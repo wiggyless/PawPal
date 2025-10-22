@@ -25,9 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Market.API\Market.API.csproj" />
-    <ProjectReference Include="..\Market.Application\Market.Application.csproj" />
-    <ProjectReference Include="..\Market.Shared\Market.Shared.csproj" />
+    <ProjectReference Include="..\Market.API\PawPal.API.csproj" />
+    <ProjectReference Include="..\Market.Application\PawPal.Application.csproj" />
+    <ProjectReference Include="..\Market.Shared\PawPal.Shared.csproj" />
   </ItemGroup>
 
 </Project>

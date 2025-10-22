@@ -1,19 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36518.9 d17.14
+VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.API", "Market.API\Market.API.csproj", "{D1F8EDA9-8DE6-4273-AE6F-050AD5E1205F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawPal.API", "Market.API\PawPal.API.csproj", "{D1F8EDA9-8DE6-4273-AE6F-050AD5E1205F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.Shared", "Market.Shared\Market.Shared.csproj", "{EA95173B-0EE1-430D-8597-3DCB7E44AB63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawPal.Shared", "Market.Shared\PawPal.Shared.csproj", "{EA95173B-0EE1-430D-8597-3DCB7E44AB63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.Infrastructure", "Market.Infrastructure\Market.Infrastructure.csproj", "{1D66E507-3657-40DB-BF88-D246F14ACA25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawPal.Infrastructure", "Market.Infrastructure\PawPal.Infrastructure.csproj", "{1D66E507-3657-40DB-BF88-D246F14ACA25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.Domain", "Market.Domain\Market.Domain.csproj", "{38B39B3A-A209-4CBA-A139-76C6E4057A69}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawPal.Domain", "Market.Domain\PawPal.Domain.csproj", "{38B39B3A-A209-4CBA-A139-76C6E4057A69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.Application", "Market.Application\Market.Application.csproj", "{EADBF014-BCDB-4D43-9E49-02DB418F4834}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawPal.Application", "Market.Application\PawPal.Application.csproj", "{EADBF014-BCDB-4D43-9E49-02DB418F4834}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.Tests", "Market.Tests\Market.Tests.csproj", "{C6818B64-0B3F-4F4D-8747-14AA594E8502}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawPal.Tests", "Market.Tests\PawPal.Tests.csproj", "{C6818B64-0B3F-4F4D-8747-14AA594E8502}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
