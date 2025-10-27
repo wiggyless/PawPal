@@ -2,7 +2,7 @@
 using PawPal.Domain.Entities.Animal_Info;
 using PawPal.Domain.Entities.Catalog;
 using PawPal.Domain.Entities.Identity;
-
+using PawPal.Domain.Entities.Places;
 namespace Market.Infrastructure.Database;
 
 public partial class DatabaseContext : DbContext, IAppDbContext
@@ -14,6 +14,8 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<AnimalCategoriesEntity> AnimalCategories => Set<AnimalCategoriesEntity>();
     public DbSet<AnimalEntity> Animals => Set<AnimalEntity>();
     public DbSet<RefreshTokenEntity> RefreshTokens => Set<RefreshTokenEntity>();
+    public DbSet<CitiesEntity> Cities => Set<CitiesEntity>();
+    public DbSet<CantonEntity> Canton => Set<CantonEntity>();
 
     private readonly TimeProvider _clock;
     public DatabaseContext(DbContextOptions<DatabaseContext> options, TimeProvider clock) : base(options)
