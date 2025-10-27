@@ -15,7 +15,7 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<AnimalEntity> Animals => Set<AnimalEntity>();
     public DbSet<RefreshTokenEntity> RefreshTokens => Set<RefreshTokenEntity>();
     public DbSet<CitiesEntity> Cities => Set<CitiesEntity>();
-    public DbSet<CantonEntity> Canton => Set<CantonEntity>();
+    public DbSet<CantonEntity> Cantons => Set<CantonEntity>();
 
     private readonly TimeProvider _clock;
     public DatabaseContext(DbContextOptions<DatabaseContext> options, TimeProvider clock) : base(options)
