@@ -12,7 +12,7 @@ public sealed class DisableProductCategoryCommandHandler(IAppDbContext ctx)
 
         if (cat is null)
         {
-            throw new MarketNotFoundException($"Kategorija (ID={request.Id}) nije pronađena.");
+            throw new PawPalNotFoundException($"Kategorija (ID={request.Id}) nije pronađena.");
         }
 
         if (!cat.IsEnabled) return Unit.Value; // idempotent

@@ -18,7 +18,7 @@ public class CreateProductCategoryCommandHandler(IAppDbContext context)
 
         if (exists)
         {
-            throw new MarketConflictException("Name already exists.");
+            throw new PawPalConflictException("Name already exists.");
         }
 
         var category = new ProductCategoryEntity
