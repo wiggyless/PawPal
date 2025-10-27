@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Market.Shared\PawPal.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Modules\Places\Queries\" />
+  </ItemGroup>
+
 </Project>

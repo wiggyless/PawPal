@@ -1,4 +1,4 @@
-using Market.Application.Modules.Catalog.ProductCategories.Commands.Create;
+using PawPal.Application.Modules.Catalog.ProductCategories.Commands.Create;
 
 namespace PawPal.Tests.ProductCategoryTests.UnitTests;
 
