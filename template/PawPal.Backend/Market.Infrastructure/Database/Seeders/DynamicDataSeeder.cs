@@ -1,4 +1,7 @@
-﻿namespace Market.Infrastructure.Database.Seeders;
+﻿using Market.Infrastructure.Database;
+using PawPal.Domain.Entities.Identity;
+
+namespace PawPal.Infrastructure.Database.Seeders;
 
 /// <summary>
 /// Dynamic seeder koji se pokreće u runtime-u,

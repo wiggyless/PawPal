@@ -1,14 +1,15 @@
-﻿using Market.Application.Abstractions;
-using Market.Infrastructure.Common;
-using Market.Infrastructure.Database;
-using Market.Shared.Constants;
-using Market.Shared.Options;
+﻿using Market.Infrastructure.Database;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using PawPal.Application.Abstractions;
+using PawPal.Domain.Entities.Identity;
+using PawPal.Infrastructure.Common;
+using PawPal.Shared.Constants;
+using PawPal.Shared.Options;
 
-namespace Market.Infrastructure;
+namespace PawPal.Infrastructure;
 
 public static class DependencyInjection
 {
@@ -51,7 +52,7 @@ public static class DependencyInjection
         services.AddScoped<IAppCurrentUser, AppCurrentUser>();
 
         // TimeProvider (if used in handlers/services)
-        services.AddSingleton<TimeProvider>(TimeProvider.System);
+        services.AddSingleton(TimeProvider.System);
 
         return services;
     }

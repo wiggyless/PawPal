@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Modules.Auth.Commands.Login;
+﻿namespace PawPal.Application.Modules.Auth.Commands.Login;
 
 /// <summary>
 /// Command for user login and issuing an access/refresh token pair.

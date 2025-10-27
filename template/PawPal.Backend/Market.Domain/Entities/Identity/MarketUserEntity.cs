@@ -1,7 +1,7 @@
 ﻿// MarketUserEntity.cs
-using Market.Domain.Common;
+using PawPal.Domain.Common;
 
-namespace Market.Domain.Entities.Identity;
+namespace PawPal.Domain.Entities.Identity;
 
 public sealed class MarketUserEntity : BaseEntity
 {

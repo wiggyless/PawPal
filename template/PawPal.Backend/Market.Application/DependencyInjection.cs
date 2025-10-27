@@ -1,8 +1,8 @@
-﻿using Market.Application.Common.Behaviors;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using PawPal.Application.Common.Behaviors;
 using System.Reflection;
 
-namespace Market.Application;
+namespace PawPal.Application;
 
 public static class DependencyInjection
 {

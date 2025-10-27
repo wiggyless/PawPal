@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Modules.Catalog.ProductCategories.Commands.Status.Disable;
+﻿using PawPal.Application.Abstractions;
+
+namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Status.Disable;
 
 public sealed class DisableProductCategoryCommandHandler(IAppDbContext ctx)
     : IRequestHandler<DisableProductCategoryCommand, Unit>

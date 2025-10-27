@@ -1,13 +1,14 @@
-﻿using Market.Application.Abstractions;
-using Market.Shared.Options;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using PawPal.Application.Abstractions;
+using PawPal.Domain.Entities.Identity;
+using PawPal.Shared.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Market.Infrastructure.Common;
+namespace PawPal.Infrastructure.Common;
 
 public sealed class JwtTokenService : IJwtTokenService
 {

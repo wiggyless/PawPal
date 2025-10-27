@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Modules.Catalog.ProductCategories.Queries.GetById;
+﻿namespace PawPal.Application.Modules.Catalog.ProductCategories.Queries.GetById;
 
 public class GetProductCategoryByIdQueryDto
 {

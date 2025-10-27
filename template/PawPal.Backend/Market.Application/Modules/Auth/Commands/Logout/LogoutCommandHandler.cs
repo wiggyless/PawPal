@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Modules.Auth.Commands.Logout;
+﻿using PawPal.Application.Abstractions;
+
+namespace PawPal.Application.Modules.Auth.Commands.Logout;
 
 /// <summary>
 /// Handler that revokes the user's refresh token (idempotently).

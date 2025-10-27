@@ -1,10 +1,10 @@
 ﻿using Market.Infrastructure.Database;
-using Market.Infrastructure.Database.Seeders;
-using Market.Shared.Constants;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PawPal.Infrastructure.Database.Seeders;
+using PawPal.Shared.Constants;
 
-namespace Market.Infrastructure;
+namespace PawPal.Infrastructure;
 
 public static class DatabaseInitializer
 {

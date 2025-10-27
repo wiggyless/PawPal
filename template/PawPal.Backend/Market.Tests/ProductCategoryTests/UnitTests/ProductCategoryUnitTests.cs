@@ -1,6 +1,6 @@
 using Market.Application.Modules.Catalog.ProductCategories.Commands.Create;
 
-namespace Market.Tests.ProductCategoryTests.UnitTests;
+namespace PawPal.Tests.ProductCategoryTests.UnitTests;
 
 public class ProductCategoryUnitTests
 {

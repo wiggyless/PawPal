@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Common;
+﻿namespace PawPal.Application.Common;
 
 public sealed class PageResult<T>
 {

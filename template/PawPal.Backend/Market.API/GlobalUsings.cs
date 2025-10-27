@@ -5,6 +5,6 @@
 global using MediatR;
 global using FluentValidation;
 global using Microsoft.AspNetCore.Mvc;
-global using Market.Application.Common;
+global using PawPal.Application.Common;
 
 global using Microsoft.AspNetCore.Authorization;

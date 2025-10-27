@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Modules.Auth.Commands.Refresh;
+﻿namespace PawPal.Application.Modules.Auth.Commands.Refresh;
 
 /// <summary>
 /// Request to rotate the refresh token and issue a new token pair.

@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Modules.Catalog.ProductCategories.Commands.Create;
+﻿using PawPal.Application.Abstractions;
+
+namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Create;
 
 public class CreateProductCategoryCommandHandler(IAppDbContext context)
     : IRequestHandler<CreateProductCategoryCommand, int>

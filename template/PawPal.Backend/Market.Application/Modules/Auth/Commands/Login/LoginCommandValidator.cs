@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Modules.Auth.Commands.Login;
+﻿namespace PawPal.Application.Modules.Auth.Commands.Login;
 
 /// <summary>
 /// FluentValidation validator for <see cref="LoginCommand"/>.

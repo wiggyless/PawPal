@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Modules.Catalog.ProductCategories.Commands.Create;
+﻿using PawPal.Domain.Entities.Catalog;
+
+namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Create;
 
 public sealed class CreateProductCategoryCommandValidator
     : AbstractValidator<CreateProductCategoryCommand>

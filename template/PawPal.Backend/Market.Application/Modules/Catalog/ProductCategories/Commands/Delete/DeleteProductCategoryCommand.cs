@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Modules.Catalog.ProductCategories.Commands.Delete;
+﻿namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Delete;
 
 public class DeleteProductCategoryCommand : IRequest<Unit>
 {

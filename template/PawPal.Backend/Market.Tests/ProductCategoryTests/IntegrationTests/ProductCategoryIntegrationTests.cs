@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Json;
 
-namespace Market.Tests.ProductCategoryTests.IntegrationTests;
+namespace PawPal.Tests.ProductCategoryTests.IntegrationTests;
 
 public class ProductCategoryIntegrationTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {

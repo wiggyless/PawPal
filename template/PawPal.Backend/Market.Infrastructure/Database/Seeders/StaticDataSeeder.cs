@@ -1,4 +1,4 @@
-﻿namespace Market.Infrastructure.Database.Seeders;
+﻿namespace PawPal.Infrastructure.Database.Seeders;
 
 public partial class StaticDataSeeder
 {

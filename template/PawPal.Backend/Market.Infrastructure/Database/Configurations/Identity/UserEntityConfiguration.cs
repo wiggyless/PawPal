@@ -1,4 +1,6 @@
-﻿namespace Market.Infrastructure.Database.Configurations.Identity;
+﻿using PawPal.Domain.Entities.Identity;
+
+namespace PawPal.Infrastructure.Database.Configurations.Identity;
 
 public sealed class UserEntityConfiguration : IEntityTypeConfiguration<MarketUserEntity>
 {

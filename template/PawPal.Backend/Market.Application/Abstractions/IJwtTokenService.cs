@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Abstractions;
+﻿using PawPal.Domain.Entities.Identity;
+
+namespace PawPal.Application.Abstractions;
 
 public sealed class JwtTokenPair
 {

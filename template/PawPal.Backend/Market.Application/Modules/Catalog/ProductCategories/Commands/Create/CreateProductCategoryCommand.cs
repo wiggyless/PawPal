@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Modules.Catalog.ProductCategories.Commands.Create;
+﻿namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Create;
 
 public class CreateProductCategoryCommand : IRequest<int>
 {

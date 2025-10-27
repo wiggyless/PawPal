@@ -1,6 +1,6 @@
-﻿using Market.Application.Modules.Auth.Commands.Login;
-using Market.Application.Modules.Auth.Commands.Logout;
-using Market.Application.Modules.Auth.Commands.Refresh;
+﻿using PawPal.Application.Modules.Auth.Commands.Login;
+using PawPal.Application.Modules.Auth.Commands.Logout;
+using PawPal.Application.Modules.Auth.Commands.Refresh;
 
 [ApiController]
 [Route("api/auth")]

@@ -1,4 +1,4 @@
-﻿namespace Market.Shared.Dtos;
+﻿namespace PawPal.Shared.Dtos;
 
 /// <summary>
 /// Represents a single field-level validation error.

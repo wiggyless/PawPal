@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Abstractions;
+﻿namespace PawPal.Application.Abstractions;
 
 /// <summary>
 /// Represents the currently logged-in user in the system.

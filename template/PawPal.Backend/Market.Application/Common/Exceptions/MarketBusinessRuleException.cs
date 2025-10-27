@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Common.Exceptions;
+﻿namespace PawPal.Application.Common.Exceptions;
 
 /// <summary>
 /// Represents an error that occurs when a business rule is violated.

@@ -1,4 +1,6 @@
-﻿using Market.Application.Modules.Auth.Commands.Login;
+﻿using PawPal.Application.Abstractions;
+using PawPal.Application.Modules.Auth.Commands.Login;
+using PawPal.Domain.Entities.Identity;
 
 public sealed class LoginCommandHandler(
     IAppDbContext ctx,
