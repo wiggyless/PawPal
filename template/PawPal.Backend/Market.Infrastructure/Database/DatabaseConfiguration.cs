@@ -1,5 +1,5 @@
-﻿using Market.Domain.Common;
-using Market.Infrastructure.Database.Seeders;
+﻿using PawPal.Domain.Common;
+using PawPal.Infrastructure.Database.Seeders;
 using System.Linq.Expressions;
 
 namespace Market.Infrastructure.Database;

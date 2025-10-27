@@ -1,12 +1,14 @@
-using Market.Application.Modules.Catalog.ProductCategories.Commands.Delete;
-using Market.Application.Modules.Catalog.ProductCategories.Commands.Status.Disable;
-using Market.Application.Modules.Catalog.ProductCategories.Commands.Status.Enable;
-using Market.Application.Modules.Catalog.ProductCategories.Commands.Create;
-using Market.Application.Modules.Catalog.ProductCategories.Commands.Update;
-using Market.Application.Modules.Catalog.ProductCategories.Queries.GetById;
-using Market.Application.Modules.Catalog.ProductCategories.Queries.List;
+using PawPal.Application.Modules.Catalog.ProductCategories.Commands.Delete;
+using PawPal.Application.Modules.Catalog.ProductCategories.Commands.Status.Disable;
+using PawPal.Application.Modules.Catalog.ProductCategories.Commands.Status.Enable;
+using PawPal.Application.Modules.Catalog.ProductCategories.Queries.GetById;
+using PawPal.Application.Common;
+using PawPal.Application.Modules.Catalog.ProductCategories.Commands.Update;
+using PawPal.Application.Modules.Catalog.ProductCategories.Queries.List;
+using PawPal.Application.Modules.Catalog.ProductCategories.Queries.GetById;
+using PawPal.Application.Modules.Catalog.ProductCategories.Commands.Create;
 
-namespace Market.API.Controllers;
+namespace PawPal.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]

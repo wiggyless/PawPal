@@ -1,4 +1,4 @@
-﻿namespace Market.Shared.Dtos;
+﻿namespace PawPal.Shared.Dtos;
 
 /// <summary>
 /// Standard API error response.

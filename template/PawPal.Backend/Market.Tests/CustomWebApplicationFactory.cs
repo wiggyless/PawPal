@@ -1,8 +1,8 @@
-﻿using Market.Application.Modules.Auth.Commands.Login;
+﻿using PawPal.Application.Modules.Auth.Commands.Login;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-namespace Market.Tests;
+namespace PawPal.Tests;
 
 public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<Program>
 {

@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Modules.Catalog.ProductCategories.Queries.GetById;
+﻿using PawPal.Application.Abstractions;
+
+namespace PawPal.Application.Modules.Catalog.ProductCategories.Queries.GetById;
 
 public class GetProductCategoryByIdQueryHandler(IAppDbContext context) : IRequestHandler<GetProductCategoryByIdQuery, GetProductCategoryByIdQueryDto>
 {

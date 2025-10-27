@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Modules.Catalog.ProductCategories.Commands.Delete;
+﻿using PawPal.Application.Abstractions;
+
+namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Delete;
 
 public class DeleteProductCategoryCommandHandler(IAppDbContext context, IAppCurrentUser appCurrentUser)
       : IRequestHandler<DeleteProductCategoryCommand, Unit>

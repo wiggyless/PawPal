@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Modules.Catalog.ProductCategories.Commands.Update;
+﻿namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Update;
 
 public sealed class UpdateProductCategoryCommand : IRequest<Unit>
 {

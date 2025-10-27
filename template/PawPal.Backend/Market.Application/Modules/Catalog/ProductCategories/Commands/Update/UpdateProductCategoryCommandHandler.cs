@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Modules.Catalog.ProductCategories.Commands.Update;
+﻿using PawPal.Application.Abstractions;
+
+namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Update;
 
 public sealed class UpdateProductCategoryCommandHandler(IAppDbContext ctx)
             : IRequestHandler<UpdateProductCategoryCommand, Unit>

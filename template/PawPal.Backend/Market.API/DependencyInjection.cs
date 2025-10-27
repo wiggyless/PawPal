@@ -1,12 +1,12 @@
-﻿using Market.Infrastructure.Common;
-using Market.Shared.Dtos;
-using Market.Shared.Options;
+﻿using PawPal.Shared.Dtos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PawPal.Infrastructure.Common;
+using PawPal.Shared.Options;
 using System.Text;
 
-namespace Market.API;
+namespace PawPal.API;
 
 public static class DependencyInjection
 {
@@ -26,7 +26,7 @@ public static class DependencyInjection
                                              .Select(e => string.IsNullOrWhiteSpace(e.ErrorMessage)
                                                  ? "Validation error"
                                                  : e.ErrorMessage));
-                    return new Microsoft.AspNetCore.Mvc.BadRequestObjectResult(new ErrorDto
+                    return new BadRequestObjectResult(new ErrorDto
                     {
                         Code = "validation.failed",
                         Message = msg

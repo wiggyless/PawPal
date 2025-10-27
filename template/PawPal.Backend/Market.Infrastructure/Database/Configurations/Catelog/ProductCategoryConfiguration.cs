@@ -1,4 +1,6 @@
-﻿namespace Market.Infrastructure.Database.Configurations.Catelog;
+﻿using PawPal.Domain.Entities.Catalog;
+
+namespace PawPal.Infrastructure.Database.Configurations.Catelog;
 
 public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCategoryEntity>
 {

@@ -1,9 +1,13 @@
 ﻿// RefreshTokenEntity.cs
 
 // RefreshTokenEntity.cs
-using Market.Domain.Common;
 
-namespace Market.Domain.Entities.Identity;
+// RefreshTokenEntity.cs
+
+// RefreshTokenEntity.cs
+using PawPal.Domain.Common;
+
+namespace PawPal.Domain.Entities.Identity;
 
 public sealed class RefreshTokenEntity : BaseEntity
 {

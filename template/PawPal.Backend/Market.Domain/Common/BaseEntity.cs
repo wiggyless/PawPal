@@ -1,4 +1,4 @@
-﻿namespace Market.Domain.Common;
+﻿namespace PawPal.Domain.Common;
 
 public class BaseEntity
 {

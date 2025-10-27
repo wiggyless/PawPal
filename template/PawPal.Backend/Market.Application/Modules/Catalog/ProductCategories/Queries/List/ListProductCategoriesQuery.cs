@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Modules.Catalog.ProductCategories.Queries.List;
+﻿using PawPal.Application.Common;
+
+namespace PawPal.Application.Modules.Catalog.ProductCategories.Queries.List;
 
 public sealed class ListProductCategoriesQuery : BasePagedQuery<ListProductCategoriesQueryDto>
 {

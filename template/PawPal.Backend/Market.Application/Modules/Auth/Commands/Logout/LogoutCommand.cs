@@ -1,4 +1,4 @@
-namespace Market.Application.Modules.Auth.Commands.Logout;
+namespace PawPal.Application.Modules.Auth.Commands.Logout;
 
 /// <summary>
 /// Command for user logout and revocation of the refresh token.

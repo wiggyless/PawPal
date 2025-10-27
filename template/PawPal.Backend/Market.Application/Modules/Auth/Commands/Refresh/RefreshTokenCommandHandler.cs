@@ -1,4 +1,6 @@
-﻿namespace Market.Application.Modules.Auth.Commands.Refresh;
+﻿using PawPal.Application.Abstractions;
+
+namespace PawPal.Application.Modules.Auth.Commands.Refresh;
 
 public sealed class RefreshTokenCommandHandler(
     IAppDbContext ctx,

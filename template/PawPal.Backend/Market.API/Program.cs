@@ -1,7 +1,7 @@
-﻿using Market.API;
-using Market.API.Middlewares;
-using Market.Application;
-using Market.Infrastructure;
+﻿using PawPal.API;
+using PawPal.API.Middleware;
+using PawPal.Application;
+using PawPal.Infrastructure;
 using Serilog;
 
 public partial class Program

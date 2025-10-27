@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Modules.Catalog.ProductCategories.Queries.List;
+﻿namespace PawPal.Application.Modules.Catalog.ProductCategories.Queries.List;
 
 public sealed class ListProductCategoriesQueryDto
 {

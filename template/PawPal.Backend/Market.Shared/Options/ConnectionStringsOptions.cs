@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Market.Shared.Options;
+namespace PawPal.Shared.Options;
 
 /// <summary>"ConnectionStrings" section.</summary>
 public sealed class ConnectionStringsOptions

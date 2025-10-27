@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
-using Market.Application.Common.Exceptions;
-using Market.Shared.Dtos;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PawPal.Application.Common.Exceptions;
+using PawPal.Shared.Dtos;
 using System.Diagnostics;
 
-namespace Market.Infrastructure.Common;
+namespace PawPal.Infrastructure.Common;
 
 /// <summary>
 /// Global exception handler for unhandled exceptions.

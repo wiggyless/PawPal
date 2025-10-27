@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Common;
+﻿namespace PawPal.Application.Common;
 
 /// <summary>
 /// Base class for list queries with pagination, search, and sorting.

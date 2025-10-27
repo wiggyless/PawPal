@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 
-namespace Market.Shared.Constants;
+namespace PawPal.Shared.Constants;
 
 public static class EnvironmentExtensions
 {

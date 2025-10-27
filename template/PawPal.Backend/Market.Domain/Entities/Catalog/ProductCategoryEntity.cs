@@ -1,6 +1,6 @@
-﻿using Market.Domain.Common;
+﻿using PawPal.Domain.Common;
 
-namespace Market.Domain.Entities.Catalog;
+namespace PawPal.Domain.Entities.Catalog;
 
 /// <summary>
 /// Represents a product category.

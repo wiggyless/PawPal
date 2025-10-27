@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using Market.Application.Abstractions;
+using PawPal.Application.Abstractions;
 
-namespace Market.Infrastructure.Common;
+namespace PawPal.Infrastructure.Common;
 
 /// <summary>
 /// Implementation of IAppCurrentUser that reads data from a JWT token.

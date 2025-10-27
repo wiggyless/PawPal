@@ -1,4 +1,4 @@
-﻿namespace Market.Application.Modules.Auth.Commands.Refresh;
+﻿namespace PawPal.Application.Modules.Auth.Commands.Refresh;
 
 public sealed class RefreshTokenCommandValidator : AbstractValidator<RefreshTokenCommand>
 {

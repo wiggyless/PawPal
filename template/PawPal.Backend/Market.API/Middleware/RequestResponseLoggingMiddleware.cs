@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text;
 
-namespace Market.API.Middlewares;
+namespace PawPal.API.Middleware;
 
 /// <summary>
 /// Middleware that logs incoming HTTP requests and outgoing responses,

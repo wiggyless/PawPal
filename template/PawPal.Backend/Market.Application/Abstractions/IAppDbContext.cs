@@ -1,4 +1,7 @@
-﻿namespace Market.Application.Abstractions;
+﻿using PawPal.Domain.Entities.Catalog;
+using PawPal.Domain.Entities.Identity;
+
+namespace PawPal.Application.Abstractions;
 
 // Application layer
 public interface IAppDbContext
