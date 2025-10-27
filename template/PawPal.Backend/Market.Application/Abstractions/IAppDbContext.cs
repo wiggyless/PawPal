@@ -1,4 +1,5 @@
-﻿using PawPal.Domain.Entities.Catalog;
+﻿using PawPal.Domain.Entities.Animal_Info;
+using PawPal.Domain.Entities.Catalog;
 using PawPal.Domain.Entities.Identity;
 using PawPal.Domain.Entities.Places;
 
