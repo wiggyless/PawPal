@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Queries.List
+namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Queries_.GetById
 {
-    public sealed class ListAnimalCategoriesQueryDto
+    public class GetAnimalCategoryByIdQueryDto
     {
         public required int Id { get; set; }
         public required string CategoryName { get; set; }

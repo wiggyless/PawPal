@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Queries.List
+namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Queries_.List
 {
     public sealed class ListAnimalCategoriesQuery : BasePagedQuery<ListAnimalCategoriesQueryDto>
     {

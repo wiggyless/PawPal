@@ -1,6 +1,6 @@
 ﻿using PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Create;
-using PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Queries.List;
-using PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Queries_.GetById;
+using PawPal.Application.Modules.Animal_Info.AnimalCategories.Queries_.GetById;
+using PawPal.Application.Modules.Animal_Info.AnimalCategories.Queries_.List;
 
 namespace PawPal.API.Controllers
 {
