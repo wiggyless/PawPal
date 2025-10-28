@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Queries_.GetById
+namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Queries_.GetById
 {
     public class GetAnimalCategoryByIdHandler(IAppDbContext context) :
         IRequestHandler<GetAnimalCategoryByIdQuery, GetAnimalCategoryByIdQueryDto>
