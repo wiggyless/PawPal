@@ -12,6 +12,9 @@ public interface IAppDbContext
     DbSet<ProductCategoryEntity> ProductCategories { get; }
     DbSet<MarketUserEntity> Users { get; }
     DbSet<RefreshTokenEntity> RefreshTokens { get; }
+    DbSet<AnimalCategoriesEntity> AnimalCategories { get; }
+    DbSet<AnimalEntity> Animals { get; }
+    DbSet<GenderEntity> Genders { get; }
     DbSet<CitiesEntity> Cities { get; }
     DbSet<CantonEntity> Cantons { get; }
 
