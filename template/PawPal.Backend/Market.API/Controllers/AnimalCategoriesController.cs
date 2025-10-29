@@ -1,4 +1,5 @@
 ﻿using PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Create;
+using PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Delete;
 using PawPal.Application.Modules.Animal_Info.AnimalCategories.Queries_.GetById;
 using PawPal.Application.Modules.Animal_Info.AnimalCategories.Queries_.List;
 
@@ -28,6 +29,19 @@ namespace PawPal.API.Controllers
         {
             var result = await sender.Send(query, ct);
             return result;
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task Delete (int id, CancellationToken ct)
+        {
+            await sender.Send(new DeleteAnimalCategoryCommand { Id = id }, ct);
+        }
+
+        [HttpPut ("{id:int}")]
+        public async Task Update(int id, UpdateAnimalCategoryCommand cmd, CancellationToken ct)
+        {
+            cmd.Id = id;
+            await sender.Send(cmd, ct);
         }
 
     }

@@ -13,8 +13,8 @@ namespace PawPal.Infrastructure.Common;
 /// Global exception handler for unhandled exceptions.
 /// Keeps the same ErrorDto format as the previous middleware.
 /// </summary>
-public sealed class MarketExceptionHandler(
-    ILogger<MarketExceptionHandler> logger,
+public sealed class PawPalExceptionHandler(
+    ILogger<PawPalExceptionHandler> logger,
     IHostEnvironment env
 ) : IExceptionHandler
 {
