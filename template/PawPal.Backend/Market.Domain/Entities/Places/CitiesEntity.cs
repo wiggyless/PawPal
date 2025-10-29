@@ -12,6 +12,7 @@ namespace PawPal.Domain.Entities.Places
         public string Name { get; set; }
         public string Region { get; set; }
         public string PostalCode { get; set; }
+        public int CantonId { get; set; }
         public CantonEntity Canton { get; set; }
     }
 }
