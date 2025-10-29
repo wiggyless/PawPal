@@ -93,7 +93,7 @@ public static class DependencyInjection
             c.AddSecurityRequirement(new OpenApiSecurityRequirement { { bearer, Array.Empty<string>() } });
         });
 
-        services.AddExceptionHandler<MarketExceptionHandler>();
+        services.AddExceptionHandler<PawPalExceptionHandler>();
         services.AddProblemDetails();
 
         return services;

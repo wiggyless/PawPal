@@ -18,11 +18,11 @@ namespace PawPal.Application.Modules.Animal_Info.Animals.Queries.GetById
                     Id = x.Id,
                     Name = x.Name,
                     Breed = x.Breed,
-                    GenderId = x.GenderId,
+                    Gender = x.Gender.GenderName,
                     Age = x.Age,
                     HasPapers = x.HasPapers,
                     ChildFriendly = x.ChildFriendly,
-                    CategoryId = x.CategoryId
+                    Category = x.Category.CategoryName
                 }).FirstOrDefaultAsync(cancellationToken);
 
             if (animal == null) throw new PawPalNotFoundException($"Animal with Id {request.Id} does not exist!");

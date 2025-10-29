@@ -1,5 +1,6 @@
 ﻿using PawPal.Application.Modules.Animal_Info.Animals.Commands.Create;
 using PawPal.Application.Modules.Animal_Info.Animals.Queries.GetById;
+using PawPal.Application.Modules.Animal_Info.Animals.Queries.List;
 
 namespace PawPal.API.Controllers
 {
@@ -12,6 +13,14 @@ namespace PawPal.API.Controllers
         {
             var animal = await sender.Send(new GetAnimalByIdQuery { Id = id }, ct);
             return animal;
+        }
+
+        [HttpGet]
+        public async Task<PageResult<ListAnimalsQueryDto>> List([FromQuery] 
+        ListAnimalsQuery query, CancellationToken ct)
+        {
+            var res = await sender.Send(query, ct);
+            return res;
         }
 
         [HttpPost]

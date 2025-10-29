@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Animal_Info.Animals.Queries.List
 {
-    internal class ListAnimalsQueryDto
+    public sealed class ListAnimalsQueryDto
     {
+        public required string Name { get; set; }
+        public required string Breed { get; set; }
+        public required string Gender { get; set; }
+        public required string Category { get; set; }
     }
 }
