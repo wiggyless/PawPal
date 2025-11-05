@@ -1,5 +1,6 @@
 ﻿using PawPal.Application.Abstractions;
 using PawPal.Domain.Entities.Animal_Info;
+using PawPal.Domain.Entities.Animal_Info.ManyToMany;
 using PawPal.Domain.Entities.Catalog;
 using PawPal.Domain.Entities.Identity;
 using PawPal.Domain.Entities.Places;
@@ -16,6 +17,13 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<RefreshTokenEntity> RefreshTokens => Set<RefreshTokenEntity>();
     public DbSet<CitiesEntity> Cities => Set<CitiesEntity>();
     public DbSet<CantonEntity> Cantons => Set<CantonEntity>();
+    public DbSet<AnimalHealthHistoryEntity> AnimalHealthHistories => Set<AnimalHealthHistoryEntity>();
+    public DbSet<AllergiesEntity> Allergies => Set<AllergiesEntity>();
+    public DbSet<DisabilitiesEntity> Disabilities => Set<DisabilitiesEntity>();
+    public DbSet<AllergiesAnimalHealthHistory> AnimalsAllergies => Set<AllergiesAnimalHealthHistory>();
+    public DbSet<DisabilitiesAnimalHealthHistory> AnimalsDisabilities => Set<DisabilitiesAnimalHealthHistory>();
+
+
 
     private readonly TimeProvider _clock;
     public DatabaseContext(DbContextOptions<DatabaseContext> options, TimeProvider clock) : base(options)

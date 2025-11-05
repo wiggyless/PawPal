@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Animal_Info.Animals.Commands.Delete
 {
-    internal class DeleteAnimalCommand
+    public class DeleteAnimalCommand : IRequest<Unit>
     {
+        public required int Id { get; set; }
     }
 }
