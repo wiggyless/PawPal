@@ -10,7 +10,7 @@ namespace PawPal.Application.Modules.Animal_Info.Animals.Commands.Create
     {
         public required string Name { get; set; }
         public required string Breed { get; set; }
-        public required int GenderId { get; set; } = 4; //4 - male, 5 - female, check DB
+        public required int GenderId { get; set; }
         public required int Age { get; set; }
         public required bool HasPapers { get; set; }
         public required bool ChildFriendly { get; set; }
