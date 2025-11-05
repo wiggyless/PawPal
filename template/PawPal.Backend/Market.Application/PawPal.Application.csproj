@@ -21,6 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Modules\Animal_Info\AnimalHealthHistory\Commands\Delete\" />
+    <Folder Include="Modules\Animal_Info\AnimalHealthHistory\Commands\Update\" />
     <Folder Include="Modules\Places\Cantons\Queries_\" />
   </ItemGroup>
 
