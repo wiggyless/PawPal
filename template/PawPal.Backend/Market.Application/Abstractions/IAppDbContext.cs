@@ -1,4 +1,5 @@
 ﻿using PawPal.Domain.Entities.Animal_Info;
+using PawPal.Domain.Entities.Animal_Info.ManyToMany;
 using PawPal.Domain.Entities.Catalog;
 using PawPal.Domain.Entities.Identity;
 using PawPal.Domain.Entities.Places;
@@ -17,6 +18,11 @@ public interface IAppDbContext
     DbSet<GenderEntity> Genders { get; }
     DbSet<CitiesEntity> Cities { get; }
     DbSet<CantonEntity> Cantons { get; }
+    DbSet<AnimalHealthHistoryEntity> AnimalHealthHistories { get; }
+    DbSet<AllergiesEntity> Allergies { get; }
+    DbSet<DisabilitiesEntity> Disabilities { get; }
+    DbSet<AllergiesAnimalHealthHistory> AnimalsAllergies { get; }
+    DbSet<DisabilitiesAnimalHealthHistory> AnimalsDisabilities { get; }
 
     Task<int> SaveChangesAsync(CancellationToken ct);
 }
