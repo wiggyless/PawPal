@@ -11,6 +11,5 @@ namespace PawPal.Domain.Entities.Places
     {
         public required string FullName { get; set; }
         public required string Abbreviation { get; set; }
-        public List<CitiesEntity> Cities { get; set; }
     }
 }

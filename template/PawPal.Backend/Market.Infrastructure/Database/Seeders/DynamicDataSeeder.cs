@@ -24,11 +24,8 @@ public static class DynamicDataSeeder
         await SeedAnimalCategoriesAsync(context);
         await SeedGendersAsync(context);
         await SeedAnimalsAsync(context);
-        await SeedAllergiesAsync(context);
-        await SeedDisabilitiesAsync(context);
-        await SeedAnimalHealthHistoriesAsync(context);
-        //await SeedCantonsAsync(context);
-        //await SeedCitiesAsync(context);
+        await SeedCantonsAsync(context);
+        await SeedCitiesAsync(context);
     }
 
     private static async Task SeedProductCategoriesAsync(DatabaseContext context)
@@ -307,7 +304,7 @@ public static class DynamicDataSeeder
 
     }
     // To be fixed
-    /*
+    
     private static async Task SeedCitiesAsync(DatabaseContext ct)
     {
         if (await ct.Cities.AnyAsync()) return;
@@ -360,6 +357,5 @@ public static class DynamicDataSeeder
         await ct.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: Cantons added.");
     }
-    */
-
+    
 }
