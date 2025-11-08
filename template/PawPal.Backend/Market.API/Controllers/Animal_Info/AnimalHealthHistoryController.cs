@@ -1,6 +1,6 @@
-﻿
-using PawPal.Application.Modules.Animal_Info.AnimalCategories.Queries_.List;
-using PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Create;
+﻿using PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Create;
+using PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Delete_;
+using PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Update_;
 using PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Queries.GetById;
 using PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Queries.List;
 namespace PawPal.API.Controllers.Animal_Info
@@ -30,6 +30,19 @@ namespace PawPal.API.Controllers.Animal_Info
         {
             var result = await sender.Send(query, ct);
             return result;
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task Update(int id, UpdateAnimalHealthHistoryCommand cmd, CancellationToken ct)
+        {
+            cmd.Id = id;
+            await sender.Send(cmd, ct);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task Delete(int id, CancellationToken ct)
+        {
+            await sender.Send(new DeleteAnimalHealthHistoryCommand { Id = id }, ct);
         }
     }
 }

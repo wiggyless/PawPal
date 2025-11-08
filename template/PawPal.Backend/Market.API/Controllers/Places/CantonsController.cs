@@ -2,7 +2,7 @@
 using PawPal.Application.Modules.Places.Cantons.Queries_;
 using PawPal.Application.Modules.Places.Cities.Queries.GetById;
 
-namespace PawPal.API.Controllers
+namespace PawPal.API.Controllers.Places
 {
     [ApiController]
     [Route("[controller]")]
