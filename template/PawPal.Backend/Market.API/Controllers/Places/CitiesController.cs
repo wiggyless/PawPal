@@ -2,7 +2,7 @@
 using PawPal.Application.Modules.Places.Cities.Queries.Lists;
 
 
-namespace PawPal.API.Controllers
+namespace PawPal.API.Controllers.Places
 {
 [ApiController]
 [Route("[controller]")]
