@@ -8,7 +8,6 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Queries.Lis
 {
     public class ListAnimalHealthHistoriesQuery : BasePagedQuery<ListAnimalHealthHistoriesQueryDto>
     {
-        public string? AllergyName { get; set; } //prikazi sve zivotinje sa navedenom alergijom
-        public string? DisabilityName { get; set; } //prikazi sve zivotinje sa navedenim poremecajem
+        public string? CategoryName { get; set; }
     }
 }

@@ -609,7 +609,7 @@ namespace PawPal.Infrastructure.Migrations
             modelBuilder.Entity("PawPal.Domain.Entities.Places.CitiesEntity", b =>
                 {
                     b.HasOne("PawPal.Domain.Entities.Places.CantonEntity", "Canton")
-                        .WithMany("Cities")
+                        .WithMany()
                         .HasForeignKey("CantonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -625,11 +625,6 @@ namespace PawPal.Infrastructure.Migrations
             modelBuilder.Entity("PawPal.Domain.Entities.Identity.MarketUserEntity", b =>
                 {
                     b.Navigation("RefreshTokens");
-                });
-
-            modelBuilder.Entity("PawPal.Domain.Entities.Places.CantonEntity", b =>
-                {
-                    b.Navigation("Cities");
                 });
 #pragma warning restore 612, 618
         }

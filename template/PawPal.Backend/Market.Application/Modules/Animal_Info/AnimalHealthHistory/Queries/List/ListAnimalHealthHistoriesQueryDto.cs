@@ -15,7 +15,16 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Queries.Lis
         public bool SpayedOrNeutered { get; set; }
         public bool ParasiteFree { get; set; }
         public string? DietaryRestrictions { get; set; }
-        public List<string> AllergyNames { get; set; }
-        public List<string> DisabilityNames { get; set; }
+        public List<AllergyDto> Allergies { get; set; }
+        public List<DisabilityDto> Disabilities { get; set; }
+    }
+
+    public class AllergyDto
+    {
+        public string AllergyName { get; set; }
+    }
+    public class DisabilityDto
+    {
+        public string DisabilityName { get; set; }
     }
 }
