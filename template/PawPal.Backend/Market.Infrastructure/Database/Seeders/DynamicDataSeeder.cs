@@ -20,6 +20,7 @@ public static class DynamicDataSeeder
         await context.Database.EnsureCreatedAsync();
 
         await SeedProductCategoriesAsync(context);
+        await SeedRolesAsync(context);
         await SeedUsersAsync(context);
         await SeedAnimalCategoriesAsync(context);
         await SeedGendersAsync(context);
@@ -56,37 +57,53 @@ public static class DynamicDataSeeder
         if (await context.Users.AnyAsync())
             return;
 
-        var hasher = new PasswordHasher<MarketUserEntity>();
+        var hasher = new PasswordHasher<UserEntity>();
 
-        var admin = new MarketUserEntity
+        var admin = new UserEntity
         {
+            FirstName = "nesto",
+            LastName = "nesto",
             Email = "admin@market.local",
             PasswordHash = hasher.HashPassword(null!, "Admin123!"),
             IsAdmin = true,
             IsEnabled = true,
+            RoleId = 1,
+            CityId = 1
         };
 
-        var user = new MarketUserEntity
+        var user = new UserEntity
         {
+            FirstName = "nesto",
+            LastName = "nesto",
             Email = "manager@market.local",
             PasswordHash = hasher.HashPassword(null!, "User123!"),
             IsManager = true,
             IsEnabled = true,
+            RoleId = 2,
+            CityId = 2
         };
 
-        var dummyForSwagger = new MarketUserEntity
+        var dummyForSwagger = new UserEntity
         {
+            FirstName = "nesto",
+            LastName = "nesto",
             Email = "string",
             PasswordHash = hasher.HashPassword(null!, "string"),
             IsEmployee = true,
             IsEnabled = true,
+            RoleId = 1,
+            CityId = 3
         };
-        var dummyForTests = new MarketUserEntity
+        var dummyForTests = new UserEntity
         {
+            FirstName = "nesto",
+            LastName = "nesto",
             Email = "test",
             PasswordHash = hasher.HashPassword(null!, "test123"),
             IsEmployee = true,
             IsEnabled = true,
+            RoleId = 3,
+            CityId = 2
         };
         context.Users.AddRange(admin, user, dummyForSwagger, dummyForTests);
         await context.SaveChangesAsync();
@@ -303,8 +320,6 @@ public static class DynamicDataSeeder
 
 
     }
-    // To be fixed
-    
     private static async Task SeedCitiesAsync(DatabaseContext ct)
     {
         if (await ct.Cities.AnyAsync()) return;
@@ -357,5 +372,25 @@ public static class DynamicDataSeeder
         await ct.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: Cantons added.");
     }
-    
+    private static async Task SeedRolesAsync(DatabaseContext ct)
+    {
+        if(await ct.Roles.AnyAsync()) return;
+
+        var basicUser = new RolesEntity
+        {
+            RoleName = "Basic user"
+        };
+        var verifiedUser = new RolesEntity
+        {
+            RoleName = "Verified user"
+        };
+
+        var admin = new RolesEntity
+        {
+            RoleName = "Admin"
+        };
+
+        ct.AddRange(basicUser, verifiedUser, admin);
+        await ct.SaveChangesAsync();
+    }
 }
