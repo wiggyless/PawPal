@@ -1,4 +1,5 @@
 ﻿using PawPal.Domain.Common;
+using PawPal.Domain.Entities.Animal_Info.ManyToMany;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace PawPal.Domain.Entities.Animal_Info
         public bool ChildFriendly { get; set; }
         public int CategoryId { get; set; }
         public AnimalCategoriesEntity Category { get; set; }
+        public List<AnimalCharacteristics> AnimalCharacteristics { get; set; }
 
     }
 }

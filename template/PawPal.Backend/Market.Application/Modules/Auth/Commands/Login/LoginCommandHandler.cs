@@ -5,7 +5,7 @@ using PawPal.Domain.Entities.Identity;
 public sealed class LoginCommandHandler(
     IAppDbContext ctx,
     IJwtTokenService jwt,
-    IPasswordHasher<MarketUserEntity> hasher)
+    IPasswordHasher<UserEntity> hasher)
     : IRequestHandler<LoginCommand, LoginCommandDto>
 {
     public async Task<LoginCommandDto> Handle(LoginCommand request, CancellationToken ct)
