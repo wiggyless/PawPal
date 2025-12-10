@@ -49,6 +49,16 @@ public partial class Program
                 .AddInfrastructure(builder.Configuration, builder.Environment)
                 .AddApplication();
 
+            var allowedOrigins = builder.Configuration.GetValue<string>("allowedOrigins")!;
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod();
+                });
+            }
+            );
+
             var app = builder.Build();
 
             // ---------------------------------------------------------
@@ -65,6 +75,8 @@ public partial class Program
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseHttpsRedirection();
+
+            app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
 
