@@ -68,7 +68,7 @@ public static class DynamicDataSeeder
             IsAdmin = true,
             IsEnabled = true,
             RoleId = 1,
-            CityId = 1
+            CityId = 10
         };
 
         var user = new UserEntity
@@ -80,7 +80,7 @@ public static class DynamicDataSeeder
             IsManager = true,
             IsEnabled = true,
             RoleId = 2,
-            CityId = 2
+            CityId = 11
         };
 
         var dummyForSwagger = new UserEntity
@@ -92,7 +92,7 @@ public static class DynamicDataSeeder
             IsEmployee = true,
             IsEnabled = true,
             RoleId = 1,
-            CityId = 3
+            CityId = 12
         };
         var dummyForTests = new UserEntity
         {
@@ -103,7 +103,7 @@ public static class DynamicDataSeeder
             IsEmployee = true,
             IsEnabled = true,
             RoleId = 3,
-            CityId = 2
+            CityId = 12
         };
         context.Users.AddRange(admin, user, dummyForSwagger, dummyForTests);
         await context.SaveChangesAsync();

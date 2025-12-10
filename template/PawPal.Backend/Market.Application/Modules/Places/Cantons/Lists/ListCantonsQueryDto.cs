@@ -13,7 +13,7 @@ namespace PawPal.Application.Modules.Places.Cantons.Lists
         public required List<ListCantonsQueryCitiesDto> Cities { get; set; }
     }
     public sealed class ListCantonsQueryCitiesDto
-    {
+    {    
         public required int Id { get; set; }
         public  required string Name { get; set; }
     }
