@@ -9,6 +9,6 @@ namespace PawPal.Domain.Entities.Identity
 {
     public class RolesEntity : BaseEntity
     {
-        public string RoleName { get; set; }
+        public string? RoleName { get; set; }
     }
 }
