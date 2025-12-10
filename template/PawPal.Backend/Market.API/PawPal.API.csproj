@@ -31,4 +31,8 @@
     <ProjectReference Include="..\Market.Shared\PawPal.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Users\" />
+  </ItemGroup>
+
 </Project>
