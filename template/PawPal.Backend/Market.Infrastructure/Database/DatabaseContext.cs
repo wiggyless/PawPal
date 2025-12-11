@@ -37,6 +37,7 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<NewsEntity> News => Set<NewsEntity>();
     public DbSet<LikedUserPosts> LikedUserPosts => Set<LikedUserPosts>();
     public DbSet<UserToUserMessages> UserToUserMessages => Set<UserToUserMessages>();
+    public DbSet<BreedEntity> Breeds => Set<BreedEntity>();
 
     private readonly TimeProvider _clock;
     public DatabaseContext(DbContextOptions<DatabaseContext> options, TimeProvider clock) : base(options)

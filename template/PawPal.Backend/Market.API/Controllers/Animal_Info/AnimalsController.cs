@@ -25,6 +25,7 @@ namespace PawPal.API.Controllers.Animal_Info
             return animal;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<PageResult<ListAnimalsQueryDto>> List([FromQuery]
         ListAnimalsQuery query, CancellationToken ct)

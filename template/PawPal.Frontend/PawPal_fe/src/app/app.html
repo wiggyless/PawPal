@@ -1,9 +1,5 @@
 <h1> Testing connection with backend</h1>
 
-<p> E-mail: </p>
-<input>
-
-<p> Password: </p>
-<input>
-<br>
-<button routerLink="/auth/login"> Login</button>
+@for (animal of _animals; track $index) {
+    <p> {{animal.name}} </p>
+}

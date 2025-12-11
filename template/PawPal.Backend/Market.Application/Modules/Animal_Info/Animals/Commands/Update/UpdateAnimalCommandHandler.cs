@@ -23,8 +23,23 @@ namespace PawPal.Application.Modules.Animal_Info.Animals.Commands.Update
             if (category == null)
                 throw new PawPalNotFoundException($"Category with the name {request.Category} is not valid!");
 
+            var breedsList = await context.Breeds.Where(b => b.CategoryID == category.Id).ToListAsync(cancellationToken);
+
+            var validatedBreed = "";
+            foreach (var breed in breedsList)
+            {
+                if (breed.Name.ToLower().Equals(request.Breed.ToLower()))
+                {
+                    validatedBreed = breed.Name;
+                    break;
+                }
+            }
+            if (validatedBreed.Equals(""))
+                throw new PawPalConflictException($"{request.Breed} is not a breed that belongs to " +
+                    $"the category {category.CategoryName}!");
+
             animal.Name = string.IsNullOrWhiteSpace(request.Name) ? animal.Name : request.Name.Trim();
-            animal.Breed = string.IsNullOrWhiteSpace(request.Breed) ? animal.Breed : request.Breed.Trim();
+            animal.Breed = string.IsNullOrWhiteSpace(request.Breed) ? animal.Breed : validatedBreed.Trim();
             animal.Age = request.Age;
             animal.ChildFriendly = request.ChildFriendly;
             animal.HasPapers = request.HasPapers;
