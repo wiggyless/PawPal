@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
@@ -12,6 +12,6 @@ export class AnimalService {
     private apiURL = environment.apiUrl + '/Animals';
   
     public get() : Observable<any>{
-      return this.http.get(this.apiURL)
+      return this.http.get(this.apiURL);
     }
 }
