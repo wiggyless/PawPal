@@ -38,5 +38,6 @@ public interface IAppDbContext
     DbSet<NewsEntity> News { get; }
     DbSet<LikedUserPosts> LikedUserPosts { get; }
     DbSet<UserToUserMessages> UserToUserMessages { get; }
+    DbSet<BreedEntity> Breeds { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }
