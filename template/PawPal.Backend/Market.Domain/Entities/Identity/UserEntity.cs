@@ -18,10 +18,7 @@ public sealed class UserEntity : BaseEntity
     public bool IsEnabled { get; set; }
     public int ?CityId { get; set; }
     public CitiesEntity ?City { get; set; }
-    public int ?RoleId { get; set; }
+    public int? RoleId { get; set; } = 1;
     public RolesEntity ?Role { get; set; }
-    public bool IsAdmin { get; set; }
-    public bool IsManager { get; set; }
-    public bool IsEmployee { get; set; }
     public ICollection<RefreshTokenEntity> RefreshTokens { get; private set; } = new List<RefreshTokenEntity>();
 }
