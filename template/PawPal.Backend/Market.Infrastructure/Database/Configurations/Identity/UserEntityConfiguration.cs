@@ -21,14 +21,9 @@ public sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEntit
             .IsRequired();
 
         // Roles
-        b.Property(x => x.IsAdmin)
-            .HasDefaultValue(false);
-
-        b.Property(x => x.IsManager)
-            .HasDefaultValue(false);
-
-        b.Property(x => x.IsEmployee)
-            .HasDefaultValue(true); // Default: regular user
+        b.Property(x => x.RoleId)
+            .HasDefaultValue(1);
+            
 
         b.Property(x => x.TokenVersion)
             .HasDefaultValue(0);

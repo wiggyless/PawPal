@@ -20,18 +20,6 @@ public interface IAppCurrentUser
     /// </summary>
     bool IsAuthenticated { get; }
 
-    /// <summary>
-    /// Indicates whether the user is an administrator.
-    /// </summary>
-    bool IsAdmin { get; }
-
-    /// <summary>
-    /// Indicates whether the user is a manager.
-    /// </summary>
-    bool IsManager { get; }
-
-    /// <summary>
-    /// Indicates whether the user is a regular employee.
-    /// </summary>
-    bool IsEmployee { get; }
+    //roles: admin, verified user, basic user
+    int? RoleId { get; }
 }
