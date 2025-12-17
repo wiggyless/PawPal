@@ -62,15 +62,18 @@ public static class DynamicDataSeeder
 
         var hasher = new PasswordHasher<UserEntity>();
 
+        var adminRole = await context.Roles.Where(r=> r.Id == 3).FirstOrDefaultAsync();
+        var verifiedRole = await context.Roles.Where(r=> r.Id == 2).FirstOrDefaultAsync();
+        var basicRole = await context.Roles.Where(r=> r.Id == 1).FirstOrDefaultAsync();
         var admin = new UserEntity
         {
             FirstName = "nesto",
             LastName = "nesto",
             Email = "admin@market.local",
             PasswordHash = hasher.HashPassword(null!, "Admin123!"),
-            IsAdmin = true,
+            RoleId = adminRole.Id,
+            Role = adminRole,
             IsEnabled = true,
-            RoleId = 1,
             CityId = 10
         };
 
@@ -80,9 +83,9 @@ public static class DynamicDataSeeder
             LastName = "nesto",
             Email = "manager@market.local",
             PasswordHash = hasher.HashPassword(null!, "User123!"),
-            IsManager = true,
+            RoleId = verifiedRole.Id,
+            Role = verifiedRole,
             IsEnabled = true,
-            RoleId = 2,
             CityId = 11
         };
 
@@ -92,9 +95,9 @@ public static class DynamicDataSeeder
             LastName = "nesto",
             Email = "string",
             PasswordHash = hasher.HashPassword(null!, "string"),
-            IsEmployee = true,
             IsEnabled = true,
-            RoleId = 1,
+            RoleId = adminRole.Id,
+            Role = adminRole,
             CityId = 12
         };
         var dummyForTests = new UserEntity
@@ -103,9 +106,9 @@ public static class DynamicDataSeeder
             LastName = "nesto",
             Email = "test",
             PasswordHash = hasher.HashPassword(null!, "test123"),
-            IsEmployee = true,
             IsEnabled = true,
-            RoleId = 3,
+            RoleId = basicRole.Id,
+            Role=basicRole,
             CityId = 12
         };
         context.Users.AddRange(admin, user, dummyForSwagger, dummyForTests);
