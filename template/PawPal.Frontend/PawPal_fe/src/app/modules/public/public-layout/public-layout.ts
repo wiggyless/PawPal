@@ -1,0 +1,30 @@
+import { Component, inject, OnInit } from '@angular/core';
+import { AnimalCategoriesService } from '../../../api-services/animal-categories/animal-categories.service';
+import { CitiesService } from '../../../api-services/cities/cities.service';
+
+@Component({
+  selector: 'app-public-layout',
+  standalone: false,
+  templateUrl: './public-layout.html',
+  styleUrl: './public-layout.scss',
+})
+export class PublicLayout implements OnInit{
+
+  animalService = inject(AnimalCategoriesService);
+  cityService = inject(CitiesService);
+
+  cities : any = [];
+  animalCategories : any = [];
+
+  ngOnInit(): void {
+     this.animalCategories = this.animalService.listAnimalCategories().subscribe(response => {
+        this.animalCategories  =response;});
+
+      this.cities = this.cityService.listCities().subscribe(response => {
+        console.log(response);
+        this.cities=response;
+      });
+  }
+  
+}
+

@@ -8,6 +8,7 @@ namespace PawPal.API.Controllers.Places
 [Route("[controller]")]
     public class CitiesController(ISender sender) : ControllerBase
     {
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<GetCityByIdQueryDto> GetById(int id,CancellationToken tk)
         {
@@ -15,6 +16,7 @@ namespace PawPal.API.Controllers.Places
             return category;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<PageResult<ListCitiesQueryDto>> List([FromQuery] 
         ListCitiesQuery query,CancellationToken ct)

@@ -24,6 +24,7 @@ namespace PawPal.API.Controllers.Animal_Info
             return category;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<PageResult<ListAnimalCategoriesQueryDto>> List([FromQuery] ListAnimalCategoriesQuery query, CancellationToken ct)
         {
