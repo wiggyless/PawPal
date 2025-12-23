@@ -1,4 +1,5 @@
-﻿using PawPal.Domain.Entities.Adoptions;
+﻿using PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Delete;
+using PawPal.Domain.Entities.Adoptions;
 using PawPal.Domain.Entities.Animal_Info;
 using PawPal.Domain.Entities.Animal_Info.ManyToMany;
 using PawPal.Domain.Entities.Catalog;
@@ -39,5 +40,6 @@ public interface IAppDbContext
     DbSet<LikedUserPosts> LikedUserPosts { get; }
     DbSet<UserToUserMessages> UserToUserMessages { get; }
     DbSet<BreedEntity> Breeds { get; }
+
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

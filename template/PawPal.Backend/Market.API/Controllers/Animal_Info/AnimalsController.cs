@@ -7,7 +7,7 @@ using PawPal.Application.Modules.Animal_Info.Animals.Queries.List;
 namespace PawPal.API.Controllers.Animal_Info
 {
     [ApiController]
-    [Route ("[controller]")]
+    [Route("[controller]")]
     public class AnimalsController(ISender sender) : ControllerBase
     {
 
