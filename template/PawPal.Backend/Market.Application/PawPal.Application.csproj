@@ -26,7 +26,6 @@
     <Folder Include="Modules\Adoptions\AdoptionRequests\Command\Create\" />
     <Folder Include="Modules\Adoptions\AdoptionRequests\Command\Delete\" />
     <Folder Include="Modules\Adoptions\AdoptionRequests\Command\Update\" />
-    <Folder Include="Modules\Adoptions\AdoptionRequests\Queries\" />
     <Folder Include="Modules\Adoptions\AdoptionStories\" />
   </ItemGroup>
 
