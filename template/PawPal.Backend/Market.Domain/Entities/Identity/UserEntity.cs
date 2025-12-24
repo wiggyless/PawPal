@@ -20,5 +20,6 @@ public sealed class UserEntity : BaseEntity
     public CitiesEntity ?City { get; set; }
     public int? RoleId { get; set; } = 1;
     public RolesEntity ?Role { get; set; }
+    public DateTime? LastOnline { get; set; } = DateTime.Now; 
     public ICollection<RefreshTokenEntity> RefreshTokens { get; private set; } = new List<RefreshTokenEntity>();
 }

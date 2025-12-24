@@ -35,11 +35,9 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 FirstName = userName,
                 LastName = userLastName,
                 Email = userEmail,
-                PasswordHash = hasher.HashPassword(null!, password),
-                CityId = 11, // this needs to be changed, trying to figure out how to give user the
-                             // option to choose a city from a list of them, that will be added to his profile 
                 BirthDate = birthDate,
                 ProfilePictureURL = image,
+                RoleId = request.RoleID,
             };
             context.Users.Add(newUser);
             await context.SaveChangesAsync(cancellationToken);
