@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <title>PawPal</title>
+</head>
+<body>
+        <div class="navbar">
+             <div class="logo">
+                <br>
+                <span class="logo-text">PawPal</span>
+                 </div>
+            <div class="navcontent">
+                  <a> ANIMAL CATALOG </a>
+                        <a> TIPS </a>
+                         <a> ABOUT US </a>
+                        <a> NEWS </a>
+                        <button class="primarybtn"> LOG IN </button>
+                        <button class="secondarybtn"> REGISTER </button>
+        </div>
+        </div>
+         <div class="header">
+            <p> NEED A NEW MEMBER OF YOUR FAMILY?</p>
+            <span>Connect with animal lovers across Bosnia and Herzegovina with our 
+                services and adopt an animal today!</span>
+            <br>
+            <div class="options">
+              <select class ="sel">
+                <option value="" disabled selected>Choose an animal category...</option>
+                    @for (cat of animalCategories.items; track cat) {
+                      <option> {{cat.categoryName}} </option>
+                    }
+              </select>
+               <select class ="sel">
+                <option value="" disabled selected>Choose a city...</option>
+                   @for (city of cities.items; track city) {
+                      <option> {{city.name}} </option>
+                    }
+              </select>
+            </div>
+            <div class="search-btn">
+ <button class="primarybtn"> SEARCH</button>
+            </div>
+        </div>
+       
+</body>
+
+</html>
