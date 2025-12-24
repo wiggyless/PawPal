@@ -42,10 +42,10 @@ namespace PawPal.Infrastructure.Migrations
                     b.Property<DateTime?>("ModifiedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("PostId")
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RequirementId")
+                    b.Property<int>("RequirementId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
@@ -973,11 +973,15 @@ namespace PawPal.Infrastructure.Migrations
                 {
                     b.HasOne("PawPal.Domain.Entities.Posts.PostsEntity", "Post")
                         .WithMany()
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PawPal.Domain.Entities.Adoptions.AdoptionRequirementEntity", "Requirement")
                         .WithMany()
-                        .HasForeignKey("RequirementId");
+                        .HasForeignKey("RequirementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
                         .WithMany()

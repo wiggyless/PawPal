@@ -1,0 +1,17 @@
+<div class="login-container">
+    <div class="logo-container">
+        pawpal
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-inputs" >
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="text" id="email" formControlName="email" required class="input">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" formControlName="password" required class="input">
+        </div>
+    </form>
+    <button class="secondarybtn" routerLink="">Go back</button>
+    <button type="submit" class="primarybtn">Login</button>
+</div>

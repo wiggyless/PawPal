@@ -17,13 +17,18 @@ export class PublicLayout implements OnInit{
   animalCategories : any = [];
 
   ngOnInit(): void {
-     this.animalCategories = this.animalService.listAnimalCategories().subscribe(response => {
+    this.loadCategories();
+    this.loadCities();
+  }
+  loadCities() {
+    this.cities = this.cityService.listCities().subscribe(response => {
+      this.cities=response;
+    });
+  }
+  
+  loadCategories() : void{
+ this.animalCategories = this.animalService.listAnimalCategories().subscribe(response => {
         this.animalCategories  =response;});
-
-      this.cities = this.cityService.listCities().subscribe(response => {
-        console.log(response);
-        this.cities=response;
-      });
   }
   
 }

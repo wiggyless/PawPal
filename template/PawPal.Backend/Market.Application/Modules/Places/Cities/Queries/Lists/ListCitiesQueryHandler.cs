@@ -14,6 +14,7 @@ namespace PawPal.Application.Modules.Places.Cities.Queries.Lists
             CancellationToken ct)
         {
             var cit = context.Cities.AsNoTracking();
+
             if (!string.IsNullOrWhiteSpace(request.Search))
             {
                 cit = cit.Where(x => x.Name.Contains(request.Search));
