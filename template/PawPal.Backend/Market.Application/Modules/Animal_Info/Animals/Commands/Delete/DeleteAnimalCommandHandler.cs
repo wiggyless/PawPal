@@ -12,9 +12,6 @@ namespace PawPal.Application.Modules.Animal_Info.Animals.Commands.Delete
     {
         public async Task<Unit> Handle(DeleteAnimalCommand request, CancellationToken cancellationToken)
         {
-            if (appCurrentUser.UserId is null)
-                throw new MarketBusinessRuleException("123", "User isn't authorized to do this."); //this will change later
-
             var animal = await context.Animals.FirstOrDefaultAsync(x=> x.Id == request.Id, cancellationToken);
             if (animal == null)
                 throw new PawPalNotFoundException($"Animal with Id {request.Id} does not exist!");
