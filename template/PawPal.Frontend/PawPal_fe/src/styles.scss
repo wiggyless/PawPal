@@ -42,3 +42,44 @@ body {
 }
 html, body { height: 100%; }
 body { margin: 0; }
+
+.primarybtn{
+    background-color: #354024;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border-color:#C7B18C;
+    color:#C7B18C;
+    font-size:medium;
+    box-shadow: 0px 4px 6px #25190b;
+}
+.primarybtn:hover{
+    background-color: #424F2D;
+    color:#C7B18C;
+    border-color:#C7B18C;
+}
+.primarybtn:active{
+    background-color: #252D19;
+    color:#C7B18C;
+    border-color:#C7B18C;
+}
+.secondarybtn{
+    background-color: #C7B18C;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border-color:#51432D;
+    color:#51432D;
+    font-size:medium;
+    box-shadow: 0px 4px 6px #25190b;
+}
+
+.secondarybtn:hover{
+    background-color: #D9C6A5;
+    color:#51432D;
+    border-color:#51432D;
+}
+
+.secondarybtn:active{
+    background-color: #B39B71;
+    color:#51432D;
+    border-color:#51432D;
+}
