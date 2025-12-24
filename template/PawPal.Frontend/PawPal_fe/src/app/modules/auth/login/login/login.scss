@@ -1,0 +1,70 @@
+.login-container{
+    margin:auto;
+    margin-top:150px;
+    height:500px;
+    width:600px;
+    background-color: #C7B18C;
+    border-radius: 20px;
+    border:5px solid #51432D;
+    box-shadow: 5px 10px 18px #888888; 
+    position:relative;
+    display:flex;
+    justify-content: space-between;
+}
+
+.login-container .primarybtn{
+    position:absolute;
+    bottom:30px;
+    right:30px;
+    padding:10px 30px;
+}
+
+.login-container .secondarybtn{
+    position:absolute;
+    bottom:30px;
+    right:150px;
+    padding:10px 20px;
+}
+.login-inputs{
+    margin-top:150px;
+    width:60%;
+    display:flex;
+    flex-direction:column;
+    gap:40px;
+    padding: 0 40px;
+}
+
+.login-inputs .form-group{
+    width:100%;
+    display:block;
+}
+
+.login-inputs label{
+    display:block;
+    text-align:right;
+    margin-bottom:6px;
+    color:#51432D;
+    font-weight:600;
+}
+
+.login-inputs input{
+    width:70%;
+    max-width:480px;
+    border-radius:15px;
+    border:2px solid #51432D;
+    padding:8px 12px;
+    background-color:#E5D7C4;
+    margin-left:25%;
+}
+
+.logo-container{
+    margin-top:75px;
+    margin-left:25px;
+    background: url("../login/image/bunny_placeholder.jpg") no-repeat;
+    background-size: cover;
+    background-position: center;
+    width:300px;
+    height:370px;
+    text-align: center;
+    border-radius:20px;
+}
