@@ -13,9 +13,11 @@ namespace PawPal.Domain.Entities.Adoptions
     {
         public string ?Status { get; set; }
         public DateTime DateSent { get; set; }
-        public int ?PostId { get; set; }
+        public int PostId { get; set; }
         public PostsEntity ?Post { get; set; }
-        public int ?RequirementId { get; set; }
+        public int RequirementId { get; set; }
         public AdoptionRequirementEntity ?Requirement { get; set; }
+        public int UserId { get; set; }
+        public UserEntity? User { get; set; }
     }
 }
