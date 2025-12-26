@@ -72,8 +72,8 @@ public partial class Program
 
             // Global exception handler (IExceptionHandler)
             app.UseExceptionHandler();
-            app.UseMiddleware<RequestResponseLoggingMiddleware>();
-
+            //app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            // uncomment this after 
             app.UseHttpsRedirection();
 
             app.UseCors();

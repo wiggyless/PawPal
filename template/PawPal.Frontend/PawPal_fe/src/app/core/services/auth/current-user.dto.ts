@@ -5,4 +5,5 @@ export interface CurrentUserDto {
   isManager: boolean;
   isEmployee: boolean;
   tokenVersion: number;
+  roleid: string;
 }

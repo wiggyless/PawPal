@@ -11,6 +11,7 @@ public sealed class RequestResponseLoggingMiddleware(
     RequestDelegate next,
     ILogger<RequestResponseLoggingMiddleware> logger)
 {
+
     private const int SlowRequestThresholdMs = 400; // 2 seconds
 
     public async Task InvokeAsync(HttpContext context)
