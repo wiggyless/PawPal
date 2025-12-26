@@ -72,7 +72,7 @@ public partial class Program
 
             // Global exception handler (IExceptionHandler)
             app.UseExceptionHandler();
-            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            //app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseHttpsRedirection();
 

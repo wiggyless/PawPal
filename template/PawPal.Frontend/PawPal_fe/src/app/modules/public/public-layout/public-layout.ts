@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AnimalCategoriesService } from '../../../api-services/animal-categories/animal-categories.service';
 import { CitiesService } from '../../../api-services/cities/cities.service';
-
+import { CurrentUserService } from '../../../core/services/auth/current-user.service';
 @Component({
   selector: 'app-public-layout',
   standalone: false,
@@ -12,7 +12,8 @@ export class PublicLayout implements OnInit{
 
   animalService = inject(AnimalCategoriesService);
   cityService = inject(CitiesService);
-
+  currentUser = inject(CurrentUserService);
+  
   cities : any = [];
   animalCategories : any = [];
 
