@@ -21,7 +21,7 @@ const refreshTokenSubject = new BehaviorSubject<string | null>(null);
  */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const auth = inject(AuthFacadeService);
-
+    
     // 1) Skip auth endpoints (login/refresh/logout)
     if (isAuthEndpoint(req.url)) {
         return next(req);
