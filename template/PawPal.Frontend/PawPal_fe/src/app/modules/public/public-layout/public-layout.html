@@ -9,20 +9,7 @@
     <title>PawPal</title>
 </head>
 <body>
-        <div class="navbar">
-             <div class="logo">
-                <br>
-                <span class="logo-text">PawPal</span>
-                 </div>
-            <div class="navcontent">
-                  <a> ANIMAL CATALOG </a>
-                        <a> TIPS </a>
-                         <a> ABOUT US </a>
-                        <a> NEWS </a>
-                        <button class="primarybtn" routerLink="/auth/login"> LOG IN </button>
-                        <button class="secondarybtn"> REGISTER </button>
-        </div>
-        </div>
+  <app-navbar [roleId]="currentUser.role_id()"></app-navbar>
          <div class="header">
             <p> NEED A NEW MEMBER OF YOUR FAMILY?</p>
             <span>Connect with animal lovers across Bosnia and Herzegovina with our 

@@ -8,9 +8,6 @@ export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const router = inject(Router);
 
   const requireAuth = route.data['requireAuth'] === true;
-  const requireAdmin = route.data['requireAdmin'] === true;
-  const requireManager = route.data['requireManager'] === true;
-  const requireEmployee = route.data['requireEmployee'] === true;
 
   const isAuth = currentUser.isAuthenticated();
 
@@ -32,29 +29,17 @@ export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
     return false;
   }
 
-  if (requireAdmin && !user.isAdmin) {
+  if(user.role_id!=3)
+  {
     router.navigate([currentUser.getDefaultRoute()]);
     return false;
   }
-
-  if (requireManager && !user.isManager) {
-    router.navigate([currentUser.getDefaultRoute()]);
-    return false;
-  }
-
-  if (requireEmployee && !user.isEmployee) {
-    router.navigate([currentUser.getDefaultRoute()]);
-    return false;
-  }
-
   return true;
 };
 
 export interface MyAuthRouteData {
   requireAuth?: boolean;
-  requireAdmin?: boolean;
-  requireManager?: boolean;
-  requireEmployee?: boolean;
+  requireRoleId?: number;
 }
 
 export function myAuthData(data: MyAuthRouteData): { auth: MyAuthRouteData } {
