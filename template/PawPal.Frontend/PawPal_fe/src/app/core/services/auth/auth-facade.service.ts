@@ -40,16 +40,14 @@ export class AuthFacadeService {
 
   /** readonly signal za UI – čita se kao auth.currentUser() */
   currentUser = this._currentUser.asReadonly();
-
   /** computed signali nad current userom */
   isAuthenticated = computed(() => !!this._currentUser());
-  isAdmin = computed(() => this._currentUser()?.isAdmin ?? false);
-  isManager = computed(() => this._currentUser()?.isManager ?? false);
-  isEmployee = computed(() => this._currentUser()?.isEmployee ?? false);
 
+  role_id = computed(() => this.currentUser()?.role_id ?? 1);
   constructor() {
     // pokušaj inicijalizacije iz postojećeg access tokena
     this.initializeFromToken();
+    
   }
 
   // =========================================================
@@ -87,7 +85,6 @@ export class AuthFacadeService {
     }
 
     const payload: LogoutCommand = { refreshToken };
-
     // 3) pokušaj server-side logout, ignoriši greške
     return this.api.logout(payload).pipe(catchError(() => of(void 0)));
   }
@@ -140,7 +137,7 @@ export class AuthFacadeService {
    */
   private initializeFromToken(): void {
     const token = this.storage.getAccessToken();
-    if (token) {
+   if (token) {
       this.decodeAndSetUser(token);
     }
   }
@@ -151,13 +148,12 @@ export class AuthFacadeService {
   private decodeAndSetUser(token: string): void {
     try {
       const payload = jwtDecode<JwtPayloadDto>(token);
-      console.log('JWT payload:', payload);
+      console.log('JWT Payload:', payload);
+
       const user: CurrentUserDto = {
         userId: Number(payload.sub),
         email: payload.email,
-        isAdmin: payload.is_admin === 'true',
-        isManager: payload.is_manager === 'true',
-        isEmployee: payload.is_employee === 'true',
+        role_id: Number(payload.role_id),
         tokenVersion: Number(payload.ver),
         roleid: payload.role_id,
       };

@@ -68,3 +68,14 @@
     text-align: center;
     border-radius:20px;
 }
+
+.input-wrapper{
+    position:relative;
+}
+.input-wrapper .eye{
+    position:absolute;
+    top:7px;
+    left:30px;
+    fill:#51432D;
+    cursor:pointer;
+}

@@ -1,8 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AnimalCategoriesService } from '../../../api-services/animal-categories/animal-categories.service';
 import { CitiesService } from '../../../api-services/cities/cities.service';
-import { RouterLink } from '@angular/router';
-
+import { CurrentUserService } from '../../../core/services/auth/current-user.service';
 @Component({
   selector: 'app-public-layout',
   standalone: false,
@@ -12,9 +11,10 @@ import { RouterLink } from '@angular/router';
 export class PublicLayout implements OnInit {
   animalService = inject(AnimalCategoriesService);
   cityService = inject(CitiesService);
-  routeLink: string = '';
-  cities: any = [];
-  animalCategories: any = [];
+  currentUser = inject(CurrentUserService);
+  
+  cities : any = [];
+  animalCategories : any = [];
 
   ngOnInit(): void {
     this.loadCategories();

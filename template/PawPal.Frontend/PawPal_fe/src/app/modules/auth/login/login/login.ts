@@ -20,8 +20,8 @@ export class LoginComponent extends BaseComponent {
   hidePassword = true;
 
   form = this.fb.group({
-      email: ['admin@lalalalalla.local', [Validators.required, Validators.email]],
-    password: ['lalalal!', [Validators.required]],
+      email: ['gugugaga', [Validators.required, Validators.email]],
+    password: ['Admin123!', [Validators.required]],
     rememberMe: [false],
   });
 
@@ -36,9 +36,13 @@ export class LoginComponent extends BaseComponent {
         fingerprint : null
       };
 
+      console.log(payload);
       this.auth.login(payload).subscribe({
       next: () => {
         this.stopLoading();
+        console.log("Login successful");
+        
+        console.log(this.currentUser.role_id());
         const target = this.currentUser.getDefaultRoute();
         this.router.navigate([target]);
       },
