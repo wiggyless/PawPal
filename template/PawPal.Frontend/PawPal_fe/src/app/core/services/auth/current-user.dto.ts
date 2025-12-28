@@ -3,4 +3,5 @@ export interface CurrentUserDto {
   email: string;
   role_id: number;
   tokenVersion: number;
+  roleid: string;
 }

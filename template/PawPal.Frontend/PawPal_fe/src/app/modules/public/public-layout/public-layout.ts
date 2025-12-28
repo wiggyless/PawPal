@@ -8,8 +8,7 @@ import { CurrentUserService } from '../../../core/services/auth/current-user.ser
   templateUrl: './public-layout.html',
   styleUrl: './public-layout.scss',
 })
-export class PublicLayout implements OnInit{
-
+export class PublicLayout implements OnInit {
   animalService = inject(AnimalCategoriesService);
   cityService = inject(CitiesService);
   currentUser = inject(CurrentUserService);
@@ -22,15 +21,16 @@ export class PublicLayout implements OnInit{
     this.loadCities();
   }
   loadCities() {
-    this.cities = this.cityService.listCities().subscribe(response => {
-      this.cities=response;
+    let startFrom = new Date().getTime();
+    this.cities = this.cityService.listCities().subscribe((response) => {
+      this.cities = response;
+      console.log(new Date().getTime() - startFrom); // for calculating response in ms
     });
   }
-  
-  loadCategories() : void{
- this.animalCategories = this.animalService.listAnimalCategories().subscribe(response => {
-        this.animalCategories  =response;});
-  }
-  
-}
 
+  loadCategories(): void {
+    this.animalCategories = this.animalService.listAnimalCategories().subscribe((response) => {
+      this.animalCategories = response;
+    });
+  }
+}

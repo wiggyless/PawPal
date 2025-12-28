@@ -2,7 +2,7 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of, tap, catchError, map } from 'rxjs';
-import { jwtDecode } from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode';
 
 import { AuthApiService } from '../../../api-services/auth/auth-api.service';
 import {
@@ -61,7 +61,7 @@ export class AuthFacadeService {
   login(payload: LoginCommand): Observable<void> {
     return this.api.login(payload).pipe(
       tap((response: LoginCommandDto) => {
-        this.storage.saveLogin(response);           // access + refresh + expiries
+        this.storage.saveLogin(response); // access + refresh + expiries
         this.decodeAndSetUser(response.accessToken); // popuni _currentUser
       }),
       map(() => void 0)
@@ -96,8 +96,8 @@ export class AuthFacadeService {
   refresh(payload: RefreshTokenCommand): Observable<RefreshTokenCommandDto> {
     return this.api.refresh(payload).pipe(
       tap((response: RefreshTokenCommandDto) => {
-        this.storage.saveRefresh(response);           // snimi nove tokene
-        this.decodeAndSetUser(response.accessToken);  // update current usera
+        this.storage.saveRefresh(response); // snimi nove tokene
+        this.decodeAndSetUser(response.accessToken); // update current usera
       })
     );
   }
@@ -155,6 +155,7 @@ export class AuthFacadeService {
         email: payload.email,
         role_id: Number(payload.role_id),
         tokenVersion: Number(payload.ver),
+        roleid: payload.role_id,
       };
 
       this._currentUser.set(user);
