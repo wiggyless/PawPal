@@ -2,7 +2,7 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of, tap, catchError, map } from 'rxjs';
-import { jwtDecode } from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode';
 
 import { AuthApiService } from '../../../api-services/auth/auth-api.service';
 import {
@@ -40,16 +40,14 @@ export class AuthFacadeService {
 
   /** readonly signal za UI – čita se kao auth.currentUser() */
   currentUser = this._currentUser.asReadonly();
-
   /** computed signali nad current userom */
   isAuthenticated = computed(() => !!this._currentUser());
-  isAdmin = computed(() => this._currentUser()?.isAdmin ?? false);
-  isManager = computed(() => this._currentUser()?.isManager ?? false);
-  isEmployee = computed(() => this._currentUser()?.isEmployee ?? false);
 
+  role_id = computed(() => this.currentUser()?.role_id ?? 1);
   constructor() {
     // pokušaj inicijalizacije iz postojećeg access tokena
     this.initializeFromToken();
+    
   }
 
   // =========================================================
@@ -63,7 +61,7 @@ export class AuthFacadeService {
   login(payload: LoginCommand): Observable<void> {
     return this.api.login(payload).pipe(
       tap((response: LoginCommandDto) => {
-        this.storage.saveLogin(response);           // access + refresh + expiries
+        this.storage.saveLogin(response); // access + refresh + expiries
         this.decodeAndSetUser(response.accessToken); // popuni _currentUser
       }),
       map(() => void 0)
@@ -87,7 +85,6 @@ export class AuthFacadeService {
     }
 
     const payload: LogoutCommand = { refreshToken };
-
     // 3) pokušaj server-side logout, ignoriši greške
     return this.api.logout(payload).pipe(catchError(() => of(void 0)));
   }
@@ -99,8 +96,8 @@ export class AuthFacadeService {
   refresh(payload: RefreshTokenCommand): Observable<RefreshTokenCommandDto> {
     return this.api.refresh(payload).pipe(
       tap((response: RefreshTokenCommandDto) => {
-        this.storage.saveRefresh(response);           // snimi nove tokene
-        this.decodeAndSetUser(response.accessToken);  // update current usera
+        this.storage.saveRefresh(response); // snimi nove tokene
+        this.decodeAndSetUser(response.accessToken); // update current usera
       })
     );
   }
@@ -140,7 +137,7 @@ export class AuthFacadeService {
    */
   private initializeFromToken(): void {
     const token = this.storage.getAccessToken();
-    if (token) {
+   if (token) {
       this.decodeAndSetUser(token);
     }
   }
@@ -151,14 +148,14 @@ export class AuthFacadeService {
   private decodeAndSetUser(token: string): void {
     try {
       const payload = jwtDecode<JwtPayloadDto>(token);
+      console.log('JWT Payload:', payload);
 
       const user: CurrentUserDto = {
         userId: Number(payload.sub),
         email: payload.email,
-        isAdmin: payload.is_admin === 'true',
-        isManager: payload.is_manager === 'true',
-        isEmployee: payload.is_employee === 'true',
+        role_id: Number(payload.role_id),
         tokenVersion: Number(payload.ver),
+        roleid: payload.role_id,
       };
 
       this._currentUser.set(user);

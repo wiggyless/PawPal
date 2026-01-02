@@ -55,6 +55,7 @@ public sealed class JwtTokenService : IJwtTokenService
             notBefore: nowUtc,
             expires: accessExpires,
             signingCredentials: creds
+         
         );
 
         var accessToken = new JwtSecurityTokenHandler().WriteToken(jwt);

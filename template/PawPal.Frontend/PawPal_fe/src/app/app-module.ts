@@ -16,18 +16,7 @@ import { from } from 'rxjs';
 import { CatalogComponent } from './modules/public/catalog/catalog/catalog';
 @NgModule({
   declarations: [App],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    NgSelectModule,
-    DatePicker,
-    MatDatepickerModule,
-    MatInputModule,
-    MatNativeDateModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    FormsModule,
-  ],
+  imports: [BrowserModule, AppRoutingModule],
   providers: [provideBrowserGlobalErrorListeners(), provideHttpClient(withFetch())],
   bootstrap: [App],
 })

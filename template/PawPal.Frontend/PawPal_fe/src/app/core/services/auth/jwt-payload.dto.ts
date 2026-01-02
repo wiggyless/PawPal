@@ -2,9 +2,7 @@
 export interface JwtPayloadDto {
   sub: string;
   email: string;
-  is_admin: string;
-  is_manager: string;
-  is_employee: string;
+  role_id:number;
   ver: string;
   iat: number;
   exp: number;
