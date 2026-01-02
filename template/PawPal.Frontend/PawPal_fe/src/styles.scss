@@ -1,24 +1,23 @@
-
 // Include theming for Angular Material with `mat.theme()`.
 // This Sass mixin will define CSS variables that are used for styling Angular Material
 // components according to the Material 3 design spec.
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
-
+@import '@ng-select/ng-select/themes/default.theme.css';
 html {
-  @include mat.theme((
-    color: (
-      primary: mat.$cyan-palette,
-      tertiary: mat.$orange-palette,
-    ),
-    density: 0,
-  ));
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$cyan-palette,
+        tertiary: mat.$orange-palette,
+      ),
+      density: 0,
+    )
+  );
 }
 
-* {
-  font-family: Nunito, sans-serif;
-}
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
 
 body {
   // Default the application to a light color theme. This can be changed to
@@ -38,48 +37,76 @@ body {
 }
 /* You can add global styles to this file, and also import other style files */
 body {
-  background-color: #E5D7C4;
+  background-color: #e5d7c4;
 }
-html, body { height: 100%; }
-body { margin: 0; }
-
-.primarybtn{
-    background-color: #354024;
-    padding: 10px 20px;
-    border-radius: 5px;
-    border-color:#C7B18C;
-    color:#C7B18C;
-    font-size:medium;
-    box-shadow: 0px 4px 6px #25190b;
+html,
+body {
+  height: 100%;
 }
-.primarybtn:hover{
-    background-color: #424F2D;
-    color:#C7B18C;
-    border-color:#C7B18C;
-}
-.primarybtn:active{
-    background-color: #252D19;
-    color:#C7B18C;
-    border-color:#C7B18C;
-}
-.secondarybtn{
-    background-color: #C7B18C;
-    padding: 10px 20px;
-    border-radius: 5px;
-    border-color:#51432D;
-    color:#51432D;
-    font-size:medium;
-    box-shadow: 0px 4px 6px #25190b;
+body {
+  margin: 0;
 }
 
-.secondarybtn:hover{
-    background-color: #D9C6A5;
-    color:#51432D;
-    border-color:#51432D;
+.primarybtn {
+  background-color: #354024;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border-color: #c7b18c;
+  color: #c7b18c;
+  font-size: medium;
+  box-shadow: 0px 4px 6px #25190b;
+}
+.primarybtn:hover {
+  background-color: #424f2d;
+  color: #c7b18c;
+  border-color: #c7b18c;
+}
+.primarybtn:active {
+  background-color: #252d19;
+  color: #c7b18c;
+  border-color: #c7b18c;
+}
+.secondarybtn {
+  background-color: #c7b18c;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border-color: #51432d;
+  color: #51432d;
+  font-size: medium;
+  box-shadow: 0px 4px 6px #25190b;
 }
 
-.secondarybtn:active{
-    background-color: #B39B71;
-    color:#51432D;
-    border-color:#51432D;
+.secondarybtn:hover {
+  background-color: #d9c6a5;
+  color: #51432d;
+  border-color: #51432d;
+}
+
+.secondarybtn:active {
+  background-color: #b39b71;
+  color: #51432d;
+  border-color: #51432d;
+}
+.ng-select {
+  border-radius: 10px;
+  background-color: #f3e9db;
+  width: 17em;
+  border-radius: 100px;
+}
+.ng-select .ng-select-container {
+  border: 0px;
+  color: #493c1d;
+  background-color: #f3e9db;
+  font-style: italic;
+  font-size: large;
+  border-radius: 100px;
+}
+.ng-select-container .ng-input {
+  padding: 0px;
+}
+.ng-select .ng-dropdown-panel {
+  border-radius: 100px;
+  margin: 0px;
+  border: 0px;
+  background-color: #f3e9db;
 }

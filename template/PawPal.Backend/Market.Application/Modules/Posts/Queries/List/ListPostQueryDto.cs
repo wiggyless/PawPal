@@ -9,9 +9,16 @@ namespace PawPal.Application.Modules.Posts.Queries.List
 {
     public class ListPostQueryDto
     {
-        public string UserName { get; set; }
-        public AnimalEntity Animal { get; set; }
-        public string? CityName { get; set; }
+        public int PostID { get; set; }
+        public string Name { get; set; }
+        public int AnimalID  { get; set; }
+        public int GenderID { get; set; }
+        public int CategoryID { get; set; }
+        public string Breed { get; set; }
+        public int Age { get; set; }
+        public int? CityID { get; set; }
+        public int UserID { get; set; } 
+        public string? PhotoURL { get; set; }
         public DateTime? DateAdded { get; set; }
     }
 }

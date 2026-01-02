@@ -14,6 +14,7 @@ namespace PawPal.API.Controllers.Places
             var category = await sender.Send(new GetCantonByIdQuery { Id = id }, tk);
             return category;
         }
+        [AllowAnonymous]
         [HttpGet]
 
         public async Task<PageResult<ListCantonsQueryDto>> List([FromQuery] 
