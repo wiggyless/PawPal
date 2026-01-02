@@ -3,11 +3,11 @@ import { CurrentUserService } from '../../../../core/services/auth/current-user.
 
 @Component({
   selector: 'app-navbar',
-  standalone: false,
+  standalone: true,
   templateUrl: './navbar.html',
-  styleUrl: './navbar.scss'
+  styleUrl: './navbar.scss',
 })
 export class NavbarComponent {
-    currentUser = inject(CurrentUserService);
-    @Input() roleId: number | null = null;
+  currentUser = inject(CurrentUserService);
+  @Input() roleId: number | null = null;
 }
