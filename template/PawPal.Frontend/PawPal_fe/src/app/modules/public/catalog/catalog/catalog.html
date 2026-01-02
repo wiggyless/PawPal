@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+      rel="stylesheet"
+    />
+    <title>PawPal</title>
+  </head>
+  <body>
+    <div class="catalog-container">
+      <div class="navbar">
+        <div class="logo">
+          <br />
+          <span class="logo-text">PawPal</span>
+        </div>
+        <div class="navcontent">
+          <a routerLink="/catalog"> ANIMAL CATALOG </a>
+          <a> TIPS </a>
+          <a> ABOUT US </a>
+          <a> NEWS </a>
+          <button class="primarybtn" routerLink="/auth/login">LOG IN</button>
+          <button class="secondarybtn">Reset</button>
+        </div>
+      </div>
+      <div class="header-sort">
+        <div class="select-container">
+          <div class="select-child">
+            <label for="ng-select">Categories</label>
+            <ng-select
+              [(ngModel)]="selectedCat"
+              placeholder="Choose category"
+              [clearable]="false"
+              [searchable]="false"
+              (change)="getBreedSelect()"
+            >
+              @for (cat of animalCategories.items; track cat){
+              <ng-option [value]="cat.id">
+                {{ cat.categoryName }}
+              </ng-option>
+              }
+            </ng-select>
+          </div>
+          <div class="select-child">
+            <label for="ng-select">Breed</label>
+            <ng-select
+              [(ngModel)]="selectedBreed"
+              placeholder="Choose breed"
+              [clearable]="false"
+              [searchable]="false"
+            >
+              @for (breed of breedArr; track breed){
+              <ng-option [value]="breed.name">
+                {{ breed.name }}
+              </ng-option>
+              }
+            </ng-select>
+          </div>
+          <div class="select-child">
+            <label for="ng-select">Gender</label>
+            <ng-select
+              [(ngModel)]="selectedGender"
+              class="custom"
+              placeholder="Choose Gender"
+              [clearable]="false"
+              [searchable]="false"
+            >
+              @for (gen of genderList.items; track gen){
+              <ng-option [value]="gen.id">
+                {{ gen.name }}
+              </ng-option>
+              }
+            </ng-select>
+          </div>
+          <div class="select-child">
+            <label for="ng-select">Cantons</label>
+            <ng-select
+              [(ngModel)]="selectedCanton"
+              placeholder="Choose Canton"
+              [clearable]="false"
+              [searchable]="false"
+              (change)="changeCity()"
+            >
+              @for (can of cantonsList.items; track can){
+              <ng-option [value]="can">
+                {{ can.fullName }}
+              </ng-option>
+              }
+            </ng-select>
+          </div>
+          <div class="select-child">
+            <label for="ng-select">City</label>
+            <ng-select
+              [(ngModel)]="selectedCity"
+              class="custom"
+              placeholder="Choose City"
+              [clearable]="false"
+              [searchable]="false"
+            >
+              @for (cit of selectedCanton?.cities; track cit){
+              <ng-option [value]="cit.id">
+                {{ cit.name }}
+              </ng-option>
+              }
+            </ng-select>
+          </div>
+          <div class="select-child">
+            <mat-form-field>
+              <mat-label for="select-bar">Age</mat-label>
+              <input matInput type="text" [(ngModel)]="ageValue" />
+              @if (ageValue) {
+              <button matSuffix matIconButton aria-label="Clear" (click)="ageValue = ''">
+                <mat-icon>x</mat-icon>
+              </button>
+              }
+            </mat-form-field>
+          </div>
+          <div class="select-child">
+            <label for="date-form">Date</label>
+            <mat-form-field class="date-form">
+              <mat-date-range-input [rangePicker]="picker" [formGroup]="datePicker" disabled>
+                <input
+                  matInput
+                  matStartDate
+                  placeholder="Start date"
+                  #fromInputMin
+                  formControlName="start"
+                />
+                <input
+                  matInput
+                  matEndDate
+                  placeholder="End date"
+                  #fromInputMax
+                  formControlName="end"
+                />
+              </mat-date-range-input>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker disabled="false"></mat-date-range-picker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="header-buttons">
+          <button (click)="searchCatalog()" class="primarybtn">Search</button>
+          <button (click)="clearSearch()" class="secondarybtn">Clear Search</button>
+        </div>
+      </div>
+      <div class="header-posts-container">
+        <div class="header-posts-title">
+          <p>Vas rezultat pretrage</p>
+        </div>
+        <div class="header-posts">
+          @for(post of postArr; track post){
+          <div class="post">
+            <div class="post-image-container"></div>
+            <div class="post-detail">
+              <h3>{{ post.name }}</h3>
+              <p>{{ post.dateAdded }}</p>
+              <p>{{ post.breed }}</p>
+              <p>{{ post.genderID }}</p>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

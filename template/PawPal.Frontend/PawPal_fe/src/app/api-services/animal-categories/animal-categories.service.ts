@@ -7,14 +7,12 @@ import { buildHttpParams } from '../../core/models/build-http-params';
 @Injectable({
   providedIn: 'root',
 })
-
 export class AnimalCategoriesService {
-    httpClient = inject(HttpClient);
-    private apiUrl = environment.apiUrl + '/AnimalCategories';
+  httpClient = inject(HttpClient);
+  private apiUrl = environment.apiUrl + '/AnimalCategories';
 
-    listAnimalCategories(request? : any): Observable<ListAnimalCategoriesQueryDto> {
-            const params = request ? buildHttpParams(request as any) : undefined;
-            return this.httpClient.get<ListAnimalCategoriesQueryDto>(this.apiUrl, { params });
-    }
-
+  listAnimalCategories(request?: any): Observable<ListAnimalCategoriesQueryDto> {
+    const params = request ? buildHttpParams(request as any) : undefined;
+    return this.httpClient.get<ListAnimalCategoriesQueryDto>(this.apiUrl, { params });
+  }
 }
