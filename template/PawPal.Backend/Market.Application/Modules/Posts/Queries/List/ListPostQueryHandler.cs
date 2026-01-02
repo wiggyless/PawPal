@@ -10,24 +10,30 @@ namespace PawPal.Application.Modules.Posts.Queries.List
     {
         public async Task<PageResult<ListPostQueryDto>> Handle(ListPostQuery request,CancellationToken cancellationToken)
         {
-            var posts = context.Posts.AsQueryable();
+            var posts = context.Posts.Include(x=>x.Animal).AsQueryable();
             if (!string.IsNullOrWhiteSpace(request.SearchCityName))
-                posts = context.Posts.Where(x => x.City.Name.ToLower().Contains(request.SearchCityName.ToLower()));
+                posts = posts.Where(x => x.City.Name.ToLower().Contains(request.SearchCityName.ToLower()));
             if (!string.IsNullOrWhiteSpace(request.SearchCategoryName))
-                posts = context.Posts.Where(x => x.Animal.Category.CategoryName.ToLower().Contains(request.SearchCategoryName.ToLower()));
+                posts = posts.Where(x => x.Animal.Category.CategoryName.ToLower().Contains(request.SearchCategoryName.ToLower()));
             if (!string.IsNullOrWhiteSpace(request.SearchGender))
-                posts = context.Posts.Where(x => x.Animal.Gender.GenderName.ToLower().Contains(request.SearchGender.ToLower()));
+                posts = posts.Where(x => x.Animal.Gender.GenderName.ToLower().Contains(request.SearchGender.ToLower()));
             if (!string.IsNullOrWhiteSpace(request.SearchBreed))
-                posts = context.Posts.Where(x => x.Animal.Breed.ToLower().Contains(request.SearchBreed.ToLower()));
+                posts = posts.Where(x => x.Animal.Breed.ToLower().Contains(request.SearchBreed.ToLower()));
             if (request.SearchDateAddedMax !=null && request.SearchDateAddedMin !=null)
-                posts = context.Posts.Where(x => x.DateAdded >= request.SearchDateAddedMin && x.DateAdded <= request.SearchDateAddedMax);
+                posts = posts.Where(x => x.DateAdded >= request.SearchDateAddedMin && x.DateAdded <= request.SearchDateAddedMax);
             var postList = posts.OrderBy(x => x.Animal.Category.CategoryName).Select(x => new ListPostQueryDto
             {
-                UserName = x.User.FirstName,
-                Animal = x.Animal,
-                CityName = x.City.Name,
+                PostID = x.Id,
+                UserID = x.UserId,
+                Name = x.Animal.Name,
+                AnimalID = x.AnimalID,
+                CategoryID = x.Animal.CategoryId,
+                Breed = x.Animal.Breed,
+                PhotoURL = x.PhotoURL,
+                GenderID = x.Animal.GenderId,
+                CityID = x.CityId,
+                Age = x.Animal.Age,
                 DateAdded = x.DateAdded,
-                // more paramteres to be added myb ;D
             });
             return await PageResult<ListPostQueryDto>.FromQueryableAsync(postList, request.Paging, cancellationToken);
         

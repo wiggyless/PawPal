@@ -25,7 +25,7 @@ namespace PawPal.API.Controllers.Posts
             var post = await sender.Send(new GetPostByIdQuery { Id = id }, cancellationToken);
             return post;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<PageResult<ListPostQueryDto>> List([FromQuery] ListPostQuery query,CancellationToken token)
         {
