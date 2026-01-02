@@ -154,8 +154,7 @@ export class AuthFacadeService {
         userId: Number(payload.sub),
         email: payload.email,
         role_id: Number(payload.role_id),
-        tokenVersion: Number(payload.ver),
-        roleid: payload.role_id,
+        tokenVersion: Number(payload.ver)
       };
 
       this._currentUser.set(user);
