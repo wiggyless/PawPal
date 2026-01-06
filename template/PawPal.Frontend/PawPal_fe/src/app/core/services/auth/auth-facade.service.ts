@@ -15,7 +15,7 @@ import {
 
 import { AuthStorageService } from './auth-storage.service';
 import { CurrentUserDto } from './current-user.dto';
-import { JwtPayloadDto } from './jwt-payload.dto';
+import { JwtPayloadDto, NET_CLAIM_TYPES } from './jwt-payload.dto';
 
 /**
  * Glavni auth servis (façade).
@@ -152,11 +152,11 @@ export class AuthFacadeService {
 
       const user: CurrentUserDto = {
         userId: Number(payload.sub),
-        email: payload.email,
+        email: payload[NET_CLAIM_TYPES.Email],
         role_id: Number(payload.role_id),
-        tokenVersion: Number(payload.ver),
-        roleid: payload.role_id,
+        tokenVersion: Number(payload.ver)
       };
+      console.log(user);
 
       this._currentUser.set(user);
     } catch (error) {

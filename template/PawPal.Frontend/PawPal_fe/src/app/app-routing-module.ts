@@ -5,7 +5,7 @@ const routes: Routes = [
   {
     path: 'admin',
     loadChildren: () =>
-      import('./modules/admin/admin-module').then(m => m.AdminModule)
+      import('./modules/public/public-module').then(m => m.PublicModule)
   },
   {
     path: 'auth',
@@ -15,7 +15,7 @@ const routes: Routes = [
   {
     path: 'client',// bilo ko logiran
     loadChildren: () =>
-      import('./modules/client/client-module').then(m => m.ClientModule)
+      import('./modules/public/public-module').then(m => m.PublicModule)
   },
   {
     path: '',

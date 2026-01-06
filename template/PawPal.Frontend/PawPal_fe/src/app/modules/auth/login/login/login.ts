@@ -17,18 +17,16 @@ export class LoginComponent extends BaseComponent {
     private auth = inject(AuthFacadeService);
     private router = inject(Router);
     private currentUser = inject(CurrentUserService);
-  hidePassword = true;
+    showPassword = false;
 
   form = this.fb.group({
-      email: ['gugugaga', [Validators.required, Validators.email]],
-    password: ['Admin123!', [Validators.required]],
-    rememberMe: [false],
+      email: ['admin@market.local', [Validators.required, Validators.email]],
+    password: ['Admin123!', [Validators.required]]
   });
 
   onSubmit(): void{
     if(this.form.invalid) //ako se ne unesu ispravni podaci, don't submit
       return;
-      this.startLoading();
       //pravimo payload tipa logincommand, i popunjavamo ga vrijednostima iz forme
       const payload : LoginCommand={
         email : this.form.value.email ?? '',
@@ -39,10 +37,7 @@ export class LoginComponent extends BaseComponent {
       console.log(payload);
       this.auth.login(payload).subscribe({
       next: () => {
-        this.stopLoading();
         console.log("Login successful");
-        
-        console.log(this.currentUser.role_id());
         const target = this.currentUser.getDefaultRoute();
         this.router.navigate([target]);
       },
@@ -50,8 +45,10 @@ export class LoginComponent extends BaseComponent {
         this.stopLoading('Invalid credentials. Please try again.');
         console.error('Login error:', err);
       },
-    });
-
+    }); 
+    
   }
-
+  
+  togglePassword():void{  this.showPassword = !this.showPassword;
+  }
 }
