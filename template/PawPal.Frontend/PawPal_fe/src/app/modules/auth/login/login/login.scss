@@ -1,6 +1,14 @@
+span{
+    color:#51432D;
+}
+
+body{
+    background-color: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(187, 116, 34, 0.2) 100%), #E5D7C4 !important; 
+}
+
 .login-container{
     margin:auto;
-    margin-top:150px;
+    margin-top:60px;
     height:500px;
     width:600px;
     background-color: #C7B18C;
@@ -10,6 +18,12 @@
     position:relative;
     display:flex;
     justify-content: space-between;
+} 
+.login-container #prijava{
+    position:absolute;
+    z-index:10;
+    top:10%;
+    left:48%;
 }
 
 .login-container .primarybtn{
@@ -48,20 +62,19 @@
 }
 
 .login-inputs input{
-    width:70%;
+    width:90%;
     max-width:480px;
     border-radius:15px;
     border:2px solid #51432D;
     padding:8px 12px;
     background-color:#E5D7C4;
-    margin-left:25%;
+    margin-left:15%;
 }
 
 .logo-container{
     margin-top:75px;
     margin-left:25px;
-    background: url("../login/image/bunny_placeholder.jpg") no-repeat;
-    background-size: cover;
+    
     background-position: center;
     width:300px;
     height:370px;
@@ -72,10 +85,26 @@
 .input-wrapper{
     position:relative;
 }
-.input-wrapper .eye{
+.input-wrapper .svg-holder{
     position:absolute;
+    right:-5px;
     top:7px;
-    left:30px;
-    fill:#51432D;
     cursor:pointer;
+}
+
+.step{
+    top:10px;
+    left:47%;
+    position:absolute;
+    z-index:100;
+    width:100px;
+    height:100px;
+    background-color: #354024;
+    border-radius:100px;
+    box-shadow: inset 0px -10px 10px rgba(0, 0, 0, 0.35);
+
+}
+
+.step #SVGRepo_iconCarrier{
+    background-color: red;
 }

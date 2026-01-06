@@ -3,48 +3,48 @@
 // components according to the Material 3 design spec.
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
+
+
+
+
 @use '@angular/material' as mat;
 @import '@ng-select/ng-select/themes/default.theme.css';
+
 html {
   @include mat.theme(
     (
       color: (
-        primary: mat.$cyan-palette,
+        primary: mat.$orange-palette,
         tertiary: mat.$orange-palette,
       ),
+      font-family:nunito,
       density: 0,
     )
   );
 }
-
-// Customize the entire app. Change :root to your selector if you want to scope the styles.
-
-body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
-  margin: 0;
-}
-/* You can add global styles to this file, and also import other style files */
-body {
-  background-color: #e5d7c4;
-}
 html,
 body {
-  height: 100%;
-}
-body {
+  height: 100%;;
   margin: 0;
+   background-color: #e5d7c4;;
+}
+*{
+    font-family:nunito, sans-serif;
+    margin:0px;
+    padding:0px;
+    box-sizing: border-box;
+}
+
+.mat-mdc-form-field {
+  border-radius: 100px; /* Adjust to match your ng-select */
+  height:75px;
+}
+
+/* Target the actual input wrapper */
+.mat-mdc-text-field-wrapper {
+  border-radius: 100px !important;
+  height:75px !important;
+  padding:0px;
 }
 
 .primarybtn {
