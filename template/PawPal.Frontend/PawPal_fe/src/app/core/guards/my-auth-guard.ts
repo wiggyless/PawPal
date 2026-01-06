@@ -29,7 +29,7 @@ export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
     return false;
   }
 
-  if(user.role_id!=3)
+  if(user.roleid!=3)
   {
     router.navigate([currentUser.getDefaultRoute()]);
     return false;

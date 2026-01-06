@@ -43,7 +43,7 @@ export class AuthFacadeService {
   /** computed signali nad current userom */
   isAuthenticated = computed(() => !!this._currentUser());
 
-  role_id = computed(() => this.currentUser()?.role_id ?? 1);
+  roleid = computed(() => this.currentUser()?.roleid ?? 1);
   constructor() {
     // pokušaj inicijalizacije iz postojećeg access tokena
     this.initializeFromToken();
@@ -153,7 +153,7 @@ export class AuthFacadeService {
       const user: CurrentUserDto = {
         userId: Number(payload.sub),
         email: payload[NET_CLAIM_TYPES.Email],
-        role_id: Number(payload.role_id),
+        roleid: Number(payload.role_id),
         tokenVersion: Number(payload.ver)
       };
       console.log(user);
