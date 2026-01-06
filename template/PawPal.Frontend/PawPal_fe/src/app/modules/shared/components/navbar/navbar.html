@@ -1,45 +1,42 @@
- <div class="navbar">
-    @if (roleId!=3 && roleId!=2) { 
-    <div class="logo">
-                    <br>
-                    <span class="logo-text">PawPal</span>
-                    </div>
-                <div class="navcontent">
-                    <a> ANIMAL CATALOG </a>
-                            <a> TIPS </a>
-                            <a> ABOUT US </a>
-                            <a> NEWS </a>
-                            <button class="primarybtn" routerLink="/auth/login"> LOG IN </button>
-                            <button class="secondarybtn"> REGISTER </button>
-            </div>
-    }
-    @else if(roleId===3){
-        <div class="logo">
-                    <br>
-                    <span class="logo-text">PawPal</span>
-                    </div>
-                <div class="navcontent">
-                    <a> ANIMAL CATALOG </a>
-                            <a> TIPS </a>
-                            <a> ABOUT US </a>
-                            <a> NEWS </a>
-                            <button class="primarybtn"> ADMIN </button>
-                            <button class="secondarybtn"> NESTO</button>
-            </div>
-    }
-    @else if(roleId===2){
-        <div class="logo">
-                    <br>
-                    <span class="logo-text">PawPal</span>
-                    </div>
-                <div class="navcontent">
-                    <a> ANIMAL CATALOG </a>
-                            <a> TIPS </a>
-                            <a> ABOUT US </a>
-                            <a> NEWS </a>
-                            <button class="primarybtn"> MOJ PROFIL </button>
-                            <button class="secondarybtn"> NESTO</button>
-                            </div>
-                }
-
-            
+<div class="navbar">
+  @if (roleId!=3 && roleId!=2) {
+  <div class="logo">
+    <br />
+    <span class="logo-text">PawPal</span>
+  </div>
+  <div class="navcontent">
+    <a routerLink="/catalog"> ANIMAL CATALOG </a>
+    <a> TIPS </a>
+    <a> ABOUT US </a>
+    <a> NEWS </a>
+    <button class="primarybtn" routerLink="/auth/login">LOG IN</button>
+    <button class="secondarybtn">REGISTER</button>
+  </div>
+  } @else if(roleId===3){
+  <div class="logo">
+    <br />
+    <span class="logo-text">PawPal</span>
+  </div>
+  <div class="navcontent">
+    <a routerLink="/catalog"> ANIMAL CATALOG </a>
+    <a> TIPS </a>
+    <a> ABOUT US </a>
+    <a> NEWS </a>
+    <button class="primarybtn">ADMIN</button>
+    <button class="secondarybtn">NESTO</button>
+  </div>
+  } @else if(roleId===2){
+  <div class="logo">
+    <br />
+    <span class="logo-text">PawPal</span>
+  </div>
+  <div class="navcontent">
+    <a routerLink="/catalog"> ANIMAL CATALOG </a>
+    <a> TIPS </a>
+    <a> ABOUT US </a>
+    <a> NEWS </a>
+    <button class="primarybtn">MOJ PROFIL</button>
+    <button class="secondarybtn">NESTO</button>
+  </div>
+  }
+</div>
