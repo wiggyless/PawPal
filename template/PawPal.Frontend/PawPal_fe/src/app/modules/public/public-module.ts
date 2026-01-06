@@ -13,9 +13,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { NavbarComponent } from '../shared/components/navbar/navbar';
 @NgModule({
   declarations: [PublicLayout, CatalogComponent],
   imports: [
+    NavbarComponent,
     PublicRoutingModule,
     FormsModule,
     NgSelectModule,

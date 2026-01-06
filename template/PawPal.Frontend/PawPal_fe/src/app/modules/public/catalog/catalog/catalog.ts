@@ -11,6 +11,7 @@ import { GenderService } from '../../../../api-services/gender/gender-service';
 import { ListGenderDto } from '../../../../api-services/gender/gender-model';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { CantonsService } from '../../../../api-services/cantons/cantons-service';
+import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 
 @Component({
   selector: 'app-catalog',
@@ -19,6 +20,7 @@ import { CantonsService } from '../../../../api-services/cantons/cantons-service
   styleUrl: './catalog.scss',
 })
 export class CatalogComponent implements OnInit {
+  currentUser = inject(CurrentUserService);
   animalCatService = inject(AnimalCategoriesService);
   animalBreedService = inject(AnimalBreedService);
   animalPostsService = inject(AnimalPostService);
