@@ -13,25 +13,12 @@
   </head>
   <body>
     <div class="catalog-container">
-      <div class="navbar">
-        <div class="logo">
-          <br />
-          <span class="logo-text">PawPal</span>
-        </div>
-        <div class="navcontent">
-          <a routerLink="/catalog"> ANIMAL CATALOG </a>
-          <a> TIPS </a>
-          <a> ABOUT US </a>
-          <a> NEWS </a>
-          <button class="primarybtn" routerLink="/auth/login">LOG IN</button>
-          <button class="secondarybtn">Reset</button>
-        </div>
-      </div>
+      <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
       <div class="header-sort">
         <div class="select-container">
           <div class="select-child">
             <label for="ng-select">Categories</label>
-            <ng-select
+            <ng-select class="custom"
               [(ngModel)]="selectedCat"
               placeholder="Choose category"
               [clearable]="false"
@@ -47,7 +34,7 @@
           </div>
           <div class="select-child">
             <label for="ng-select">Breed</label>
-            <ng-select
+            <ng-select class="custom"
               [(ngModel)]="selectedBreed"
               placeholder="Choose breed"
               [clearable]="false"
@@ -63,9 +50,9 @@
           <div class="select-child">
             <label for="ng-select">Gender</label>
             <ng-select
+            class="custom"
               [(ngModel)]="selectedGender"
-              class="custom"
-              placeholder="Choose Gender"
+              placeholder="Choose gender"
               [clearable]="false"
               [searchable]="false"
             >
@@ -79,8 +66,9 @@
           <div class="select-child">
             <label for="ng-select">Cantons</label>
             <ng-select
+              class="custom"
               [(ngModel)]="selectedCanton"
-              placeholder="Choose Canton"
+              placeholder="Choose canton"
               [clearable]="false"
               [searchable]="false"
               (change)="changeCity()"
@@ -95,9 +83,10 @@
           <div class="select-child">
             <label for="ng-select">City</label>
             <ng-select
+              class="custom"
               [(ngModel)]="selectedCity"
               class="custom"
-              placeholder="Choose City"
+              placeholder="Choose city"
               [clearable]="false"
               [searchable]="false"
             >
@@ -107,17 +96,6 @@
               </ng-option>
               }
             </ng-select>
-          </div>
-          <div class="select-child">
-            <mat-form-field>
-              <mat-label for="select-bar">Age</mat-label>
-              <input matInput type="text" [(ngModel)]="ageValue" />
-              @if (ageValue) {
-              <button matSuffix matIconButton aria-label="Clear" (click)="ageValue = ''">
-                <mat-icon>x</mat-icon>
-              </button>
-              }
-            </mat-form-field>
           </div>
           <div class="select-child">
             <label for="date-form">Date</label>
@@ -144,13 +122,13 @@
           </div>
         </div>
         <div class="header-buttons">
-          <button (click)="searchCatalog()" class="primarybtn">Search</button>
-          <button (click)="clearSearch()" class="secondarybtn">Clear Search</button>
+          <button (click)="searchCatalog()" class="primarybtn">SEARCH</button>
+          <button (click)="clearSearch()" class="secondarybtn">CLEAR</button>
         </div>
       </div>
       <div class="header-posts-container">
         <div class="header-posts-title">
-          <p>Vas rezultat pretrage</p>
+          <p>Vaš rezultat pretrage:</p>
         </div>
         <div class="header-posts">
           @for(post of postArr; track post){

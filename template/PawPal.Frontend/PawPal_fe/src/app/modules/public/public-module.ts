@@ -13,8 +13,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { App } from '../../app';
-import { AppModule } from '../../app-module';
 import { NavbarComponent } from '../shared/components/navbar/navbar';
 import { PostComponent } from './post/post/post';
 @NgModule({

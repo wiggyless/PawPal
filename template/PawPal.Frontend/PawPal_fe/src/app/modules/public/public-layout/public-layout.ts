@@ -24,7 +24,6 @@ export class PublicLayout implements OnInit {
     let startFrom = new Date().getTime();
     this.cities = this.cityService.listCities().subscribe((response) => {
       this.cities = response;
-      console.log(new Date().getTime() - startFrom); // for calculating response in ms
     });
   }
 
