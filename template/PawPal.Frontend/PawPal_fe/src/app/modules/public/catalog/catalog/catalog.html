@@ -154,7 +154,16 @@
         </div>
         <div class="header-posts">
           @for(post of postArr; track post){
-          <div class="post">
+          <div
+            class="post"
+            [routerLink]="['/post']"
+            [state]="{
+              postId: post.postID,
+              animalId: post.animalID,
+              city: post.cityID,
+              dateAdded: post.dateAdded
+            }"
+          >
             <div class="post-image-container"></div>
             <div class="post-detail">
               <h3>{{ post.name }}</h3>

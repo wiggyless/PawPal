@@ -16,8 +16,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { App } from '../../app';
 import { AppModule } from '../../app-module';
 import { NavbarComponent } from '../shared/components/navbar/navbar';
+import { PostComponent } from './post/post/post';
 @NgModule({
-  declarations: [PublicLayout, CatalogComponent],
+  declarations: [PublicLayout, CatalogComponent, PostComponent],
   imports: [
     NavbarComponent,
     PublicRoutingModule,

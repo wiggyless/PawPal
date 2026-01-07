@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { finalize, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ListCitiesQueryDto } from './cities.model';
+import { GetCityByIdDto, ListCitiesQueryDto } from './cities.model';
 import { buildHttpParams } from '../../core/models/build-http-params';
 @Injectable({
   providedIn: 'root',
@@ -13,5 +13,10 @@ export class CitiesService {
   listCities(request?: any): Observable<ListCitiesQueryDto> {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.get<ListCitiesQueryDto>(this.apiUrl, { params });
+  }
+  getCityById(request?: number): Observable<GetCityByIdDto> {
+    this.apiUrl = environment.apiUrl + '/Cities' + '/' + request;
+    const params = request ? buildHttpParams(request as any) : undefined;
+    return this.httpClient.get<GetCityByIdDto>(this.apiUrl, { params });
   }
 }

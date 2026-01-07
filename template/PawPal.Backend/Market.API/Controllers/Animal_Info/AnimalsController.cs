@@ -18,6 +18,7 @@ namespace PawPal.API.Controllers.Animal_Info
             return CreatedAtAction(nameof(GetById), new { id }, new { id });
         }
 
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<GetAnimalByIdQueryDto> GetById(int id, CancellationToken ct)
         {
