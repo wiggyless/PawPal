@@ -85,6 +85,7 @@ export class AuthFacadeService {
     }
 
     const payload: LogoutCommand = { refreshToken };
+    console.log(payload);
     // 3) pokušaj server-side logout, ignoriši greške
     return this.api.logout(payload).pipe(catchError(() => of(void 0)));
   }
@@ -171,5 +172,6 @@ export class AuthFacadeService {
   private clearUserState(): void {
     this._currentUser.set(null);
     this.storage.clear();
+    console.log("Storage cleared!");
   }
 }
