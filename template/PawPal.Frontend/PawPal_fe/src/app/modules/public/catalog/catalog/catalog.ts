@@ -11,6 +11,7 @@ import { GenderService } from '../../../../api-services/gender/gender-service';
 import { ListGenderDto } from '../../../../api-services/gender/gender-model';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { CantonsService } from '../../../../api-services/cantons/cantons-service';
+import { Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 
 @Component({
@@ -27,6 +28,7 @@ export class CatalogComponent implements OnInit {
   citiesService = inject(CitiesService);
   genderService = inject(GenderService);
   cantonsService = inject(CantonsService);
+  router = inject(Router);
   animalCategories: any = [];
   animalBreed: any = [];
   animalPosts: any = [];
@@ -41,8 +43,8 @@ export class CatalogComponent implements OnInit {
   selectedCity: any;
   ageValue: string = '';
   datePicker = new FormGroup({
-    start: new FormControl<Date>(new Date()),
-    end: new FormControl<Date>(new Date()),
+    start: new FormControl<any>(null),
+    end: new FormControl<any>(null),
   });
   @ViewChild('breedSelect') breedRef!: ElementRef;
   fromInputMax: MatInput = new MatInput();
@@ -98,7 +100,6 @@ export class CatalogComponent implements OnInit {
   }
   searchCatalog(): void {
     this.postArr = this.animalPosts.items;
-    var parsedAge = parseInt(this.ageValue);
     this.postArr = (this.animalPosts.items as Array<ListAnimalPostsDto>).filter(
       (x) =>
         (this.selectedCat == null ? true : this.selectedCat == x.categoryID) &&
@@ -107,8 +108,7 @@ export class CatalogComponent implements OnInit {
           : !(this.selectedBreed as string).localeCompare(x.breed)) &&
         this.compareDates(x.dateAdded) &&
         (this.selectedGender == null ? true : this.selectedGender == x.genderID) &&
-        (this.selectedCity == null ? true : this.selectedCity == x.cityID) &&
-        (isNaN(parsedAge) ? true : parsedAge == x.age)
+        (this.selectedCity == null ? true : this.selectedCity == x.cityID)
     );
   }
   clearSearch(): void {

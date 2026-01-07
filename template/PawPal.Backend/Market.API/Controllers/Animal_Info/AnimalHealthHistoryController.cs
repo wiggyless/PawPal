@@ -9,6 +9,7 @@ namespace PawPal.API.Controllers.Animal_Info
     [Route("[controller]")]
     public class AnimalHealthHistoryController(ISender sender) : ControllerBase
     {
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<int>> CreateAnimalHealthHistory
             (CreateAnimalHealthHistoryCommand command, CancellationToken ct)
@@ -16,14 +17,14 @@ namespace PawPal.API.Controllers.Animal_Info
             int id = await sender.Send(command, ct);
             return CreatedAtAction(nameof(GetById), new { id }, new { id });
         }
-
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<GetAnimalHealthHistoryByIdQueryDto> GetById(int id, CancellationToken ct)
         {
             var healthHistory = await sender.Send(new GetAnimalHealthHistoryByIdQuery { Id = id }, ct);
             return healthHistory;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<PageResult<ListAnimalHealthHistoriesQueryDto>> 
             List([FromQuery] ListAnimalHealthHistoriesQuery query, CancellationToken ct)

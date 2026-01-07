@@ -20,10 +20,12 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Queries.Get
                 Where(x=> x.AnimalHealthHistoryId == request.Id)
                 .Select(x=> x.Disability).ToListAsync();
 
+            // changed this to AnimalId, cuz there is no reason to search a healthhistory alone, an animal is needed 
             var healthHistory = await context.AnimalHealthHistories.
-                Where(x => x.Id == request.Id)
+                Where(x => x.AnimalId== request.Id)
                 .Select(x => new GetAnimalHealthHistoryByIdQueryDto
                 {
+                    AnimalID = x.AnimalId,
                     AnimalHealthHistoryId = x.Id,
                     AnimalName = x.Animal.Name,
                     AnimalCategory = x.Animal.Category.CategoryName,

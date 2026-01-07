@@ -14,8 +14,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NavbarComponent } from '../shared/components/navbar/navbar';
+import { PostComponent } from './post/post/post';
 @NgModule({
-  declarations: [PublicLayout, CatalogComponent],
+  declarations: [PublicLayout, CatalogComponent, PostComponent],
   imports: [
     NavbarComponent,
     PublicRoutingModule,

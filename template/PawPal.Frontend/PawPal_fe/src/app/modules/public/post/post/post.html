@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+      rel="stylesheet"
+    />
+    <title>PawPal</title>
+  </head>
+  <body>
+    <div class="post-container">
+      <app-navbar></app-navbar>
+      <div class="post">
+        <div class="post-image"></div>
+        <div class="post-information-container">
+          <h2 class="pet-name">{{ animal.name }}</h2>
+          <div class="post-information">
+            <div class="post-information-pet">
+              <div class="post-information-pet-info">
+                <div class="post-information-pet-attributes">
+                  <p>Category:</p>
+                  <p>Breed:</p>
+                  <p>Age:</p>
+                  <p>Gender:</p>
+                  <p>Vaccinated:</p>
+                  <p>Sterilizied:</p>
+                  <p>Parasite free:</p>
+                  <p>Passport:</p>
+                  <p>Upload date:</p>
+                  <p>Grad:</p>
+                </div>
+                <div class="post-information-pet-attributes-values">
+                  <p>{{ animal.category }}</p>
+                  <p>{{ animal.breed }}</p>
+                  <p>{{ animal.age }}</p>
+                  <p>{{ animal.gender }}</p>
+                  <p>{{ animalHealth.vaccinated }}</p>
+                  <p>{{ animalHealth.spayedOrNeutered }}</p>
+                  <p>{{ animalHealth.parasiteFree }}</p>
+                  <p>{{ animal.hasPapers }}</p>
+                  <p>{{ dateAdded }}</p>
+                  <p>{{ city.name }}</p>
+                </div>
+              </div>
+              <div class="post-information-pet-add-info">
+                <p class="post-information-pet-add-info-label">Additional information</p>
+                <div class="post-information-pet-add-info-text" (click)="checkHealth()">
+                  <p>Hello</p>
+                </div>
+              </div>
+            </div>
+            <div class="post-information-user"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
