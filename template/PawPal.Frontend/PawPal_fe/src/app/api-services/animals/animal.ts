@@ -1,17 +1,20 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
+import { buildHttpParams } from '../../core/models/build-http-params';
+import { GetAnimalByIdDto } from './animal-model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnimalService {
-  constructor(){}
-    private http = inject(HttpClient);
-    private apiURL = environment.apiUrl + '/Animals';
-  
-    public get() : Observable<any>{
-      return this.http.get(this.apiURL);
-    }
+  private http = inject(HttpClient);
+  private apiURL = environment.apiUrl + '/Animals';
+
+  getAnimalById(request?: any): Observable<GetAnimalByIdDto> {
+    this.apiURL = environment.apiUrl + '/Animals' + ('/' + request);
+    const params = request ? buildHttpParams(request as any) : undefined;
+    return this.http.get<GetAnimalByIdDto>(this.apiURL);
+  }
 }

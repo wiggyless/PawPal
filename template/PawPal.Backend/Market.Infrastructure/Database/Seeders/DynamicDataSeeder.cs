@@ -29,6 +29,8 @@ public static class DynamicDataSeeder
         await SeedCantonsAsync(context);
         await SeedCitiesAsync(context);
         await SeedBreedsAsync(context);
+        await SeedAlergiesAync(context);
+        await SeedDisabilitesAync(context);
     }
 
 
@@ -54,6 +56,45 @@ public static class DynamicDataSeeder
             await context.SaveChangesAsync();
             Console.WriteLine("✅ Dynamic seed: product categories added.");
         }
+    }
+    private static async Task SeedAlergiesAync(DatabaseContext context)
+    {
+        if(!await context.Allergies.AnyAsync())
+        {
+            context.Allergies.AddRange(
+                new AllergiesEntity
+                {
+                    Name = "Timothy",
+                    Description = "Big grass"
+                },
+                new AllergiesEntity
+                {
+                    Name = "Black Willow",
+                    Description = "Leaf hehe"
+                }
+                );
+        }
+        await context.SaveChangesAsync();
+    }
+    private static async Task SeedDisabilitesAync(DatabaseContext context)
+    {
+        if (!await context.Allergies.AnyAsync())
+        {
+            context.Disabilities.AddRange(
+                new DisabilitiesEntity
+                {
+                    Name = "Deafness",
+                    Description = "Does not hear",
+                },
+                new DisabilitiesEntity
+                {
+                    Name = "Blindness",
+                    Description = "Does not see",
+                }
+
+                );
+        }
+        await context.SaveChangesAsync();
     }
     private static async Task SeedUsersAsync(DatabaseContext context)
     {

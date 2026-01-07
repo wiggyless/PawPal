@@ -14,7 +14,6 @@ export function buildHttpParams(obj: Record<string, any>, prefix: string = ''): 
   if (obj === undefined || obj === null) {
     return params;
   }
-
   Object.entries(obj).forEach(([key, value]) => {
     // Konstruiši puni ključ (npr. "paging.page")
     const fullKey = prefix ? `${prefix}.${key}` : key;
@@ -31,7 +30,7 @@ export function buildHttpParams(obj: Record<string, any>, prefix: string = ''): 
 
     // 3) niz → dodaj svaki element posebno
     if (Array.isArray(value)) {
-      value.forEach(val => {
+      value.forEach((val) => {
         if (val !== null && val !== undefined) {
           params = params.append(fullKey, String(val));
         }
@@ -42,8 +41,8 @@ export function buildHttpParams(obj: Record<string, any>, prefix: string = ''): 
     // 4) objekti → rekurzivno spljošti
     if (typeof value === 'object' && !(value instanceof Date)) {
       const nestedParams = buildHttpParams(value, fullKey);
-      nestedParams.keys().forEach(nestedKey => {
-        nestedParams.getAll(nestedKey)?.forEach(nestedValue => {
+      nestedParams.keys().forEach((nestedKey) => {
+        nestedParams.getAll(nestedKey)?.forEach((nestedValue) => {
           params = params.append(nestedKey, nestedValue);
         });
       });

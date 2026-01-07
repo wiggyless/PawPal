@@ -9,6 +9,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Queries.Get
 {
     public class GetAnimalHealthHistoryByIdQueryDto
     {
+        public int AnimalID { get; set; }
         public int AnimalHealthHistoryId { get; set; }
         public string? AnimalName { get; set; }
         public string? AnimalCategory { get; set; }
