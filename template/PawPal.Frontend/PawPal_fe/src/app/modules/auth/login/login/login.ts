@@ -33,7 +33,6 @@ export class LoginComponent extends BaseComponent {
         password : this.form.value.password ?? '',
         fingerprint : null
       };
-
       console.log(payload);
       this.auth.login(payload).subscribe({
       next: () => {
@@ -49,6 +48,6 @@ export class LoginComponent extends BaseComponent {
     
   }
   
-  togglePassword():void{  this.showPassword = !this.showPassword;
+  togglePassword():void{this.showPassword = !this.showPassword;
   }
 }
