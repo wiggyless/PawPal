@@ -14,8 +14,8 @@ html {
   @include mat.theme(
     (
       color: (
-        primary: mat.$orange-palette,
-        tertiary: mat.$orange-palette,
+        primary: mat.$green-palette,
+        tertiary: mat.$green-palette,
       ),
       font-family:nunito,
       density: 0,
@@ -98,7 +98,7 @@ html {
   color: #493c1d;
   background-color: #f3e9db;
   font-style: italic;
-  font-size: large;
+  font-size: medium;
   border-radius: 100px;
 }
 .ng-select-container .ng-input {
