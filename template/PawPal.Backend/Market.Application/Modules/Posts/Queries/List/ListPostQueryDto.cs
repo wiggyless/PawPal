@@ -18,7 +18,6 @@ namespace PawPal.Application.Modules.Posts.Queries.List
         public int Age { get; set; }
         public int? CityID { get; set; }
         public int UserID { get; set; } 
-        public string? PhotoURL { get; set; }
         public DateTime? DateAdded { get; set; }
     }
 }

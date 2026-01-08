@@ -15,6 +15,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NavbarComponent } from '../shared/components/navbar/navbar';
 import { PostComponent } from './post/post/post';
+import { KeyValuePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { CarouselModule } from 'primeng/carousel';
+import { ButtonIcon } from 'primeng/button';
 @NgModule({
   declarations: [PublicLayout, CatalogComponent, PostComponent],
   imports: [
@@ -33,6 +37,10 @@ import { PostComponent } from './post/post/post';
     ReactiveFormsModule,
     MatIconModule,
     MatButtonModule,
+    KeyValuePipe,
+    CommonModule,
+    CarouselModule,
+    ButtonIcon,
   ],
 })
 export class PublicModule {}

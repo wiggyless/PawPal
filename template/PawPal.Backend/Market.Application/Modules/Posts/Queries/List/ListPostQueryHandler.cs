@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Hosting;
 namespace PawPal.Application.Modules.Posts.Queries.List
 {
     public sealed class ListPostQueryHandler(IAppDbContext context) : IRequestHandler<ListPostQuery,PageResult<ListPostQueryDto>>
@@ -29,12 +29,12 @@ namespace PawPal.Application.Modules.Posts.Queries.List
                 AnimalID = x.AnimalID,
                 CategoryID = x.Animal.CategoryId,
                 Breed = x.Animal.Breed,
-                PhotoURL = x.PhotoURL,
                 GenderID = x.Animal.GenderId,
                 CityID = x.CityId,
                 Age = x.Animal.Age,
                 DateAdded = x.DateAdded,
             });
+        
             return await PageResult<ListPostQueryDto>.FromQueryableAsync(postList, request.Paging, cancellationToken);
         
         }
