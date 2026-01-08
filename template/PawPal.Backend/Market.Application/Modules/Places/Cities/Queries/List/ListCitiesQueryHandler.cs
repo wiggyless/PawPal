@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace PawPal.Application.Modules.Places.Cities.Queries.Lists
 {
     public sealed class ListCitiesQueryHandler(IAppDbContext context) :
-        IRequestHandler<ListCitiesQuery,PageResult<ListCitiesQueryDto>>
+        IRequestHandler<ListCitiesQuery, PageResult<ListCitiesQueryDto>>
     {
         public async Task<PageResult<ListCitiesQueryDto>> Handle(ListCitiesQuery request,
             CancellationToken ct)

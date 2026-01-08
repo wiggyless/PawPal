@@ -18,7 +18,8 @@
         <div class="select-container">
           <div class="select-child">
             <label for="ng-select">Categories</label>
-            <ng-select class="custom"
+            <ng-select
+              class="custom"
               [(ngModel)]="selectedCat"
               placeholder="Choose category"
               [clearable]="false"
@@ -34,7 +35,8 @@
           </div>
           <div class="select-child">
             <label for="ng-select">Breed</label>
-            <ng-select class="custom"
+            <ng-select
+              class="custom"
               [(ngModel)]="selectedBreed"
               placeholder="Choose breed"
               [clearable]="false"
@@ -50,7 +52,7 @@
           <div class="select-child">
             <label for="ng-select">Gender</label>
             <ng-select
-            class="custom"
+              class="custom"
               [(ngModel)]="selectedGender"
               placeholder="Choose gender"
               [clearable]="false"
@@ -139,10 +141,11 @@
               postId: post.postID,
               animalId: post.animalID,
               city: post.cityID,
-              dateAdded: post.dateAdded
+              dateAdded: post.dateAdded,
+              userId: post.userID,
             }"
           >
-            <div class="post-image-container"></div>
+            <img [src]="imageUrl" class="post-image" />
             <div class="post-detail">
               <h3>{{ post.name }}</h3>
               <p>{{ post.dateAdded }}</p>

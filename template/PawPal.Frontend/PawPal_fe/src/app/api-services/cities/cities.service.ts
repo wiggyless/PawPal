@@ -15,8 +15,7 @@ export class CitiesService {
     return this.httpClient.get<ListCitiesQueryDto>(this.apiUrl, { params });
   }
   getCityById(request?: number): Observable<GetCityByIdDto> {
-    this.apiUrl = environment.apiUrl + '/Cities' + '/' + request;
     const params = request ? buildHttpParams(request as any) : undefined;
-    return this.httpClient.get<GetCityByIdDto>(this.apiUrl, { params });
+    return this.httpClient.get<GetCityByIdDto>(`${this.apiUrl}/${request}`);
   }
 }

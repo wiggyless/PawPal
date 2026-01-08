@@ -60,7 +60,6 @@ public partial class Program
             );
 
             var app = builder.Build();
-
             // ---------------------------------------------------------
             // 4. Middleware pipeline
             // ---------------------------------------------------------
@@ -75,12 +74,13 @@ public partial class Program
             //app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseHttpsRedirection();
-
+            app.UseStaticFiles();
             app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
+
 
             // Database migrations + seeding
             await app.Services.InitializeDatabaseAsync(app.Environment);

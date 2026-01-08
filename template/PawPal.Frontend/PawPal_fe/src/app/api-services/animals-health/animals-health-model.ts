@@ -1,8 +1,8 @@
 export interface GetAnimalsHealthByIdDto {
   animalHealthHistoryId: number;
   animalId: number;
-  vaccinated: boolean;
   parasiteFree: boolean;
+  vaccinated: boolean;
   spayedOrNeutered: boolean;
   dietaryRestrictions: string;
   animalAllergies: Array<string>;
