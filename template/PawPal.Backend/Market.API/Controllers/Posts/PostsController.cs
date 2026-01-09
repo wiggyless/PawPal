@@ -3,7 +3,8 @@ using PawPal.Application.Modules.Posts.Commands.Delete;
 using PawPal.Application.Modules.Posts.Commands.Update;
 using PawPal.Application.Modules.Posts.Queries.GetByID;
 using PawPal.Application.Modules.Posts.Queries.List;
-
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
 namespace PawPal.API.Controllers.Posts
 {
     [ApiController]
@@ -17,7 +18,7 @@ namespace PawPal.API.Controllers.Posts
             int id = await sender.Send(command, cancellationToken);
             return CreatedAtAction(nameof(GetById), new { id }, new { id });
         }
-
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
 
         public async Task<GetPostByIdQueryDto> GetById(int id,CancellationToken cancellationToken)

@@ -12,7 +12,6 @@ namespace PawPal.Application.Modules.Posts.Commands.Create
         public int AnimalID { get; set; }
         public int CityID { get; set; }
         public int? UserId { get; set; }
-        public string? PhotoURL { get; set; }
         public bool? Status { get; set; }
     }
 }

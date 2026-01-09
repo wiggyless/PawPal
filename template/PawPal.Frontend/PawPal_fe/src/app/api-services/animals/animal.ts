@@ -13,8 +13,7 @@ export class AnimalService {
   private apiURL = environment.apiUrl + '/Animals';
 
   getAnimalById(request?: any): Observable<GetAnimalByIdDto> {
-    this.apiURL = environment.apiUrl + '/Animals' + ('/' + request);
     const params = request ? buildHttpParams(request as any) : undefined;
-    return this.http.get<GetAnimalByIdDto>(this.apiURL);
+    return this.http.get<GetAnimalByIdDto>(`${this.apiURL}/${request}`, { params });
   }
 }

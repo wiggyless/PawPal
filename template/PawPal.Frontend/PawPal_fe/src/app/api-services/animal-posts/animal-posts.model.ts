@@ -3,11 +3,11 @@ export interface ListAnimalPostsDto {
   animalID: number;
   cityID: number;
   categoryID: number;
+  userID: number;
   genderID: number;
   name: string;
   age: number;
   breed: string;
-  userId: number;
   photoURL: string;
   dateAdded: Date;
 }
@@ -16,6 +16,6 @@ export interface AnimalPostByIdQuery {
   animalID: number;
   name: string;
   cityID: number;
-  userId: number;
+  userID: number;
   photoURL: string;
 }

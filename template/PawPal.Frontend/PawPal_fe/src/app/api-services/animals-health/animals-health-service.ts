@@ -12,8 +12,7 @@ export class AnimalsHealthService {
   httpClient = inject(HttpClient);
   private apiUrl = environment.apiUrl + '/AnimalHealthHistory';
   getAnimalHealthHistoryById(request?: any): Observable<GetAnimalsHealthByIdDto> {
-    this.apiUrl = (environment.apiUrl + '/AnimalHealthHistory' + ('/' + request)) as string;
     const params = request ? buildHttpParams(request as any) : undefined;
-    return this.httpClient.get<GetAnimalsHealthByIdDto>(this.apiUrl, { params });
+    return this.httpClient.get<GetAnimalsHealthByIdDto>(`${this.apiUrl}/${request}`);
   }
 }

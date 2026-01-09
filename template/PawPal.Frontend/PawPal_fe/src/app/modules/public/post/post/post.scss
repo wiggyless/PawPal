@@ -7,10 +7,10 @@
   align-items: center;
 }
 .post-image {
-  width: 90%;
-  border: 5px solid black;
+  width: 80%;
   height: 350px;
   border-radius: 10px;
+  align-self: center;
 }
 .post-information-container {
   display: flex;
@@ -28,23 +28,26 @@
 .pet-name {
   color: #e5d7c4;
   font-weight: 100;
-  font-size: 30px;
+  font-size: 35px;
   margin-top: 10px;
+  font-weight: bolder;
 }
 .post-information {
   display: grid;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: 50% 50%;
   width: 90%;
   border-radius: 10px;
+  margin-top: 50px;
 }
 .post-information-pet-info {
-  display: grid;
+  display: flex;
   gap: 10px;
   background-color: rgb(82, 67, 48);
-  grid-template-columns: 50% 50%;
-  border: 1px solid green;
+  border: 1px solid rgb(62, 47, 28);
   color: #e5d7c4;
-  font-size: 20px;
+  font-size: 30px;
+  align-items: center;
+  padding: 5px;
 }
 .post-information-pet {
   width: 95%;
@@ -52,26 +55,136 @@
   flex-direction: column;
 }
 .post-information-pet-attributes {
-  text-align: right;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 .post-information-pet-attributes-values {
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 .post-information-pet-add-info {
   width: 100%;
 }
 .post-information-pet-add-info-text {
-  background-color: red;
+  background-color: rgb(243, 233, 219);
   width: 100%;
   height: 200px;
   border-radius: 10px;
-  padding: 5x;
+  padding: 10px;
 }
 .post-information-pet-add-info-label {
   color: #e5d7c4;
   margin: 15px 0px 0px 0px;
 }
+.straight-border {
+  width: 1px;
+  border: 1px solid rgb(62, 47, 28);
+  height: 100%;
+}
+.post-information-user-container {
+  display: flex;
+  color: #e5d7c4;
+  flex-direction: column;
+  border-left: 1px solid rgb(62, 47, 28);
+}
 .post-information-user {
-  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
   background-color: rgb(72, 59, 40);
+  align-items: center;
+}
+.post-information-user-logo {
+  width: 200px;
+  height: 200px;
+  border-radius: 100px;
+  border: 1px solid black;
+  margin-top: 10%;
+  background-image: url('./usagi.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.post-information-user-logo-activity {
+  width: 50px;
+  height: 50px;
+  border: 1px solid green;
+  position: relative;
+  left: 80%;
+  top: 75%;
+  border-radius: 100px;
+  background-color: green;
+}
+.post-information-user-username {
+  margin-top: 10px;
+  font-size: 35px;
+}
+.post-information-user-activity {
+  margin-top: 10px;
+  font-size: 20px;
+}
+.post-information-user-border {
+  margin-top: 10px;
+  border: 1px solid rgb(62, 47, 28);
+  width: 90%;
+}
+.post-information-user-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 50px;
+}
+.post-information-user-buttons button {
+  font-size: 30px;
+  font-weight: 100;
+}
+.post-information-user-report {
+  margin: 200px 20px 20px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+.post-information-user-report p {
+  font-style: italic;
+  margin-bottom: 10px;
+}
+.p-carousel {
+  width: 60%;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.p-carousel-item {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.chevron-left {
+  border: solid black;
+  border-width: 0 5px 5px 0;
+  display: inline-block;
+  padding: 12px;
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+.chevron-right {
+  border: solid black;
+  border-width: 0 5px 5px 0;
+  display: inline-block;
+  padding: 12px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.p-button {
+  width: 50px;
+  height: 50px;
+}
+.p-button-icon-only {
+  --p-button-icon-only-width: 50px;
+  height: 50px;
 }

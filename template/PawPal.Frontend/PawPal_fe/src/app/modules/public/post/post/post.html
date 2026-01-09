@@ -15,45 +15,72 @@
     <div class="post-container">
       <app-navbar></app-navbar>
       <div class="post">
-        <div class="post-image"></div>
+        <p-carousel [value]="imagesList" [numVisible]="1" [numScroll]="1" [circular]="true">
+          <ng-template pTemplate="previousicon">
+            <span class="chevron-left"></span>
+          </ng-template>
+
+          <ng-template pTemplate="nexticon">
+            <span class="chevron-right"></span>
+          </ng-template>
+          <ng-template let-image pTemplate="img">
+            <img class="post-image" src="{{ env.apiUrl + image }}" />
+          </ng-template>
+        </p-carousel>
         <div class="post-information-container">
           <h2 class="pet-name">{{ animal.name }}</h2>
           <div class="post-information">
             <div class="post-information-pet">
               <div class="post-information-pet-info">
                 <div class="post-information-pet-attributes">
-                  <p>Category:</p>
-                  <p>Breed:</p>
-                  <p>Age:</p>
-                  <p>Gender:</p>
+                  @for(ani of animal|keyvalue: keepOrder;track ani.key){
+                  <p>{{ ani.key.charAt(0).toUpperCase() + ani.key.slice(1) }}:</p>
+                  }
                   <p>Vaccinated:</p>
-                  <p>Sterilizied:</p>
-                  <p>Parasite free:</p>
-                  <p>Passport:</p>
-                  <p>Upload date:</p>
-                  <p>Grad:</p>
+                  <p>Sprayed:</p>
+                  <p>ParaisteFree:</p>
+                  <p>Date added:</p>
+                  <p>City:</p>
                 </div>
+                <div class="straight-border"></div>
                 <div class="post-information-pet-attributes-values">
-                  <p>{{ animal.category }}</p>
-                  <p>{{ animal.breed }}</p>
-                  <p>{{ animal.age }}</p>
-                  <p>{{ animal.gender }}</p>
+                  @for(ani of animal|keyvalue: keepOrder;track ani.key){
+                  <p>{{ ani.value }}</p>
+                  }
                   <p>{{ animalHealth.vaccinated }}</p>
                   <p>{{ animalHealth.spayedOrNeutered }}</p>
                   <p>{{ animalHealth.parasiteFree }}</p>
-                  <p>{{ animal.hasPapers }}</p>
                   <p>{{ dateAdded }}</p>
                   <p>{{ city.name }}</p>
                 </div>
               </div>
               <div class="post-information-pet-add-info">
                 <p class="post-information-pet-add-info-label">Additional information</p>
-                <div class="post-information-pet-add-info-text" (click)="checkHealth()">
+                <div class="post-information-pet-add-info-text">
                   <p>Hello</p>
                 </div>
               </div>
             </div>
-            <div class="post-information-user"></div>
+            <div class="post-information-user-container">
+              <div class="post-information-user">
+                <div class="post-information-user-logo">
+                  <div class="post-information-user-logo-activity"></div>
+                </div>
+                <p class="post-information-user-username">
+                  {{ user.firstName }} {{ user.lastName }}
+                </p>
+                <p class="post-information-user-activity">Last time active: {{ user.dateTime }}</p>
+                <div class="post-information-user-border"></div>
+                <div class="post-information-user-buttons">
+                  <button class="primarybtn">Adopt</button>
+                  <button class="primarybtn">Send message</button>
+                </div>
+              </div>
+              <div class="post-information-user-report">
+                <p>Inappropriate content?</p>
+                <button class="secondarybtn">Report</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -11,7 +11,6 @@ namespace PawPal.Application.Modules.Posts.Commands.Update
     {
         [JsonIgnore]
         public int Id { get; set; }
-        public string PhotoURL { get; set; }
         // will add more attributes
     }
 }

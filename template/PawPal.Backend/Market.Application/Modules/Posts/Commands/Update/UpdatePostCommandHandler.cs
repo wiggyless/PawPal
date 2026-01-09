@@ -18,7 +18,6 @@ namespace PawPal.Application.Modules.Posts.Commands.Update
             if (post == null)
                 throw new PawPalNotFoundException("Post entity not found");
 
-            post.PhotoURL = request.PhotoURL;
 
             await context.SaveChangesAsync(cancellationToken);
             

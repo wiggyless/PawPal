@@ -17,13 +17,14 @@ namespace PawPal.API.Controllers.Places
             int id = await sender.Send(cuc, ct);
             return CreatedAtAction(nameof(GetById), new { id }, new { id});
         }
-
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<GetUserByIdQueryDto> GetById(int id, CancellationToken ct)
         {
             var user = await sender.Send(new GetUserByIdQuery { Id = id }, ct);
             return user;
         }
+        [AllowAnonymous]
         [HttpGet]
         public async Task<PageResult<ListUsersQueryDto>> List([FromQuery]
         ListUsersQuery query,CancellationToken ct)

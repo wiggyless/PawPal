@@ -48,6 +48,7 @@ export class CatalogComponent implements OnInit {
   });
   @ViewChild('breedSelect') breedRef!: ElementRef;
   fromInputMax: MatInput = new MatInput();
+  imageUrl = 'https://localhost:7260/posts/Krompir2.jpg';
   ngOnInit(): void {
     this.loadCategories();
     this.loadAnimalBreed();
@@ -110,6 +111,7 @@ export class CatalogComponent implements OnInit {
         (this.selectedGender == null ? true : this.selectedGender == x.genderID) &&
         (this.selectedCity == null ? true : this.selectedCity == x.cityID)
     );
+    console.log(this.postArr);
   }
   clearSearch(): void {
     this.postArr = this.animalPosts.items;

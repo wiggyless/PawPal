@@ -14,7 +14,6 @@ namespace PawPal.Domain.Entities.Posts
     {
         public string? Status { get; set; }
         public DateTime DateAdded { get; set; }
-        public string? PhotoURL { get; set; }
         public int UserId { get; set; }
         public UserEntity ?User { get; set; }
         public int? CityId { get; set; }

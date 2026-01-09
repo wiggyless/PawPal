@@ -40,6 +40,6 @@ public interface IAppDbContext
     DbSet<LikedUserPosts> LikedUserPosts { get; }
     DbSet<UserToUserMessages> UserToUserMessages { get; }
     DbSet<BreedEntity> Breeds { get; }
-
+    DbSet<PostImagesEntity> PostImages { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

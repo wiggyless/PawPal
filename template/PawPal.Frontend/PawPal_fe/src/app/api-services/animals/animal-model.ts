@@ -9,8 +9,8 @@ export interface GetAnimalByIdDto {
   name: string;
   breed: string;
   gender: string;
-  category: string;
   age: number;
+  category: string;
   hasPapers: boolean;
   childFriendly: boolean;
 }
