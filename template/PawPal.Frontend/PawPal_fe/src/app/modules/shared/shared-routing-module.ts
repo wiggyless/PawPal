@@ -8,10 +8,6 @@ const routes: Routes = [
     path: '',
     component: PublicLayout,
   },
-  {
-    path: '/auth/login',
-    component: LoginComponent,
-  },
 ];
 
 @NgModule({
