@@ -11,18 +11,18 @@
                 services and adopt an animal today!</span>
             <br>
             <div class="options">
-              <select class ="sel">
-                <option value="" disabled selected>Choose an animal category...</option>
+              <ng-select class ="custom"
+              placeholder="Choose an animal category">
                     @for (cat of animalCategories.items; track cat) {
-                      <option> {{cat.categoryName}} </option>
+                      <ng-option [value]="cat.id"> {{cat.categoryName}} </ng-option>
                     }
-              </select>
-               <select class ="sel">
-                <option value="" disabled selected>Choose a city...</option>
+              </ng-select>
+               <ng-select class ="custom"
+               placeholder="Choose a city">
                    @for (city of cities.items; track city) {
-                      <option> {{city.name}} </option>
+                      <ng-option [value]="city.id"> {{city.name}} </ng-option>
                     }
-              </select>
+              </ng-select>
             </div>
             <div class="search-btn">
  <button class="primarybtn"> SEARCH</button>

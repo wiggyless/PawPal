@@ -11,6 +11,8 @@ namespace PawPal.API.Controllers.Places
     [Route("[controller]")]
     public class UsersController(ISender sender):ControllerBase
     {
+
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<int>> CreateUser(CreateUserCommand cuc,CancellationToken ct)
         {

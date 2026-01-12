@@ -20,14 +20,22 @@ namespace PawPal.Application.Modules.Users.Commands.Create
             if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(userLastName) ||
                 string.IsNullOrWhiteSpace(userEmail) || string.IsNullOrWhiteSpace(password) || birthDate == null)
             {
-                throw new ValidationException("All fields must be filled");
+                throw new ValidationException("All fields must be filled!");
             }
+
+            var cityExists = await context.Cities.
+               AnyAsync(x => x.Id == request.City, cancellationToken);
+            if (!cityExists)
+            {
+                throw new PawPalConflictException("City does not exist!");
+            }
+
             // checking if the email is being used
             bool emailUsed = await context.Users.
                 AnyAsync(x => x.Email == userEmail, cancellationToken);
             if (emailUsed)
             {
-                throw new PawPalConflictException("Email is already being used");
+                throw new PawPalConflictException("Email is already being used!");
             }
             var hasher = new PasswordHasher<UserEntity>();
             var newUser = new UserEntity
@@ -38,6 +46,9 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 BirthDate = birthDate,
                 ProfilePictureURL = image,
                 RoleId = request.RoleID,
+                PasswordHash = hasher.HashPassword(null, password),
+                CityId = request.City,
+                IsEnabled = true
             };
             context.Users.Add(newUser);
             await context.SaveChangesAsync(cancellationToken);

@@ -12,7 +12,7 @@
  
  <div class="navbar">
     @if (roleId!=3 && roleId!=2) { 
-    <div class="logo">
+    <div class="logo" routerLink="">
                    
                     </div>
                 <div class="navcontent">
@@ -21,11 +21,11 @@
                             <a> ABOUT US </a>
                             <a> NEWS </a>
                             <button class="primarybtn" routerLink="/auth/login"> LOG IN </button>
-                            <button class="secondarybtn"> REGISTER </button>
+                            <button class="secondarybtn" routerLink="/auth/register"> REGISTER </button>
             </div>
     }
-    @else if(roleId===3){
-        <div class="logo">
+    @else if(currentUser.roleid()===3){
+        <div class="logo" routerLink="/admin">
                    
                     </div>
                 <div class="navcontent">
@@ -44,7 +44,7 @@
             </div>
     }
     @else if(roleId===2){
-        <div class="logo">
+        <div class="logo" routerLink="/client">
                     </div>
                 <div class="navcontent">
                     <a routerLink="/catalog" routerLinkActive="active"> ANIMAL CATALOG </a>
