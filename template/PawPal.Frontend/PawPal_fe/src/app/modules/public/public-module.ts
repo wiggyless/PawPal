@@ -19,6 +19,7 @@ import { KeyValuePipe } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonIcon } from 'primeng/button';
+import { Bind } from "primeng/bind";
 @NgModule({
   declarations: [PublicLayout, CatalogComponent, PostComponent],
   imports: [
@@ -41,6 +42,7 @@ import { ButtonIcon } from 'primeng/button';
     CommonModule,
     CarouselModule,
     ButtonIcon,
-  ],
+    Bind
+],
 })
 export class PublicModule {}

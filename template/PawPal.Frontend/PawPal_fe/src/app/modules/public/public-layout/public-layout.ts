@@ -15,13 +15,13 @@ export class PublicLayout implements OnInit {
   
   cities : any = [];
   animalCategories : any = [];
+selectedCategory: any;
 
   ngOnInit(): void {
     this.loadCategories();
     this.loadCities();
   }
   loadCities() {
-    let startFrom = new Date().getTime();
     this.cities = this.cityService.listCities().subscribe((response) => {
       this.cities = response;
     });
@@ -29,6 +29,7 @@ export class PublicLayout implements OnInit {
 
   loadCategories(): void {
     this.animalCategories = this.animalService.listAnimalCategories().subscribe((response) => {
+      console.log(response);
       this.animalCategories = response;
     });
   }

@@ -18,7 +18,6 @@
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            
             <div class="input-wrapper">
                 <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" required class="input" placeholder="Enter your password">
                 <div class="svg-holder" (click)="togglePassword()"> 
@@ -35,4 +34,5 @@
         <button class="secondarybtn" routerLink="">Go back</button>
         <button type="submit" class="primarybtn" [disabled]="form.invalid">Login</button>
     </form>
+    
 </div>

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.service';
 import { Router } from '@angular/router';
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-logout',
   standalone: false,

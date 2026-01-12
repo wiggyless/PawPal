@@ -14,6 +14,7 @@ import { MatDatepicker, MatDatepickerToggle } from '@angular/material/datepicker
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
 @NgModule({
   declarations: [AuthLayout, LoginComponent, LogoutComponent, RegisterComponent],
   imports: [AuthRoutingModule,
@@ -31,7 +32,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatHint,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule, MatSuffix],
+    MatIconModule, MatSuffix, MatProgressSpinner],
 
 })
 export class AuthModule {}

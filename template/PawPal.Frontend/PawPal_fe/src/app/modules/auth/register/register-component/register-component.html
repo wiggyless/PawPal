@@ -20,7 +20,7 @@
         <div class="form-group">
             <label for="cityId">City</label>
            <ng-select class="options" placeholder="Please choose a city" formControlName="cityId" required>
-            @for (city of cityList.items; track $index) {
+                @for (city of cityList.items; track $index) {
                 <ng-option [value]="city.id">
                     {{city.name}}
                 </ng-option>
@@ -84,13 +84,5 @@
     
     </div>
   </mat-step>
-
-<ng-template matStepperIcon="phone">
-    <mat-icon>call_end</mat-icon>
-  </ng-template>
-  <ng-template matStepperIcon="chat">
-    <mat-icon>forum</mat-icon>
-  </ng-template>
-
 </mat-stepper>
 </div>

@@ -48,7 +48,7 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 RoleId = request.RoleID,
                 PasswordHash = hasher.HashPassword(null, password),
                 CityId = request.City,
-
+                IsEnabled = true
             };
             context.Users.Add(newUser);
             await context.SaveChangesAsync(cancellationToken);

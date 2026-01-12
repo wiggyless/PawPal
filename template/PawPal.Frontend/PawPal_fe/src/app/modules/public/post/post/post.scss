@@ -8,10 +8,11 @@
 }
 .post-image {
   width: 80%;
-  height: 350px;
+  height: 600px;
   border-radius: 10px;
   align-self: center;
 }
+
 .post-information-container {
   display: flex;
   flex-direction: column;
@@ -152,7 +153,7 @@
   margin-bottom: 10px;
 }
 .p-carousel {
-  width: 60%;
+  width: 100%;
   padding: 10px;
   justify-content: center;
   align-items: center;

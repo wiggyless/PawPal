@@ -50,9 +50,31 @@ body{
 }
 
 .login-inputs .form-group{
-    width:100%;
-    display:block;
+    height:80px;
+    margin-left:50px;
+    margin-bottom:5px;
+    position:relative;
 }
+.form-group input{
+    position:absolute;
+    right:-10px;
+}
+
+
+.input{
+    border-radius:20px;
+    border:2px solid #E5D7C4;
+    padding:10px 22px;
+    background-color:#E5D7C4;
+    box-shadow:0px 5px 5px #756751;
+    font-size:medium;
+}
+
+
+.input::placeholder{
+    font-style: italic;
+}
+
 
 .login-inputs label{
     display:block;
@@ -60,16 +82,6 @@ body{
     margin-bottom:6px;
     color:#51432D;
     font-weight:600;
-}
-
-.login-inputs input{
-    width:90%;
-    max-width:480px;
-    border-radius:15px;
-    border:2px solid #51432D;
-    padding:8px 12px;
-    background-color:#E5D7C4;
-    margin-left:15%;
 }
 
 .logo-container{

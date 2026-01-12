@@ -3,6 +3,12 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { UserService } from '../../../../api-services/register/users-service';
 import { CreateUserCommand } from '../../../../api-services/register/users-model';
+import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
+import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.service';
+import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
+import { CurrentUserDto } from '../../../../core/services/auth/current-user.dto';
+import { NET_CLAIM_TYPES } from '../../../../core/services/auth/jwt-payload.dto';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-register-component',
   standalone: false,
@@ -14,6 +20,12 @@ export class RegisterComponent implements OnInit {
   private _formBuilder = inject(FormBuilder);
   private cityService = inject(CitiesService);
   private userService = inject(UserService);
+    private auth = inject(AuthFacadeService);
+  private currentUser = inject(CurrentUserService);
+    private router = inject(Router);
+
+
+    
   cityList: any = [];
   cityId : number = 0;
   dateOfBirth : Date = new Date();
@@ -46,24 +58,26 @@ export class RegisterComponent implements OnInit {
    onSubmit() {
     if(this.accountInfo.invalid || this.basicInfo.invalid) return;
       const payload : CreateUserCommand={
-        firstName : this.basicInfo.value.firstName ?? '',
-        lastName : this.basicInfo.value.lastName ?? '',
-        birthDate : new Date(this.basicInfo.value.dateOfBirth ?? ''),
-        email : this.accountInfo.value.email ?? '',
-        password : this.accountInfo.value.password ?? '',
-        roleID : 2,
-        city : this.basicInfo.value.cityId ?? 0,
-        profilePictureURL : null
+        firstName: this.basicInfo.value.firstName ?? '',
+        lastName: this.basicInfo.value.lastName ?? '',
+        birthDate: new Date(this.basicInfo.value.dateOfBirth ?? ''),
+        email: this.accountInfo.value.email ?? '',
+        password: this.accountInfo.value.password ?? '',
+        roleID: 2,
+        city: this.basicInfo.value.cityId ?? 0,
+        profilePictureURL: null,
       }
-      console.log(payload);
+
+      //user is created here
       this.userService.createUser(payload).subscribe({
         next: (res) => {
           console.log("Registration successful, user ID:", res);
+          this.auth.redirectToLogin();
         },
         error: (err) => {
           console.error('Registration error:', err);
         },
       });
-    
-   }
+   
+}
 }
