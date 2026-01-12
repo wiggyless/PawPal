@@ -3,12 +3,21 @@ import { AuthRoutingModule } from './auth-routing-module';
 import { LoginComponent } from './login/login/login';
 import { AuthLayout } from './auth-layout/auth-layout/auth-layout';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatIcon } from "@angular/material/icon";
-import { MatInput } from "@angular/material/input";
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { LogoutComponent } from './logout/logout/logout';
+import { PublicModule } from '../public/public-module';
+import { NavbarComponent } from '../shared/components/navbar/navbar';
 @NgModule({
   declarations: [AuthLayout, LoginComponent, LogoutComponent],
-  imports: [AuthRoutingModule, ReactiveFormsModule, MatIcon, MatInput, CommonModule],
+  imports: [
+    AuthRoutingModule,
+    ReactiveFormsModule,
+    MatIcon,
+    MatInput,
+    CommonModule,
+    NavbarComponent,
+  ],
 })
 export class AuthModule {}

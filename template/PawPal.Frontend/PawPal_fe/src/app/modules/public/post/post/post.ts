@@ -96,6 +96,7 @@ export class PostComponent implements OnInit {
   loadUsers(): void {
     this.userService.getUser(this.userId).subscribe((response) => {
       this.user = response;
+      console.log(response);
     });
   }
   loadPostImages(): void {

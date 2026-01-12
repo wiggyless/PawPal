@@ -1,33 +1,42 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ClientLayout } from './modules/client/client-layout/client-layout/client-layout';
+import { NavbarComponent } from './modules/shared/components/navbar/navbar';
+import { UserProfileComponent } from './modules/client/my-profile/user-profile-component/user-profile-component';
+import { PublicLayout } from './modules/public/public-layout/public-layout';
+import { ClientModule } from './modules/client/client-module';
+import { SharedModule } from 'primeng/api';
+import { PublicModule } from './modules/public/public-module';
 
 const routes: Routes = [
   {
     path: 'admin',
-    loadChildren: () =>
-      import('./modules/public/public-module').then(m => m.PublicModule)
+    loadChildren: () => import('./modules/public/public-module').then((m) => m.PublicModule),
   },
   {
     path: 'auth',
-    loadChildren: () =>
-      import('./modules/auth/auth-module').then(m => m.AuthModule)
+    loadChildren: () => import('./modules/auth/auth-module').then((m) => m.AuthModule),
   },
   {
-    path: 'client',// bilo ko logiran
-    loadChildren: () =>
-      import('./modules/public/public-module').then(m => m.PublicModule)
+    path: 'client', // bilo ko logiran
+    component: PublicLayout,
+    loadChildren: () => PublicModule,
+  },
+  {
+    path: 'client/my-profile',
+    component: ClientLayout,
+    loadChildren: () => ClientModule,
   },
   {
     path: '',
-    loadChildren: () =>
-      import('./modules/public/public-module').then(m => m.PublicModule)
+    loadChildren: () => import('./modules/public/public-module').then((m) => m.PublicModule),
   },
   // fallback 404
-  { path: '**', redirectTo: '' }
+  //{ path: '**', redirectTo: '' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}
