@@ -24,6 +24,7 @@ export class PostComponent implements OnInit {
   cityId: number = 0;
   userId: number = 0;
   postId: number = 0;
+  currentUser = inject(CurrentUserService);
   animalHealthService = inject(AnimalsHealthService);
   animalService = inject(AnimalService);
   cityService = inject(CitiesService);
@@ -98,6 +99,7 @@ export class PostComponent implements OnInit {
   loadUsers(): void {
     this.userService.getUser(this.userId).subscribe((response) => {
       this.user = response;
+      console.log(response);
     });
   }
   loadPostImages(): void {

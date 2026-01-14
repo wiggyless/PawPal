@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { buildHttpParams } from '../../core/models/build-http-params';
-import { GetAnimalByIdDto } from './animal-model';
+import { AddAnimalDto, GetAnimalByIdDto } from './animal-model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,5 +15,9 @@ export class AnimalService {
   getAnimalById(request?: any): Observable<GetAnimalByIdDto> {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.http.get<GetAnimalByIdDto>(`${this.apiURL}/${request}`, { params });
+  }
+  addAnimal(request?: any): Observable<number> {
+    const params = request ? buildHttpParams(request as any) : undefined;
+    return this.http.post<number>(`${this.apiURL}`, request, { params });
   }
 }

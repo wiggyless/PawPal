@@ -44,10 +44,10 @@ export class AuthFacadeService {
   isAuthenticated = computed(() => !!this._currentUser());
 
   roleid = computed(() => this.currentUser()?.roleid ?? 1);
+  userId = computed(() => this.currentUser()?.userId ?? null);
   constructor() {
     // pokušaj inicijalizacije iz postojećeg access tokena
     this.initializeFromToken();
-    
   }
 
   // =========================================================
@@ -138,7 +138,7 @@ export class AuthFacadeService {
    */
   private initializeFromToken(): void {
     const token = this.storage.getAccessToken();
-   if (token) {
+    if (token) {
       this.decodeAndSetUser(token);
     }
   }
@@ -155,7 +155,7 @@ export class AuthFacadeService {
         userId: Number(payload.sub),
         email: payload[NET_CLAIM_TYPES.Email],
         roleid: Number(payload.role_id),
-        tokenVersion: Number(payload.ver)
+        tokenVersion: Number(payload.ver),
       };
       console.log(user);
 
@@ -172,6 +172,6 @@ export class AuthFacadeService {
   private clearUserState(): void {
     this._currentUser.set(null);
     this.storage.clear();
-    console.log("Storage cleared!");
+    console.log('Storage cleared!');
   }
 }
