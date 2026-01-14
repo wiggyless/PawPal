@@ -1,0 +1,251 @@
+<div class="container">
+  <div class="stepper-container">
+    <!-- First stepper images -->
+    <mat-stepper #stepper linear="true">
+      <mat-step [stepControl]="firstFormGroup" class="mat-step-container">
+        <div class="mat-step-image-container">
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Image upload</ng-template>
+            <input
+              placeholder="Image"
+              type="file"
+              formControlName="firstCtrl"
+              required
+              class="image-input"
+              multiple
+              (change)="showImages($event)"
+            />
+          </form>
+          <div class="image-container">
+            @for(img of imageList;track img){
+            <img class="image" [src]="img" />
+            }
+          </div>
+        </div>
+        <div class="stepper-buttons">
+          <button mat-button matStepperPrevious class="secondarybtn">BACK</button>
+          <button mat-button matStepperNext class="primarybtn">NEXT</button>
+        </div>
+      </mat-step>
+
+      <!-- Second stepper main info -->
+      <mat-step [stepControl]="secondFormGroup" label="Main information" class="mat-step-container">
+        <div class="mat-step-main-info-container">
+          <div class="second-step-image-holder">
+            <img class="second-step-image" />
+          </div>
+          <form [formGroup]="secondFormGroup" class="mat-step-form">
+            <mat-form-field>
+              <input matInput formControlName="nameCtrl" placeholder="e.g Rex" required />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Select gender" required formControlName="genderCtrl">
+                @for(gen of genderList.items;track gen){
+                <mat-option [value]="gen.id">{{ gen.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Select category" required formControlName="categoryCtrl">
+                @for(cat of categoryList.items;track cat){
+                <mat-option [value]="cat.id">{{ cat.categoryName }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                type="number"
+                formControlName="ageCtrl"
+                placeholder="e.g 2"
+                required
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="Select breed" required formControlName="breedCtrl">
+                @for(bree of breedList.items;track bree){
+                <mat-option [value]="bree.name">{{ bree.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-checkbox formControlName="passportCheck" (change)="togglePass()"
+              >Passport</mat-checkbox
+            >
+            <mat-form-field>
+              <input matInput formControlName="passportCtrl" placeholder="e.g 77232" />
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="stepper-buttons">
+          <button matButton matStepperPrevious class="secondarybtn">Back</button>
+          <button matButton matStepperNext class="primarybtn">Next</button>
+        </div>
+      </mat-step>
+
+      <!-- Third stepper health info -->
+      <mat-step [stepControl]="thridFormGroup" class="mat-step-container" [optional]="true">
+        <div class="mat-step-health-info-container">
+          <form [formGroup]="thridFormGroup">
+            <ng-template matStepLabel>Health info</ng-template>
+            <!-- Allergy -->
+            <mat-checkbox (change)="toggleAllergy()" formControlName="allergyCheck"
+              >Allergy</mat-checkbox
+            >
+            <mat-form-field>
+              <mat-select placeholder="Select allergy" formControlName="allergyCtrl">
+                @for(bree of breedList.items;track bree){
+                <mat-option [value]="bree.name">{{ bree.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <!-- Disease -->
+            <mat-checkbox (change)="toggleDis()" formControlName="disCheck">Disease</mat-checkbox>
+            <mat-form-field>
+              <mat-select placeholder="Select disease" formControlName="disCtrl">
+                @for(bree of breedList.items;track bree){
+                <mat-option [value]="bree.name">{{ bree.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <!-- Date -->
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker" placeholder="dd.MM.yyyy" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-checkbox (change)="toggleDate()" formControlName="lastDateCheck"
+              >Not sure</mat-checkbox
+            >
+            <!-- Additional info checkboxes-->
+
+            <section class="additional-health-info">
+              <mat-checkbox formControlName="vaccineCheck">Vaccinated</mat-checkbox>
+              <mat-checkbox formControlName="sterCheck">Sterlizied</mat-checkbox>
+              <mat-checkbox formControlName="parasiteCheck">Parasite free</mat-checkbox>
+            </section>
+          </form>
+        </div>
+        <div class="stepper-buttons">
+          <button mat-button matStepperPrevious class="secondarybtn">BACK</button>
+          <button mat-button matStepperNext class="primarybtn" (click)="filterImages()">
+            NEXT
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- Fouth step final -->
+      <mat-step [stepControl]="fourthFromGroup" class="mat-step-container">
+        <div class="mat-step-final-container">
+          <form [formGroup]="fourthFromGroup">
+            <ng-template matStepLabel>Upload post</ng-template>
+          </form>
+        </div>
+        <div class="stepper-buttons">
+          <button mat-button matStepperPrevious class="secondarybtn">BACK</button>
+          <button mat-button (click)="addPost()" class="primarybtn">POST</button>
+        </div>
+        <div class="post-container">
+          <div class="post">
+            <p-carousel
+              [value]="fileteredImageList"
+              [numVisible]="1"
+              [numScroll]="1"
+              [circular]="true"
+            >
+              <ng-template pTemplate="previousicon">
+                <span class="chevron-left"></span>
+              </ng-template>
+
+              <ng-template pTemplate="nexticon">
+                <span class="chevron-right"></span>
+              </ng-template>
+              <ng-template let-image pTemplate="img">
+                <img class="post-image" src="{{ image }}" />
+              </ng-template>
+            </p-carousel>
+
+            <div class="post-information-container">
+              <h2 class="pet-name">
+                <p>{{ fourthFromGroup.value.mainInfo?.nameCtrl }}</p>
+              </h2>
+              <div class="post-information">
+                <div class="post-information-pet">
+                  <div class="post-information-pet-info">
+                    <div class="post-information-pet-attributes">
+                      <p>Category:</p>
+                      <p>Race:</p>
+                      <p>Gender:</p>
+                      <p>Age:</p>
+                      <p>Vaccinated:</p>
+                      <p>Sprayed:</p>
+                      <p>ParaisteFree:</p>
+                      <p>Passport:</p>
+                      <p>Date added:</p>
+                      <p>City:</p>
+                    </div>
+                    <div class="straight-border"></div>
+                    <div class="post-information-pet-attributes-values">
+                      <p>{{ fourthFromGroup.value.mainInfo?.categoryCtrl }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.breedCtrl }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.genderCtrl }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.ageCtrl }}</p>
+                      <p>{{ fourthFromGroup.value.healthInfo?.vaccineCheck }}</p>
+                      <p>{{ fourthFromGroup.value.healthInfo?.parasiteCheck }}</p>
+                      <p>{{ fourthFromGroup.value.healthInfo?.disCheck }}</p>
+                      <p>
+                        {{
+                          fourthFromGroup.value.mainInfo?.passportCheck
+                            ? fourthFromGroup.value.mainInfo?.passportCtrl
+                            : 'None'
+                        }}
+                      </p>
+                      <p>{{ currentDate }}</p>
+                      <p>{{ userData.city }}</p>
+                      <!--
+                  @for(ani of animal|keyvalue: keepOrder;track ani.key){
+                  <p>{{ ani.value }}</p>
+                  }
+                  <p>{{ animalHealth.vaccinated }}</p>
+                  <p>{{ animalHealth.spayedOrNeutered }}</p>
+                  <p>{{ animalHealth.parasiteFree }}</p>
+                  <p>{{ dateAdded }}</p>
+                  <p>{{ city.name }}</p>
+                  -->
+                    </div>
+                  </div>
+                  <div class="post-information-pet-add-info">
+                    <p class="post-information-pet-add-info-label">Additional information</p>
+                    <div class="post-information-pet-add-info-text">
+                      <p>Hello</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="post-information-user-container">
+                  <div class="post-information-user">
+                    <div class="post-information-user-logo">
+                      <div class="post-information-user-logo-activity"></div>
+                    </div>
+                    <p class="post-information-user-username">
+                      {{ userData.firstName }} {{ userData.lastName }}
+                    </p>
+                    <p class="post-information-user-activity">Last time active:</p>
+                    <div class="post-information-user-border"></div>
+                    <div class="post-information-user-buttons">
+                      <button class="primarybtn">ADOPT</button>
+                      <button class="primarybtn">SEND MESSAGE</button>
+                    </div>
+                  </div>
+                  <div class="post-information-user-report">
+                    <p>Inappropriate content?</p>
+                    <button class="secondarybtn">REPORT</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</div>

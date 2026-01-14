@@ -14,29 +14,30 @@ import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
 })
 export class LoginComponent extends BaseComponent {
   private fb = inject(FormBuilder);
-    private auth = inject(AuthFacadeService);
-    private router = inject(Router);
-    private currentUser = inject(CurrentUserService);
-    showPassword = false;
+  private auth = inject(AuthFacadeService);
+  private router = inject(Router);
+  private currentUser = inject(CurrentUserService);
+  showPassword = false;
 
   form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]]
   });
 
-  onSubmit(): void{
-    if(this.form.invalid) //ako se ne unesu ispravni podaci, don't submit
+  onSubmit(): void {
+    if (this.form.invalid)
+      //ako se ne unesu ispravni podaci, don't submit
       return;
-      //pravimo payload tipa logincommand, i popunjavamo ga vrijednostima iz forme
-      const payload : LoginCommand={
-        email : this.form.value.email ?? '',
-        password : this.form.value.password ?? '',
-        fingerprint : null
-      };
-      console.log(payload);
-      this.auth.login(payload).subscribe({
+    //pravimo payload tipa logincommand, i popunjavamo ga vrijednostima iz forme
+    const payload: LoginCommand = {
+      email: this.form.value.email ?? '',
+      password: this.form.value.password ?? '',
+      fingerprint: null,
+    };
+    console.log(payload);
+    this.auth.login(payload).subscribe({
       next: () => {
-        console.log("Login successful");
+        console.log('Login successful');
         const target = this.currentUser.getDefaultRoute();
         this.router.navigate([target]);
       },
@@ -44,10 +45,10 @@ export class LoginComponent extends BaseComponent {
         this.stopLoading('Invalid credentials. Please try again.');
         console.error('Login error:', err);
       },
-    }); 
-    
+    });
   }
-  
-  togglePassword():void{this.showPassword = !this.showPassword;
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 }

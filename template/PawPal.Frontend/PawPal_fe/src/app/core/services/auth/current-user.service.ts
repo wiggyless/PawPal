@@ -10,9 +10,9 @@ export class CurrentUserService {
   currentUser = computed(() => this.auth.currentUser());
 
   isAuthenticated = computed(() => this.auth.isAuthenticated());
-  
-  roleid = computed(() => this.auth.roleid());
 
+  roleid = computed(() => this.auth.roleid());
+  userId = this.currentUser()?.userId ?? null;
   get snapshot() {
     return this.auth.currentUser();
   }
@@ -22,7 +22,7 @@ export class CurrentUserService {
     const user = this.snapshot;
     if (!user) return '/login';
 
-    if (user.roleid==3) return '/admin';
+    if (user.roleid == 3) return '/admin';
     return '/client';
   }
 }

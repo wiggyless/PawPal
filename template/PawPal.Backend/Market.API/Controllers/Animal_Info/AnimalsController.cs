@@ -10,7 +10,7 @@ namespace PawPal.API.Controllers.Animal_Info
     [Route("[controller]")]
     public class AnimalsController(ISender sender) : ControllerBase
     {
-
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<int>> CreateAnimal(CreateAnimalCommand cmd, CancellationToken ct)
         {

@@ -1,0 +1,28 @@
+@use '@angular/material' as mat;
+.client-layout-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background-color: #e5d7c4;
+}
+.client-layout {
+  display: flex;
+  width: 100%;
+  margin-top: 75px;
+  height: 100%;
+}
+.client-side-navbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #c7b18c;
+  width: 350px;
+}
+.client-content {
+  height: 100%;
+  background-color: #e5d7c4;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0 30px 0 30px;
+}

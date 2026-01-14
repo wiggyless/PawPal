@@ -19,3 +19,15 @@ export interface AnimalPostByIdQuery {
   userID: number;
   photoURL: string;
 }
+export interface listAnimalPostsByUserIdDto {
+  postID: number;
+  firstImage: string;
+  userID: string;
+  animalName: string;
+}
+export interface AddAnimalPost {
+  animalID: number;
+  cityID: number;
+  userId: number;
+  status: boolean;
+}

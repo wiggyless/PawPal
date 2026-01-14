@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="client-layout-container">
+      <div class="client-layout">
+        <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
+        <app-user-profile-side-navbar class="client-side-navbar"></app-user-profile-side-navbar>
+        <app-user-profile-component class="client-content"></app-user-profile-component>
+      </div>
+    </div>
+    <router-outlet></router-outlet>
+  </body>
+</html>

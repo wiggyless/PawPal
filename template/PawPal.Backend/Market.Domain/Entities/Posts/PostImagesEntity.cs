@@ -10,6 +10,7 @@ namespace PawPal.Domain.Entities.Posts
     public class PostImagesEntity : BaseEntity
     {
         public int PostId { get; set; } 
+        public string MainImage { get; set; }
         public List<string>? PhotoURL { get; set; }
     }
 }

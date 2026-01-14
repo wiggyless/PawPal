@@ -4,4 +4,7 @@ export interface GetUserByIdDto {
   lastName: string;
   email: string;
   dateTime: string;
+  city: string;
+  cityID: number;
+  cantonAbbrevation: string;
 }

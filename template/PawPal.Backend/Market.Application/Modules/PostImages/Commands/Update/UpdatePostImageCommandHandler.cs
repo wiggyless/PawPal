@@ -18,9 +18,11 @@ namespace PawPal.Application.Modules.PostImages.Commands.Update
             if(postImage.PhotoURL is null)
             {
                 postImage.PhotoURL = new List<string>(command.PostImages);
+                postImage.MainImage = command.FirstImage;
             }else
             {
                 postImage.PhotoURL.AddRange(command.PostImages);
+                postImage.MainImage = command.FirstImage;
             }
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
