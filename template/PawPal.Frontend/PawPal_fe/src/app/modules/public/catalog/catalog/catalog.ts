@@ -49,6 +49,8 @@ export class CatalogComponent implements OnInit {
   @ViewChild('breedSelect') breedRef!: ElementRef;
   fromInputMax: MatInput = new MatInput();
   imageUrl = 'https://localhost:7260/posts/Krompir2.jpg';
+
+  genderNames :string[] = [];
   ngOnInit(): void {
     this.loadCategories();
     this.loadAnimalBreed();
@@ -130,4 +132,5 @@ export class CatalogComponent implements OnInit {
   changeCity() {
     this.selectedCity = null;
   }
+
 }

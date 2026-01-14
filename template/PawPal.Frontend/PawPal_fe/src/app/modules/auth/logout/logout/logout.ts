@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.service';
 import { Router } from '@angular/router';
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-logout',
   standalone: false,
@@ -15,7 +15,6 @@ export class LogoutComponent implements OnInit{
 
   ngOnInit(): void {
     // Call logout (handles API call + clears state)
-    console.log("Logout begin!");
     this.authService.logout().subscribe({
       next: () => this.startCountdown(),
       error: () => this.startCountdown() // Even if API fails, clear local state
@@ -25,8 +24,6 @@ export class LogoutComponent implements OnInit{
   private startCountdown(): void {
     const intervalId = setInterval(() => {
       this.countdownSeconds--;
-
-      console.log("Brojimo.");
 
       if (this.countdownSeconds <= 0) {
         clearInterval(intervalId);

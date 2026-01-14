@@ -95,17 +95,18 @@ html {
   color: #493c1d;
   background-color: #f3e9db;
   font-style: italic;
-  font-size: large;
+  font-size: medium;
   border-radius: 100px;
 }
 .ng-select-container .ng-input {
   padding: 0px;
 }
+
 .ng-select .ng-dropdown-panel {
   border-radius: 100px;
   margin: 0px;
   border: 0px;
-  background-color: #f3e9db;
+  background-color: #f3e9db !important;
 }
 .p-button-icon-only {
   width: 100%;

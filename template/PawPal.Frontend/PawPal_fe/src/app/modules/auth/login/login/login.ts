@@ -20,8 +20,8 @@ export class LoginComponent extends BaseComponent {
   showPassword = false;
 
   form = this.fb.group({
-    email: ['manager@market.local', [Validators.required, Validators.email]],
-    password: ['User123!', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]]
   });
 
   onSubmit(): void {

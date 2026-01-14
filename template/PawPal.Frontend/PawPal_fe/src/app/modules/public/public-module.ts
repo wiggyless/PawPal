@@ -20,6 +20,7 @@ import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonIcon } from 'primeng/button';
 import { SharedModule } from 'primeng/api';
+import { Bind } from "primeng/bind";
 @NgModule({
   declarations: [PublicLayout, CatalogComponent, PostComponent],
   imports: [
@@ -42,6 +43,7 @@ import { SharedModule } from 'primeng/api';
     CommonModule,
     CarouselModule,
     ButtonIcon,
-  ],
+    Bind
+],
 })
 export class PublicModule {}
