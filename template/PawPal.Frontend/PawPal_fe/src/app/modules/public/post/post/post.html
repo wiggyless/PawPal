@@ -13,7 +13,7 @@
   </head>
   <body>
     <div class="post-container">
-      <app-navbar></app-navbar>
+      <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
       <div class="post">
         <p-carousel [value]="imagesList" [numVisible]="1" [numScroll]="1" [circular]="true">
           <ng-template pTemplate="previousicon">

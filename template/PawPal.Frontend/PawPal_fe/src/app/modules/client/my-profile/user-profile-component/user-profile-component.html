@@ -1,44 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  </head>
-  <body>
-    <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
-    <div class="user-profile-container">
-      <div class="user-profile">
-        <div class="user-profile-list-container">
-          <ul class="user-profile-option-list">
-            <li class="user-profile-option">My profile</li>
-            <li class="user-profile-option">Favorites</li>
-            <li class="user-profile-option">My posts</li>
-            <li class="user-profile-option">My requests</li>
-            <li class="user-profile-option">My animals</li>
-            <li class="user-profile-option">My messages</li>
-            <li class="user-profile-option">Settings</li>
-          </ul>
-          <div class="user-profile-option-footer">
-            <p>Report a problem</p>
-            <p>Log out</p>
-          </div>
-        </div>
-        <div class="user-profile-detials-container">
-          <div class="user-profile-details">
-            <div class="user-profile-detials-header">
-              <img class="user-profile-image" />
-              <div class="user-profile-detials-header-text">
-                <h1 class="user-profile-details-name">[NAME_OF_THE_USER]</h1>
-                <p class="user-profile-details-prop">@Username</p>
-                <p class="user-profile-details-prop">Number of posts:</p>
-                <p class="user-profile-details-prop">Favorite animal:</p>
-              </div>
-              <button class="primarybtn">EDIT PROFILE</button>
-            </div>
-            <div class="user-profile-detials-main"><h1>Hello</h1></div>
-          </div>
-        </div>
-      </div>
+<div class="user-profile-details">
+  <div class="user-profile-detials-header">
+    <img class="user-profile-image" />
+    <div class="user-profile-detials-header-text">
+      <h1 class="user-profile-details-name">{{ userData.firstName }}</h1>
+      <p class="user-profile-details-prop">@Username</p>
+      <p class="user-profile-details-prop">Number of posts:</p>
+      <p class="user-profile-details-prop">Favorite animal:</p>
     </div>
-  </body>
-</html>
+    <button class="primarybtn">EDIT PROFILE</button>
+  </div>
+  <div class="user-profile-detials-main">
+    <form class="user-profile-form" [formGroup]="profileForm">
+      <div class="user-profile-form-input-container">
+        <label for="first-Name" disabled>First Name</label>
+        <input
+          class="user-profile-form-input"
+          id="first-Name"
+          type="text"
+          formControlName="firstName"
+        />
+      </div>
+      <div class="user-profile-form-input-container">
+        <label for="last-Name" disabled>Last Name</label>
+        <input
+          class="user-profile-form-input"
+          id="last-Name"
+          type="text"
+          formControlName="lastName"
+        />
+      </div>
+      <div class="user-profile-form-input-container">
+        <label for="date1" disabled>Date of birth</label>
+        <input class="user-profile-form-input" id="date1" type="text" formControlName="date" />
+      </div>
+      <div class="user-profile-form-input-container">
+        <label for="city1">City</label>
+        <input class="user-profile-form-input" id="city1" type="text" formControlName="city" />
+      </div>
+      <div class="user-profile-form-input-container" id="user-profile-form-input-aboutme-container">
+        <label for="about-Me-Text">About me</label>
+        <input
+          class="user-profile-form-input"
+          id="about-Me-Text"
+          type="text"
+          formControlName="aboutMe"
+        />
+      </div>
+    </form>
+  </div>
+</div>

@@ -10,6 +10,7 @@ import { PostImagesService } from '../../../../api-services/animal-post-images/a
 import { environment } from '../../../../../environments/environment';
 import { Carousel } from 'primeng/carousel';
 import { ButtonPassThroughOptions } from 'primeng/button';
+import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 @Component({
   selector: 'app-post',
   standalone: false,
@@ -23,6 +24,7 @@ export class PostComponent implements OnInit {
   cityId: number = 0;
   userId: number = 0;
   postId: number = 0;
+  currentUser = inject(CurrentUserService);
   animalHealthService = inject(AnimalsHealthService);
   animalService = inject(AnimalService);
   cityService = inject(CitiesService);

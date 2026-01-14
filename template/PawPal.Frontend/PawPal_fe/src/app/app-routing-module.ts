@@ -7,6 +7,7 @@ import { PublicLayout } from './modules/public/public-layout/public-layout';
 import { ClientModule } from './modules/client/client-module';
 import { SharedModule } from 'primeng/api';
 import { PublicModule } from './modules/public/public-module';
+import { CreatePost } from './modules/client/create-post/create-post';
 
 const routes: Routes = [
   {
@@ -24,7 +25,11 @@ const routes: Routes = [
   },
   {
     path: 'client/my-profile',
-    component: ClientLayout,
+    loadChildren: () => ClientModule,
+  },
+  {
+    path: 'client/create-post',
+    component: CreatePost,
     loadChildren: () => ClientModule,
   },
   {

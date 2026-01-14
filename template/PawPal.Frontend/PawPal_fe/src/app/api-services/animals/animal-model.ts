@@ -14,3 +14,12 @@ export interface GetAnimalByIdDto {
   hasPapers: boolean;
   childFriendly: boolean;
 }
+export interface AddAnimalDto {
+  name: string;
+  breed: string;
+  genderId: number;
+  age: number;
+  hasPapers: boolean;
+  childFriendly: boolean;
+  categoryId: number;
+}

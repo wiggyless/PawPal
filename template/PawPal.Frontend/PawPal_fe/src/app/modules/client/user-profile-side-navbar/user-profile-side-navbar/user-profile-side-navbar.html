@@ -1,0 +1,18 @@
+<mat-nav-list class="user-profile-option-list">
+  @for(items of matListItems|keyvalue: keepOrder;track items.key) {
+  <mat-list-item
+    class="user-profile-option"
+    (click)="onSelect(items.key)"
+    [class.user-profile-option-bold]="selectedItem == items.key"
+    [routerLink]="items.value"
+    [state]="{
+      item: items.key
+    }"
+    >{{ items.key.replace('_', ' ') }}
+  </mat-list-item>
+  }
+</mat-nav-list>
+<div class="user-profile-option-footer">
+  <p>Report</p>
+  <p>Log out</p>
+</div>

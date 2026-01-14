@@ -5,8 +5,40 @@ import { ClientLayout } from './client-layout/client-layout/client-layout';
 import { NavbarComponent } from '../shared/components/navbar/navbar';
 import { RouterOutlet } from '@angular/router';
 import { SharedModule } from 'primeng/api';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MyPosts } from './my-posts/my-posts';
+import { UserProfileSideNavbar } from './user-profile-side-navbar/user-profile-side-navbar/user-profile-side-navbar';
+import { MatListModule } from '@angular/material/list';
+import { KeyValuePipe } from '@angular/common';
+import { CreatePost } from './create-post/create-post';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { CarouselModule } from 'primeng/carousel';
 @NgModule({
-  declarations: [UserProfileComponent, ClientLayout],
-  imports: [ClientRoutingModule, NavbarComponent, RouterOutlet],
+  declarations: [UserProfileComponent, ClientLayout, MyPosts, UserProfileSideNavbar, CreatePost],
+  imports: [
+    ClientRoutingModule,
+    NavbarComponent,
+    RouterOutlet,
+    ReactiveFormsModule,
+    MatListModule,
+    KeyValuePipe,
+    MatStepperModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatGridListModule,
+    MatSelectModule,
+    FormsModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    CarouselModule,
+  ],
 })
 export class ClientModule {}

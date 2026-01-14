@@ -12,6 +12,8 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
         public async Task<GetUserByIdQueryDto> Handle(GetUserByIdQuery request,CancellationToken cancellationToken)
         {
             var user = await context.Users.
+                Include(x =>x.City).
+                Include(x=>x.City.Canton).
                 Where(a => a.Id == request.Id).
                 Select(x => new GetUserByIdQueryDto
                 {
@@ -20,6 +22,9 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
                     LastName = x.LastName,
                     Email = x.Email,
                     DateTime = x.BirthDate,
+                    City = x.City.Name,
+                    CantonAbbrevation = x.City.Canton.Abbreviation,
+                    CityID = x.CityId,
                 }).FirstOrDefaultAsync(cancellationToken);
             if (user == null) throw new PawPalNotFoundException($"User with Id {request.Id} does not exist");
             return user;

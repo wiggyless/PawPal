@@ -1,3 +1,4 @@
+/*
 .user-profile-container {
   display: flex;
   flex-direction: row;
@@ -15,23 +16,29 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #c7b18c;
 }
 .user-profile-option-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
   padding: 10px;
   text-align: center;
-  width: 70%;
+  width: 80%;
   margin-top: 150px;
-  margin-bottom: 235px;
+  margin-bottom: 120px;
 }
 .user-profile-option {
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 100;
   border-bottom: 1px solid black;
-  padding: 10px;
+  padding: 15px;
+  width: 100%;
+  height: 100%;
+}
+.user-profile-option:hover {
+  cursor: pointer;
+  background-color: rgb(189, 167, 130);
 }
 .user-profile-option-footer {
   display: flex;
@@ -39,27 +46,32 @@
   width: 100%;
   color: white;
   font-weight: bold;
+  font-size: 22px;
   background-color: rgb(125, 80, 2);
+  padding: 30px;
+  align-items: stretch;
 }
 .user-profile-option-footer p {
   margin-left: 20%;
 }
-.user-profile-detials-container {
-  width: 85%;
-  background-color: white;
+  .user-profile-detials-container {
+  height: 100%;
+  background-color: #e5d7c4;
   display: flex;
   justify-content: center;
 }
+*/
+
 .user-profile-details {
   margin-top: 50px;
-  width: 80%;
+  width: 70%;
   display: flex;
   flex-direction: column;
 }
 .user-profile-detials-header {
   width: 100%;
   border: 1px black solid;
-  height: 250px;
+  height: 200px;
   border-radius: 10px;
   padding: 25px;
   display: flex;
@@ -67,8 +79,8 @@
   align-items: flex-start;
 }
 .user-profile-image {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   border: 1px solid black;
   border-radius: 200px;
 }
@@ -85,8 +97,41 @@
   display: flex;
   margin-top: 50px;
   width: 100%;
-  height: 100px;
   border: 1px solid black;
   border-radius: 10px;
   padding: 25px;
+}
+.user-profile-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+  gap: 80px;
+}
+.user-profile-form-input {
+  margin-top: 2px;
+  border-radius: 100px;
+  background-color: #f3e9db;
+  padding: 10px;
+  width: 400px;
+  font-size: large;
+  font-style: italic;
+  font-weight: lighter;
+  color: #493c1d;
+  outline: 0;
+}
+.user-profile-form-input-container {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  font-size: 20px;
+}
+#user-profile-form-input-aboutme-container {
+  width: 100%;
+}
+#about-Me-Text {
+  width: 100%;
+  height: 150px;
+  border-radius: 20px;
 }

@@ -8,7 +8,8 @@ namespace PawPal.Application.Modules.PostImages.Commands.Update
 {
     public class UpdatePostImageCommand : IRequest<Unit>
     {
-        public int PostId { get; set; } 
+        public int PostId { get; set; }
+        public string FirstImage { get; set; }
         public List<string> PostImages { get; set; }    
     }
 }

@@ -3,7 +3,7 @@
 // components according to the Material 3 design spec.
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
-
+@use './app/modules/client/client.scss';
 @use '@angular/material' as mat;
 @import '@ng-select/ng-select/themes/default.theme.css';
 
@@ -20,10 +20,10 @@ html {
   );
 }
 html {
-  height: 100%;;
+  height: 100%;
   margin: 0;
-   background-image: linear-gradient(#e5d7c4,#c9ab81);
-   background-size: cover;
+  background-image: linear-gradient(#e5d7c4, #c9ab81);
+  background-size: cover;
 }
 * {
   font-family: nunito, sans-serif;

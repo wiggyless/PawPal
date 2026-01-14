@@ -5,12 +5,14 @@ using PawPal.Application.Modules.Posts.Queries.GetByID;
 using PawPal.Application.Modules.Posts.Queries.List;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
+using PawPal.Application.Modules.Posts.Queries.ListPostsByUserId;
 namespace PawPal.API.Controllers.Posts
 {
     [ApiController]
     [Route("[controller]")]
     public class PostsController(ISender sender) : ControllerBase
     {
+        [AllowAnonymous]
         [HttpPost]
 
         public async Task<ActionResult<int>> CreatePost(CreatePostCommand command,CancellationToken cancellationToken)
@@ -27,13 +29,21 @@ namespace PawPal.API.Controllers.Posts
             return post;
         }
         [AllowAnonymous]
+        [HttpGet("userPost")]
+
+        public async Task<PageResult<ListPostByUserIdQueryDto>> GetPostListById([FromQuery] ListPostByUserIdQuery query, CancellationToken cancellationToken)
+        {
+            var list = await sender.Send(query, cancellationToken);
+            return list;
+        }
+        [AllowAnonymous]
         [HttpGet]
         public async Task<PageResult<ListPostQueryDto>> List([FromQuery] ListPostQuery query,CancellationToken token)
         {
             var list = await sender.Send(query, token);
             return list;
         }
-
+        
         [HttpPut("{id:int}")]
         public async Task Update(UpdatePostCommand upc, int id, CancellationToken ct)
         {
