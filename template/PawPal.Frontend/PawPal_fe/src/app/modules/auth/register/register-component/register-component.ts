@@ -13,71 +13,68 @@ import { Router } from '@angular/router';
   selector: 'app-register-component',
   standalone: false,
   templateUrl: './register-component.html',
-  styleUrl: './register-component.scss'
+  styleUrl: './register-component.scss',
 })
 export class RegisterComponent implements OnInit {
-
   private _formBuilder = inject(FormBuilder);
   private cityService = inject(CitiesService);
   private userService = inject(UserService);
-    private auth = inject(AuthFacadeService);
+  private auth = inject(AuthFacadeService);
   private currentUser = inject(CurrentUserService);
-    private router = inject(Router);
+  private router = inject(Router);
 
-
-    
   cityList: any = [];
-  cityId : number = 0;
-  dateOfBirth : Date = new Date();
+  cityId: number = 0;
+  dateOfBirth: Date = new Date();
   showPassword = false;
 
   dateControl = new FormControl(new Date());
-   basicInfo = this._formBuilder.group({
+  basicInfo = this._formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     cityId: ['', Validators.required],
-    dateOfBirth: ['', Validators.required]
+    dateOfBirth: ['', Validators.required],
   });
-  
+
   accountInfo = this._formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
-    ngOnInit(): void {
+  ngOnInit(): void {
     this.loadCities();
-}  
-
-  loadCities() :void {
-    this.cityService.listCities().subscribe((res) =>{
-      this.cityList = res;
-    }
-    )
   }
-   togglePassword():void{this.showPassword = !this.showPassword;}
 
-   onSubmit() {
-    if(this.accountInfo.invalid || this.basicInfo.invalid) return;
-      const payload : CreateUserCommand={
-        firstName: this.basicInfo.value.firstName ?? '',
-        lastName: this.basicInfo.value.lastName ?? '',
-        birthDate: new Date(this.basicInfo.value.dateOfBirth ?? ''),
-        email: this.accountInfo.value.email ?? '',
-        password: this.accountInfo.value.password ?? '',
-        roleID: 2,
-        city: this.basicInfo.value.cityId ?? 0,
-        profilePictureURL: null,
-      }
+  loadCities(): void {
+    this.cityService.listCities().subscribe((res) => {
+      this.cityList = res;
+    });
+  }
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
 
-      //user is created here
-      this.userService.createUser(payload).subscribe({
-        next: (res) => {
-          console.log("Registration successful, user ID:", res);
-          this.auth.redirectToLogin();
-        },
-        error: (err) => {
-          console.error('Registration error:', err);
-        },
-      });
-   
-}
+  onSubmit() {
+    if (this.accountInfo.invalid || this.basicInfo.invalid) return;
+    const payload: CreateUserCommand = {
+      firstName: this.basicInfo.value.firstName ?? '',
+      lastName: this.basicInfo.value.lastName ?? '',
+      birthDate: new Date(this.basicInfo.value.dateOfBirth ?? ''),
+      email: this.accountInfo.value.email ?? '',
+      password: this.accountInfo.value.password ?? '',
+      roleID: 2,
+      city: this.basicInfo.value.cityId ?? 0,
+      profilePictureURL: null,
+    };
+
+    //user is created here
+    this.userService.createUser(payload).subscribe({
+      next: (res) => {
+        console.log('Registration successful, user ID:', res);
+        this.auth.redirectToLogin();
+      },
+      error: (err) => {
+        console.error('Registration error:', err);
+      },
+    });
+  }
 }

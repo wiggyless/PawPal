@@ -29,7 +29,6 @@ export class PostComponent implements OnInit {
   animalService = inject(AnimalService);
   cityService = inject(CitiesService);
   userService = inject(AnimalUserService);
-  currentUser = inject(CurrentUserService);
   postImageService = inject(PostImagesService);
   animalHealth: GetAnimalsHealthByIdDto = {
     animalHealthHistoryId: 0,
