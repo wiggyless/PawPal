@@ -4,7 +4,7 @@ import { AnimalBreedService } from '../../../../api-services/anima-breed/animal-
 import { ListAnimalBreedQueryDto } from '../../../../api-services/anima-breed/animal-breed.model';
 import { ListAnimalCategoriesQueryDto } from '../../../../api-services/animal-categories/animal-categories.model';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
-import { ListAnimalPostsDto } from '../../../../api-services/animal-posts/animal-posts.model';
+import { ListAnimal, ListAnimalPostsDto } from '../../../../api-services/animal-posts/animal-posts.model';
 import { MatInput } from '@angular/material/input';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GenderService } from '../../../../api-services/gender/gender-service';
@@ -13,6 +13,7 @@ import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { CantonsService } from '../../../../api-services/cantons/cantons-service';
 import { Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-catalog',
@@ -31,7 +32,7 @@ export class CatalogComponent implements OnInit {
   router = inject(Router);
   animalCategories: any = [];
   animalBreed: any = [];
-  animalPosts: any = [];
+  animalPosts: Observable<ListAnimal[]> | undefined;
   genderList: any = [];
   cantonsList: any = [];
   breedArr: Array<ListAnimalBreedQueryDto> = new Array<ListAnimalBreedQueryDto>();
@@ -74,10 +75,8 @@ export class CatalogComponent implements OnInit {
     });
   }
   loadPosts(): void {
-    this.animalPosts = this.animalPostsService.listAnimalPosts().subscribe((response) => {
-      this.animalPosts = response;
-      this.postArr = this.animalPosts.items;
-    });
+    this.animalPosts = this.animalPostsService.listAnimalPosts();
+    console.log(this.animalPosts);
   }
   loadGender(): void {
     this.genderList = this.genderService.listGender().subscribe((resposne) => {
@@ -102,7 +101,7 @@ export class CatalogComponent implements OnInit {
     return postTime.getTime() >= chosenTimeMin! && postTime.getTime() <= chosenTimeMax!;
   }
   searchCatalog(): void {
-    this.postArr = this.animalPosts.items;
+  /*
     this.postArr = (this.animalPosts.items as Array<ListAnimalPostsDto>).filter(
       (x) =>
         (this.selectedCat == null ? true : this.selectedCat == x.categoryID) &&
@@ -113,10 +112,9 @@ export class CatalogComponent implements OnInit {
         (this.selectedGender == null ? true : this.selectedGender == x.genderID) &&
         (this.selectedCity == null ? true : this.selectedCity == x.cityID)
     );
-    console.log(this.postArr);
+    console.log(this.postArr);*/
   }
   clearSearch(): void {
-    this.postArr = this.animalPosts.items;
     this.breedArr = new Array<ListAnimalBreedQueryDto>();
     this.selectedCat = null;
     this.selectedBreed = null;
@@ -132,5 +130,16 @@ export class CatalogComponent implements OnInit {
   changeCity() {
     this.selectedCity = null;
   }
-
+  
+routeToPost(post: ListAnimalPostsDto) {
+    this.router.navigate(['post'], {
+      queryParams: {
+        postID: post.postID,
+        animalID: post.animalID,
+        cityID: post.cityID,
+        userID: post.userID,
+        dateAdded: post.dateAdded,
+      },
+    });
+}
 }

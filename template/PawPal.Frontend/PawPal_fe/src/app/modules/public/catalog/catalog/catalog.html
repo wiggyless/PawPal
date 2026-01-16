@@ -17,87 +17,81 @@
       <div class="header-sort">
         <div class="select-container">
           <div class="select-child">
-            <label for="ng-select">Categories</label>
-            <ng-select
-              class="custom"
-              [(ngModel)]="selectedCat"
-              placeholder="Choose an animal category"
-              [clearable]="false"
-              [searchable]="false"
-              (change)="getBreedSelect()"
-            >
-              @for (cat of animalCategories.items; track cat){
-              <ng-option [value]="cat.id">
-                {{ cat.categoryName }}
-              </ng-option>
-              }
-            </ng-select>
+            <label for="category-select">Categories</label>
+            <mat-form-field class="custom">
+              <mat-select
+                [(ngModel)]="selectedCat"
+                placeholder="Choose an animal category"
+                (selectionChange)="getBreedSelect()"
+              >
+                @for (cat of animalCategories.items; track cat){
+                <mat-option [value]="cat.id">
+                  {{ cat.categoryName }}
+                </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
           </div>
           <div class="select-child">
-            <label for="ng-select">Breed</label>
-            <ng-select
-              class="custom"
-              [(ngModel)]="selectedBreed"
-              placeholder="Choose an animal breed"
-              [clearable]="false"
-              [searchable]="false"
-            >
-              @for (breed of breedArr; track breed){
-              <ng-option [value]="breed.name">
-                {{ breed.name }}
-              </ng-option>
-              }
-            </ng-select>
+            <label for="breed-select">Breed</label>
+            <mat-form-field class="custom">
+              <mat-select
+                [(ngModel)]="selectedBreed"
+                placeholder="Choose an animal breed"
+              >
+                @for (breed of breedArr; track breed){
+                <mat-option [value]="breed.name">
+                  {{ breed.name }}
+                </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
           </div>
           <div class="select-child">
-            <label for="ng-select">Gender</label>
-            <ng-select
-              class="custom"
-              [(ngModel)]="selectedGender"
-              placeholder="Choose gender"
-              [clearable]="false"
-              [searchable]="false"
-            >
-              @for (gen of genderList.items; track gen){
-              <ng-option [value]="gen.id">
-                {{ gen.name }}
-              </ng-option>
-              }
-            </ng-select>
+            <label for="gender-select">Gender</label>
+            <mat-form-field class="custom">
+              <mat-select
+                [(ngModel)]="selectedGender"
+                placeholder="Choose gender"
+              >
+                @for (gen of genderList.items; track gen){
+                <mat-option [value]="gen.id">
+                  {{ gen.name }}
+                </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
           </div>
           <div class="select-child">
-            <label for="ng-select">Cantons</label>
-            <ng-select
-              class="custom"
-              [(ngModel)]="selectedCanton"
-              placeholder="Choose canton"
-              [clearable]="false"
-              [searchable]="false"
-              (change)="changeCity()"
-            >
-              @for (can of cantonsList.items; track can){
-              <ng-option [value]="can">
-                {{ can.fullName }}
-              </ng-option>
-              }
-            </ng-select>
+            <label for="canton-select">Cantons</label>
+            <mat-form-field class="custom">
+              <mat-select
+                [(ngModel)]="selectedCanton"
+                placeholder="Choose canton"
+                (selectionChange)="changeCity()"
+              >
+                @for (can of cantonsList.items; track can){
+                <mat-option [value]="can">
+                  {{ can.fullName }}
+                </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
           </div>
           <div class="select-child">
-            <label for="ng-select">City</label>
-            <ng-select
-              class="custom"
-              [(ngModel)]="selectedCity"
-              class="custom"
-              placeholder="Choose city"
-              [clearable]="false"
-              [searchable]="false"
-            >
-              @for (cit of selectedCanton?.cities; track cit){
-              <ng-option [value]="cit.id">
-                {{ cit.name }}
-              </ng-option>
-              }
-            </ng-select>
+            <label for="city-select">City</label>
+            <mat-form-field class="custom">
+              <mat-select
+                [(ngModel)]="selectedCity"
+                placeholder="Choose city"
+              >
+                @for (cit of selectedCanton?.cities; track cit){
+                <mat-option [value]="cit.id">
+                  {{ cit.name }}
+                </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
           </div>
           <div class="select-child">
             <label for="date-form">Date</label>
@@ -133,18 +127,8 @@
           <p>Vaš rezultat pretrage:</p>
         </div>
         <div class="header-posts">
-          @for(post of postArr; track post){
-          <div
-            class="post"
-            [routerLink]="['/post']"
-            [state]="{
-              postId: post.postID,
-              animalId: post.animalID,
-              city: post.cityID,
-              dateAdded: post.dateAdded,
-              userId: post.userID,
-            }"
-          >
+          @if(animalPosts | async; as posts){ @for(post of posts;track post){
+          <div class="post" (click)="routeToPost(post)">
             <img [src]="imageUrl" class="post-image" />
             <div class="post-detail">
               <h3>{{ post.name }}</h3>
@@ -155,10 +139,10 @@
               @else {
               <p>{{ genderList.items[1].name }}</p>
               }
-              <p>{{ post.dateAdded | date: 'short'}}</p>
+              <p>{{ post.dateAdded | date : 'short' }}</p>
             </div>
           </div>
-          }
+          } }
         </div>
       </div>
     </div>

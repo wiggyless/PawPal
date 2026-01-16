@@ -33,12 +33,12 @@
             <div class="post-information-pet">
               <div class="post-information-pet-info">
                 <div class="post-information-pet-attributes">
-                  @for(ani of animal|keyvalue: keepOrder;track ani.key){
+                  @for(ani of animal|keyvalue: keepOrder;track ani.key){ <!--im gonna kill this dude bruh-->
                   <p>{{ ani.key.charAt(0).toUpperCase() + ani.key.slice(1) }}:</p>
                   }
                   <p>Vaccinated:</p>
                   <p>Sprayed:</p>
-                  <p>ParaisteFree:</p>
+                  <p>Parasite free:</p>
                   <p>Date added:</p>
                   <p>City:</p>
                 </div>
@@ -47,10 +47,25 @@
                   @for(ani of animal|keyvalue: keepOrder;track ani.key){
                   <p>{{ ani.value }}</p>
                   }
-                  <p>{{ animalHealth.vaccinated }}</p>
-                  <p>{{ animalHealth.spayedOrNeutered }}</p>
-                  <p>{{ animalHealth.parasiteFree }}</p>
-                  <p>{{ dateAdded }}</p>
+                  @if(!animalHealth.vaccinated){
+                    <p><mat-icon>close</mat-icon></p>
+                  }
+                  @else {
+                    <p><mat-icon>check</mat-icon></p>
+                  }
+                  @if(!animalHealth.spayedOrNeutered){
+                    <p><mat-icon>close</mat-icon></p>
+                  }
+                  @else {
+                    <p><mat-icon>check</mat-icon></p>
+                  }
+                  @if(!animalHealth.parasiteFree){
+                      <p><mat-icon>close</mat-icon></p>
+                  }
+                  @else {
+                      <p><mat-icon>check</mat-icon></p>
+                  }
+                  <p>{{ dateAdded  | date: 'short'}}</p>
                   <p>{{ city.name }}</p>
                 </div>
               </div>
@@ -69,7 +84,7 @@
                 <p class="post-information-user-username">
                   {{ user.firstName }} {{ user.lastName }}
                 </p>
-                <p class="post-information-user-activity">Last time active: {{ user.dateTime }}</p>
+                <p class="post-information-user-activity">Last time active: {{ user.dateTime  | date: 'short'}}</p>
                 <div class="post-information-user-border"></div>
                 <div class="post-information-user-buttons">
                   <button class="primarybtn">ADOPT</button>

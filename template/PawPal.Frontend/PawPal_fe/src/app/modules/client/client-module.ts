@@ -21,6 +21,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { CarouselModule } from 'primeng/carousel';
+import { MatIcon } from "@angular/material/icon";
 @NgModule({
   declarations: [UserProfileComponent, ClientLayout, MyPosts, UserProfileSideNavbar, CreatePost],
   imports: [
@@ -39,6 +40,8 @@ import { CarouselModule } from 'primeng/carousel';
     MatCheckboxModule,
     MatDatepickerModule,
     CarouselModule,
-  ],
+    MatSelectModule,
+    MatIcon
+],
 })
 export class ClientModule {}

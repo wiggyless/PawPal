@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { BaseComponent } from '../../../../core/components/base-classes/base-component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.service';
@@ -12,7 +12,10 @@ import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class LoginComponent extends BaseComponent {
+export class LoginComponent extends BaseComponent implements OnInit {
+  ngOnInit(): void {
+    console.log('WHAAAAT');
+  }
   private fb = inject(FormBuilder);
   private auth = inject(AuthFacadeService);
   private router = inject(Router);
