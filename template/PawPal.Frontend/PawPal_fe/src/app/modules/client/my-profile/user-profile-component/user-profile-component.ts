@@ -3,9 +3,7 @@ import { CurrentUserService } from '../../../../core/services/auth/current-user.
 import { FormControl, FormGroup } from '@angular/forms';
 import { AnimalUserService } from '../../../../api-services/animal-users/animal-users-service';
 import { GetUserByIdDto, UpdateUserCommand } from '../../../../api-services/animal-users/animal-users-model';
-import { provideNativeDateAdapter } from '@angular/material/core';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
-
 @Component({
   selector: 'app-user-profile-component',
   standalone: false,
