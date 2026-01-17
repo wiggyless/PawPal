@@ -4,7 +4,12 @@ import { AnimalBreedService } from '../../../../api-services/anima-breed/animal-
 import { ListAnimalBreedQueryDto } from '../../../../api-services/anima-breed/animal-breed.model';
 import { ListAnimalCategoriesQueryDto } from '../../../../api-services/animal-categories/animal-categories.model';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
-import { ListAnimal, ListAnimalPostsDto } from '../../../../api-services/animal-posts/animal-posts.model';
+import {
+  AnimalPostByIdQuery,
+  GetPostQuery,
+  ListAnimal,
+  ListAnimalPostsDto,
+} from '../../../../api-services/animal-posts/animal-posts.model';
 import { MatInput } from '@angular/material/input';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GenderService } from '../../../../api-services/gender/gender-service';
@@ -13,6 +18,11 @@ import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { CantonsService } from '../../../../api-services/cantons/cantons-service';
 import { Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { PageResult } from '../../../../core/models/paging/page-result';
+import { BaseListPagedComponent } from '../../../../core/components/base-classes/base-list-paged-component';
+import { PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -21,7 +31,11 @@ import { Observable } from 'rxjs';
   templateUrl: './catalog.html',
   styleUrl: './catalog.scss',
 })
-export class CatalogComponent implements OnInit {
+export class CatalogComponent
+  extends BaseListPagedComponent<ListAnimal, GetPostQuery>
+  implements OnInit
+{
+  // Injections //
   currentUser = inject(CurrentUserService);
   animalCatService = inject(AnimalCategoriesService);
   animalBreedService = inject(AnimalBreedService);
@@ -30,13 +44,27 @@ export class CatalogComponent implements OnInit {
   genderService = inject(GenderService);
   cantonsService = inject(CantonsService);
   router = inject(Router);
+
+  // Page Values ( didnt use the template cuz whats going on???)
+  page = {
+    pageSize: 10,
+    currentPage: 1,
+    includedTotal: true,
+    totalItems: 5,
+    totalPages: 0,
+    pageSizeOption: [2, 5, 10, 100],
+  };
+
+  // Lists //
   animalCategories: any = [];
   animalBreed: any = [];
-  animalPosts: Observable<ListAnimal[]> | undefined;
+  animalPosts: Observable<PageResult<ListAnimal>> | undefined;
   genderList: any = [];
   cantonsList: any = [];
   breedArr: Array<ListAnimalBreedQueryDto> = new Array<ListAnimalBreedQueryDto>();
-  postArr: Array<ListAnimalPostsDto> = new Array<ListAnimalPostsDto>();
+  postArr: Observable<ListAnimal[]> | undefined;
+
+  // List selections //
   selectedCat: any;
   selectedBreed: any;
   selectedGender: any;
@@ -47,15 +75,21 @@ export class CatalogComponent implements OnInit {
     start: new FormControl<any>(null),
     end: new FormControl<any>(null),
   });
-  @ViewChild('breedSelect') breedRef!: ElementRef;
+
+  // random values
+
   fromInputMax: MatInput = new MatInput();
   imageUrl = 'https://localhost:7260/posts/Krompir2.jpg';
 
-  genderNames :string[] = [];
+  constructor() {
+    super();
+    this.request = new GetPostQuery();
+    this.request.paging.pageSize = 2;
+  }
   ngOnInit(): void {
     this.loadCategories();
     this.loadAnimalBreed();
-    this.loadPosts();
+    this.loadPagedData();
     this.loadGender();
     this.loadCantons();
   }
@@ -74,9 +108,20 @@ export class CatalogComponent implements OnInit {
       this.animalBreed = response;
     });
   }
-  loadPosts(): void {
-    this.animalPosts = this.animalPostsService.listAnimalPosts();
-    console.log(this.animalPosts);
+  protected override loadPagedData(): void {
+    this.animalPosts = this.animalPostsService.listAnimalPosts(this.request).pipe(
+      tap((res) => {
+        this.page = {
+          pageSize: res.pageSize,
+          currentPage: res.currentPage,
+          includedTotal: res.includedTotal,
+          totalItems: res.totalItems,
+          totalPages: res.totalPages,
+          pageSizeOption: this.page.pageSizeOption,
+        };
+      })
+    );
+    console.log(this.page);
   }
   loadGender(): void {
     this.genderList = this.genderService.listGender().subscribe((resposne) => {
@@ -101,20 +146,25 @@ export class CatalogComponent implements OnInit {
     return postTime.getTime() >= chosenTimeMin! && postTime.getTime() <= chosenTimeMax!;
   }
   searchCatalog(): void {
-  /*
-    this.postArr = (this.animalPosts.items as Array<ListAnimalPostsDto>).filter(
-      (x) =>
-        (this.selectedCat == null ? true : this.selectedCat == x.categoryID) &&
-        (this.selectedBreed == null
-          ? true
-          : !(this.selectedBreed as string).localeCompare(x.breed)) &&
-        this.compareDates(x.dateAdded) &&
-        (this.selectedGender == null ? true : this.selectedGender == x.genderID) &&
-        (this.selectedCity == null ? true : this.selectedCity == x.cityID)
+    /*
+    this.postArr = this.animalPosts?.pipe(
+      map((post) =>
+        post.filter(
+          (x) =>
+            (this.selectedCat == null ? true : this.selectedCat == x.categoryID) &&
+            (this.selectedBreed == null
+              ? true
+              : !(this.selectedBreed as string).localeCompare(x.breed)) &&
+            this.compareDates(x.dateAdded) &&
+            (this.selectedGender == null ? true : this.selectedGender == x.genderID) &&
+            (this.selectedCity == null ? true : this.selectedCity == x.cityID)
+        )
+      )
     );
-    console.log(this.postArr);*/
+    */
   }
   clearSearch(): void {
+    //this.postArr = this.animalPosts.items;
     this.breedArr = new Array<ListAnimalBreedQueryDto>();
     this.selectedCat = null;
     this.selectedBreed = null;
@@ -130,16 +180,20 @@ export class CatalogComponent implements OnInit {
   changeCity() {
     this.selectedCity = null;
   }
-  
-routeToPost(post: ListAnimalPostsDto) {
+  routeToPost(post: ListAnimal) {
     this.router.navigate(['post'], {
       queryParams: {
         postID: post.postID,
         animalID: post.animalID,
         cityID: post.cityID,
         userID: post.userID,
-        dateAdded: post.dateAdded,
       },
     });
+  }
+  handlePageEvent(event: PageEvent) {
+    this.request.paging.page = event.pageIndex + 1;
+    this.request.paging.pageSize = event.pageSize;
+    this.loadPagedData();
+  }
 }
 }

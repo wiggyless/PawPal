@@ -23,8 +23,8 @@ export class LoginComponent extends BaseComponent implements OnInit {
   showPassword = false;
 
   form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]]
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
   });
 
   onSubmit(): void {
@@ -42,6 +42,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
       next: () => {
         console.log('Login successful');
         const target = this.currentUser.getDefaultRoute();
+        console.log(target);
         this.router.navigate([target]);
       },
       error: (err) => {

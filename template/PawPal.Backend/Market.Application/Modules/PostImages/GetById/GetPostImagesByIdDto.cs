@@ -10,6 +10,7 @@ namespace PawPal.Application.Modules.PostImages.GetById
     {
         public int Id { get; set; }
         public int PostId { get; set; }
+        public string MainImage { get; set; }
         public List<string> PostImages { get; set; }    
     }
 }

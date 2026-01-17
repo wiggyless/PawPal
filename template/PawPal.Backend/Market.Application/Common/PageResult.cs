@@ -2,7 +2,8 @@
 
 public sealed class PageResult<T>
 {
-    public int Total { get; init; }
+    public int TotalItems { get; init; }
+    
     public IReadOnlyList<T> Items { get; init; }
 
     /// <summary>
@@ -23,6 +24,6 @@ public sealed class PageResult<T>
             .Take(paging.PageSize)
             .ToListAsync(ct);
 
-        return new PageResult<T> { Total = total, Items = items };
+        return new PageResult<T> { TotalItems = total, Items = items };
     }
 }

@@ -18,6 +18,7 @@ namespace PawPal.Application.Modules.PostImages.GetById
                 Id = postImage.Id,
                 PostId = request.PostId,
                 PostImages = postImage.PhotoURL,
+                MainImage = postImage.MainImage,
             };
             return newPostImage;
         }

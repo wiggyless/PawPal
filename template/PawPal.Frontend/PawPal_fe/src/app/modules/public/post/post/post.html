@@ -14,8 +14,15 @@
   <body>
     <div class="post-container">
       <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
+
       <div class="post">
-        <p-carousel [value]="imagesList" [numVisible]="1" [numScroll]="1" [circular]="true">
+        @if(currentUser.userId == userId){
+        <div class="post-buttons">
+          <button class="primarybtn" (click)="routeEditPost()">EDIT</button>
+          <button class="secondarybtn">DELETE</button>
+        </div>
+        } @if(imagesList|async;as images){
+        <p-carousel [value]="images" [numVisible]="1" [numScroll]="1" [circular]="true">
           <ng-template pTemplate="previousicon">
             <span class="chevron-left"></span>
           </ng-template>
@@ -27,6 +34,7 @@
             <img class="post-image" src="{{ env.apiUrl + image }}" />
           </ng-template>
         </p-carousel>
+        }
         <div class="post-information-container">
           <h2 class="pet-name">{{ animal.name }}</h2>
           <div class="post-information">

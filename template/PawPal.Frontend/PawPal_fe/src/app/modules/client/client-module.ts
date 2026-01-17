@@ -9,7 +9,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MyPosts } from './my-posts/my-posts';
 import { UserProfileSideNavbar } from './user-profile-side-navbar/user-profile-side-navbar/user-profile-side-navbar';
 import { MatListModule } from '@angular/material/list';
-import { KeyValuePipe } from '@angular/common';
+import { AsyncPipe, KeyValuePipe } from '@angular/common';
 import { CreatePost } from './create-post/create-post';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';

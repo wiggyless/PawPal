@@ -5,8 +5,8 @@
     <div class="client-content-posts-container">
       <h1>PUBLIC POSTS:</h1>
       <div class="client-content-posts">
-        @for( post of animalPostList.items;track post) {
-        <div class="post">
+        @if(animalPostList | async ;as posts){ @for( post of posts;track post) {
+        <div class="post" (click)="loadPost(post)">
           <div class="post-image">
             <img [src]="post.firstImage == '' ? '' : envLink.apiUrl + post.firstImage" />
           </div>
@@ -15,7 +15,7 @@
             <p class="post-info-views">1,234 views</p>
           </div>
         </div>
-        }
+        } }
       </div>
     </div>
   </div>

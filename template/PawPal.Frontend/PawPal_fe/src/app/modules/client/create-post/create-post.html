@@ -2,28 +2,44 @@
   <div class="stepper-container">
     <!-- First stepper images -->
     <mat-stepper #stepper linear="true">
-      <mat-step [stepControl]="firstFormGroup" class="mat-step-container">
+      <mat-step [stepControl]="firstFormGroup" class="mat-step-container" [optional]="true">
         <div class="mat-step-image-container">
           <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Image upload</ng-template>
             <input
               placeholder="Image"
               type="file"
-              formControlName="firstCtrl"
-
+              formArrayName="firstCtrl"
+              required
               class="image-input"
               multiple
               (change)="showImages($event)"
             />
           </form>
           <div class="image-container">
-            @for(img of imageList;track img){
-            <img class="image" [src]="img" />
+            @for (i of [].constructor(10); track $index) {
+              @if (imageControls[$index]) {
+                <div class="image-holder">
+                  <!--I am running out of ideas on how to name classes -->
+
+                  <img class="image" [src]="imageControls[$index].value" />
+                  <div class="image-holder-button">
+                    <button class="image-delete-button" (click)="deleteImage($index)">X</button>
+                  </div>
+                </div>
+              } @else {
+                <div class="image-holder">
+                  <!--I am running out of ideas on how to name classes -->
+
+                  <img class="image" [src]="" />
+                  <div class="image-holder-button"></div>
+                </div>
+              }
             }
           </div>
         </div>
         <div class="stepper-buttons">
-          <button mat-button routerLink="/client" class="secondarybtn">BACK</button>
+          <button mat-button (click)="getPageBack()" class="secondarybtn">BACK</button>
           <button mat-button matStepperNext class="primarybtn">NEXT</button>
         </div>
       </mat-step>
@@ -79,13 +95,7 @@
              <div class="form-field-format">
             <label class="input-label">Age</label>
             <mat-form-field>
-              <input
-                matInput
-                type="number"
-                formControlName="ageCtrl"
-                placeholder="e.g 2"
-                required
-              />
+              <input matInput type="number" formControlName="age" placeholder="e.g 2" required />
             </mat-form-field>
             </div>
             <div class="form-field-format">
@@ -219,7 +229,7 @@
 
             <div class="post-information-container">
               <h2 class="pet-name">
-                <p>{{ fourthFromGroup.value.mainInfo?.nameCtrl }}</p>
+                <p>{{ fourthFromGroup.value.mainInfo?.name }}</p>
               </h2>
               <div class="post-information">
                 <div class="post-information-pet">
@@ -238,6 +248,13 @@
                     </div>
                     <div class="straight-border"></div>
                     <div class="post-information-pet-attributes-values">
+                      <p>{{ fourthFromGroup.value.mainInfo?.categoryID }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.breed }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.genderID }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.age }}</p>
+                      <p>{{ fourthFromGroup.value.healthInfo?.vaccineCheck }}</p>
+                      <p>{{ fourthFromGroup.value.healthInfo?.parasiteCheck }}</p>
+                      <p>{{ fourthFromGroup.value.healthInfo?.disCheck }}</p>
                       <p>{{ selectedCategory.categoryName }}</p>
                       <p>{{ fourthFromGroup.value.mainInfo?.breedCtrl }}</p>
                       <p>{{ fourthFromGroup.value.mainInfo?.genderCtrl }}</p>
