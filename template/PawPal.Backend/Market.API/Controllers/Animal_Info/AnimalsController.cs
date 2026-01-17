@@ -15,7 +15,7 @@ namespace PawPal.API.Controllers.Animal_Info
         public async Task<ActionResult<int>> CreateAnimal(CreateAnimalCommand cmd, CancellationToken ct)
         {
             int id = await sender.Send(cmd, ct);
-            return CreatedAtAction(nameof(GetById), new { id }, new { id });
+            return id;
         }
 
         [AllowAnonymous]

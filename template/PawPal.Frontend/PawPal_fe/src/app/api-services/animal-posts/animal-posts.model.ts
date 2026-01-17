@@ -56,3 +56,17 @@ export interface AddAnimalPost {
   userId: number;
   status: boolean;
 }
+
+export interface ListAnimal {
+  postID: number;
+  animalID: number;
+  cityID: number;
+  categoryID: number;
+  userID: number;
+  genderID: number;
+  name: string;
+  age: number;
+  breed: string;
+  photoURL: string;
+  dateAdded: Date;
+}

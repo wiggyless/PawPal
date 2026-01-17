@@ -7,7 +7,7 @@ import {
   ViewEncapsulation,
   inject,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 import { AnimalsHealthService } from '../../../../api-services/animals-health/animals-health-service';
 import { GetAnimalsHealthByIdDto } from '../../../../api-services/animals-health/animals-health-model';
 import { AnimalService } from '../../../../api-services/animals/animal';
@@ -16,7 +16,6 @@ import { GetCityByIdDto } from '../../../../api-services/cities/cities.model';
 import { AnimalUserService } from '../../../../api-services/animal-users/animal-users-service';
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
 import { environment } from '../../../../../environments/environment';
-import { ActivatedRoute } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { catchError, Observable, of } from 'rxjs';
 import { GetPostImageById } from '../../../../api-services/animal-post-images/animal-post-images-model';
@@ -44,8 +43,8 @@ export class PostComponent implements OnInit {
   cityService = inject(CitiesService);
   userService = inject(AnimalUserService);
   postImageService = inject(PostImagesService);
+  route = inject(ActivatedRoute);
   cd = inject(ChangeDetectorRef);
-  // api containers
   animalHealth: GetAnimalsHealthByIdDto = {
     animalHealthHistoryId: 0,
     animalId: 0,
@@ -56,6 +55,7 @@ export class PostComponent implements OnInit {
     animalAllergies: [],
     animalDisabilities: [],
   };
+
   animal = {
     name: '',
     category: '',
@@ -94,6 +94,8 @@ export class PostComponent implements OnInit {
     this.loadUsers();
     this.loadPostImages();
   }
+
+
   keepOrder = (a: any, b: any) => 0;
   loadHealth(): void {
     this.animalHealthService.getAnimalHealthHistoryById(this.animalId).subscribe((response) => {

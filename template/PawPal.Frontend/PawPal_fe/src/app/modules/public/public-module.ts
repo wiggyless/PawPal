@@ -8,7 +8,7 @@ import { DatePicker } from 'primeng/datepicker';
 import { MatFormField, MatLabel, MatInput } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,8 +20,9 @@ import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonIcon } from 'primeng/button';
 import { SharedModule } from 'primeng/api';
-import { Bind } from 'primeng/bind';
-import { MatPaginatorModule } from '@angular/material/paginator';
+  import { MatPaginatorModule } from '@angular/material/paginator';
+import { Bind } from "primeng/bind";
+import { MatSelect } from "@angular/material/select";
 @NgModule({
   declarations: [PublicLayout, CatalogComponent, PostComponent],
   imports: [
@@ -47,6 +48,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     Bind,
     MatPaginatorModule,
     AsyncPipe,
+    MatSelect,
+    MatOption
   ],
 })
 export class PublicModule {}

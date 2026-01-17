@@ -8,6 +8,7 @@ import {
   AnimalPostByIdQuery,
   GetPostQuery,
   ListAnimal,
+  ListAnimalPostsDto,
 } from '../../../../api-services/animal-posts/animal-posts.model';
 import { MatInput } from '@angular/material/input';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -22,6 +23,8 @@ import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { PageResult } from '../../../../core/models/paging/page-result';
 import { BaseListPagedComponent } from '../../../../core/components/base-classes/base-list-paged-component';
 import { PageEvent } from '@angular/material/paginator';
+import { Observable } from 'rxjs';
+
 @Component({
   selector: 'app-catalog',
   standalone: false,
@@ -192,4 +195,5 @@ export class CatalogComponent
     this.request.paging.pageSize = event.pageSize;
     this.loadPagedData();
   }
+}
 }

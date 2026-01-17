@@ -23,6 +23,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Cr
         public string? AllergyName { get; set; }
     }
 
+
     public class AnimalDisabilitiesCommand
     {
         public string? DisabilityName { get; set; }
