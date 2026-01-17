@@ -2,6 +2,7 @@
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.List;
 using PawPal.Application.Modules.Allergies.Queries.GetById;
 using PawPal.Application.Modules.Allergies.Queries.List;
+using PawPal.Application.Modules.Disabilities.Command.Create;
 using PawPal.Application.Modules.Disabilities.GetById;
 using PawPal.Application.Modules.Disabilities.List;
 
@@ -24,6 +25,14 @@ namespace PawPal.API.Controllers.Allergies
             CancellationToken cancellationToken)
         {
             var res = await sender.Send(query, cancellationToken);
+            return res;
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult<int>> CreateDisablitie(CreateDisabilitieCommand command,CancellationToken cancellationToken)
+        {
+            var res = await sender.Send(command, cancellationToken);
             return res;
         }
     }

@@ -8,6 +8,6 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.De
 {
     public class DeleteAnimalHealthHistoryCommand : IRequest<Unit>
     {
-        public required int Id { get; set; }
+        public required int AnimalId { get; set; }
     }
 }

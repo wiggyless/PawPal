@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { buildHttpParams } from '../../core/models/build-http-params';
@@ -10,6 +10,9 @@ import {
   listAnimalPostsByUserIdDto,
 } from './animal-posts.model';
 import { PageResult } from '../../core/models/paging/page-result';
+interface ResponseImage {
+  id: number;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -23,18 +26,28 @@ export class AnimalPostService {
     return this.httpClient.get<PageResult<ListAnimal>>(this.apiUrl, { params });
     //.pipe(map((response) => response.items));
   }
-  listAnimalPostsByUserId(request?: any): Observable<listAnimalPostsByUserIdDto[]> {
+  listAnimalPostsByUserId(request: any): Observable<PageResult<listAnimalPostsByUserIdDto>> {
     const params = request ? buildHttpParams(request as any) : undefined;
-    return this.httpClient
-      .get<PageResult<listAnimalPostsByUserIdDto>>(`${this.apiUrl}/userPost`, { params })
-      .pipe(map((response) => response.items));
+    console.log(params?.toString());
+    return this.httpClient.get<PageResult<listAnimalPostsByUserIdDto>>(`${this.apiUrl}/userPost`, {
+      params,
+    });
   }
   getPostById(request?: any): Observable<AnimalPostByIdQuery> {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.get<AnimalPostByIdQuery>(`${this.apiUrl}/${request}`, { params });
   }
-  addPost(request?: any): Observable<number> {
+  addPost(request?: any): Observable<ResponseImage> {
     const params = request ? buildHttpParams(request as any) : undefined;
-    return this.httpClient.post<number>(`${this.apiUrl}`, request, { params });
+    return this.httpClient.post<ResponseImage>(`${this.apiUrl}`, request, { params });
+  }
+
+  deletePost(postId: number, animalId: number): Observable<number> {
+    return this.httpClient.delete<number>(`${this.apiUrl}/${postId}`, {
+      body: {
+        id: postId,
+        animalID: animalId,
+      },
+    });
   }
 }

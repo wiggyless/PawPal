@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -16,24 +16,25 @@
       <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
 
       <div class="post">
-        @if(currentUser.userId == userId){
-        <div class="post-buttons">
-          <button class="primarybtn" (click)="routeEditPost()">EDIT</button>
-          <button class="secondarybtn">DELETE</button>
-        </div>
-        } @if(imagesList|async;as images){
-        <p-carousel [value]="images" [numVisible]="1" [numScroll]="1" [circular]="true">
-          <ng-template pTemplate="previousicon">
-            <span class="chevron-left"></span>
-          </ng-template>
+        @if (currentUser.userId == userId) {
+          <div class="post-buttons">
+            <button class="primarybtn" (click)="routeEditPost()">EDIT</button>
+            <button class="secondarybtn" (click)="deletePost()">DELETE</button>
+          </div>
+        }
+        @if (imagesList | async; as images) {
+          <p-carousel [value]="images" [numVisible]="1" [numScroll]="1" [circular]="true">
+            <ng-template pTemplate="previousicon">
+              <span class="chevron-left"></span>
+            </ng-template>
 
-          <ng-template pTemplate="nexticon">
-            <span class="chevron-right"></span>
-          </ng-template>
-          <ng-template let-image pTemplate="img">
-            <img class="post-image" src="{{ env.apiUrl + image }}" />
-          </ng-template>
-        </p-carousel>
+            <ng-template pTemplate="nexticon">
+              <span class="chevron-right"></span>
+            </ng-template>
+            <ng-template let-image pTemplate="img">
+              <img class="post-image" src="{{ env.apiUrl + image }}" />
+            </ng-template>
+          </p-carousel>
         }
         <div class="post-information-container">
           <h2 class="pet-name">{{ animal.name }}</h2>
@@ -41,8 +42,9 @@
             <div class="post-information-pet">
               <div class="post-information-pet-info">
                 <div class="post-information-pet-attributes">
-                  @for(ani of animal|keyvalue: keepOrder;track ani.key){ <!--im gonna kill this dude bruh-->
-                  <p>{{ ani.key.charAt(0).toUpperCase() + ani.key.slice(1) }}:</p>
+                  @for (ani of animal | keyvalue: keepOrder; track ani.key) {
+                    <!--im gonna kill this dude bruh-->
+                    <p>{{ ani.key.charAt(0).toUpperCase() + ani.key.slice(1) }}:</p>
                   }
                   <p>Vaccinated:</p>
                   <p>Sprayed:</p>
@@ -52,28 +54,25 @@
                 </div>
                 <div class="straight-border"></div>
                 <div class="post-information-pet-attributes-values">
-                  @for(ani of animal|keyvalue: keepOrder;track ani.key){
-                  <p>{{ ani.value }}</p>
+                  @for (ani of animal | keyvalue: keepOrder; track ani.key) {
+                    <p>{{ ani.value }}</p>
                   }
-                  @if(!animalHealth.vaccinated){
+                  @if (!animalHealth.vaccinated) {
                     <p><mat-icon>close</mat-icon></p>
-                  }
-                  @else {
+                  } @else {
                     <p><mat-icon>check</mat-icon></p>
                   }
-                  @if(!animalHealth.spayedOrNeutered){
+                  @if (!animalHealth.spayedOrNeutered) {
                     <p><mat-icon>close</mat-icon></p>
-                  }
-                  @else {
+                  } @else {
                     <p><mat-icon>check</mat-icon></p>
                   }
-                  @if(!animalHealth.parasiteFree){
-                      <p><mat-icon>close</mat-icon></p>
+                  @if (!animalHealth.parasiteFree) {
+                    <p><mat-icon>close</mat-icon></p>
+                  } @else {
+                    <p><mat-icon>check</mat-icon></p>
                   }
-                  @else {
-                      <p><mat-icon>check</mat-icon></p>
-                  }
-                  <p>{{ dateAdded  | date: 'short'}}</p>
+                  <p>{{ dateAdded | date: 'short' }}</p>
                   <p>{{ city.name }}</p>
                 </div>
               </div>
@@ -92,7 +91,9 @@
                 <p class="post-information-user-username">
                   {{ user.firstName }} {{ user.lastName }}
                 </p>
-                <p class="post-information-user-activity">Last time active: {{ user.dateTime  | date: 'short'}}</p>
+                <p class="post-information-user-activity">
+                  Last time active: {{ user.dateTime | date: 'short' }}
+                </p>
                 <div class="post-information-user-border"></div>
                 <div class="post-information-user-buttons">
                   <button class="primarybtn">ADOPT</button>
