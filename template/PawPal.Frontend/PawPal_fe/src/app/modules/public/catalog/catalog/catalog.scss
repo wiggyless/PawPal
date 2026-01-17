@@ -1,12 +1,4 @@
-.footer {
-  width: 100%;
-  height: 100px;
-  background-color: #493c1d;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
+
 .logo {
   background-color: #e5d7c4;
   width: 170px;
@@ -205,3 +197,139 @@ label {
   ::ng-deep .mat-date-range-input-container{
     padding-top:7px
   }
+
+  mat-paginator {
+  width: 100%;
+  height: 50px;
+  background-color: transparent;
+  justify-content: center;
+  display: flex;
+}
+
+::ng-deep .mat-mdc-paginator-page-size-select {
+  height: 40px;
+  width: 60px;
+  padding-bottom: 10px;
+}
+
+// Main paginator text
+.mat-mdc-paginator {
+  color: white !important;
+}
+
+// Navigation icons
+.mat-mdc-paginator .mat-mdc-icon-button {
+  color: white !important;
+}
+
+// Dropdown select text and arrow
+.mat-mdc-paginator .mat-mdc-select-value,
+.mat-mdc-paginator .mat-mdc-select-arrow {
+  color: white !important;
+}
+
+// Dropdown border (the underline/outline)
+::ng-deep .mat-mdc-paginator .mat-mdc-form-field {
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-text-field-wrapper {
+  background-color: transparent !important;
+}
+
+// Target the select trigger border
+::ng-deep .mat-mdc-paginator .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-paginator .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-paginator .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline__trailing {
+  border-color: white !important;
+}
+
+// For filled variant
+::ng-deep .mat-mdc-paginator .mat-mdc-form-field .mdc-line-ripple {
+  background-color: white !important;
+}
+
+// Page size label
+::ng-deep .mat-mdc-paginator .mat-mdc-paginator-page-size-label {
+  color: white !important;
+}
+
+// Range label (e.g., "1 - 10 of 100")
+::ng-deep .mat-mdc-paginator .mat-mdc-paginator-range-label {
+  color: white !important;
+}
+
+// Add this to target the SVG icons inside the buttons
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button svg {
+  fill: white !important;
+}
+
+// Also target the mat-icon if it's being used
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button mat-icon {
+  color: white !important;
+}
+
+// Target the paginator icons more specifically
+::ng-deep .mat-mdc-paginator .mat-mdc-paginator-navigation-previous,
+::ng-deep .mat-mdc-paginator .mat-mdc-paginator-navigation-next,
+::ng-deep .mat-mdc-paginator .mat-mdc-paginator-navigation-first,
+::ng-deep .mat-mdc-paginator .mat-mdc-paginator-navigation-last {
+  color: white !important;
+}
+
+// Ensure the button itself has white color
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button {
+  color: white !important;
+  --mat-icon-button-state-layer-color: white !important;
+  --mdc-icon-button-icon-color: white !important;
+}
+
+// Target the selected value text in the dropdown
+::ng-deep .mat-mdc-paginator .mat-mdc-select-value-text {
+  color: white !important;
+}
+
+// Target the select input itself
+::ng-deep .mat-mdc-paginator .mat-mdc-select {
+  color: white !important;
+}
+
+// Target the trigger text
+::ng-deep .mat-mdc-paginator .mat-mdc-select-trigger {
+  color: white !important;
+}
+
+// Additional targeting for the min-line
+::ng-deep .mat-mdc-paginator .mat-mdc-select-min-line {
+  color: white !important;
+}
+
+.footer-main {
+  width: 100%;
+  height: 175px;
+  background-color: #493c1d;
+  position:relative;
+  bottom:0;
+}
+
+.footer-secondary{
+  width:100%;
+  background-color: #2d2513;
+  height: 55px;
+  position:absolute;
+  bottom:0;
+}
+
+.footer-container{
+  align-items: center;
+  width: 100%;
+  display: flex;
+  padding-left: 40%;
+  
+  padding-top:25px;
+}
+.footer-container p{
+  color:rgb(230, 226, 221); 
+  text-align: center;
+  padding:10px;
+}

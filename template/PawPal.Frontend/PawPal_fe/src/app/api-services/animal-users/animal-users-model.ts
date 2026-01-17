@@ -8,3 +8,10 @@ export interface GetUserByIdDto {
   cityID: number;
   cantonAbbrevation: string;
 }
+export interface UpdateUserCommand{
+  firstName: string;
+  lastName: string;
+  profilePictureURL: string;
+  date: string;
+  cityId: number;
+}

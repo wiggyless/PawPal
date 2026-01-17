@@ -20,8 +20,6 @@
             @for (i of [].constructor(10); track $index) {
               @if (imageControls[$index]) {
                 <div class="image-holder">
-                  <!--I am running out of ideas on how to name classes -->
-
                   <img class="image" [src]="imageControls[$index].value" />
                   <div class="image-holder-button">
                     <button class="image-delete-button" (click)="deleteImage($index)">X</button>
@@ -29,8 +27,6 @@
                 </div>
               } @else {
                 <div class="image-holder">
-                  <!--I am running out of ideas on how to name classes -->
-
                   <img class="image" [src]="" />
                   <div class="image-holder-button"></div>
                 </div>
@@ -70,8 +66,8 @@
             <div class="form-field-format">
               <label class="input-label">Name</label>
               <mat-form-field>
-                <input matInput formControlName="nameCtrl" placeholder="e.g Rex" required />
-                @if (secondFormGroup.get('nameCtrl')?.hasError('required')) {
+                <input matInput formControlName="name" placeholder="e.g Rex" required />
+                @if (secondFormGroup.get('name')?.hasError('required')) {
                   <mat-error>Please enter a name!</mat-error>
                 }
               </mat-form-field>
@@ -80,12 +76,13 @@
             <div class="form-field-format">
               <label class="input-label">Gender</label>
               <mat-form-field>
-                <mat-select placeholder="Select gender" required formControlName="genderCtrl">
+                <mat-select placeholder="Select gender" required formControlName="genderID"
+                (selectionChange)="setGender()">
                   @for (gen of genderList.items; track gen) {
                     <mat-option [value]="gen.id">{{ gen.name }}</mat-option>
                   }
                 </mat-select>
-                @if (secondFormGroup.get('nameCtrl')?.hasError('required')) {
+                @if (secondFormGroup.get('genderID')?.hasError('required')) {
                   <mat-error>Please select a gender!</mat-error>
                 }
               </mat-form-field>
@@ -97,7 +94,7 @@
                 <mat-select
                   placeholder="Select category"
                   required
-                  formControlName="categoryCtrl"
+                  formControlName="categoryID"
                   (selectionChange)="getBreedSelect()"
                 >
                   @for (cat of categoryList.items; track cat) {
@@ -106,7 +103,7 @@
                     </mat-option>
                   }
                 </mat-select>
-                @if (secondFormGroup.get('categoryCtrl')?.hasError('required')) {
+                @if (secondFormGroup.get('categoryID')?.hasError('required')) {
                   <mat-error>Please select an animal category!</mat-error>
                 }
               </mat-form-field>
@@ -120,13 +117,13 @@
             <div class="form-field-format">
               <label class="input-label">Breed</label>
               <mat-form-field>
-                <mat-select placeholder="Select breed" required formControlName="breedCtrl">
+                <mat-select placeholder="Select breed" required formControlName="breed">
                   <!-- required -->
                   @for (breed of breedArr; track breed) {
                     <mat-option [value]="breed.name"> {{ breed.name }}</mat-option>
                   }
                 </mat-select>
-                @if (secondFormGroup.get('breedCtrl')?.hasError('required')) {
+                @if (secondFormGroup.get('breed')?.hasError('required')) {
                   <mat-error>Please select a breed!</mat-error>
                 }
               </mat-form-field>
@@ -310,14 +307,10 @@
                     </div>
                     <div class="straight-border"></div>
                     <div class="post-information-pet-attributes-values">
-                      <p>{{ fourthFromGroup.value.mainInfo?.categoryID }}</p>
-                      <p>{{ fourthFromGroup.value.mainInfo?.breed }}</p>
-                      <p>{{ fourthFromGroup.value.mainInfo?.genderID }}</p>
-                      <p>{{ fourthFromGroup.value.mainInfo?.age }}</p>
-                      <p>{{ fourthFromGroup.value.healthInfo?.vaccineCheck }}</p>
-                      <p>{{ fourthFromGroup.value.healthInfo?.parasiteCheck }}</p>
-                      <p>{{ fourthFromGroup.value.healthInfo?.disCheck }}</p>
                       <p>{{ selectedCategory.categoryName }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.breed }}</p>
+                      <p></p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.age }}</p>
                       @if (!selectedVaccinated) {
                         <p><mat-icon>close</mat-icon></p>
                       } @else {
