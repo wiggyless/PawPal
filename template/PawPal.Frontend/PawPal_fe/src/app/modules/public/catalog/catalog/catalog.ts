@@ -22,6 +22,12 @@ import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { PageResult } from '../../../../core/models/paging/page-result';
 import { BaseListPagedComponent } from '../../../../core/components/base-classes/base-list-paged-component';
 import { PageEvent } from '@angular/material/paginator';
+import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
+import {
+  GetMainImagePostBlob,
+  GetMainImagePostBlobClass,
+  ListMainImageId,
+} from '../../../../api-services/animal-post-images/animal-post-images-model';
 
 @Component({
   selector: 'app-catalog',
@@ -42,6 +48,7 @@ export class CatalogComponent
   genderService = inject(GenderService);
   cantonsService = inject(CantonsService);
   router = inject(Router);
+  postImages = inject(PostImagesService);
 
   // Page Values ( didnt use the template cuz whats going on???)
   page = {
@@ -77,13 +84,13 @@ export class CatalogComponent
   // random values
 
   fromInputMax: MatInput = new MatInput();
-  imageUrl = 'https://localhost:7260/posts/Krompir2.jpg';
-
+  tempList: number[] = [];
   constructor() {
     super();
     this.request = new GetPostQuery();
     this.request.paging.pageSize = 2;
   }
+  catalogImages: GetMainImagePostBlobClass[] = [];
   ngOnInit(): void {
     this.loadCategories();
     this.loadAnimalBreed();
@@ -106,6 +113,36 @@ export class CatalogComponent
       this.animalBreed = response;
     });
   }
+  loadPostImages(idList: ListAnimal[]): void {
+    idList.forEach((element) => {
+      this.tempList.push(element.postID);
+    });
+    this.postImages.getMainImagePostBlob(this.tempList).subscribe((response) => {
+      this.setImages(response);
+    });
+  }
+
+  setImages(blobList: GetMainImagePostBlob[]): void {
+    blobList.forEach((x) => {
+      if (x.mainImage != '') {
+        const byteCharacters = atob(x.mainImage);
+        const byteNumbers = new Array(byteCharacters.length);
+
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+
+        // 2. Create the Blob from the typed array
+        const blob = new Blob([byteArray], { type: 'image/png' });
+
+        // 3. Create the URL and add to form
+        const imageUrl = URL.createObjectURL(blob);
+        this.catalogImages.push(new GetMainImagePostBlobClass(x.postID, imageUrl));
+      }
+    });
+  }
   protected override loadPagedData(): void {
     this.animalPosts = this.animalPostsService.listAnimalPosts(this.request).pipe(
       tap((res) => {
@@ -119,7 +156,9 @@ export class CatalogComponent
         };
       }),
     );
-    console.log(this.page);
+    this.animalPosts.subscribe((x) => {
+      this.loadPostImages(x.items);
+    });
   }
   loadGender(): void {
     this.genderList = this.genderService.listGender().subscribe((resposne) => {
@@ -192,5 +231,8 @@ export class CatalogComponent
     this.request.paging.page = event.pageIndex + 1;
     this.request.paging.pageSize = event.pageSize;
     this.loadPagedData();
+  }
+  getPostImage(index: number) {
+    return this.catalogImages.find((x) => x.postID == index)?.mainImage;
   }
 }

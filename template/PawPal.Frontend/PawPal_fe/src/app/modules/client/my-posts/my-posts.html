@@ -6,7 +6,7 @@
       <h1>PUBLIC POSTS:</h1>
       <div class="client-content-posts">
         @if (animalPostList | async; as posts) {
-          @for (post of posts; track post) {
+          @for (post of posts.items; track post) {
             <div class="post" (click)="loadPost(post)">
               <div class="post-image">
                 <img [src]="post.firstImage == '' ? '' : envLink.apiUrl + post.firstImage" />
@@ -19,6 +19,14 @@
           }
         }
       </div>
+      <mat-paginator
+        [length]="page.totalItems"
+        [pageSize]=""
+        [pageSizeOptions]="page.pageSizeOption"
+        aria-label="Select page"
+        (page)="handlePageEvent($event)"
+      >
+      </mat-paginator>
     </div>
   </div>
 </div>

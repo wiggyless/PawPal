@@ -9,6 +9,5 @@ namespace PawPal.Application.Modules.PostImages.Commands.Delete
     public class DeletePostImageCommand : IRequest<Unit>
     {
         public int PostId { get; set; } 
-        public List<string> PostImages { get; set; }
     }
 }

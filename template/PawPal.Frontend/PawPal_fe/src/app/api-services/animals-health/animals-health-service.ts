@@ -15,8 +15,12 @@ export class AnimalsHealthService {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.get<GetAnimalsHealthByIdDto>(`${this.apiUrl}/${request}`);
   }
-  addAnimalHealthHistory(request? : any) : Observable<number>{
+  addAnimalHealthHistory(request?: any): Observable<number> {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.post<number>(`${this.apiUrl}`, request, { params });
+  }
+  updateAnimalHealthHistory(request: any, id: number): Observable<number> {
+    const params = request ? buildHttpParams(request as any) : undefined;
+    return this.httpClient.put<number>(`${this.apiUrl}/${id}`, request, { params });
   }
 }

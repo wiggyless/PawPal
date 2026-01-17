@@ -1,7 +1,7 @@
 <div class="container">
   <div class="stepper-container">
     <!-- First stepper images -->
-    <mat-stepper #stepper linear="true">
+    <mat-stepper #stepper linear="true" (selectionChange)="showImagesCtrl()">
       <mat-step [stepControl]="firstFormGroup" class="mat-step-container" [optional]="true">
         <div class="mat-step-image-container">
           <form [formGroup]="firstFormGroup">
@@ -247,9 +247,7 @@
         </div>
         <div class="stepper-buttons">
           <button mat-button matStepperPrevious class="secondarybtn">BACK</button>
-          <button mat-button matStepperNext class="primarybtn" (click)="filterImages()">
-            NEXT
-          </button>
+          <button mat-button matStepperNext class="primarybtn">NEXT</button>
         </div>
       </mat-step>
 
@@ -262,29 +260,31 @@
         </div>
         <div class="stepper-buttons-final">
           <button mat-button matStepperPrevious class="secondarybtn">BACK</button>
-          <button mat-button (click)="addPost()" routerLink="/client" class="primarybtn">
+          <button mat-button (click)="isUpdate ? updatePost() : addPost()" class="primarybtn">
             POST
           </button>
         </div>
         <div class="post-container">
           <div class="post">
-            <p-carousel
-              [value]="fileteredImageList"
-              [numVisible]="1"
-              [numScroll]="1"
-              [circular]="true"
-            >
-              <ng-template pTemplate="previousicon">
-                <span class="chevron-left"></span>
-              </ng-template>
+            @if (imageControls.length > 0) {
+              <p-carousel
+                [value]="imageControls"
+                [numVisible]="1"
+                [numScroll]="1"
+                [circular]="true"
+              >
+                <ng-template pTemplate="previousicon">
+                  <span class="chevron-left"></span>
+                </ng-template>
 
-              <ng-template pTemplate="nexticon">
-                <span class="chevron-right"></span>
-              </ng-template>
-              <ng-template let-image pTemplate="img">
-                <img class="post-image" src="{{ image }}" />
-              </ng-template>
-            </p-carousel>
+                <ng-template pTemplate="nexticon">
+                  <span class="chevron-right"></span>
+                </ng-template>
+                <ng-template let-image pTemplate="img">
+                  <img class="post-image" src="{{ image.value }}" />
+                </ng-template>
+              </p-carousel>
+            }
 
             <div class="post-information-container">
               <h2 class="pet-name">
