@@ -7,7 +7,7 @@ import {
   ViewEncapsulation,
   inject,
 } from '@angular/core';
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AnimalsHealthService } from '../../../../api-services/animals-health/animals-health-service';
 import { GetAnimalsHealthByIdDto } from '../../../../api-services/animals-health/animals-health-model';
 import { AnimalService } from '../../../../api-services/animals/animal';
@@ -43,7 +43,6 @@ export class PostComponent implements OnInit {
   cityService = inject(CitiesService);
   userService = inject(AnimalUserService);
   postImageService = inject(PostImagesService);
-  route = inject(ActivatedRoute);
   cd = inject(ChangeDetectorRef);
   animalHealth: GetAnimalsHealthByIdDto = {
     animalHealthHistoryId: 0,
@@ -95,7 +94,6 @@ export class PostComponent implements OnInit {
     this.loadPostImages();
   }
 
-
   keepOrder = (a: any, b: any) => 0;
   loadHealth(): void {
     this.animalHealthService.getAnimalHealthHistoryById(this.animalId).subscribe((response) => {
@@ -128,7 +126,7 @@ export class PostComponent implements OnInit {
         console.error('Error fetching images:', error);
         return of([]);
         // implement stock image for when the image is not found
-      })
+      }),
     );
 
     /*.subscribe((response) => {

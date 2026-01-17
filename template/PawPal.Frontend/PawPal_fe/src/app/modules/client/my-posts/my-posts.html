@@ -5,17 +5,19 @@
     <div class="client-content-posts-container">
       <h1>PUBLIC POSTS:</h1>
       <div class="client-content-posts">
-        @if(animalPostList | async ;as posts){ @for( post of posts;track post) {
-        <div class="post" (click)="loadPost(post)">
-          <div class="post-image">
-            <img [src]="post.firstImage == '' ? '' : envLink.apiUrl + post.firstImage" />
-          </div>
-          <div class="post-info">
-            <p class="post-info-name">{{ post.animalName }}</p>
-            <p class="post-info-views">1,234 views</p>
-          </div>
-        </div>
-        } }
+        @if (animalPostList | async; as posts) {
+          @for (post of posts; track post) {
+            <div class="post" (click)="loadPost(post)">
+              <div class="post-image">
+                <img [src]="post.firstImage == '' ? '' : envLink.apiUrl + post.firstImage" />
+              </div>
+              <div class="post-info">
+                <p class="post-info-name">{{ post.animalName }}</p>
+                <p class="post-info-views">1,234 views</p>
+              </div>
+            </div>
+          }
+        }
       </div>
     </div>
   </div>
