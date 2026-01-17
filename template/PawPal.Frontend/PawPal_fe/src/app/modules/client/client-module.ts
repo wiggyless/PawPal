@@ -22,6 +22,7 @@ import { MatDatepickerModule, MatDateRangeInput } from '@angular/material/datepi
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { CarouselModule } from 'primeng/carousel';
 import { MatIcon } from '@angular/material/icon';
+import { MatPaginator } from '@angular/material/paginator';
 @NgModule({
   declarations: [UserProfileComponent, ClientLayout, MyPosts, UserProfileSideNavbar, CreatePost],
   imports: [
@@ -43,6 +44,7 @@ import { MatIcon } from '@angular/material/icon';
     MatSelectModule,
     MatIcon,
     AsyncPipe,
+    MatPaginator,
     MatDatepickerModule,
     MatDateRangeInput,
   ],

@@ -23,3 +23,13 @@ export interface AddAnimalDto {
   childFriendly: boolean;
   categoryId: number;
 }
+export interface UpdateAnimalDto {
+  name: string;
+  breed: string;
+  gender: string;
+  age: number;
+  hasPapers: true;
+  childFriendly: true;
+  category: string;
+  categoryID: number;
+}

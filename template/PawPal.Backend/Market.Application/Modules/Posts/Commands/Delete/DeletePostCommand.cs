@@ -9,5 +9,6 @@ namespace PawPal.Application.Modules.Posts.Commands.Delete
     public class DeletePostCommand : IRequest<Unit>
     {
         public int Id { get; set; }
+        public int AnimalID { get; set; }
     }
 }

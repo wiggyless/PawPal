@@ -45,7 +45,7 @@ namespace PawPal.Application.Modules.Animal_Info.Animals.Commands.Update
             animal.HasPapers = request.HasPapers;
             animal.Gender = request.Gender == null ? animal.Gender : gender;
             animal.Category = request.Category == null ? animal.Category : category;
-
+            animal.CategoryId = request.CategoryID;
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

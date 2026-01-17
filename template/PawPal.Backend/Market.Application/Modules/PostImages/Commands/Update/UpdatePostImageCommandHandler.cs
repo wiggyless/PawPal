@@ -15,6 +15,7 @@ namespace PawPal.Application.Modules.PostImages.Commands.Update
             { 
                 throw new PawPalNotFoundException($"Post with id {command.PostId} not found");
             }
+            postImage.PhotoURL.Clear();
             var listName = command.PostImages.Select(x => "/posts/Post_" + command.PostId + "/" + x.FileName).ToList();
             for(int i =0;i< listName.Count; i++)
             {

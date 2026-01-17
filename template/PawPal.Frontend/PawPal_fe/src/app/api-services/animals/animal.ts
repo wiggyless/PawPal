@@ -20,4 +20,8 @@ export class AnimalService {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.http.post<number>(`${this.apiURL}`, request, { params });
   }
+  updateAnimal(request: any, id: number): Observable<number> {
+    const params = request ? buildHttpParams(request as any) : undefined;
+    return this.http.put<number>(`${this.apiURL}/${id}`, request, { params });
+  }
 }

@@ -6,6 +6,8 @@ using PawPal.Application.Modules.Posts.Queries.List;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
 using PawPal.Application.Modules.Posts.Queries.ListPostsByUserId;
+using PawPal.Application.Modules.PostImages.Commands.Delete;
+using PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Delete_;
 namespace PawPal.API.Controllers.Posts
 {
     [ApiController]
@@ -50,11 +52,12 @@ namespace PawPal.API.Controllers.Posts
             upc.Id = id;
             await sender.Send(upc, ct);
         }
-
+        [AllowAnonymous]
         [HttpDelete("{id:int}")]
-        public async Task Delete(int id,CancellationToken ct)
+        public async Task Delete(DeletePostCommand deletePost, CancellationToken ct)
         {
-            await sender.Send(new DeletePostCommand { Id = id }, ct);
+            await sender.Send(deletePost, ct);
+            await sender.Send(new DeletePostImageCommand { PostId = deletePost.Id }, ct);
         }
     }
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -24,10 +24,10 @@
                 placeholder="Choose an animal category"
                 (selectionChange)="getBreedSelect()"
               >
-                @for (cat of animalCategories.items; track cat){
-                <mat-option [value]="cat.id">
-                  {{ cat.categoryName }}
-                </mat-option>
+                @for (cat of animalCategories.items; track cat) {
+                  <mat-option [value]="cat.id">
+                    {{ cat.categoryName }}
+                  </mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -35,14 +35,11 @@
           <div class="select-child">
             <label for="breed-select">Breed</label>
             <mat-form-field class="custom">
-              <mat-select
-                [(ngModel)]="selectedBreed"
-                placeholder="Choose an animal breed"
-              >
-                @for (breed of breedArr; track breed){
-                <mat-option [value]="breed.name">
-                  {{ breed.name }}
-                </mat-option>
+              <mat-select placeholder="Choose an animal breed">
+                @for (breed of breedArr; track breed) {
+                  <mat-option [value]="breed.name">
+                    {{ breed.name }}
+                  </mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -50,14 +47,11 @@
           <div class="select-child">
             <label for="gender-select">Gender</label>
             <mat-form-field class="custom">
-              <mat-select
-                [(ngModel)]="selectedGender"
-                placeholder="Choose gender"
-              >
-                @for (gen of genderList.items; track gen){
-                <mat-option [value]="gen.id">
-                  {{ gen.name }}
-                </mat-option>
+              <mat-select [(ngModel)]="selectedGender" placeholder="Choose gender">
+                @for (gen of genderList.items; track gen) {
+                  <mat-option [value]="gen.name">
+                    {{ gen.name }}
+                  </mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -70,10 +64,10 @@
                 placeholder="Choose canton"
                 (selectionChange)="changeCity()"
               >
-                @for (can of cantonsList.items; track can){
-                <mat-option [value]="can">
-                  {{ can.fullName }}
-                </mat-option>
+                @for (can of cantonsList.items; track can) {
+                  <mat-option [value]="can">
+                    {{ can.fullName }}
+                  </mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -81,14 +75,11 @@
           <div class="select-child">
             <label for="city-select">City</label>
             <mat-form-field class="custom">
-              <mat-select
-                [(ngModel)]="selectedCity"
-                placeholder="Choose city"
-              >
-                @for (cit of selectedCanton?.cities; track cit){
-                <mat-option [value]="cit.id">
-                  {{ cit.name }}
-                </mat-option>
+              <mat-select [(ngModel)]="selectedCity" placeholder="Choose city">
+                @for (cit of selectedCanton?.cities; track cit) {
+                  <mat-option [value]="cit.id">
+                    {{ cit.name }}
+                  </mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -127,23 +118,18 @@
           <p>Your search result:</p>
         </div>
         <div class="header-posts">
-          @if(animalPosts | async; as posts){ @for(post of posts.items;track post){
-          <div class="post" (click)="routeToPost(post)">
-            <img [src]="imageUrl" class="post-image" />
-            <div class="post-detail">
-              <h3>{{ post.name }}</h3>
-              <p>{{ post.breed }}</p>
-              @if(post.genderID === genderList.items[0].id){
-              <p>{{ genderList.items[0].name }}</p>
-              }
-              @else {
-              <p>{{ genderList.items[1].name }}</p>
-              }
-
-              <p>{{ post.dateAdded | date : 'short' }}</p>
-            </div>
-          </div>
-          } }
+          @if (animalPosts | async; as posts) {
+            @for (post of posts.items; track post) {
+              <div class="post" (click)="routeToPost(post)">
+                <img [src]="getPostImage(post.postID)" class="post-image" />
+                <div class="post-detail">
+                  <h3>{{ post.name }}</h3>
+                  <p>{{ post.breed }}</p>
+                  <p>{{ post.dateAdded | date: 'short' }}</p>
+                </div>
+              </div>
+            }
+          }
         </div>
   <mat-paginator
         [length]="page.totalItems"
