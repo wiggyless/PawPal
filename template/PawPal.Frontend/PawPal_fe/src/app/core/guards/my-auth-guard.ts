@@ -22,8 +22,9 @@ export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
     return true;
   }
 
-  // 2) role check – admin > manager > employee
+  // 2) role check
   const user = currentUser.snapshot;
+  console.log(user);
   if (!user) {
     router.navigate(['/auth/login']);
     return false;

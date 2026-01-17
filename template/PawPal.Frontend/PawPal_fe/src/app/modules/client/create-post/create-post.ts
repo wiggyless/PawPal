@@ -99,12 +99,12 @@ export class CreatePost implements OnInit {
   disabilityService = inject(DisabilityService);
   healthHistory = inject(AnimalsHealthService);
   // lists
-  genderList: any = [];
-  categoryList: any = [];
-  breedList: any = [];
+  genderList: any = { items: [] };
+  categoryList: any = { items: [] };
+  breedList: any = { items: [] };
   fileteredImageList: string[] = [];
-  allergyList: any = [];
-  disabilityList: any = [];
+  allergyList: any = { items: [] };
+  disabilityList: any = { items: [] };
   // random variables
   env = environment.apiUrl;
   url: string = '';
@@ -121,14 +121,13 @@ export class CreatePost implements OnInit {
     categoryName: '',
     isEnabled: true,
   };
-  selectedGender: string = '';
+  selectedGender: any;
   selectedParasiteFree: boolean = false;
   selectedVaccinated: boolean = false;
   selectedSprayed: boolean = false;
   selectedAllergies: any = [];
   selectedDisabilities: any = [];
 
-  //imam id kategorije...
   userData: GetUserByIdDto = {
     id: 0,
     firstName: '',
@@ -226,7 +225,6 @@ export class CreatePost implements OnInit {
       const reader = new FileReader();
       reader.readAsDataURL(files);
       reader.onload = () => {
-        console.log(reader.result);
         this.imageControls.push(this._formBuilder.control(reader.result?.toString() as string));
       };
     }
@@ -320,12 +318,13 @@ export class CreatePost implements OnInit {
     this.fileteredImageList = this.imageList.filter((img) => img != '');
   }
   addPost(): void {
+    this.newAnimal.name = this.fourthFromGroup.value.mainInfo?.name as string,
     this.newAnimal.age = this.fourthFromGroup.value.mainInfo?.age as number;
     this.newAnimal.breed = this.fourthFromGroup.value.mainInfo?.breed as string;
-    this.newAnimal.categoryId = this.fourthFromGroup.value.mainInfo?.categoryID as number;
+    this.newAnimal.categoryId = this.fourthFromGroup.value.mainInfo?.categoryID as any;
     this.newAnimal.hasPapers = this.fourthFromGroup.value.mainInfo?.passportCheck as boolean;
     this.newAnimal.name = this.fourthFromGroup.value.mainInfo?.name as string;
-    this.newAnimal.genderId = this.fourthFromGroup.value.mainInfo?.genderID as number;
+    this.newAnimal.genderId = this.fourthFromGroup.value.mainInfo?.genderID as any;
 
     this.newAnimalHealthHistory.dietaryRestrictions = '';
     this.newAnimalHealthHistory.parasiteFree = this.selectedParasiteFree;
@@ -361,7 +360,7 @@ export class CreatePost implements OnInit {
     this.location.back();
   }
   getBreedSelect(): void {
-    this.selectedCategoryId = this.secondFormGroup.get('categoryCtrl')?.value; //ovo uzima iz mat-selecta
+    this.selectedCategoryId = this.secondFormGroup.get('categoryID')?.value; //ovo uzima iz mat-selecta
     this.breedArr = this.breedList.items; //gives it all the breeds that are in selectedCategoryId db
     this.breedArr = this.breedArr.filter((x) => x.categoryId == this.selectedCategoryId); //filters it :D
     this.categoryService.getAnimalCategoryById(this.selectedCategoryId).subscribe((res) => {
@@ -384,6 +383,10 @@ export class CreatePost implements OnInit {
 
   addDisabilityToList() {
     this.selectedDisabilities = this.thridFormGroup.get('disCtrl')?.value;
+  }
+  setGender(){
+    this.selectedGender = this.secondFormGroup.get('genderID')?.value;
+
   }
 }
 
