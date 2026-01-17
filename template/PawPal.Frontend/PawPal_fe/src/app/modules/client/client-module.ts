@@ -18,7 +18,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerModule, MatDateRangeInput } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { CarouselModule } from 'primeng/carousel';
 import { MatIcon } from '@angular/material/icon';
@@ -45,6 +45,9 @@ import { MatPaginator } from '@angular/material/paginator';
     MatIcon,
     AsyncPipe,
     MatPaginator,
+    MatDatepickerModule,
+    MatDateRangeInput,
   ],
+  providers:[provideNativeDateAdapter()]
 })
 export class ClientModule {}

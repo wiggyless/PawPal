@@ -206,7 +206,7 @@ public static class DynamicDataSeeder
             var krompir = new AnimalEntity
             {
                 Name = "Krompir",
-                Breed = "European Shorthair",
+                Breed = "British Shorthair",
                 Age = 2,
                 GenderId = femaleGender.Id,
                 ChildFriendly = true,

@@ -39,9 +39,9 @@ export interface AnimalPostByIdQuery {
   postID: number;
   animalID: number;
   cityID: number;
-  categoryID: number;
+  categoryID: any;
   userID: number;
-  genderID: number;
+  genderID: any;
   name: string;
   age: number;
   breed: string;

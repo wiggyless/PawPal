@@ -6,11 +6,14 @@
   flex-direction: column;
   gap: 50px;
 }
+
 .client-content-posts {
-  display: flex;
-  flex-direction: row;
-  gap: 50px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); // Changed from repeat(2, 1fr)
+  gap: 15px;
+  justify-items: center; // Centers items within grid cells
 }
+
 .post {
   width: 250px;
   height: 280px;
@@ -18,17 +21,21 @@
   box-shadow: 6px 10px 5px 4px rgba(0, 0, 0, 0.39);
   -webkit-box-shadow: 6px 10px 5px 4px rgba(0, 0, 0, 0.39);
   -moz-box-shadow: 6px 10px 5px 4px rgba(0, 0, 0, 0.39);
+  cursor: pointer; 
 }
+
 .post-image {
   width: 100%;
   height: 75%;
   border-bottom: 1px solid black;
 }
+
 .post-image img {
   width: 100%;
   height: 100%;
   border-radius: 10px 10px 0px 0px;
 }
+
 .post-info {
   text-align: center;
   background-color: #c7b18c;
@@ -36,6 +43,7 @@
   position: relative;
   height: 25%;
 }
+
 .post-info-name {
   font-weight: bold;
   font-size: 25px;

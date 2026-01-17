@@ -124,7 +124,7 @@ export class CreatePost implements OnInit {
     categoryName: '',
     isEnabled: true,
   };
-  selectedGender: string = '';
+  selectedGender: any;
   selectedParasiteFree: boolean = false;
   selectedVaccinated: boolean = false;
   selectedSprayed: boolean = false;
@@ -430,13 +430,14 @@ export class CreatePost implements OnInit {
     });
   }
   addPost(): void {
+    this.newAnimal.name = this.fourthFromGroup.value.mainInfo?.name as string,
     this.newAnimal.age = this.fourthFromGroup.value.mainInfo?.age as number;
     this.newAnimal.breed = this.fourthFromGroup.value.mainInfo?.breed as string;
-    this.newAnimal.categoryId = this.fourthFromGroup.value.mainInfo?.categoryID as number;
+    this.newAnimal.categoryId = this.fourthFromGroup.value.mainInfo?.categoryID as any;
     this.newAnimal.hasPapers = this.fourthFromGroup.value.mainInfo?.passportCheck as boolean;
     this.newAnimal.name = this.fourthFromGroup.value.mainInfo?.name as string;
-    this.newAnimal.genderId = this.fourthFromGroup.value.mainInfo?.genderID as number;
-    console.log(this.newAnimal);
+    this.newAnimal.genderId = this.fourthFromGroup.value.mainInfo?.genderID as any;
+
     this.newAnimalHealthHistory.dietaryRestrictions = '';
     this.newAnimalHealthHistory.parasiteFree = this.selectedParasiteFree;
     this.newAnimalHealthHistory.vaccinated = this.selectedVaccinated;
@@ -526,5 +527,9 @@ export class CreatePost implements OnInit {
 
   addDisabilityToList() {
     this.selectedDisabilities = this.thridFormGroup.get('disCtrl')?.value;
+  }
+  setGender(){
+    this.selectedGender = this.secondFormGroup.get('genderID')?.value;
+
   }
 }

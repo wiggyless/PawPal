@@ -8,10 +8,13 @@ import { ClientModule } from './modules/client/client-module';
 import { SharedModule } from 'primeng/api';
 import { PublicModule } from './modules/public/public-module';
 import { CreatePost } from './modules/client/create-post/create-post';
+import {  myAuthGuard } from './core/guards/my-auth-guard';
 
 const routes: Routes = [
   {
     path: 'admin',
+    canActivate: [myAuthGuard],
+    data: { requireAuth: true, requireRoleId: 3 }, 
     loadChildren: () => import('./modules/public/public-module').then((m) => m.PublicModule),
   },
   {

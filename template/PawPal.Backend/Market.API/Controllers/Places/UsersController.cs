@@ -34,12 +34,14 @@ namespace PawPal.API.Controllers.Places
             var result = await sender.Send(query, ct);
             return result;
         }
+        [AllowAnonymous]
         [HttpPut("{id:int}")]
         public async Task Update(UpdateUserCommand uuc, int id, CancellationToken ct)
         {
             uuc.Id = id;
             await sender.Send(uuc, ct);
         }
+        [AllowAnonymous]
         [HttpDelete("{id:int}")]
         public async Task Delete(int id, CancellationToken ct)
         {
