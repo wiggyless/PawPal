@@ -16,10 +16,13 @@ namespace PawPal.Application.Modules.PostImages.Commands.Create
             var post = await context.Posts.Where(x=>x.Id == command.PostId).FirstOrDefaultAsync(cancellationToken);
             if (post is null)
                 throw new PawPalNotFoundException($"Post with ID:{command.PostId} not found");
+
+            var listName = command.PostImages.Select(x => "/posts/Post_"+command.PostId+"/"+x.FileName).ToList();
             var newPostImages = new PostImagesEntity
             {
                 PostId = command.PostId,
-                PhotoURL = command.PostImages,
+                PhotoURL = listName,
+                MainImage = listName[0],
             };
             context.PostImages.Add(newPostImages);
             await context.SaveChangesAsync(cancellationToken);

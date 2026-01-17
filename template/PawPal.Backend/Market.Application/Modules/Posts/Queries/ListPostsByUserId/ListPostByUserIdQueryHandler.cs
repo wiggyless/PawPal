@@ -20,7 +20,9 @@ namespace PawPal.Application.Modules.Posts.Queries.ListPostsByUserId
                 UserId = x.UserId,
                 PostId = x.Id,
                 FirstImage = (postImagesList.FirstOrDefault(y => y.PostId == x.Id).MainImage == null)?"": 
-                postImagesList.FirstOrDefault(y => y.PostId == x.Id).MainImage
+                postImagesList.FirstOrDefault(y => y.PostId == x.Id).MainImage,
+                AnimalID = x.AnimalID,
+                CityID = x.CityId,
             }); 
             return await PageResult<ListPostByUserIdQueryDto>.FromQueryableAsync(finalList,request.Paging,cancellationToken);
         }

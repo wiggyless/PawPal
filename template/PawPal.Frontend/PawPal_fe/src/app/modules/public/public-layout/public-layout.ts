@@ -12,10 +12,10 @@ export class PublicLayout implements OnInit {
   animalService = inject(AnimalCategoriesService);
   cityService = inject(CitiesService);
   currentUser = inject(CurrentUserService);
-  
-  cities : any = [];
-  animalCategories : any = [];
-selectedCategory: any;
+
+  cities: any = [];
+  animalCategories: any = [];
+  selectedCategory: any;
 
   ngOnInit(): void {
     this.loadCategories();
@@ -29,7 +29,6 @@ selectedCategory: any;
 
   loadCategories(): void {
     this.animalCategories = this.animalService.listAnimalCategories().subscribe((response) => {
-      console.log(response);
       this.animalCategories = response;
     });
   }

@@ -15,12 +15,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NavbarComponent } from '../shared/components/navbar/navbar';
 import { PostComponent } from './post/post/post';
-import { KeyValuePipe } from '@angular/common';
+import { AsyncPipe, KeyValuePipe } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonIcon } from 'primeng/button';
 import { SharedModule } from 'primeng/api';
-import { Bind } from "primeng/bind";
+import { Bind } from 'primeng/bind';
+import { MatPaginatorModule } from '@angular/material/paginator';
 @NgModule({
   declarations: [PublicLayout, CatalogComponent, PostComponent],
   imports: [
@@ -43,7 +44,9 @@ import { Bind } from "primeng/bind";
     CommonModule,
     CarouselModule,
     ButtonIcon,
-    Bind
-],
+    Bind,
+    MatPaginatorModule,
+    AsyncPipe,
+  ],
 })
 export class PublicModule {}
