@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Posts.Queries.List
 {
-    public class ListPostQueryDto
+    public class ListPostQueryDto 
     {
         public int PostID { get; set; }
         public string Name { get; set; }

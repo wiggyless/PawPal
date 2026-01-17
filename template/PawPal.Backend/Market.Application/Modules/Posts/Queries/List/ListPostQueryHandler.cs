@@ -34,7 +34,7 @@ namespace PawPal.Application.Modules.Posts.Queries.List
                 Age = x.Animal.Age,
                 DateAdded = x.DateAdded,
             });
-        
+            
             return await PageResult<ListPostQueryDto>.FromQueryableAsync(postList, request.Paging, cancellationToken);
         
         }

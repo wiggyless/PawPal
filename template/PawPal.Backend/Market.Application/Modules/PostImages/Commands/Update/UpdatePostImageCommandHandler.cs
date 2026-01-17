@@ -15,15 +15,13 @@ namespace PawPal.Application.Modules.PostImages.Commands.Update
             { 
                 throw new PawPalNotFoundException($"Post with id {command.PostId} not found");
             }
-            if(postImage.PhotoURL is null)
+            var listName = command.PostImages.Select(x => "/posts/Post_" + command.PostId + "/" + x.FileName).ToList();
+            for(int i =0;i< listName.Count; i++)
             {
-                postImage.PhotoURL = new List<string>(command.PostImages);
-                postImage.MainImage = command.FirstImage;
-            }else
-            {
-                postImage.PhotoURL.AddRange(command.PostImages);
-                postImage.MainImage = command.FirstImage;
+                if (postImage.PhotoURL.Count == 10) break;
+                postImage.PhotoURL.Add(listName[i]);
             }
+             postImage.MainImage = listName[0];
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

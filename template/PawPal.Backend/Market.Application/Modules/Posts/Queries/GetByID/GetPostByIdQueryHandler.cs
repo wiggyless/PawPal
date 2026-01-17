@@ -15,9 +15,15 @@ namespace PawPal.Application.Modules.Posts.Queries.GetByID
                 Where(x => x.Id == request.Id).
                 Select(x => new GetPostByIdQueryDto
                 {
-                    Id = x.Id,
-                    AnimalID = x.AnimalID,
-                    UserId = x.UserId,
+                    PostID = x.Id,
+                    UserID = x.UserId,
+                    Name = x.Animal.Name,
+                    AnimalID = request.Id,
+                    CategoryID = x.Animal.CategoryId,
+                    Breed = x.Animal.Breed,
+                    GenderID = x.Animal.GenderId,
+                    CityID = x.CityId,
+                    Age = x.Animal.Age,
                     DateAdded = x.DateAdded,
                 }).FirstOrDefaultAsync(cancelationToken);
             if (post == null) throw new PawPalNotFoundException("Post not found");

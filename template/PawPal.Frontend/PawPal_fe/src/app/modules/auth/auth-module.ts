@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { PublicModule } from '../public/public-module';
 import { NavbarComponent } from '../shared/components/navbar/navbar';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { MatInput, MatFormField, MatLabel, MatHint, MatSuffix } from '@angular/material/input';
+import { MatInput, MatFormField, MatLabel, MatHint, MatSuffix, MatError } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { LogoutComponent } from './logout/logout/logout';
 import { RegisterComponent } from './register/register-component/register-component';
@@ -40,6 +40,7 @@ import { FormGroup } from '@angular/forms';
     MatIconModule,
     MatSuffix,
     MatProgressSpinner,
-  ],
+    MatError
+],
 })
 export class AuthModule {}

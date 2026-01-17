@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { BaseComponent } from '../../../../core/components/base-classes/base-component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.service';
@@ -12,7 +12,10 @@ import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class LoginComponent extends BaseComponent {
+export class LoginComponent extends BaseComponent implements OnInit {
+  ngOnInit(): void {
+    console.log('WHAAAAT');
+  }
   private fb = inject(FormBuilder);
   private auth = inject(AuthFacadeService);
   private router = inject(Router);
@@ -20,8 +23,8 @@ export class LoginComponent extends BaseComponent {
   showPassword = false;
 
   form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]]
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
   });
 
   onSubmit(): void {
@@ -39,6 +42,7 @@ export class LoginComponent extends BaseComponent {
       next: () => {
         console.log('Login successful');
         const target = this.currentUser.getDefaultRoute();
+        console.log(target);
         this.router.navigate([target]);
       },
       error: (err) => {

@@ -2,14 +2,14 @@
   <div class="stepper-container">
     <!-- First stepper images -->
     <mat-stepper #stepper linear="true">
-      <mat-step [stepControl]="firstFormGroup" class="mat-step-container">
+      <mat-step [stepControl]="firstFormGroup" class="mat-step-container" [optional]="true">
         <div class="mat-step-image-container">
           <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Image upload</ng-template>
             <input
               placeholder="Image"
               type="file"
-              formControlName="firstCtrl"
+              formArrayName="firstCtrl"
               required
               class="image-input"
               multiple
@@ -17,13 +17,29 @@
             />
           </form>
           <div class="image-container">
-            @for(img of imageList;track img){
-            <img class="image" [src]="img" />
+            @for (i of [].constructor(10); track $index) {
+              @if (imageControls[$index]) {
+                <div class="image-holder">
+                  <!--I am running out of ideas on how to name classes -->
+
+                  <img class="image" [src]="imageControls[$index].value" />
+                  <div class="image-holder-button">
+                    <button class="image-delete-button" (click)="deleteImage($index)">X</button>
+                  </div>
+                </div>
+              } @else {
+                <div class="image-holder">
+                  <!--I am running out of ideas on how to name classes -->
+
+                  <img class="image" [src]="" />
+                  <div class="image-holder-button"></div>
+                </div>
+              }
             }
           </div>
         </div>
         <div class="stepper-buttons">
-          <button mat-button matStepperPrevious class="secondarybtn">BACK</button>
+          <button mat-button (click)="getPageBack()" class="secondarybtn">BACK</button>
           <button mat-button matStepperNext class="primarybtn">NEXT</button>
         </div>
       </mat-step>
@@ -32,98 +48,144 @@
       <mat-step [stepControl]="secondFormGroup" label="Main information" class="mat-step-container">
         <div class="mat-step-main-info-container">
           <div class="second-step-image-holder">
-            <img class="second-step-image" />
-          </div>
+                    <svg fill="#473619" viewBox="0 0 35 35" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#473619"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>rabbit</title> <path d="M23.961 5.99c-0.333-0.007-0.681 0.013-1.030 0.065-4.414-1.996-5.841-4.914-7.812-4.914-1.705 0-1.62 3.149 4.884 6.521-0.012 0.015-0.023 0.030-0.035 0.046-0.496 0.68-6.986-3.097-8.985-3.093-2.692 0.006 1.257 6.368 7.689 5.369 0.61-0.095-0.302 0.909-0.227 1.48v-0c0.023 0.176 0.065 0.345 0.123 0.506-6.275-0.164-10.188 0.982-12.463 2.774-1.616-0.903-1.672-4.089-3.337-3.265-1.77 0.876-0.679 5.582 0.831 7.142-1.022 4.432 2.247 9.722 4.846 11.331h20.509c1.112-0.789 0.487-1.41 0-1.997-0.602-0.725-2.461-1.199-3.993-0.998-2.23-0.908 5.444-5.973 0.027-11.95 1.021 0.058 2.186-0.023 3.2-0.342 0.023 0.016 0.047 0.033 0.071 0.049l0.045-0.086c0.931-0.313 1.723-0.836 2.137-1.648 0.51-0.998-3.303-6.922-6.479-6.989zM24.957 10.973c-0.551 0-0.998-0.447-0.998-0.998s0.447-0.998 0.998-0.998c0.551 0 0.998 0.447 0.998 0.998s-0.447 0.998-0.998 0.998z"></path> </g></svg>
+            <span class="input-label"> Enter some basic information about your pet!</span>
+                  </div>
           <form [formGroup]="secondFormGroup" class="mat-step-form">
+            <div class="form-field-format">
+            <label class="input-label">Name</label>
             <mat-form-field>
-              <input matInput formControlName="nameCtrl" placeholder="e.g Rex" required />
+              <input matInput formControlName="nameCtrl" placeholder="e.g Rex" required /> 
+              @if(secondFormGroup.get('nameCtrl')?.hasError('required')) {
+                <mat-error>Please enter a name!</mat-error>
+              }
             </mat-form-field>
-            <mat-form-field>
+            </div>
+            
+            <div class="form-field-format">
+              <label class="input-label">Gender</label>
+              <mat-form-field>
               <mat-select placeholder="Select gender" required formControlName="genderCtrl">
                 @for(gen of genderList.items;track gen){
                 <mat-option [value]="gen.id">{{ gen.name }}</mat-option>
                 }
               </mat-select>
+              @if(secondFormGroup.get('nameCtrl')?.hasError('required')) {
+                <mat-error>Please select a gender!</mat-error>
+              }
             </mat-form-field>
+            </div>
+
+             <div class="form-field-format">
+            <label class="input-label">Category</label>
             <mat-form-field>
-              <mat-select placeholder="Select category" required formControlName="categoryCtrl">
+              <mat-select placeholder="Select category" required formControlName="categoryCtrl"  
+                (selectionChange)="getBreedSelect()"> 
                 @for(cat of categoryList.items;track cat){
-                <mat-option [value]="cat.id">{{ cat.categoryName }}</mat-option>
+                <mat-option [value]="cat.id">
+                  {{ cat.categoryName }}
+                </mat-option>
                 }
               </mat-select>
+              @if(secondFormGroup.get('categoryCtrl')?.hasError('required')) {
+                <mat-error>Please select an animal category!</mat-error>
+              }
             </mat-form-field>
+            </div>
+             <div class="form-field-format">
+            <label class="input-label">Age</label>
             <mat-form-field>
-              <input
-                matInput
-                type="number"
-                formControlName="ageCtrl"
-                placeholder="e.g 2"
-                required
-              />
+              <input matInput type="number" formControlName="age" placeholder="e.g 2" required />
             </mat-form-field>
+            </div>
+            <div class="form-field-format">
+            <label class="input-label">Breed</label>
             <mat-form-field>
-              <mat-select placeholder="Select breed" required formControlName="breedCtrl">
-                @for(bree of breedList.items;track bree){
-                <mat-option [value]="bree.name">{{ bree.name }}</mat-option>
+              <mat-select placeholder="Select breed" required formControlName="breedCtrl"> <!-- required -->
+                @for(breed of breedArr;track breed){
+                <mat-option [value]="breed.name">
+                  {{ breed.name }}</mat-option>
                 }
               </mat-select>
+              @if(secondFormGroup.get('breedCtrl')?.hasError('required')) {
+                <mat-error>Please select a breed!</mat-error>
+              }
             </mat-form-field>
-            <mat-checkbox formControlName="passportCheck" (change)="togglePass()"
-              >Passport</mat-checkbox
+            </div>
+            <mat-checkbox formControlName="passportCheck" (change)="togglePass()" style="margin-top: 30px;"
+            >Passport</mat-checkbox
             >
+            <div class="form-field-format">
+            <label class="input-label">Passport number</label>
             <mat-form-field>
               <input matInput formControlName="passportCtrl" placeholder="e.g 77232" />
             </mat-form-field>
+            </div>
           </form>
         </div>
         <div class="stepper-buttons">
-          <button matButton matStepperPrevious class="secondarybtn">Back</button>
-          <button matButton matStepperNext class="primarybtn">Next</button>
+          <button matButton matStepperPrevious class="secondarybtn">BACK</button>
+          <button matButton matStepperNext class="primarybtn">NEXT</button>
         </div>
       </mat-step>
 
       <!-- Third stepper health info -->
       <mat-step [stepControl]="thridFormGroup" class="mat-step-container" [optional]="true">
         <div class="mat-step-health-info-container">
-          <form [formGroup]="thridFormGroup">
-            <ng-template matStepLabel>Health info</ng-template>
+          <div class="second-step-image-holder">
+                    <svg fill="#473619" viewBox="0 0 35 35" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#473619"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>rabbit</title> <path d="M23.961 5.99c-0.333-0.007-0.681 0.013-1.030 0.065-4.414-1.996-5.841-4.914-7.812-4.914-1.705 0-1.62 3.149 4.884 6.521-0.012 0.015-0.023 0.030-0.035 0.046-0.496 0.68-6.986-3.097-8.985-3.093-2.692 0.006 1.257 6.368 7.689 5.369 0.61-0.095-0.302 0.909-0.227 1.48v-0c0.023 0.176 0.065 0.345 0.123 0.506-6.275-0.164-10.188 0.982-12.463 2.774-1.616-0.903-1.672-4.089-3.337-3.265-1.77 0.876-0.679 5.582 0.831 7.142-1.022 4.432 2.247 9.722 4.846 11.331h20.509c1.112-0.789 0.487-1.41 0-1.997-0.602-0.725-2.461-1.199-3.993-0.998-2.23-0.908 5.444-5.973 0.027-11.95 1.021 0.058 2.186-0.023 3.2-0.342 0.023 0.016 0.047 0.033 0.071 0.049l0.045-0.086c0.931-0.313 1.723-0.836 2.137-1.648 0.51-0.998-3.303-6.922-6.479-6.989zM24.957 10.973c-0.551 0-0.998-0.447-0.998-0.998s0.447-0.998 0.998-0.998c0.551 0 0.998 0.447 0.998 0.998s-0.447 0.998-0.998 0.998z"></path> </g></svg>
+            <span class="input-label"> Enter health information about your pet!</span>
+                  </div>
+          <form [formGroup]="thridFormGroup" class="animal-health-container">
+            <ng-template matStepLabel>Health information</ng-template>
             <!-- Allergy -->
+             <div class="all-dis-container">
+             <div class="form-field-format">
             <mat-checkbox (change)="toggleAllergy()" formControlName="allergyCheck"
-              >Allergy</mat-checkbox
+              >Allergies?</mat-checkbox
             >
             <mat-form-field>
-              <mat-select placeholder="Select allergy" formControlName="allergyCtrl">
-                @for(bree of breedList.items;track bree){
-                <mat-option [value]="bree.name">{{ bree.name }}</mat-option>
+              <mat-select placeholder="Select an allergy (or more)" formControlName="allergyCtrl"
+              multiple (selectionChange)="addAllergyToList()">
+                @for(allergy of allergyList.items;track allergy){
+                <mat-option [value]="allergy.name">{{ allergy.name }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
+            </div>
             <!-- Disease -->
-            <mat-checkbox (change)="toggleDis()" formControlName="disCheck">Disease</mat-checkbox>
+             <div class="form-field-format">
+            <mat-checkbox (change)="toggleDis()" formControlName="disCheck">Disabilities?</mat-checkbox>
             <mat-form-field>
-              <mat-select placeholder="Select disease" formControlName="disCtrl">
-                @for(bree of breedList.items;track bree){
-                <mat-option [value]="bree.name">{{ bree.name }}</mat-option>
+              <mat-select placeholder="Select a disease (or more)" formControlName="disCtrl" multiple (selectionChange)="addDisabilityToList()">
+                @for(dis of disabilityList.items;track dis){
+                <mat-option [value]="dis.name">{{ dis.name }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
-
+            </div>
+            </div>
+            <div class="date-checkbox-container">
             <!-- Date -->
+             <div class="form-field-format-date">
+              <label class="input-label">Last vet visit?</label>
             <mat-form-field>
-              <input matInput [matDatepicker]="picker" placeholder="dd.MM.yyyy" />
+              <input matInput [matDatepicker]="picker" placeholder="dd.MM.yyyy" formControlName="dateCtrl"/>
               <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
             <mat-checkbox (change)="toggleDate()" formControlName="lastDateCheck"
-              >Not sure</mat-checkbox
-            >
+            >No information about last vet visit</mat-checkbox>
+          </div>
             <!-- Additional info checkboxes-->
-
+              <div class="checkbox-alignment">
             <section class="additional-health-info">
-              <mat-checkbox formControlName="vaccineCheck">Vaccinated</mat-checkbox>
-              <mat-checkbox formControlName="sterCheck">Sterlizied</mat-checkbox>
-              <mat-checkbox formControlName="parasiteCheck">Parasite free</mat-checkbox>
+              <mat-checkbox (change) = "toggleVacc()" formControlName="vaccineCheck">Vaccinated</mat-checkbox>
+              <mat-checkbox (change) = "toggleSpray()" formControlName="sterCheck">Sterilized</mat-checkbox>
+              <mat-checkbox (change) = "toggleParasite()" formControlName="parasiteCheck">Parasite free</mat-checkbox>
             </section>
+            </div>
+            </div>
           </form>
         </div>
         <div class="stepper-buttons">
@@ -141,9 +203,9 @@
             <ng-template matStepLabel>Upload post</ng-template>
           </form>
         </div>
-        <div class="stepper-buttons">
+        <div class="stepper-buttons-final">
           <button mat-button matStepperPrevious class="secondarybtn">BACK</button>
-          <button mat-button (click)="addPost()" class="primarybtn">POST</button>
+          <button mat-button (click)="addPost()" routerLink="/client" class="primarybtn">POST</button>
         </div>
         <div class="post-container">
           <div class="post">
@@ -167,7 +229,7 @@
 
             <div class="post-information-container">
               <h2 class="pet-name">
-                <p>{{ fourthFromGroup.value.mainInfo?.nameCtrl }}</p>
+                <p>{{ fourthFromGroup.value.mainInfo?.name }}</p>
               </h2>
               <div class="post-information">
                 <div class="post-information-pet">
@@ -179,20 +241,42 @@
                       <p>Age:</p>
                       <p>Vaccinated:</p>
                       <p>Sprayed:</p>
-                      <p>ParaisteFree:</p>
+                      <p>Parasite free:</p>
                       <p>Passport:</p>
                       <p>Date added:</p>
                       <p>City:</p>
                     </div>
                     <div class="straight-border"></div>
                     <div class="post-information-pet-attributes-values">
-                      <p>{{ fourthFromGroup.value.mainInfo?.categoryCtrl }}</p>
-                      <p>{{ fourthFromGroup.value.mainInfo?.breedCtrl }}</p>
-                      <p>{{ fourthFromGroup.value.mainInfo?.genderCtrl }}</p>
-                      <p>{{ fourthFromGroup.value.mainInfo?.ageCtrl }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.categoryID }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.breed }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.genderID }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.age }}</p>
                       <p>{{ fourthFromGroup.value.healthInfo?.vaccineCheck }}</p>
                       <p>{{ fourthFromGroup.value.healthInfo?.parasiteCheck }}</p>
                       <p>{{ fourthFromGroup.value.healthInfo?.disCheck }}</p>
+                      <p>{{ selectedCategory.categoryName }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.breedCtrl }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.genderCtrl }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.ageCtrl }}</p>
+                      @if(!selectedVaccinated){
+                        <p><mat-icon>close</mat-icon></p>
+                      }
+                      @else {
+                         <p><mat-icon>check</mat-icon></p>
+                      }
+                      @if(!selectedParasiteFree){
+                        <p><mat-icon>close</mat-icon></p>
+                      }
+                      @else {
+                         <p><mat-icon>check</mat-icon></p>
+                      }
+                      @if(!selectedSprayed){
+                        <p><mat-icon>close</mat-icon></p>
+                      }
+                      @else {
+                         <p><mat-icon>check</mat-icon></p>
+                      }
                       <p>
                         {{
                           fourthFromGroup.value.mainInfo?.passportCheck
@@ -217,7 +301,8 @@
                   <div class="post-information-pet-add-info">
                     <p class="post-information-pet-add-info-label">Additional information</p>
                     <div class="post-information-pet-add-info-text">
-                      <p>Hello</p>
+                      <p>Allergies: {{selectedAllergies}}</p>
+                      <p>Disabilities: {{selectedDisabilities}}</p>
                     </div>
                   </div>
                 </div>
