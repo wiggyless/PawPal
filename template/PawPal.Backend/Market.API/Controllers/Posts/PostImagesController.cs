@@ -7,6 +7,7 @@ using PawPal.Application.Modules.PostImages.Commands.Delete;
 using PawPal.Application.Modules.PostImages.Commands.Update;
 using PawPal.Application.Modules.PostImages.GetById;
 using PawPal.Application.Modules.PostImages.GetByIdFile;
+using PawPal.Application.Modules.PostImages.ListMainImages;
 using PawPal.Application.Modules.Posts.Commands.Create;
 using PawPal.Application.Modules.Posts.Commands.Delete;
 using PawPal.Application.Modules.Posts.Commands.Update;
@@ -28,9 +29,8 @@ namespace PawPal.API.Controllers.Posts
             int id = await sender.Send(command, cancellationToken);
             var subFolder = "posts";
             string root = env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-
+           
             string storeFileDirectory = Path.Combine(root, subFolder, "Post_" + command.PostId);
-            Console.WriteLine("PATHHHHH AL ZA ROOOOOT->>>>", storeFileDirectory);
             if (!Directory.Exists(storeFileDirectory))
             {
                 Directory.CreateDirectory(storeFileDirectory);
@@ -48,7 +48,6 @@ namespace PawPal.API.Controllers.Posts
                 }
                 var fileLocation = Path.Combine(subFolder, file.FileName).Replace("\\", "/");
             }
-
             return id;
         }
         [AllowAnonymous]
@@ -83,7 +82,28 @@ namespace PawPal.API.Controllers.Posts
             
             return newPostImage;
         }
-        
+        [AllowAnonymous]
+        [HttpPost("catalogImages")]
+        public async Task<List<ListMainImageQueryDto>> GetMainImages([FromBody]List<int> request, CancellationToken cancellationToken)
+        {
+            string root = env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+
+
+            var postImage = context.PostImages.AsQueryable();
+            postImage = postImage.Where(x => request.Contains(x.PostId));
+            if (postImage is null)
+                throw new PawPalNotFoundException("PostImages not found");
+            List<ListMainImageQueryDto> newPostImage = new();
+            foreach (var img in postImage)
+            {
+                string route = root.Replace("\\", "/");
+                string drugiRut = route + img.MainImage;
+                newPostImage.Add(new ListMainImageQueryDto {PostID=img.PostId, MainImage =
+                    await System.IO.File.ReadAllBytesAsync(drugiRut,cancellationToken) });
+            }
+            return  newPostImage;
+        }
+
         [AllowAnonymous]
         [HttpPut]
         public async Task Update(UpdatePostImageCommand command, CancellationToken cancellationToken)
@@ -98,10 +118,15 @@ namespace PawPal.API.Controllers.Posts
             {
                 Directory.CreateDirectory(storeFileDirectory);
             }
+            foreach(var file in Directory.GetFiles(storeFileDirectory))
+            {
+                System.IO.File.Delete(file);
+            }
             foreach (var file in command.PostImages)
             {
                 string safeFileName = Path.GetFileName(file.FileName);
                 string route = Path.Combine(storeFileDirectory, safeFileName);
+                
                 using (var ms = new MemoryStream())
                 {
                     using (var stream = new FileStream(route, FileMode.Create))
@@ -112,11 +137,13 @@ namespace PawPal.API.Controllers.Posts
                 var fileLocation = Path.Combine(subFolder, file.FileName).Replace("\\", "/");
             }
 
+
         }
+        [AllowAnonymous]
         [HttpDelete("{id:int}")]
         public async Task Delete(int id,List<string> postImages, CancellationToken ct)
         {
-            await sender.Send(new DeletePostImageCommand { PostId = id,PostImages = postImages }, ct);
+            await sender.Send(new DeletePostImageCommand { PostId = id}, ct);
         }
     }
 }

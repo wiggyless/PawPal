@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
 import { GenderService } from '../../../api-services/gender/gender-service';
@@ -17,21 +17,26 @@ import {
   GetPostImageById,
 } from '../../../api-services/animal-post-images/animal-post-images-model';
 
-import { map, Observable } from 'rxjs';
-import { ActivatedRoute, Route } from '@angular/router';
+import { forkJoin, map, Observable, switchMap } from 'rxjs';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import {
   AddAnimalPost,
   AnimalPostByIdQuery,
 } from '../../../api-services/animal-posts/animal-posts.model';
-import { AddAnimalDto } from '../../../api-services/animals/animal-model';
+import { AddAnimalDto, UpdateAnimalDto } from '../../../api-services/animals/animal-model';
 import { AnimalService } from '../../../api-services/animals/animal';
 import { AnimalPostService } from '../../../api-services/animal-posts/animal-posts.service';
 import { ListAnimalBreedQueryDto } from '../../../api-services/anima-breed/animal-breed.model';
 import { AllergyService } from '../../../api-services/alergies/allergy-service';
 import { DisabilityService } from '../../../api-services/disabilities/disability-service';
 import { AnimalCategoryByIdQueryDto } from '../../../api-services/animal-categories/animal-categories.model';
-import { AddAnimalHealthHistory } from '../../../api-services/animals-health/animals-health-model';
+import {
+  AddAnimalHealthHistory,
+  UpdateHealthHistory,
+} from '../../../api-services/animals-health/animals-health-model';
 import { AnimalsHealthService } from '../../../api-services/animals-health/animals-health-service';
+import { AllergyQueryDto } from '../../../api-services/alergies/allergy-model';
+import { DisabilitiesDto } from '../../../api-services/disabilities/disability-model';
 @Component({
   selector: 'app-create-post',
   standalone: false,
@@ -40,7 +45,6 @@ import { AnimalsHealthService } from '../../../api-services/animals-health/anima
   providers: [provideNativeDateAdapter()],
 })
 export class CreatePost implements OnInit {
-  imageList: string[] = ['', '', '', '', '', '', '', '', '', ''];
   isPassChecked = false;
   // injections
   private _formBuilder = inject(FormBuilder);
@@ -55,7 +59,7 @@ export class CreatePost implements OnInit {
   route = inject(ActivatedRoute);
   location = inject(Location);
   postImages = inject(PostImagesService);
-  imgListLenght: number = 0;
+  nextRoute = inject(Router);
   //Group forms
   firstFormGroup = this._formBuilder.group({
     firstCtrl: this._formBuilder.array<string>([]),
@@ -99,12 +103,11 @@ export class CreatePost implements OnInit {
   disabilityService = inject(DisabilityService);
   healthHistory = inject(AnimalsHealthService);
   // lists
-  genderList: any = { items: [] };
-  categoryList: any = { items: [] };
-  breedList: any = { items: [] };
-  fileteredImageList: string[] = [];
-  allergyList: any = { items: [] };
-  disabilityList: any = { items: [] };
+  genderList: any = [];
+  categoryList: any = [];
+  breedList: any = [];
+  allergyList: any = [];
+  disabilityList: any = [];
   // random variables
   env = environment.apiUrl;
   url: string = '';
@@ -112,7 +115,7 @@ export class CreatePost implements OnInit {
   picker: any;
   routePostID: number = 0;
   isUpdate: boolean = false;
-
+  routeAnimalID: number = 0;
   /* iris additions for improving logic!!!!!*/
   breedArr: Array<ListAnimalBreedQueryDto> = new Array<ListAnimalBreedQueryDto>();
   selectedCategoryId: any;
@@ -127,7 +130,8 @@ export class CreatePost implements OnInit {
   selectedSprayed: boolean = false;
   selectedAllergies: any = [];
   selectedDisabilities: any = [];
-
+  cd = inject(ChangeDetectorRef);
+  //imam id kategorije...
   userData: GetUserByIdDto = {
     id: 0,
     firstName: '',
@@ -161,6 +165,25 @@ export class CreatePost implements OnInit {
     postId: 0,
     postImages: [],
   };
+  updateHealth: UpdateHealthHistory = {
+    animalId: 0,
+    vaccinated: false,
+    spayedOrNeutered: false,
+    parasiteFree: false,
+    dietaryRestrictions: '',
+    allergies: [],
+    disabilities: [],
+  };
+  updateAnimal: UpdateAnimalDto = {
+    name: '',
+    breed: '',
+    gender: '',
+    age: 0,
+    hasPapers: true,
+    childFriendly: true,
+    category: '',
+    categoryID: 0,
+  };
   index: number = 0;
   imgFileList: Array<File> = Array();
   imageObserveList: Observable<GetImagePostBlob> | undefined;
@@ -175,8 +198,8 @@ export class CreatePost implements OnInit {
     animalAllergies: [],
     dietaryRestrictions: '',
   };
-
   newAnimalId: number = 0;
+
   //--Functions--//
   ngOnInit(): void {
     const params = this.route.snapshot.queryParams;
@@ -184,19 +207,38 @@ export class CreatePost implements OnInit {
       this.route.queryParams.subscribe((params) => {
         this.routePostID = params['postID'];
         this.isUpdate = params['update'];
+        this.routeAnimalID = params['animalID'];
       });
     }
     this.loadServices();
   }
   loadServices() {
     if (this.isUpdate) {
-      this.postService.getPostById(this.routePostID).subscribe({
-        next: (response: AnimalPostByIdQuery) => {
-          this.secondFormGroup.patchValue(response);
+      this.loadUpdatePage();
+      this.loadImages();
+    } else {
+      forkJoin({
+        genders: this.genderService.listGender(),
+        categories: this.categoryService.listAnimalCategories(),
+        breeds: this.breedService.listAnimalBreed(),
+        user: this.animalUserService.getUser(this.currentUser.userId),
+        allergies: this.allergyService.listAnimalAllergies(),
+        disabilities: this.disabilityService.listAnimalDisability(),
+      }).subscribe({
+        next: (results) => {
+          this.genderList = results.genders;
+          this.categoryList = results.categories;
+          this.breedList = results.breeds;
+          this.userData = results.user;
+          this.allergyList = results.allergies;
+          this.disabilityList = results.disabilities;
+          // Now you are 100% sure ALL data is ready for the form
+        },
+        error: (err) => {
+          console.error('One of the requests failed', err);
         },
       });
-      this.loadImages();
-    }
+      /*
     this.genderService.listGender().subscribe((response) => {
       this.genderList = response;
     });
@@ -213,8 +255,46 @@ export class CreatePost implements OnInit {
       this.allergyList = res;
     });
     this.disabilityService.listAnimalDisability().subscribe((res) => {
-      console.log(res);
       this.disabilityList = res;
+    });
+    */
+    }
+  }
+  loadUpdatePage() {
+    forkJoin({
+      posts: this.postService.getPostById(this.routePostID),
+      health: this.healthHistory.getAnimalHealthHistoryById(this.routeAnimalID),
+      genders: this.genderService.listGender(),
+      categories: this.categoryService.listAnimalCategories(),
+      breeds: this.breedService.listAnimalBreed(),
+      user: this.animalUserService.getUser(this.currentUser.userId),
+      allergies: this.allergyService.listAnimalAllergies(),
+
+      disabilities: this.disabilityService.listAnimalDisability(),
+    }).subscribe({
+      next: (results) => {
+        this.genderList = results.genders;
+        this.categoryList = results.categories;
+        this.breedList = results.breeds;
+        this.userData = results.user;
+        this.allergyList = results.allergies;
+        this.disabilityList = results.disabilities;
+        this.secondFormGroup.patchValue(results.posts);
+        this.thridFormGroup.patchValue({
+          allergyCtrl: results.health.animalAllergies.toString(),
+          allergyCheck: results.health.animalAllergies.toString() != '' ? true : false,
+          disCtrl: results.health.animalDisabilities.toString(),
+          disCheck: results.health.animalDisabilities.toString() != '' ? true : false,
+          vaccineCheck: results.health.vaccinated,
+          parasiteCheck: results.health.parasiteFree,
+          sterCheck: results.health.spayedOrNeutered,
+        });
+        this.getBreedSelect();
+        // Now you are 100% sure ALL data is ready for the form
+      },
+      error: (err) => {
+        console.error('One of the requests failed', err);
+      },
     });
   }
   showImages(event: any): void {
@@ -223,6 +303,7 @@ export class CreatePost implements OnInit {
     for (let i = 0; i < event.target.files.length; i++) {
       const files = event.target.files[i];
       const reader = new FileReader();
+      this.imgFileList.push(files);
       reader.readAsDataURL(files);
       reader.onload = () => {
         this.imageControls.push(this._formBuilder.control(reader.result?.toString() as string));
@@ -260,7 +341,6 @@ export class CreatePost implements OnInit {
     items.postImages.forEach((base64String: string, index: number) => {
       // 1. Clean the string (remove data URL prefix if present)
       const base64Data = base64String.includes(',') ? base64String.split(',')[1] : base64String;
-
       // 2. Decode the Base64 string into binary data
       const byteCharacters = atob(base64Data);
 
@@ -275,7 +355,6 @@ export class CreatePost implements OnInit {
       // 5. Create the preview URL (optional, for UI display)
       const imageUrl = URL.createObjectURL(file);
     });
-    console.log(this.filterImages);
   }
   createImges(): void {
     this.newPostIamge.postId = this.routePostID;
@@ -283,13 +362,11 @@ export class CreatePost implements OnInit {
     let temp;
     this.postImages.updatePostImages(this.newPostIamge).subscribe((resposne) => {
       temp = resposne;
-      console.log(resposne);
     });
   }
   deleteImage(index: number): void {
+    if (!this.isUpdate) this.imgFileList.splice(index, 1);
     this.imageControls.splice(index, 1);
-    console.log(this.imageControls);
-    console.log(this.imageList);
   }
   togglePass(): void {
     !this.secondFormGroup.value.passportCheck
@@ -314,8 +391,43 @@ export class CreatePost implements OnInit {
       ? this.thridFormGroup.get('allergyCtrl')?.disable()
       : this.thridFormGroup.get('allergyCtrl')?.enable();
   }
-  filterImages(): void {
-    this.fileteredImageList = this.imageList.filter((img) => img != '');
+  showImagesCtrl() {
+    this.cd.detectChanges();
+    this.imageControls.forEach((element) => {});
+  }
+  updatePost(): void {
+    let healthHistoryID = 0;
+    console.log(this.routeAnimalID);
+    this.healthHistory.getAnimalHealthHistoryById(this.routeAnimalID).subscribe((response) => {
+      healthHistoryID = response.animalHealthHistoryId;
+      this.selectedAllergies.forEach((element: string) => {
+        this.updateHealth?.allergies.push(new AllergyQueryDto(element));
+      });
+      this.selectedDisabilities.forEach((element: string) => {
+        this.updateHealth?.disabilities.push(new DisabilitiesDto(element));
+      });
+      this.updateHealth.parasiteFree = this.selectedParasiteFree;
+      this.updateHealth.vaccinated = this.selectedVaccinated;
+      this.updateHealth.spayedOrNeutered = this.selectedSprayed;
+      this.updateHealth.animalId = this.routeAnimalID;
+      this.updateAnimal = this.fourthFromGroup.value.mainInfo as UpdateAnimalDto;
+      this.updateAnimal.gender = 'Female'; // need to change
+      this.updateAnimal.category = this.selectedCategory.categoryName;
+      this.newPostIamge.postImages = this.imgFileList;
+      this.newPostIamge.postId = this.routePostID;
+      forkJoin({
+        animals: this.animalService.updateAnimal(this.updateAnimal, this.routeAnimalID),
+        health: this.healthHistory.updateAnimalHealthHistory(this.updateHealth, healthHistoryID),
+        postImages: this.postImages.updatePostImages(this.newPostIamge),
+      }).subscribe({
+        next: (response) => {
+          console.log(response.animals);
+          console.log(response.health);
+          console.log(response.postImages);
+          this.nextRoute.navigate(['']);
+        },
+      });
+    });
   }
   addPost(): void {
     this.newAnimal.name = this.fourthFromGroup.value.mainInfo?.name as string,
@@ -332,10 +444,43 @@ export class CreatePost implements OnInit {
     this.newAnimalHealthHistory.spayedOrNeutered = this.selectedSprayed;
     this.newAnimalHealthHistory.animalAllergies = this.selectedAllergies;
     this.newAnimalHealthHistory.animalDisabilities = this.selectedDisabilities;
-
-    console.log(this.newAnimal);
-    console.log(this.newAnimalHealthHistory);
+    this.newPost.cityID = this.userData.cityID;
+    this.newPost.status = true;
+    this.newPost.userId = this.userData.id;
+    this.newPostIamge.postImages = this.imgFileList;
     let newPostId = 0;
+    this.animalService
+      .addAnimal(this.newAnimal)
+      .pipe(
+        switchMap((animalId) => {
+          // 1. Prepare and save Health History
+          this.newAnimalHealthHistory.animalId = animalId;
+          this.newPost.animalID = animalId;
+          return this.healthHistory.addAnimalHealthHistory(this.newAnimalHealthHistory);
+        }),
+        switchMap((healthHistoryResponse) => {
+          // 2. Save the Post (Now you have the Health History ID if needed)
+          // Assuming healthHistoryResponse contains the ID you mentioned
+          return this.postService.addPost(this.newPost);
+        }),
+        switchMap((postResponse) => {
+          // 3. Create the Post Images
+          this.newPostIamge.postId = postResponse.id;
+          console.log(postResponse);
+          return this.postImages.createPostImages(this.newPostIamge);
+        }),
+      )
+      .subscribe({
+        next: (finalResult) => {
+          this.nextRoute.navigate(['']);
+          console.log('All steps completed successfully');
+          this;
+        },
+        error: (err) => {
+          console.error('Something went wrong in the chain:', err);
+        },
+      });
+    /*
     this.animalService.addAnimal(this.newAnimal).subscribe((response) => {
       this.newAnimalId = response;
 
@@ -346,15 +491,14 @@ export class CreatePost implements OnInit {
         .subscribe((response) => {
           console.log(response);
         });
-      this.newPost.animalID = this.newAnimalId;
-      this.newPost.cityID = this.userData.cityID;
-      this.newPost.status = true;
-      this.newPost.userId = this.userData.id;
+
 
       this.postService.addPost(this.newPost).subscribe((response) => {
         newPostId = response;
       });
+
     });
+    */
   }
   getPageBack() {
     this.location.back();
@@ -389,10 +533,3 @@ export class CreatePost implements OnInit {
 
   }
 }
-
-/*@if(post.genderID === genderList.items[0].id){
-              <p>{{ genderList.items[0].name }}</p>
-              }
-              @else {
-              <p>{{ genderList.items[1].name }}</p>
-              } */

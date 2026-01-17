@@ -34,7 +34,7 @@ namespace PawPal.API.Controllers.Animal_Info
             var res = await sender.Send(query, ct);
             return res;
         }
-
+        [AllowAnonymous]
         [HttpPut("{id:int}")]
         public async Task Update(UpdateAnimalCommand cmd, int id, CancellationToken ct)
         {

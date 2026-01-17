@@ -15,9 +15,9 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.De
             if (user.UserId is null)
                 throw new MarketBusinessRuleException("123", "User isn't authorized to do this.");
 
-            var healthHistory = await context.AnimalHealthHistories.Where(x => x.Id == request.Id).FirstOrDefaultAsync(cancellationToken);
+            var healthHistory = await context.AnimalHealthHistories.Where(x => x.AnimalId == request.AnimalId).FirstOrDefaultAsync(cancellationToken);
             if (healthHistory == null)
-                throw new PawPalNotFoundException($"Animal health history with Id {request.Id} does not exist!");
+                throw new PawPalNotFoundException($"Animal health history for animal with Id {request.AnimalId} does not exist!");
 
             healthHistory.IsDeleted = true;
             await context.SaveChangesAsync(cancellationToken);

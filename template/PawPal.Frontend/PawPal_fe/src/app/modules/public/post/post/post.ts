@@ -19,6 +19,7 @@ import { environment } from '../../../../../environments/environment';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { catchError, Observable, of } from 'rxjs';
 import { GetPostImageById } from '../../../../api-services/animal-post-images/animal-post-images-model';
+import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 @Component({
   selector: 'app-post',
   standalone: false,
@@ -43,6 +44,8 @@ export class PostComponent implements OnInit {
   cityService = inject(CitiesService);
   userService = inject(AnimalUserService);
   postImageService = inject(PostImagesService);
+  postService = inject(AnimalPostService);
+  nextRoute = inject(Router);
   cd = inject(ChangeDetectorRef);
   animalHealth: GetAnimalsHealthByIdDto = {
     animalHealthHistoryId: 0,
@@ -141,7 +144,14 @@ export class PostComponent implements OnInit {
       queryParams: {
         postID: this.postId,
         update: true,
+        animalID: this.animalId,
       },
+    });
+  }
+  deletePost() {
+    console.log(this.postId);
+    this.postService.deletePost(this.postId, this.animalId).subscribe((response) => {
+      this.nextRoute.navigate(['']);
     });
   }
 }

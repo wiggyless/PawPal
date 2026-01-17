@@ -24,6 +24,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { MatIcon } from '@angular/material/icon';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { DialogueComponent } from './dialogue-component/dialogue-component';
+import { MatPaginator } from '@angular/material/paginator';
 @NgModule({
   declarations: [UserProfileComponent, ClientLayout, MyPosts, UserProfileSideNavbar, CreatePost, DialogueComponent],
   imports: [
@@ -45,6 +46,7 @@ import { DialogueComponent } from './dialogue-component/dialogue-component';
     MatSelectModule,
     MatIcon,
     AsyncPipe,
+    MatPaginator,
     MatDatepickerModule,
     MatDateRangeInput,
     MatDialogModule,
