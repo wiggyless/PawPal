@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogueComponent } from '../../dialogue-component/dialogue-component';
 @Component({
   selector: 'app-user-profile-side-navbar',
   standalone: false,
@@ -7,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserProfileSideNavbar implements OnInit {
   selectedItem: string = 'My_Profile';
+  dialog = inject(MatDialog);
   ngOnInit(): void {
     this.selectedItem = history.state.item == undefined ? 'My_Profile' : history.state.item;
   }
@@ -23,4 +26,10 @@ export class UserProfileSideNavbar implements OnInit {
   onSelect(item: string) {
     this.selectedItem = item;
   }
+
+  
+  openDialog(){
+    this.dialog.open(DialogueComponent);
+  }
 }
+

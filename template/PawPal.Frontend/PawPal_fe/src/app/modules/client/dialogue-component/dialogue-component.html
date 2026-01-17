@@ -1,0 +1,14 @@
+<div class="container">
+<mat-dialog-content>
+    <div class="icon-holder">
+        <mat-icon>delete_forever</mat-icon>
+    </div>
+        
+   <h2 style="text-align: center;">Are you sure you want to delete your profile?</h2>
+   <h3 style="text-align: center;">This action is irreversible!</h3>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button class="primarybtn" (click)="onDelete()">Yes, I want to delete</button>
+    <button class="secondarybtn" [mat-dialog-close]>Cancel</button>
+</mat-dialog-actions>
+</div>
