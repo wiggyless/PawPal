@@ -78,5 +78,5 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
     this.request.paging.page = event.pageIndex + 1;
     this.request.paging.pageSize = event.pageSize;
     this.loadAnimalPosts();
-  }
+    }
 }

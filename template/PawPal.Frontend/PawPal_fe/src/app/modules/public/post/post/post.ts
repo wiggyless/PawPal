@@ -17,7 +17,7 @@ import { AnimalUserService } from '../../../../api-services/animal-users/animal-
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
 import { environment } from '../../../../../environments/environment';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, forkJoin, Observable, of } from 'rxjs';
 import { GetPostImageById } from '../../../../api-services/animal-post-images/animal-post-images-model';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 @Component({
@@ -90,54 +90,29 @@ export class PostComponent implements OnInit {
       this.cityId = params['cityID'];
       this.userId = params['userID'];
     });
-    this.loadAnimal();
-    this.loadHealth();
-    this.loadCity();
-    this.loadUsers();
-    this.loadPostImages();
+    this.imagesList = this.postImageService.getImagePost(this.postId);
+    forkJoin({
+      animal: this.animalService.getAnimalById(this.animalId as number),
+      health: this.animalHealthService.getAnimalHealthHistoryById(this.animalId),
+      cities: this.cityService.getCityById(this.cityId),
+      users: this.userService.getUser(this.userId),
+    }).subscribe({
+      next: (response) => {
+        let sourceKeys = Object.keys(response.animal);
+        sourceKeys.forEach((key) => {
+          if (key in this.animal) {
+            (this.animal as any)[key] = (response.animal as any)[key];
+          }
+        });
+        this.animalHealth = response.health;
+        this.city = response.cities;
+        this.user = response.users;
+        this.cd.detectChanges();
+      },
+    });
   }
 
   keepOrder = (a: any, b: any) => 0;
-  loadHealth(): void {
-    this.animalHealthService.getAnimalHealthHistoryById(this.animalId).subscribe((response) => {
-      this.animalHealth = response;
-    });
-  }
-  loadAnimal(): void {
-    this.animalService.getAnimalById(this.animalId as number).subscribe((response) => {
-      let sourceKeys = Object.keys(response);
-      sourceKeys.forEach((key) => {
-        if (key in this.animal) {
-          (this.animal as any)[key] = (response as any)[key];
-        }
-      });
-    });
-  }
-  loadCity(): void {
-    this.cityService.getCityById(this.cityId).subscribe((response) => {
-      this.city = response;
-    });
-  }
-  loadUsers(): void {
-    this.userService.getUser(this.userId).subscribe((response) => {
-      this.user = response;
-    });
-  }
-  loadPostImages(): void {
-    this.imagesList = this.postImageService.getImagePost(this.postId).pipe(
-      catchError((error) => {
-        console.error('Error fetching images:', error);
-        return of([]);
-        // implement stock image for when the image is not found
-      }),
-    );
-
-    /*.subscribe((response) => {
-      = response.postImages;
-      this.cd.detectChanges();
-    });
-    */
-  }
 
   routeEditPost(): void {
     this.routeNext.navigate(['/client/my-profile/create-post'], {

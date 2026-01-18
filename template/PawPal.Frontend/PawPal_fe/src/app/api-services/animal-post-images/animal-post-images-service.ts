@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { buildHttpParams } from '../../core/models/build-http-params';
@@ -29,9 +29,13 @@ export class PostImagesService {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.get<GetImagePostBlob>(`${this.apiUrl}/download/${request}`);
   }
-  getMainImagePostBlob(request?: any): Observable<GetMainImagePostBlob[]> {
-    const params = request ? buildHttpParams(request as any) : undefined;
-    return this.httpClient.post<GetMainImagePostBlob[]>(`${this.apiUrl}/catalogImages`, request);
+  getMainImagePostBlob(request?: Array<number>): Observable<GetMainImagePostBlob[]> {
+    //const params = request ? buildHttpParams(request as any) : undefined;
+    let params = new HttpParams();
+    request?.forEach((x) => {
+      params = params.append('id', x);
+    });
+    return this.httpClient.get<GetMainImagePostBlob[]>(`${this.apiUrl}/catalogImages`, { params });
   }
   updatePostImages(request: AddNewPostImages): Observable<number> {
     const params = request ? buildHttpParams(request as any) : undefined;
