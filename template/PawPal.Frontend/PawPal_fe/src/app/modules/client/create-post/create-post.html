@@ -2,7 +2,7 @@
   <div class="stepper-container">
     <!-- First stepper images -->
     <mat-stepper #stepper linear="true" (selectionChange)="showImagesCtrl()">
-      <mat-step [stepControl]="firstFormGroup" class="mat-step-container" [optional]="true">
+      <mat-step [stepControl]="firstFormGroup" class="mat-step-container">
         <div class="mat-step-image-container">
           <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Image upload</ng-template>
@@ -14,24 +14,27 @@
               class="image-input"
               multiple
               (change)="showImages($event)"
+              accept="image/png, image/jpeg,image/jpg"
             />
           </form>
           <div class="image-container">
-            @for (i of [].constructor(10); track $index) {
-              @if (imageControls[$index]) {
-                <div class="image-holder">
-                  <img class="image" [src]="imageControls[$index].value" />
-                  <div class="image-holder-button">
-                    <button class="image-delete-button" (click)="deleteImage($index)">
-                      <mat-icon style="font-size:26px; color:white">delete</mat-icon>
-                    </button>
+            @if (newImage == true) {
+              @for (i of [].constructor(10); track $index) {
+                @if (imageControls[$index]) {
+                  <div class="image-holder">
+                    <img class="image" [src]="imageControls[$index].value" />
+                    <div class="image-holder-button">
+                      <button class="image-delete-button" (click)="deleteImage($index)">
+                        <mat-icon style="font-size: 26px; color: white">delete</mat-icon>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              } @else {
-                <div class="image-holder">
-                  <img class="image" [src]="" />
-                  <div class="image-holder-button"></div>
-                </div>
+                } @else {
+                  <div class="image-holder">
+                    <img class="image" [src]="" />
+                    <div class="image-holder-button"></div>
+                  </div>
+                }
               }
             }
           </div>

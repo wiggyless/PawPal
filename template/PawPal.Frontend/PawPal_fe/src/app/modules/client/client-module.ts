@@ -22,11 +22,19 @@ import { MatDatepickerModule, MatDateRangeInput } from '@angular/material/datepi
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { CarouselModule } from 'primeng/carousel';
 import { MatIcon } from '@angular/material/icon';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DialogueComponent } from './dialogue-component/dialogue-component';
 import { MatPaginator } from '@angular/material/paginator';
+import { A11yModule } from '@angular/cdk/a11y';
 @NgModule({
-  declarations: [UserProfileComponent, ClientLayout, MyPosts, UserProfileSideNavbar, CreatePost, DialogueComponent],
+  declarations: [
+    UserProfileComponent,
+    ClientLayout,
+    MyPosts,
+    UserProfileSideNavbar,
+    CreatePost,
+    DialogueComponent,
+  ],
   imports: [
     ClientRoutingModule,
     NavbarComponent,
@@ -50,7 +58,8 @@ import { MatPaginator } from '@angular/material/paginator';
     MatDatepickerModule,
     MatDateRangeInput,
     MatDialogModule,
+    A11yModule,
   ],
-  providers:[provideNativeDateAdapter(), MatDialog]
+  providers: [provideNativeDateAdapter(), MatDialog],
 })
 export class ClientModule {}

@@ -10,9 +10,8 @@
 // Main image stepper css
 .stepper-container {
   width: 80%;
-  height:500px;
+  height: 500px;
   margin: auto;
-  
 }
 .mat-grid-tile {
   background-color: lightblue;
@@ -24,17 +23,16 @@ input[type='file']::file-selector-button {
   width: 350px;
   height: 350px;
   border: 1px solid black;
-  border-radius:25px;
+  border-radius: 25px;
   background-color: #d5ba8d;
 }
-input[type='file']::content{
+input[type='file']::content {
   font-style: italic;
-  font-size:larger;
+  font-size: larger;
 }
 
-
-::ng-deep.mat-horizontal-content-container{
-  padding-left: 15px  !important;
+::ng-deep.mat-horizontal-content-container {
+  padding-left: 15px !important;
 }
 .image-container {
   display: flex;
@@ -46,7 +44,7 @@ input[type='file']::content{
   column-gap: 30px;
 }
 .image {
-width: 100%;
+  width: 100%;
   height: 120px;
   border: 1px solid #47331a;
   flex: 0 0 calc(15% - 8px);
@@ -72,10 +70,8 @@ width: 100%;
 :host ::ng-deep .mat-stepper-horizontal {
   padding: 30px;
   border-radius: 10px;
-  background-image:linear-gradient(#b2996f, #dbc49b);
-    border:3px solid #51432D;
-  
-
+  background-image: linear-gradient(#b2996f, #dbc49b);
+  border: 3px solid #51432d;
 }
 .stepper-buttons {
   display: flex;
@@ -83,12 +79,12 @@ width: 100%;
   align-self: flex-end;
   gap: 20px;
 }
-.stepper-buttons-final{
-display: flex;
+.stepper-buttons-final {
+  display: flex;
   flex-direction: row;
   align-self: flex-end;
   gap: 20px;
-padding-top:65px;
+  padding-top: 65px;
 }
 
 .stepper-buttons button {
@@ -138,9 +134,8 @@ input[type='number'] {
   justify-content: center;
 }
 
-::ng-deep .mat-mdc-form-field{
+::ng-deep .mat-mdc-form-field {
 }
-
 
 // Thrid stepper
 
@@ -349,20 +344,19 @@ input[type='number'] {
   height: 50px;
 }
 
+::ng-deep .mat-horizontal-stepper-header-container {
+  position: absolute;
 
-::ng-deep .mat-horizontal-stepper-header-container{
- position:absolute;
-
- top:14%;
- left:450px;
+  top: 14%;
+  left: 450px;
 }
 
-::ng-deep .mat-step-icon{
+::ng-deep .mat-step-icon {
   width: 80px !important;
   height: 80px !important;
 }
-::ng-deep .mat-step-header{
-  height:130px !important;
+::ng-deep .mat-step-header {
+  height: 130px !important;
 }
 ::ng-deep .mat-stepper-horizontal-line {
   display: none !important;
@@ -374,7 +368,7 @@ input[type='number'] {
 }
 
 ::ng-deep .mat-step-label {
-  color: #51432D;
+  color: #51432d;
   font-size: 14px;
   margin-top: 0px; /* Push label below the circle */
 }
@@ -388,76 +382,73 @@ input[type='number'] {
   margin-bottom: 8px;
 }
 
-.mat-step-image-container{
-  padding-top:75px;
+.mat-step-image-container {
+  padding-top: 75px;
 }
-.mat-step-main-info-container{
-  padding-top:85px;
+.mat-step-main-info-container {
+  padding-top: 85px;
 }
 
-.input-label{
+.input-label {
   font-weight: bolder;
   font-size: 16px;
-  color:#473619;
-  margin-left:10px;
+  color: #473619;
+  margin-left: 10px;
 }
 
-
-.form-field-format{
-  display:flex;
-  flex-direction:column;
-  height:100px;
+.form-field-format {
+  display: flex;
+  flex-direction: column;
+  height: 100px;
 }
 
 ::ng-deep .mat-step-header .mat-step-icon-selected,
-::ng-deep .mat-step-header.mat-step-header-selected .mat-step-icon{
-    background-color: #354024 !important;
-    box-shadow: 5px 10px 10px  #262d18 inset !important;
+::ng-deep .mat-step-header.mat-step-header-selected .mat-step-icon {
+  background-color: #354024 !important;
+  box-shadow: 5px 10px 10px #262d18 inset !important;
 }
 
-::ng-deep .mat-step-header  .mat-step-icon-state-number{
-    background-color: #889063;
-    box-shadow: 5px 10px 10px  #627440 inset
-
+::ng-deep .mat-step-header .mat-step-icon-state-number {
+  background-color: #889063;
+  box-shadow: 5px 10px 10px #627440 inset;
 }
 
-::ng-deep .mat-step-header .mat-step-icon-state-done{
-    background-color:#889063;
-    box-shadow: 5px 10px 10px  #627440 inset
+::ng-deep .mat-step-header .mat-step-icon-state-done {
+  background-color: #889063;
+  box-shadow: 5px 10px 10px #627440 inset;
 }
 
-::ng-deep .mat-step-header .mat-step-icon-state-edit{
-   background-color: #354024 !important;
-    box-shadow: 5px 10px 10px  #262d18 inset !important;
+::ng-deep .mat-step-header .mat-step-icon-state-edit {
+  background-color: #354024 !important;
+  box-shadow: 5px 10px 10px #262d18 inset !important;
 }
 
-
-.mat-step-health-info-container{
-  padding-top:75px;
-  height:400px;
+.mat-step-health-info-container {
+  padding-top: 75px;
+  height: 400px;
 }
 
-.animal-health-container{
-  display:flex;
+.animal-health-container {
+  display: flex;
   gap: 20px;
 }
-.all-dis-container{
+.all-dis-container {
   flex: 1;
-  display:flex;
+  display: flex;
   flex-direction: column;
   gap: 15px;
   width: 400px;
 }
 
-.date-checkbox-container{
+.date-checkbox-container {
   flex: 1;
-  display:flex;
+  display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.checkbox-alignment{
-  display:flex;
+.checkbox-alignment {
+  display: flex;
   flex-direction: column;
   gap: 15px;
 }
@@ -478,16 +469,16 @@ input[type='number'] {
   flex-shrink: 0;
 }
 
-.form-field-format-date{
-  display:flex;
-  flex-direction:column;
-  height:140px;
+.form-field-format-date {
+  display: flex;
+  flex-direction: column;
+  height: 140px;
 }
 
-.image-delete-button{
+.image-delete-button {
   background-color: rgb(179, 55, 55);
   border-radius: 100px;
   border: none;
-  padding:5px;
+  padding: 5px;
   box-shadow: 2px 3px 5px #504949;
 }

@@ -49,7 +49,7 @@
             <mat-form-field class="custom">
               <mat-select [(ngModel)]="selectedGender" placeholder="Choose gender">
                 @for (gen of genderList.items; track gen) {
-                  <mat-option [value]="gen.name">
+                  <mat-option [value]="gen.id">
                     {{ gen.name }}
                   </mat-option>
                 }

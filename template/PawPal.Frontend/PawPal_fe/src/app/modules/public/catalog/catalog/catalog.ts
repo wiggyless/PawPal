@@ -95,6 +95,7 @@ export class CatalogComponent
   ngOnInit(): void {
     this.loadPagedData();
   }
+  /*
   loadCategories(): void {
     this.animalCategories = this.animalCatService.listAnimalCategories().subscribe((response) => {
       this.animalCategories = response;
@@ -110,28 +111,12 @@ export class CatalogComponent
       this.animalBreed = response;
     });
   }
-
-  setImages(blobList: GetMainImagePostBlob[]): void {
-    blobList.forEach((x) => {
-      if (x.mainImage != '') {
-        const byteCharacters = atob(x.mainImage);
-        const byteNumbers = new Array(byteCharacters.length);
-
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-
-        // 2. Create the Blob from the typed array
-        const blob = new Blob([byteArray], { type: 'image/png' });
-
-        // 3. Create the URL and add to form
-        const imageUrl = URL.createObjectURL(blob);
-        this.catalogImages.push(new GetMainImagePostBlobClass(x.postID, imageUrl));
-      }
+  loadGender(): void {
+    this.genderList = this.genderService.listGender().subscribe((resposne) => {
+      this.genderList = resposne;
     });
   }
+*/
   protected override loadPagedData(): void {
     this.animalPosts = this.animalPostsService.listAnimalPosts(this.request).pipe(
       shareReplay(1),
@@ -148,10 +133,10 @@ export class CatalogComponent
     );
     this.postArr = this.animalPosts;
     forkJoin({
-      categories: (this.animalCategories = this.animalCatService.listAnimalCategories()),
-      breed: (this.animalBreed = this.animalBreedService.listAnimalBreed()),
-      cantons: (this.cantonsList = this.cantonsService.listCantons()),
-      gender: (this.genderList = this.genderService.listGender()),
+      categories: this.animalCatService.listAnimalCategories(),
+      breed: this.animalBreedService.listAnimalBreed(),
+      cantons: this.cantonsService.listCantons(),
+      gender: this.genderService.listGender(),
       post: this.animalPosts,
       cities: this.citiesService.listCities(),
     }).subscribe({
@@ -192,11 +177,41 @@ export class CatalogComponent
       this.setImages(response);
     });
   }
-  loadGender(): void {
-    this.genderList = this.genderService.listGender().subscribe((resposne) => {
-      this.genderList = resposne;
+  setImages(blobList: GetMainImagePostBlob[]): void {
+    blobList.forEach((x) => {
+      if (x.mainImage != '') {
+        const byteCharacters = atob(x.mainImage);
+        const byteNumbers = new Array(byteCharacters.length);
+
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        let mimeType = 'image/png';
+        if (byteArray.length > 4) {
+          const header = byteArray.slice(0, 4);
+          let headerHex = '';
+          for (let i = 0; i < header.length; i++) {
+            headerHex += header[i].toString(16).toUpperCase();
+          }
+
+          if (headerHex.startsWith('89504E47')) {
+            mimeType = 'image/png';
+          } else if (headerHex.startsWith('FFD8FF')) {
+            mimeType = 'image/jpeg';
+          }
+        }
+        // 2. Create the Blob from the typed array
+        const blob = new Blob([byteArray], { type: mimeType });
+
+        // 3. Create the URL and add to form
+        const imageUrl = URL.createObjectURL(blob);
+        this.catalogImages.push(new GetMainImagePostBlobClass(x.postID, imageUrl));
+      }
     });
   }
+
   getBreedSelect(): void {
     this.breedArr = this.animalBreed.items;
     this.breedArr = this.breedArr.filter((x) => x.categoryId == this.selectedCat);
@@ -233,10 +248,10 @@ export class CatalogComponent
       }),
       shareReplay(1),
     );
-    console.log(this.animalPosts);
   }
   clearSearch(): void {
     //this.postArr = this.animalPosts.items;
+    this.animalPosts = this.postArr;
     this.breedArr = new Array<ListAnimalBreedQueryDto>();
     this.selectedCat = null;
     this.selectedBreed = null;
@@ -259,7 +274,7 @@ export class CatalogComponent
         animalID: post.animalID,
         cityID: post.cityID,
         userID: post.userID,
-        dateAdded: post.dateAdded
+        dateAdded: post.dateAdded,
       },
     });
   }
