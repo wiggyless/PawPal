@@ -200,6 +200,7 @@ export class CreatePost implements OnInit {
   };
   newAnimalId: number = 0;
   secondStep: boolean = false;
+  newImage = true;
   //--Functions--//
   ngOnInit(): void {
     const params = this.route.snapshot.queryParams;
@@ -304,6 +305,7 @@ export class CreatePost implements OnInit {
     });
   }
   showImages(event: any): void {
+    this.newImage = false;
     this.index = this.imageControls.length;
     if (this.index == 10) return;
     for (let i = 0; i < event.target.files.length; i++) {
@@ -313,8 +315,10 @@ export class CreatePost implements OnInit {
       reader.readAsDataURL(files);
       reader.onload = () => {
         this.imageControls.push(this._formBuilder.control(reader.result?.toString() as string));
+        this.cd.detectChanges();
+        this.firstFormGroup.updateValueAndValidity();
+        this.newImage = true;
       };
-      this.cd.detectChanges();
     }
   }
   loadImages(): void {
@@ -324,6 +328,7 @@ export class CreatePost implements OnInit {
     });
   }
   loadBlob(items: GetImagePostBlob) {
+    this.newImage = false;
     items.postImages.forEach((base64String: string) => {
       const byteCharacters = atob(base64String);
       const byteNumbers = new Array(byteCharacters.length);
@@ -348,9 +353,11 @@ export class CreatePost implements OnInit {
       const blob = new Blob([byteArray], { type: mimeType });
       const imageUrl = URL.createObjectURL(blob);
       this.imageControls.push(this._formBuilder.control(imageUrl));
-      this.cd.detectChanges();
-      this.createFiles(items);
     });
+    this.firstFormGroup.updateValueAndValidity();
+    this.newImage = true;
+    this.cd.detectChanges();
+    this.createFiles(items);
   }
   createFiles(items: GetImagePostBlob) {
     items.postImages.forEach((base64String: string, index: number) => {
