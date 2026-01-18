@@ -8,11 +8,6 @@ using PawPal.Domain.Entities.Places;
 
 namespace PawPal.Infrastructure.Database.Seeders;
 
-/// <summary>
-/// Dynamic seeder koji se pokreće u runtime-u,
-/// obično pri startu aplikacije (npr. u Program.cs).
-/// Koristi se za unos demo/test podataka koji nisu dio migracije.
-/// </summary>
 public static class DynamicDataSeeder
 {
     public static async Task SeedAsync(DatabaseContext context)
@@ -20,7 +15,6 @@ public static class DynamicDataSeeder
         // Osiguraj da baza postoji (bez migracija)
         await context.Database.EnsureCreatedAsync();
 
-        await SeedProductCategoriesAsync(context);
         await SeedRolesAsync(context);
         await SeedUsersAsync(context);
         await SeedAnimalCategoriesAsync(context);
@@ -29,72 +23,9 @@ public static class DynamicDataSeeder
         await SeedCantonsAsync(context);
         await SeedCitiesAsync(context);
         await SeedBreedsAsync(context);
-        await SeedAlergiesAync(context);
-        await SeedDisabilitesAync(context);
-    }
-
-
-    private static async Task SeedProductCategoriesAsync(DatabaseContext context)
-    {
-        if (!await context.ProductCategories.AnyAsync())
-        {
-            context.ProductCategories.AddRange(
-                new ProductCategoryEntity
-                {
-                    Name = "Računari (demo)",
-                    IsEnabled = true,
-                    CreatedAtUtc = DateTime.UtcNow
-                },
-                new ProductCategoryEntity
-                {
-                    Name = "Mobilni uređaji (demo)",
-                    IsEnabled = true,
-                    CreatedAtUtc = DateTime.UtcNow
-                }
-            );
-
-            await context.SaveChangesAsync();
-            Console.WriteLine("✅ Dynamic seed: product categories added.");
-        }
-    }
-    private static async Task SeedAlergiesAync(DatabaseContext context)
-    {
-        if(!await context.Allergies.AnyAsync())
-        {
-            context.Allergies.AddRange(
-                new AllergiesEntity
-                {
-                    Name = "Timothy",
-                    Description = "Big grass"
-                },
-                new AllergiesEntity
-                {
-                    Name = "Black Willow",
-                    Description = "Leaf hehe"
-                }
-                );
-        }
-        await context.SaveChangesAsync();
-    }
-    private static async Task SeedDisabilitesAync(DatabaseContext context)
-    {
-        if (!await context.Allergies.AnyAsync())
-        {
-            context.Disabilities.AddRange(
-                new DisabilitiesEntity
-                {
-                    Name = "Deafness",
-                    Description = "Does not hear",
-                },
-                new DisabilitiesEntity
-                {
-                    Name = "Blindness",
-                    Description = "Does not see",
-                }
-
-                );
-        }
-        await context.SaveChangesAsync();
+        await SeedAllergiesAsync(context);
+        await SeedDisabilitiesAsync(context);
+        await SeedAnimalHealthHistoriesAsync(context);
     }
     private static async Task SeedUsersAsync(DatabaseContext context)
     {
@@ -106,6 +37,9 @@ public static class DynamicDataSeeder
         var adminRole = await context.Roles.Where(r=> r.Id == 3).FirstOrDefaultAsync();
         var verifiedRole = await context.Roles.Where(r=> r.Id == 2).FirstOrDefaultAsync();
         var basicRole = await context.Roles.Where(r=> r.Id == 1).FirstOrDefaultAsync();
+
+        var mostar = await context.Cities.Where(x => x.Name == "Mostar").FirstOrDefaultAsync();
+
         var admin = new UserEntity
         {
             FirstName = "nesto",
@@ -115,7 +49,7 @@ public static class DynamicDataSeeder
             RoleId = adminRole.Id,
             Role = adminRole,
             IsEnabled = true,
-            CityId = 10
+            CityId = mostar.Id
         };
 
         var user = new UserEntity
@@ -127,32 +61,21 @@ public static class DynamicDataSeeder
             RoleId = verifiedRole.Id,
             Role = verifiedRole,
             IsEnabled = true,
-            CityId = 11
+            CityId = mostar.Id
         };
 
-        var dummyForSwagger = new UserEntity
+        var johnnyDoe = new UserEntity
         {
-            FirstName = "nesto",
-            LastName = "nesto",
-            Email = "string",
-            PasswordHash = hasher.HashPassword(null!, "string"),
+            FirstName = "Johnny",
+            LastName = "Doe",
+            Email = "johnnydoe1@gmail.com",
+            PasswordHash = hasher.HashPassword(null!, "johnnydoe1"),
             IsEnabled = true,
-            RoleId = adminRole.Id,
-            Role = adminRole,
-            CityId = 12
+            RoleId = verifiedRole.Id,
+            Role = verifiedRole,
+            CityId = mostar.Id
         };
-        var dummyForTests = new UserEntity
-        {
-            FirstName = "nesto",
-            LastName = "nesto",
-            Email = "test",
-            PasswordHash = hasher.HashPassword(null!, "test123"),
-            IsEnabled = true,
-            RoleId = basicRole.Id,
-            Role=basicRole,
-            CityId = 12
-        };
-        context.Users.AddRange(admin, user, dummyForSwagger, dummyForTests);
+        context.Users.AddRange(admin, user, johnnyDoe);
         await context.SaveChangesAsync();
 
         Console.WriteLine("✅ Dynamic seed: demo users added.");
@@ -194,12 +117,13 @@ public static class DynamicDataSeeder
         var femaleGender = await context.Genders.Where(x => x.GenderName.ToLower() == "female").FirstOrDefaultAsync();
         var maleGender = await context.Genders.Where(x => x.GenderName.ToLower() == "male").FirstOrDefaultAsync();
 
+
+
         var cat = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "cat").FirstOrDefaultAsync();
         var dog = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "dog").FirstOrDefaultAsync();
         var rabbit = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "rabbit").FirstOrDefaultAsync();
         var fish = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "fish").FirstOrDefaultAsync();
         var bird = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "bird").FirstOrDefaultAsync();
-
 
         if (femaleGender != null && maleGender != null)
         {
@@ -340,24 +264,24 @@ public static class DynamicDataSeeder
         context.AnimalsAllergies.Add(animalAllergy);
         await context.SaveChangesAsync();
 
-        var evilBnuy = await context.Animals.Where(x => x.Name.ToLower() == "World Eater".ToLower()).FirstOrDefaultAsync();
+        var kiki = await context.Animals.Where(x => x.Name.ToLower() == "Kiki".ToLower()).FirstOrDefaultAsync();
 
-        var evilBnuyHealth = new AnimalHealthHistoryEntity
+        var kikiHealth = new AnimalHealthHistoryEntity
         {
-            AnimalId = evilBnuy.Id,
-            Animal = evilBnuy,
+            AnimalId = kiki.Id,
+            Animal = kiki,
             ParasiteFree = true,
             Vaccinated = true,
-            DietaryRestrictions = "Do not feed too much, he is fat",
+            DietaryRestrictions = "Do not feed too much, she is fat",
             SpayedOrNeutered = true
         };
-        context.AnimalHealthHistories.Add(evilBnuyHealth);
+        context.AnimalHealthHistories.Add(kikiHealth);
         await context.SaveChangesAsync();
 
         var animalDisability = new DisabilitiesAnimalHealthHistory
         {
-            AnimalHealthHistoryId = evilBnuyHealth.Id,
-            AnimalHealthHistory = evilBnuyHealth,
+            AnimalHealthHistoryId = kikiHealth.Id,
+            AnimalHealthHistory = kikiHealth,
             DisabilityId = 3
         };
         context.AnimalsDisabilities.Add(animalDisability);
@@ -425,29 +349,54 @@ public static class DynamicDataSeeder
     private static async Task SeedCitiesAsync(DatabaseContext ct)
     {
         if (await ct.Cities.AnyAsync()) return;
+        //ovo je dodani kako ne bi hardkodirali vrijednosti i time sprjecavamo eventualne errore u buducnosti
+        var usk = await ct.Cantons.Where(x => x.FullName == "Unsko-Sanski").FirstOrDefaultAsync();
+        var hnk = await ct.Cantons.Where(x => x.FullName == "Hercegovačko-neretvanski kanton").FirstOrDefaultAsync();
+        var zdk = await ct.Cantons.Where(x => x.FullName == "Zeničko-dobojski kanton").FirstOrDefaultAsync();
 
         var tesanj = new CitiesEntity
         {
             Name = "Tešanj",
             Region = "?",
             PostalCode = "74260",
-            CantonId = 2,
+            CantonId = zdk.Id
+        };
+        var zenica = new CitiesEntity
+        {
+            Name = "Zenica",
+            Region = "?",
+            PostalCode = "72000",
+            CantonId = zdk.Id
         };
         var mostar = new CitiesEntity
         {
             Name = "Mostar",
             Region = "?",
             PostalCode = "88000",
-            CantonId = 3,
+            CantonId = hnk.Id
+        };
+        var jablanica = new CitiesEntity
+        {
+            Name = "Jablanica",
+            Region = "?",
+            PostalCode = "88420",
+            CantonId = hnk.Id
         };
         var bihac = new CitiesEntity
         {
             Name = "Bihać",
             Region = "?",
             PostalCode = "77000",
-            CantonId = 1,
+            CantonId = usk.Id
         };
-        ct.Cities.AddRange(tesanj, mostar, bihac);
+        var sanskiMost = new CitiesEntity
+        {
+            Name = "Sanski Most",
+            Region = "?",
+            PostalCode = "79260",
+            CantonId = usk.Id
+        };
+        ct.Cities.AddRange(tesanj, mostar, bihac, zenica, jablanica, sanskiMost);
         await ct.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: Cantons added.");
     }
@@ -480,16 +429,16 @@ public static class DynamicDataSeeder
 
         var basicUser = new RolesEntity
         {
-            RoleName = "Basic user"
+            RoleName = "Basic user" //1
         };
         var verifiedUser = new RolesEntity
         {
-            RoleName = "Verified user"
+            RoleName = "Verified user" //2
         };
 
-        var admin = new RolesEntity
+        var admin = new RolesEntity 
         {
-            RoleName = "Admin"
+            RoleName = "Admin" //3
         };
 
         ct.AddRange(basicUser, verifiedUser, admin);

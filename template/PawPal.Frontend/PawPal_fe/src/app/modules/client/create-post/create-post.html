@@ -22,7 +22,9 @@
                 <div class="image-holder">
                   <img class="image" [src]="imageControls[$index].value" />
                   <div class="image-holder-button">
-                    <button class="image-delete-button" (click)="deleteImage($index)">X</button>
+                    <button class="image-delete-button" (click)="deleteImage($index)">
+                      <mat-icon style="font-size:26px; color:white">delete</mat-icon>
+                    </button>
                   </div>
                 </div>
               } @else {
