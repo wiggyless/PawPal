@@ -22,7 +22,11 @@
               @for (i of [].constructor(10); track $index) {
                 @if (imageControls[$index]) {
                   <div class="image-holder">
-                    <img class="image" [src]="imageControls[$index].value" />
+                    <img
+                      class="image"
+                      [src]="imageControls[$index].value"
+                      crossorigin="anonymous"
+                    />
                     <div class="image-holder-button">
                       <button class="image-delete-button" (click)="deleteImage($index)">
                         <mat-icon style="font-size: 26px; color: white">delete</mat-icon>

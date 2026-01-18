@@ -195,7 +195,6 @@ export class CatalogComponent
           for (let i = 0; i < header.length; i++) {
             headerHex += header[i].toString(16).toUpperCase();
           }
-
           if (headerHex.startsWith('89504E47')) {
             mimeType = 'image/png';
           } else if (headerHex.startsWith('FFD8FF')) {
