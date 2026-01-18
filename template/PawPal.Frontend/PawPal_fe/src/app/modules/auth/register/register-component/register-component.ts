@@ -69,8 +69,20 @@ export class RegisterComponent implements OnInit {
     //user is created here
     this.userService.createUser(payload).subscribe({
       next: (res) => {
-        console.log('Registration successful, user ID:', res);
-        this.auth.redirectToLogin();
+        const loginPayload: LoginCommand = {
+          email: this.accountInfo.value.email ?? '',
+          password: this.accountInfo.value.password ?? '',
+          fingerprint: null,
+        };
+        this.auth.login(loginPayload).subscribe({
+          next: (res)=>{
+            const target = this.currentUser.getDefaultRoute();
+            this.router.navigate([target]);
+          },
+          error: (res)=>{
+            console.log(res);
+          }
+        })
       },
       error: (err) => {
         console.error('Registration error:', err);

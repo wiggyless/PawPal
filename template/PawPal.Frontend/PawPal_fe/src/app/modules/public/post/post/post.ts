@@ -20,6 +20,8 @@ import { CurrentUserService } from '../../../../core/services/auth/current-user.
 import { catchError, Observable, of } from 'rxjs';
 import { GetPostImageById } from '../../../../api-services/animal-post-images/animal-post-images-model';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogueComponent } from '../../../client/dialogue-component/dialogue-component';
 @Component({
   selector: 'app-post',
   standalone: false,
@@ -47,6 +49,7 @@ export class PostComponent implements OnInit {
   postService = inject(AnimalPostService);
   nextRoute = inject(Router);
   cd = inject(ChangeDetectorRef);
+  dialog = inject(MatDialog);
   animalHealth: GetAnimalsHealthByIdDto = {
     animalHealthHistoryId: 0,
     animalId: 0,
@@ -89,6 +92,7 @@ export class PostComponent implements OnInit {
       this.animalId = params['animalID'];
       this.cityId = params['cityID'];
       this.userId = params['userID'];
+      this.dateAdded = params['dateAdded'];
     });
     this.loadAnimal();
     this.loadHealth();
@@ -150,8 +154,8 @@ export class PostComponent implements OnInit {
   }
   deletePost() {
     console.log(this.postId);
-    this.postService.deletePost(this.postId, this.animalId).subscribe((response) => {
-      this.nextRoute.navigate(['']);
-    });
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {postDelete: true, profileDelete:false, postId: this.postId, animalId: this.animalId};
+    this.dialog.open(DialogueComponent,dialogConfig);
   }
 }
