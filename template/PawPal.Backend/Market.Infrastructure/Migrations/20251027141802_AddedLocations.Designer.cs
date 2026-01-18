@@ -314,7 +314,7 @@ namespace PawPal.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Canton");
+                    b.ToTable("Cantons");
                 });
 
             modelBuilder.Entity("PawPal.Domain.Entities.Places.CitiesEntity", b =>
