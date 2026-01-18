@@ -149,6 +149,7 @@ export class PostComponent implements OnInit {
         postID: this.postId,
         update: true,
         animalID: this.animalId,
+        dateAdded: this.dateAdded,
       },
     });
   }
