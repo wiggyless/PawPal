@@ -407,21 +407,22 @@ export class CreatePost implements OnInit {
   }
   updatePost(): void {
     let healthHistoryID = 0;
-    console.log(this.routeAnimalID);
-    this.healthHistory.getAnimalHealthHistoryById(this.routeAnimalID).subscribe((response) => {
+
+    this.healthHistory.getAnimalHealthHistoryById(this.routeAnimalID).subscribe((response) => { //uzimaju se informacije o zdravstvenoj historiji
       healthHistoryID = response.animalHealthHistoryId;
       this.selectedAllergies.forEach((element: string) => {
-        this.updateHealth?.allergies.push(new AllergyQueryDto(element));
+        this.updateHealth?.allergies.push(new AllergyQueryDto(element)); //dodaj svaku alergiju 
       });
       this.selectedDisabilities.forEach((element: string) => {
-        this.updateHealth?.disabilities.push(new DisabilitiesDto(element));
+        this.updateHealth?.disabilities.push(new DisabilitiesDto(element)); //dodaj svaki poremecaj
       });
       this.updateHealth.parasiteFree = this.selectedParasiteFree;
       this.updateHealth.vaccinated = this.selectedVaccinated;
       this.updateHealth.spayedOrNeutered = this.selectedSprayed;
       this.updateHealth.animalId = this.routeAnimalID;
+      
       this.updateAnimal = this.fourthFromGroup.value.mainInfo as UpdateAnimalDto;
-      this.updateAnimal.gender = 'Female'; // need to change
+      this.updateAnimal.gender = this.selectedGender; 
       this.updateAnimal.category = this.selectedCategory.categoryName;
       this.newPostIamge.postImages = this.imgFileList;
       this.newPostIamge.postId = this.routePostID;
