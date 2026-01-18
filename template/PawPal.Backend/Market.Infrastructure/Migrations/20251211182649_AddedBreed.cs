@@ -100,12 +100,12 @@ namespace PawPal.Infrastructure.Migrations
                 table: "Breeds",
                 column: "CategoryID");
 
-            migrationBuilder.AddForeignKey(
+           /* migrationBuilder.AddForeignKey(
                 name: "FK_Cities_Cantons_CantonId",
                 table: "Cities",
                 column: "CantonId",
                 principalTable: "Cantons",
-                principalColumn: "Id");
+                principalColumn: "Id");*/
         }
 
         /// <inheritdoc />
@@ -171,13 +171,13 @@ namespace PawPal.Infrastructure.Migrations
                 oldType: "int",
                 oldNullable: true);
 
-            migrationBuilder.AddForeignKey(
+          /*  migrationBuilder.AddForeignKey(
                 name: "FK_Cities_Cantons_CantonId",
                 table: "Cities",
                 column: "CantonId",
                 principalTable: "Cantons",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade);*/
         }
     }
 }

@@ -12,7 +12,7 @@ namespace PawPal.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Canton",
+                name: "Cantons",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -25,7 +25,7 @@ namespace PawPal.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Canton", x => x.Id);
+                    table.PrimaryKey("PK_Cantons", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -46,9 +46,9 @@ namespace PawPal.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Cities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cities_Canton_CantonId",
+                        name: "FK_Cities_Cantons_CantonId",
                         column: x => x.CantonId,
-                        principalTable: "Canton",
+                        principalTable: "Cantons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -66,7 +66,7 @@ namespace PawPal.Infrastructure.Migrations
                 name: "Cities");
 
             migrationBuilder.DropTable(
-                name: "Canton");
+                name: "Cantons");
         }
     }
 }
