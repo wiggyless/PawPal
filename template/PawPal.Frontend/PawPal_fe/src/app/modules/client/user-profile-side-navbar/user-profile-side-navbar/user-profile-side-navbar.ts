@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogueComponent } from '../../dialogue-component/dialogue-component';
 @Component({
   selector: 'app-user-profile-side-navbar',
@@ -29,7 +29,9 @@ export class UserProfileSideNavbar implements OnInit {
 
   
   openDialog(){
-    this.dialog.open(DialogueComponent);
+     const dialogConfig = new MatDialogConfig();
+     dialogConfig.data = {postDelete: false, profileDelete:true};
+     this.dialog.open(DialogueComponent,dialogConfig);
   }
 }
 

@@ -21,6 +21,6 @@ namespace PawPal.Domain.Entities.Posts
         public int AnimalID { get; set; }
         public AnimalEntity Animal { get; set; }
         public int? AnimalHistoryId { get; set; }
-        public AnimalHealthHistoryEntity? AnimalHealthHistory { get; set; } 
+        public AnimalHealthHistoryEntity? AnimalHealthHistory { get; set; }
     }
 }

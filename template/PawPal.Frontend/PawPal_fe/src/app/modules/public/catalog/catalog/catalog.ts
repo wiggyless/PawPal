@@ -57,7 +57,7 @@ export class CatalogComponent
     includedTotal: true,
     totalItems: 5,
     totalPages: 0,
-    pageSizeOption: [2, 5, 10, 100],
+    pageSizeOption: [4, 16, 32],
   };
 
   // Lists //
@@ -88,7 +88,7 @@ export class CatalogComponent
   constructor() {
     super();
     this.request = new GetPostQuery();
-    this.request.paging.pageSize = 2;
+    this.request.paging.pageSize = 4;
   }
   catalogImages: GetMainImagePostBlobClass[] = [];
   ngOnInit(): void {
@@ -224,6 +224,7 @@ export class CatalogComponent
         animalID: post.animalID,
         cityID: post.cityID,
         userID: post.userID,
+        dateAdded: post.dateAdded
       },
     });
   }
