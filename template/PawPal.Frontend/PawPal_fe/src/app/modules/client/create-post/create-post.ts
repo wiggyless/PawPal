@@ -316,7 +316,6 @@ export class CreatePost implements OnInit {
       reader.onload = () => {
         this.imageControls.push(this._formBuilder.control(reader.result?.toString() as string));
         this.cd.detectChanges();
-        this.firstFormGroup.updateValueAndValidity();
         this.newImage = true;
       };
     }
@@ -343,7 +342,6 @@ export class CreatePost implements OnInit {
         for (let i = 0; i < header.length; i++) {
           headerHex += header[i].toString(16).toUpperCase();
         }
-
         if (headerHex.startsWith('89504E47')) {
           mimeType = 'image/png';
         } else if (headerHex.startsWith('FFD8FF')) {
@@ -354,7 +352,6 @@ export class CreatePost implements OnInit {
       const imageUrl = URL.createObjectURL(blob);
       this.imageControls.push(this._formBuilder.control(imageUrl));
     });
-    this.firstFormGroup.updateValueAndValidity();
     this.newImage = true;
     this.cd.detectChanges();
     this.createFiles(items);
@@ -542,7 +539,7 @@ export class CreatePost implements OnInit {
   addDisabilityToList() {
     this.selectedDisabilities = this.thridFormGroup.get('disCtrl')?.value;
   }
-  setGender(){
+  setGender() {
     const genderId = this.secondFormGroup.get('genderID')?.value;
     const gender = this.genderList.items.find((g: any) => g.id === genderId);
     this.selectedGender = gender ? gender.name : '';
