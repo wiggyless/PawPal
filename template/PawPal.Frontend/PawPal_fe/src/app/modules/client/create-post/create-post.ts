@@ -529,7 +529,8 @@ export class CreatePost implements OnInit {
     this.selectedDisabilities = this.thridFormGroup.get('disCtrl')?.value;
   }
   setGender(){
-    this.selectedGender = this.secondFormGroup.get('genderID')?.value;
-
+    const genderId = this.secondFormGroup.get('genderID')?.value;
+    const gender = this.genderList.items.find((g: any) => g.id === genderId);
+    this.selectedGender = gender ? gender.name : '';
   }
 }

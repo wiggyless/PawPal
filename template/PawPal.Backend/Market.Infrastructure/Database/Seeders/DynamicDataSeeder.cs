@@ -15,13 +15,13 @@ public static class DynamicDataSeeder
         // Osiguraj da baza postoji (bez migracija)
         await context.Database.EnsureCreatedAsync();
 
+        await SeedCantonsAsync(context);
+        await SeedCitiesAsync(context);
         await SeedRolesAsync(context);
         await SeedUsersAsync(context);
         await SeedAnimalCategoriesAsync(context);
         await SeedGendersAsync(context);
         await SeedAnimalsAsync(context);
-        await SeedCantonsAsync(context);
-        await SeedCitiesAsync(context);
         await SeedBreedsAsync(context);
         await SeedAllergiesAsync(context);
         await SeedDisabilitiesAsync(context);

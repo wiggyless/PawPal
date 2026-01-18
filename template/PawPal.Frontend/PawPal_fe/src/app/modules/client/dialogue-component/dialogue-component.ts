@@ -42,14 +42,16 @@ export class DialogueComponent implements OnInit {
     this.postID = this.data.postId;
     this.animalID = this.data.animalId;
   }
-  onDeleteUser():void{
-    this.userActualService.deleteUser(this.userId).subscribe({
+  //OVA FUNKCIJA JE UNUTAR dialogue-component.ts koja kontroliše brisanje korisnika ili objava
+  onDeleteUser():void{ 
+    this.userActualService.deleteUser(this.userId).subscribe({ //zovemo naš servis, i šaljemo mu id usera koji je trenutno aktivan
+      //user.Id smo dobili korištenjem currentUser servisa
       next: (res)=>{
-        this.dialog.closeAll();
-        this.router.navigate(['/auth/logout']);
+        this.dialog.closeAll(); //zatvara se dijalog
+        this.router.navigate(['/auth/logout']); //navigiramo korisnika na logout, kako bi se njegov token izbrisao iz lokalnog storage-a
       },
       error:(res)=>{
-        console.log('Poop', res)
+        console.log('Didnt work', res)
       }
     });
   }
@@ -61,7 +63,7 @@ export class DialogueComponent implements OnInit {
         this.router.navigate(['/client']);
       },
          error:(res)=>{
-        console.log('Poop', res);
+        console.log('Didnt work', res);
       }
     })
   }

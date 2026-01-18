@@ -73,15 +73,13 @@ export class UserProfileComponent implements OnInit {
 
   saveChanges(){
     this.editing = false;
+    //prikupljamo sve informacije sa forme
     this.userData.firstName = this.profileForm.get('firstName')?.value as string;
      this.userData.lastName  = this.profileForm.get('lastName')?.value as string;
      this.userData.dateTime = this.profileForm.get('date')?.value as string;
     this.userData.cityID = this.profileForm.get('city')?.value as any;
-
-     const selectedCity = this.cityList.items?.find((city: any) => city.id === this.userData.cityID);
-  if (selectedCity) {
-    this.userData.city = selectedCity.name;
-  }
+    
+    //pravimo payload 
     const payload: UpdateUserCommand = {
       firstName: this.userData.firstName,
       lastName: this.userData.lastName,
@@ -90,15 +88,15 @@ export class UserProfileComponent implements OnInit {
       cityId : this.userData.cityID
     };
 
-    this.userDataService.updateUser(this.userData.id, payload).subscribe({
+    this.userDataService.updateUser(this.userData.id, payload).subscribe({ //payload šaljemo našem servisu
       next: (res) => {
           console.log('SUCCESS =>', res);
-          this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+          this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false }); //dodano kako se ne bi broj kasnije prikazivao umjesto imena, mali bug
       },
       error: (res)=>{
         console.log('ERROR: =>', res);
       }
     })
-    this.profileForm.disable();
+    this.profileForm.disable(); //onemogućavamo formu kako korisnik ne bi mogao više da edituje
   }
 }

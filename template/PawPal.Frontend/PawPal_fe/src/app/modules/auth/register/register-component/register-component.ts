@@ -64,11 +64,11 @@ export class RegisterComponent implements OnInit {
       roleID: 2,
       city: this.basicInfo.value.cityId ?? 0,
       profilePictureURL: null,
-    };
+    }; //prikupljaju se informacije sa 'basicInfo' i 'accountInfo' formi i stavljaju u payload
 
-    //user is created here
+    //user je kreiran ovdje
     this.userService.createUser(payload).subscribe({
-      next: (res) => {
+      next: (res) => { //ako je user uspješno kreiran, odmah ga logiramo na sistem, koristeći LoginCommand
         const loginPayload: LoginCommand = {
           email: this.accountInfo.value.email ?? '',
           password: this.accountInfo.value.password ?? '',
@@ -77,7 +77,7 @@ export class RegisterComponent implements OnInit {
         this.auth.login(loginPayload).subscribe({
           next: (res)=>{
             const target = this.currentUser.getDefaultRoute();
-            this.router.navigate([target]);
+            this.router.navigate([target]); //rute mogu biti prema /admin i /client modulima
           },
           error: (res)=>{
             console.log(res);
