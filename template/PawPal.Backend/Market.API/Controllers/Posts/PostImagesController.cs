@@ -82,9 +82,10 @@ namespace PawPal.API.Controllers.Posts
             
             return newPostImage;
         }
+
         [AllowAnonymous]
-        [HttpPost("catalogImages")]
-        public async Task<List<ListMainImageQueryDto>> GetMainImages([FromBody]List<int> request, CancellationToken cancellationToken)
+        [HttpGet("catalogImages")]
+        public async Task<List<ListMainImageQueryDto>> GetMainImages([FromQuery(Name = "id")] List<int> request, CancellationToken cancellationToken)
         {
             string root = env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
 
@@ -101,7 +102,7 @@ namespace PawPal.API.Controllers.Posts
                 newPostImage.Add(new ListMainImageQueryDto {PostID=img.PostId, MainImage =
                     await System.IO.File.ReadAllBytesAsync(drugiRut,cancellationToken) });
             }
-            return  newPostImage;
+            return newPostImage;
         }
 
         [AllowAnonymous]
