@@ -18,4 +18,8 @@ export class AnimalUserService {
     updateUser(id:number, payload: UpdateUserCommand) : Observable<void>{
       return this.httpClient.put<void>(`${this.apiUrl}/${id}`, payload);
     }
+
+    deleteUser(id:number) : Observable<void>{
+      return this.httpClient.delete<void>(`${this.apiUrl}/${id}`)
+    }
 }

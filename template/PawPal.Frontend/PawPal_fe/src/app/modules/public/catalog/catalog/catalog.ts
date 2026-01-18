@@ -57,7 +57,7 @@ export class CatalogComponent
     includedTotal: true,
     totalItems: 0,
     totalPages: 0,
-    pageSizeOption: [4, 8, 16, 32],
+    pageSizeOption: [4, 16, 32],
   };
 
   // Lists //
@@ -259,6 +259,7 @@ export class CatalogComponent
         animalID: post.animalID,
         cityID: post.cityID,
         userID: post.userID,
+        dateAdded: post.dateAdded
       },
     });
   }

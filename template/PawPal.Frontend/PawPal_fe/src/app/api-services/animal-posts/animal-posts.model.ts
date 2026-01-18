@@ -32,6 +32,7 @@ export interface listAnimalPostsByUserIdDto {
   animalName: string;
   cityID: number;
   animalID: number;
+  dateAdded: Date;
 }
 
 // Get Post by Id

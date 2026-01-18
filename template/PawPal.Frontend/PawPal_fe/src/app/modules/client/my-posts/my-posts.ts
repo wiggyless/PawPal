@@ -30,7 +30,7 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
     super();
     this.currentUser = crr;
     this.request = new GetPostQuery();
-    this.request.paging.pageSize = 2;
+    this.request.paging.pageSize = 4;
   }
   protected override loadPagedData(): void {}
   // Page Values ( didnt use the template cuz whats going on???)
@@ -40,7 +40,7 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
     includedTotal: true,
     totalItems: 5,
     totalPages: 0,
-    pageSizeOption: [2, 5, 10, 100],
+    pageSizeOption: [4, 8],
   };
 
   ngOnInit(): void {
@@ -71,6 +71,7 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
         animalID: post.animalID,
         cityID: post.cityID,
         userID: post.userId,
+        dateAdded: post.dateAdded
       },
     });
   }

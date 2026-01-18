@@ -15,3 +15,7 @@ export interface UpdateUserCommand{
   date: string;
   cityId: number;
 }
+
+export interface DeleteUserCommand{
+  id: number;
+}
