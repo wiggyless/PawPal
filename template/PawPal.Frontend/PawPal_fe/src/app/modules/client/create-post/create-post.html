@@ -38,7 +38,7 @@
         </div>
         <div class="stepper-buttons">
           <button mat-button (click)="getPageBack()" class="secondarybtn">BACK</button>
-          <button mat-button matStepperNext class="primarybtn">NEXT</button>
+          <button mat-button matStepperNext (click)="changeStep()" class="primarybtn">NEXT</button>
         </div>
       </mat-step>
 
@@ -78,8 +78,12 @@
             <div class="form-field-format">
               <label class="input-label">Gender</label>
               <mat-form-field>
-                <mat-select placeholder="Select gender" required formControlName="genderID"
-                (selectionChange)="setGender()">
+                <mat-select
+                  placeholder="Select gender"
+                  required
+                  formControlName="genderID"
+                  (selectionChange)="setGender()"
+                >
                   @for (gen of genderList.items; track gen) {
                     <mat-option [value]="gen.id">{{ gen.name }}</mat-option>
                   }
@@ -145,7 +149,9 @@
           </form>
         </div>
         <div class="stepper-buttons">
-          <button matButton matStepperPrevious class="secondarybtn">BACK</button>
+          <button matButton matStepperPrevious class="secondarybtn" (click)="changeStep()">
+            BACK
+          </button>
           <button matButton matStepperNext class="primarybtn">NEXT</button>
         </div>
       </mat-step>
@@ -268,7 +274,7 @@
         </div>
         <div class="post-container">
           <div class="post">
-            @if (imageControls.length > 0) {
+            @if (secondStep) {
               <p-carousel
                 [value]="imageControls"
                 [numVisible]="1"

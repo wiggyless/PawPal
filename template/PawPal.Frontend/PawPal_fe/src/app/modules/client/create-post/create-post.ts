@@ -60,6 +60,7 @@ export class CreatePost implements OnInit {
   location = inject(Location);
   postImages = inject(PostImagesService);
   nextRoute = inject(Router);
+  cd = inject(ChangeDetectorRef);
   //Group forms
   firstFormGroup = this._formBuilder.group({
     firstCtrl: this._formBuilder.array<string>([]),
@@ -130,7 +131,6 @@ export class CreatePost implements OnInit {
   selectedSprayed: boolean = false;
   selectedAllergies: any = [];
   selectedDisabilities: any = [];
-  cd = inject(ChangeDetectorRef);
   //imam id kategorije...
   userData: GetUserByIdDto = {
     id: 0,
@@ -199,7 +199,7 @@ export class CreatePost implements OnInit {
     dietaryRestrictions: '',
   };
   newAnimalId: number = 0;
-
+  secondStep: boolean = false;
   //--Functions--//
   ngOnInit(): void {
     const params = this.route.snapshot.queryParams;
@@ -212,10 +212,13 @@ export class CreatePost implements OnInit {
     }
     this.loadServices();
   }
+  changeStep() {
+    this.secondStep = !this.secondStep;
+  }
   loadServices() {
     if (this.isUpdate) {
       this.loadUpdatePage();
-      this.loadImages();
+      //this.loadImages();
     } else {
       forkJoin({
         genders: this.genderService.listGender(),
@@ -232,6 +235,7 @@ export class CreatePost implements OnInit {
           this.userData = results.user;
           this.allergyList = results.allergies;
           this.disabilityList = results.disabilities;
+          this.cd.detectChanges();
           // Now you are 100% sure ALL data is ready for the form
         },
         error: (err) => {
@@ -269,8 +273,8 @@ export class CreatePost implements OnInit {
       breeds: this.breedService.listAnimalBreed(),
       user: this.animalUserService.getUser(this.currentUser.userId),
       allergies: this.allergyService.listAnimalAllergies(),
-
       disabilities: this.disabilityService.listAnimalDisability(),
+      images: this.postImages.getImagePostBlob(this.routePostID),
     }).subscribe({
       next: (results) => {
         this.genderList = results.genders;
@@ -290,7 +294,9 @@ export class CreatePost implements OnInit {
           sterCheck: results.health.spayedOrNeutered,
         });
         this.getBreedSelect();
+        this.loadBlob(results.images);
         // Now you are 100% sure ALL data is ready for the form
+        this.cd.detectChanges();
       },
       error: (err) => {
         console.error('One of the requests failed', err);
@@ -308,11 +314,10 @@ export class CreatePost implements OnInit {
       reader.onload = () => {
         this.imageControls.push(this._formBuilder.control(reader.result?.toString() as string));
       };
+      this.cd.detectChanges();
     }
   }
   loadImages(): void {
-    let blob = new Blob();
-    let reader = new FileReader();
     this.imageObserveList = this.postImages.getImagePostBlob(this.routePostID);
     this.imageObserveList.subscribe((response) => {
       this.loadBlob(response);
@@ -320,35 +325,38 @@ export class CreatePost implements OnInit {
   }
   loadBlob(items: GetImagePostBlob) {
     items.postImages.forEach((base64String: string) => {
-      // 1. Decode the Base64 string into binary data
       const byteCharacters = atob(base64String);
       const byteNumbers = new Array(byteCharacters.length);
-
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
-
       const byteArray = new Uint8Array(byteNumbers);
+      let mimeType = 'image/png';
+      if (byteArray.length > 4) {
+        const header = byteArray.slice(0, 4);
+        let headerHex = '';
+        for (let i = 0; i < header.length; i++) {
+          headerHex += header[i].toString(16).toUpperCase();
+        }
 
-      // 2. Create the Blob from the typed array
-      const blob = new Blob([byteArray], { type: 'image/png' });
-
-      // 3. Create the URL and add to form
+        if (headerHex.startsWith('89504E47')) {
+          mimeType = 'image/png';
+        } else if (headerHex.startsWith('FFD8FF')) {
+          mimeType = 'image/jpeg';
+        }
+      }
+      const blob = new Blob([byteArray], { type: mimeType });
       const imageUrl = URL.createObjectURL(blob);
       this.imageControls.push(this._formBuilder.control(imageUrl));
+      this.cd.detectChanges();
+      this.createFiles(items);
     });
-
+  }
+  createFiles(items: GetImagePostBlob) {
     items.postImages.forEach((base64String: string, index: number) => {
-      // 1. Clean the string (remove data URL prefix if present)
       const base64Data = base64String.includes(',') ? base64String.split(',')[1] : base64String;
-      // 2. Decode the Base64 string into binary data
       const byteCharacters = atob(base64Data);
-
-      // 3. Use Uint8Array.from for a more efficient conversion
       const byteArray = Uint8Array.from(byteCharacters, (char) => char.charCodeAt(0));
-
-      // 4. Create the File object
-      // We provide a filename and specify the type
       const fileName = `image_${index}_${Date.now()}.png`;
       const file = new File([byteArray], fileName, { type: 'image/png' });
       this.imgFileList.push(file);
@@ -367,6 +375,9 @@ export class CreatePost implements OnInit {
   deleteImage(index: number): void {
     if (!this.isUpdate) this.imgFileList.splice(index, 1);
     this.imageControls.splice(index, 1);
+    this.firstFormGroup.updateValueAndValidity();
+
+    this.cd.detectChanges();
   }
   togglePass(): void {
     !this.secondFormGroup.value.passportCheck
@@ -393,7 +404,6 @@ export class CreatePost implements OnInit {
   }
   showImagesCtrl() {
     this.cd.detectChanges();
-    this.imageControls.forEach((element) => {});
   }
   updatePost(): void {
     let healthHistoryID = 0;
@@ -421,17 +431,14 @@ export class CreatePost implements OnInit {
         postImages: this.postImages.updatePostImages(this.newPostIamge),
       }).subscribe({
         next: (response) => {
-          console.log(response.animals);
-          console.log(response.health);
-          console.log(response.postImages);
           this.nextRoute.navigate(['']);
         },
       });
     });
   }
   addPost(): void {
-    this.newAnimal.name = this.fourthFromGroup.value.mainInfo?.name as string,
-    this.newAnimal.age = this.fourthFromGroup.value.mainInfo?.age as number;
+    ((this.newAnimal.name = this.fourthFromGroup.value.mainInfo?.name as string),
+      (this.newAnimal.age = this.fourthFromGroup.value.mainInfo?.age as number));
     this.newAnimal.breed = this.fourthFromGroup.value.mainInfo?.breed as string;
     this.newAnimal.categoryId = this.fourthFromGroup.value.mainInfo?.categoryID as any;
     this.newAnimal.hasPapers = this.fourthFromGroup.value.mainInfo?.passportCheck as boolean;
