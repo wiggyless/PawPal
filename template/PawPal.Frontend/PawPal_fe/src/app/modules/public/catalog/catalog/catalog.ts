@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { AnimalCategoriesService } from '../../../../api-services/animal-categories/animal-categories.service';
 import { AnimalBreedService } from '../../../../api-services/anima-breed/animal-breed.service';
 import { ListAnimalBreedQueryDto } from '../../../../api-services/anima-breed/animal-breed.model';
@@ -17,7 +17,7 @@ import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { CantonsService } from '../../../../api-services/cantons/cantons-service';
 import { Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { PageResult } from '../../../../core/models/paging/page-result';
 import { BaseListPagedComponent } from '../../../../core/components/base-classes/base-list-paged-component';
@@ -49,13 +49,13 @@ export class CatalogComponent
   cantonsService = inject(CantonsService);
   router = inject(Router);
   postImages = inject(PostImagesService);
-
+  cd = inject(ChangeDetectorRef);
   // Page Values ( didnt use the template cuz whats going on???)
   page = {
-    pageSize: 10,
+    pageSize: 4,
     currentPage: 1,
     includedTotal: true,
-    totalItems: 5,
+    totalItems: 0,
     totalPages: 0,
     pageSizeOption: [4, 16, 32],
   };
@@ -63,11 +63,11 @@ export class CatalogComponent
   // Lists //
   animalCategories: any = [];
   animalBreed: any = [];
-  animalPosts: Observable<PageResult<ListAnimal>> | undefined;
+  animalPosts: Observable<PageResult<ListAnimal>> = new Observable<PageResult<ListAnimal>>();
   genderList: any = [];
   cantonsList: any = [];
   breedArr: Array<ListAnimalBreedQueryDto> = new Array<ListAnimalBreedQueryDto>();
-  postArr: Observable<ListAnimal[]> | undefined;
+  postArr: Observable<PageResult<ListAnimal>> = new Observable<PageResult<ListAnimal>>();
 
   // List selections //
   selectedCat: any;
@@ -89,14 +89,11 @@ export class CatalogComponent
     super();
     this.request = new GetPostQuery();
     this.request.paging.pageSize = 4;
+    this.request.paging.page = 1;
   }
   catalogImages: GetMainImagePostBlobClass[] = [];
   ngOnInit(): void {
-    this.loadCategories();
-    this.loadAnimalBreed();
     this.loadPagedData();
-    this.loadGender();
-    this.loadCantons();
   }
   loadCategories(): void {
     this.animalCategories = this.animalCatService.listAnimalCategories().subscribe((response) => {
@@ -111,14 +108,6 @@ export class CatalogComponent
   loadAnimalBreed(): void {
     this.animalBreed = this.animalBreedService.listAnimalBreed().subscribe((response) => {
       this.animalBreed = response;
-    });
-  }
-  loadPostImages(idList: ListAnimal[]): void {
-    idList.forEach((element) => {
-      this.tempList.push(element.postID);
-    });
-    this.postImages.getMainImagePostBlob(this.tempList).subscribe((response) => {
-      this.setImages(response);
     });
   }
 
@@ -145,6 +134,39 @@ export class CatalogComponent
   }
   protected override loadPagedData(): void {
     this.animalPosts = this.animalPostsService.listAnimalPosts(this.request).pipe(
+      shareReplay(1),
+      tap((res) => {
+        this.page = {
+          pageSize: res.pageSize,
+          currentPage: res.currentPage,
+          includedTotal: res.includedTotal,
+          totalItems: res.totalItems,
+          totalPages: res.totalPages,
+          pageSizeOption: this.page.pageSizeOption,
+        };
+      }),
+    );
+    this.postArr = this.animalPosts;
+    forkJoin({
+      categories: (this.animalCategories = this.animalCatService.listAnimalCategories()),
+      breed: (this.animalBreed = this.animalBreedService.listAnimalBreed()),
+      cantons: (this.cantonsList = this.cantonsService.listCantons()),
+      gender: (this.genderList = this.genderService.listGender()),
+      post: this.animalPosts,
+      cities: this.citiesService.listCities(),
+    }).subscribe({
+      next: (response) => {
+        this.animalBreed = response.breed;
+        this.animalCategories = response.categories;
+        this.cantonsList = response.cantons;
+        this.genderList = response.gender;
+        this.loadPostImages(response.post.items);
+        this.cd.detectChanges();
+      },
+    });
+
+    /*
+    this.animalPosts = this.animalPostsService.listAnimalPosts(this.request).pipe(
       tap((res) => {
         this.page = {
           pageSize: res.pageSize,
@@ -158,6 +180,16 @@ export class CatalogComponent
     );
     this.animalPosts.subscribe((x) => {
       this.loadPostImages(x.items);
+    });
+    */
+  }
+  loadPostImages(idList: ListAnimal[]): void {
+    idList.forEach((element) => {
+      this.tempList.push(element.postID);
+    });
+    this.postImages.getMainImagePostBlob(this.tempList).subscribe((response) => {
+      console.log(response);
+      this.setImages(response);
     });
   }
   loadGender(): void {
@@ -183,22 +215,25 @@ export class CatalogComponent
     return postTime.getTime() >= chosenTimeMin! && postTime.getTime() <= chosenTimeMax!;
   }
   searchCatalog(): void {
-    /*
-    this.postArr = this.animalPosts?.pipe(
-      map((post) =>
-        post.filter(
-          (x) =>
-            (this.selectedCat == null ? true : this.selectedCat == x.categoryID) &&
-            (this.selectedBreed == null
-              ? true
-              : !(this.selectedBreed as string).localeCompare(x.breed)) &&
-            this.compareDates(x.dateAdded) &&
-            (this.selectedGender == null ? true : this.selectedGender == x.genderID) &&
-            (this.selectedCity == null ? true : this.selectedCity == x.cityID)
-        )
-      )
+    this.animalPosts = this.postArr.pipe(
+      map((post) => {
+        return {
+          ...post,
+          items: post.items.filter((x) => {
+            const matchesCat = this.selectedCat == null || this.selectedCat === x.categoryID;
+            const matchesBreed =
+              this.selectedBreed == null || (this.selectedBreed as string) === x.breed;
+            const matchesDate = this.compareDates(x.dateAdded);
+            const matchesGender = this.selectedGender == null || this.selectedGender === x.genderID;
+            const matchesCity = this.selectedCity == null || this.selectedCity === x.cityID;
+
+            return matchesCat && matchesBreed && matchesDate && matchesGender && matchesCity;
+          }),
+        };
+      }),
+      shareReplay(1),
     );
-    */
+    console.log(this.animalPosts);
   }
   clearSearch(): void {
     //this.postArr = this.animalPosts.items;
