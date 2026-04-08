@@ -11,6 +11,7 @@ public sealed class UserEntity : BaseEntity
     public string? LastName { get; set; }
     public DateTime? BirthDate { get; set; }
     public string? ProfilePictureURL { get; set; }
+    public string? Username { get; set; }
     public string? Email { get; set; }
     public string? PasswordHash { get; set; }
     public bool OnlineStatus { get; set; }
@@ -20,6 +21,6 @@ public sealed class UserEntity : BaseEntity
     public CitiesEntity ?City { get; set; }
     public int? RoleId { get; set; } = 1;
     public RolesEntity ?Role { get; set; }
-    public DateTime? LastOnline { get; set; } = DateTime.Now; 
+    public DateTime? LastOnline { get; set; } = DateTime.Now;
     public ICollection<RefreshTokenEntity> RefreshTokens { get; private set; } = new List<RefreshTokenEntity>();
 }

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CreateUserCommand } from './users-model';
+import { CreateUserCommand, GetByUsernameQueryDto } from './users-model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,4 +15,7 @@ export class UserService {
     return this.http.post<number>(`${this.apiUrl}`, command);
   }
 
+  getByUsername(username: string): Observable<GetByUsernameQueryDto> {
+    return this.http.get<GetByUsernameQueryDto>(`${this.apiUrl}/${username}`);
+  }
 }
