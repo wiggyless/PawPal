@@ -5,6 +5,7 @@ import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.se
 import { Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
+import { DialoguePopupService } from '../../../shared/components/dialogue-popup/dialogue-popup.service';
 
 @Component({
   selector: 'app-login',
@@ -14,12 +15,14 @@ import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
 })
 export class LoginComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
-    console.log('WHAAAAT');
+    
   }
   private fb = inject(FormBuilder);
   private auth = inject(AuthFacadeService);
   private router = inject(Router);
   private currentUser = inject(CurrentUserService);
+  private dialogueService = inject(DialoguePopupService);
+
   showPassword = false;
 
   form = this.fb.group({
@@ -29,9 +32,8 @@ export class LoginComponent extends BaseComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.invalid)
-      //ako se ne unesu ispravni podaci, don't submit
       return;
-    //pravimo payload tipa logincommand, i popunjavamo ga vrijednostima iz forme
+    
     const payload: LoginCommand = {
       email: this.form.value.email ?? '',
       password: this.form.value.password ?? '',
@@ -40,13 +42,12 @@ export class LoginComponent extends BaseComponent implements OnInit {
     console.log(payload);
     this.auth.login(payload).subscribe({
       next: () => {
-        console.log('Login successful');
         const target = this.currentUser.getDefaultRoute();
-        console.log(target);
         this.router.navigate([target]);
       },
       error: (err) => {
-        this.stopLoading('Invalid credentials. Please try again.');
+        console.log('CALLED');
+        this.dialogueService.error('Login Failed', 'Please check your credentials and try again.');
         console.error('Login error:', err);
       },
     });

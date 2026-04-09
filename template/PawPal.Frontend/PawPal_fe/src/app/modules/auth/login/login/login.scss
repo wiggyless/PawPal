@@ -41,7 +41,7 @@ body{
     padding:10px 20px;
 }
 .login-inputs{
-    margin-top:150px;
+    margin-top:130px;
     width:60%;
     display:flex;
     flex-direction:column;
@@ -77,9 +77,8 @@ body{
 .login-inputs label{
     display:block;
     text-align:right;
-    margin-bottom:6px;
+    margin-bottom:5px;
     color:#51432D;
-    font-weight:600;
 }
 
 .logo-container{
@@ -135,4 +134,30 @@ body{
  text-decoration-line:1px solid; 
  font-size:smaller; 
  cursor:pointer;
+}
+
+.options {
+  position: absolute;
+  right: -10px;
+  width: 255px;
+  padding: 0px;
+  border-radius: 20px;
+}
+
+.mat-icon{
+    color: #51432D;
+    margin-right:10px;
+}
+
+.eye-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+label{
+    font-weight: 700;
 }

@@ -63,6 +63,11 @@ html {
   color: #c7b18c;
   border-color: #c7b18c;
 }
+.primarybtn:disabled{
+  background-color: #4F5547;
+  color: #9E978D;
+  border-color: #9E978D;
+}
 .secondarybtn {
   background-color: #c7b18c;
   padding: 10px 20px;
