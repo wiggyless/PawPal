@@ -1,0 +1,87 @@
+// Overlay — darkens the entire background
+.toast-container {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+ 
+// Modal card
+.toast {
+  background: linear-gradient(145deg, #3a2f1e, #2b2214);
+  border-radius: 20px;
+  padding: 48px 40px 40px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+ 
+  // Icon
+  .toast-icon {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ 
+    svg {
+      width: 100%;
+      height: 100%;
+      stroke-width: 1.5;
+    }
+  }
+ 
+  &.success .toast-icon svg { stroke: #c8a96e; }
+  &.error   .toast-icon svg { stroke: #c87a6e; }
+  &.info    .toast-icon svg { stroke: #6e9ec8; }
+  &.warning .toast-icon svg { stroke: #c8b46e; }
+ 
+  // Text content
+  .toast-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+ 
+    .toast-title {
+      font-size: 17px;
+      font-weight: 500;
+      color: #d4c4a0;
+    }
+ 
+    .toast-msg {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #a89878;
+    }
+  }
+ 
+  // Close/OK button
+  .toast-close {
+    padding: 12px 48px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: filter 0.15s ease, transform 0.1s ease;
+    background: none;
+    color: #d4c4a0;
+ 
+    &:hover  { filter: brightness(1.2); }
+    &:active { transform: scale(0.97); }
+  }
+ 
+  &.success .toast-close { background: #4a5c2e; color: #d4c4a0; }
+  &.error   .toast-close { background: #5c2e2e; color: #d4a0a0; }
+  &.info    .toast-close { background: #2e3f5c; color: #a0bcd4; }
+  &.warning .toast-close { background: #5c4a2e; color: #d4c4a0; }
+}

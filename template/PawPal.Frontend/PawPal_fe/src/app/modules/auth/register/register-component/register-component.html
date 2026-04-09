@@ -78,6 +78,7 @@
             <input matInput type="email" id="email" formControlName="email" placeholder="e.g. user123@gmail.com">
             <mat-error *ngIf="accountInfo.get('email')?.hasError('required')">Please enter your e-mail!</mat-error>
             <mat-error *ngIf="accountInfo.get('email')?.hasError('email')">Enter a valid e-mail address!</mat-error>
+            <mat-error *ngIf="accountInfo.get('email')?.hasError('emailTaken')">E-mail is already taken!</mat-error>
           </mat-form-field>
         </div>
 

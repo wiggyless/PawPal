@@ -7,7 +7,7 @@ import { CurrentUserService } from '../../../../core/services/auth/current-user.
 import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.service';
 import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
 import { Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 export const passwordMatchValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
@@ -23,7 +23,7 @@ export const passwordMatchValidator: ValidatorFn = (group: AbstractControl): Val
   standalone: false,
   templateUrl: './register-component.html',
   styleUrl: './register-component.scss',
-   animations: [ //animacija da mi bude ista kao i mat-error zato jer mi ide na zivce sto nema animacija
+  animations: [ //animacija da mi bude ista kao i mat-error zato jer mi ide na zivce sto nema animacija
     trigger('fadeSlide', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(-4px)' }),
@@ -51,7 +51,8 @@ export class RegisterComponent implements OnInit {
   showRepeatPassword = false;
   dateControl = new FormControl(new Date());
   usernameAvailable = false;
-  
+  emailAvailable = false;
+
   basicInfo = this._formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
@@ -71,21 +72,48 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCities();
-     this.accountInfo.get('username')?.valueChanges.pipe( //umjesto da ja sad manuelno pravim neki countdown, ovo mi navodno kao prati promjene, i kad prestane bit promjena 600ms, onda tek poziva funkciju
-    debounceTime(600),
-    distinctUntilChanged(),
-    switchMap(username => this.userService.getByUsername(username?.toString() || ''))
-  ).subscribe({
-    next: (res) => {
-      if(res!=null){
-        this.accountInfo.get('username')?.setErrors({ usernameTaken: true });
-        this.usernameAvailable = false;
+    this.accountInfo.get('username')?.valueChanges.pipe( //umjesto da ja sad manuelno pravim neki countdown, ovo mi navodno kao prati promjene, i kad prestane bit promjena 600ms, onda tek poziva funkciju
+      catchError(() => of(null)), //it stopped checking after the first error so i think this just returns a null and doesnt break the whole chain
+      debounceTime(600),
+      distinctUntilChanged(),
+      switchMap(username => this.userService.getByUsername(username?.toString() || ''))
+    ).subscribe({
+      next: (res) => {
+        if (res != null) {
+          this.accountInfo.get('username')?.setErrors({ usernameTaken: true });
+          this.usernameAvailable = false;
+        }
+        else {
+          this.accountInfo.get('username')?.setErrors(null);
+          this.usernameAvailable = true;
+        }
+      },
+      error: (err) => {
+        console.error('Error checking username availability:', err);
       }
-      else
-         this.accountInfo.get('username')?.setErrors(null);
-        this.usernameAvailable = true;
-    }
-  });
+    });
+    if(this.accountInfo.get('email') == null) return;
+    this.accountInfo.get('email')?.valueChanges.pipe(
+      catchError(() => of(null)),
+      debounceTime(600),
+      distinctUntilChanged(),
+      switchMap(email => this.userService.getByEmail(email?.toString() || ''))
+    ).subscribe({
+      next: (res) => {
+        if (res != null) {
+          this.accountInfo.get('email')?.setErrors({ emailTaken: true });
+          this.emailAvailable = false;
+        }
+        else {
+          this.accountInfo.get('email')?.setErrors(null);
+          this.emailAvailable = true;
+        }
+      }
+      , error: (err) => {
+        console.error('Error checking email availability:', err);
+      }
+    });
+
   }
   loadCities(): void {
     this.cityService.listCities().subscribe((res) => {

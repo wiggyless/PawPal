@@ -2,7 +2,9 @@
 using PawPal.Application.Modules.Users.Commands.Create;
 using PawPal.Application.Modules.Users.Commands.Delete;
 using PawPal.Application.Modules.Users.Commands.Update;
+using PawPal.Application.Modules.Users.Queries.GetByEmail;
 using PawPal.Application.Modules.Users.Queries.GetById;
+using PawPal.Application.Modules.Users.Queries.GetByUsername;
 using PawPal.Application.Modules.Users.Queries.List;
 
 namespace PawPal.API.Controllers.Places
@@ -41,11 +43,32 @@ namespace PawPal.API.Controllers.Places
             uuc.Id = id;
             await sender.Send(uuc, ct);
         }
+
         [AllowAnonymous]
         [HttpDelete("{id:int}")]
         public async Task Delete(int id, CancellationToken ct)
         {
             await sender.Send(new DeleteUserCommand { Id = id }, ct);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("lookup")] //to search by username or email
+        public async Task<IActionResult> GetUser(
+             [FromQuery] string? username,
+             [FromQuery] string? email,
+              CancellationToken ct)
+        {
+            if (!string.IsNullOrEmpty(username))
+            {
+                var user = await sender.Send(new GetByUsernameQuery { Username = username }, ct);
+                return Ok(user);
+            }
+            if (!string.IsNullOrEmpty(email))
+            {
+                var user = await sender.Send(new GetUserByEmailQuery { Email = email }, ct);
+                return Ok(user);
+            }
+            return BadRequest("Provide either username or email.");
         }
     }
 }
