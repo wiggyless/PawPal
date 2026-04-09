@@ -17,3 +17,10 @@ export interface GetByUsernameQueryDto{
     email: string;
     username: string;
 }
+
+export interface GetByEmailQueryDto{
+    firstName: string;
+    lastName: string;
+    email: string;
+    username: string;
+}

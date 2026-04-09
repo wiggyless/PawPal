@@ -16,6 +16,7 @@ import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
+
 @NgModule({
   declarations: [AuthLayout, LoginComponent, LogoutComponent, RegisterComponent],
   imports: [
