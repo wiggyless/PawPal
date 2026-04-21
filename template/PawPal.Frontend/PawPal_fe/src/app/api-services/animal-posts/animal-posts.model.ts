@@ -1,12 +1,16 @@
 import { BasePagedQuery } from '../../core/models/paging/base-paged-query';
 
 export class GetPostQuery extends BasePagedQuery {
+  userID?: number;
   searchCityName?: string | null;
   searchCategoryName?: string;
   searchBreed?: string;
   searchGender?: string;
   searchDateAddedMax?: Date;
   searchDateAddedMin?: Date;
+  searchCantonId?: number;
+  isLiked?: boolean;
+  isRequest?: boolean;
 }
 
 // List the animals posts (forgor to add Post in the interface name)
@@ -30,6 +34,8 @@ export interface listAnimalPostsByUserIdDto {
   firstImage: string;
   userId: string;
   animalName: string;
+  breed: string;
+  gender: string;
   cityID: number;
   animalID: number;
   dateAdded: Date;
@@ -70,4 +76,7 @@ export interface ListAnimal {
   breed: string;
   photoURL: string;
   dateAdded: Date;
+}
+export class ListPostsByRange extends BasePagedQuery {
+  postIdList?: number[];
 }

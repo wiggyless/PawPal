@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <title>PawPal</title>
   </head>
-  <body>
+  <body class="main-page-layout">
     <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
     <div class="header">
       <p>NEED A NEW MEMBER OF YOUR FAMILY?</p>
@@ -13,30 +13,128 @@
       >
       <br />
       <div class="options">
-        <mat-select class="sel" placeholder="Select an animal category">
-          @for (cat of animalCategories.items; track cat) {
-          <mat-option>{{ cat.categoryName }}</mat-option>
-          }
-        </mat-select>
-        
-        <mat-select class="sel" placeholder="Select a city">
-          @for (city of cities.items; track city) {
-          <mat-option>{{  city.name }}</mat-option>
-          }
-        </mat-select>
-
+        @if (imagesLoaded) {
+          <mat-select
+            class="sel"
+            placeholder="Select an animal category"
+            [(ngModel)]="selectedCategory"
+            (valueChange)="showCategory()"
+          >
+            @for (cat of animalCategories.items; track cat) {
+              <mat-option [value]="cat.categoryName">{{ cat.categoryName }}</mat-option>
+            }
+          </mat-select>
+        }
+        @if (imagesLoaded) {
+          <mat-select class="sel" placeholder="Select a canton" [(ngModel)]="selectedCanton">
+            @for (cant of cantons.items; track cant) {
+              <mat-option [value]="cant.id">{{ cant.fullName }}</mat-option>
+            }
+          </mat-select>
+        }
       </div>
       <div class="search-btn">
-        <button class="primarybtn">SEARCH</button>
+        <button class="primarybtn" (click)="searchCatalog()">SEARCH</button>
       </div>
     </div>
-    <div class="footer-main">
-      <div class="footer-container">
-      <svg fill="#e5d7c4" height="64px" width="64px" version="1.2" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 256.00 256.00" xml:space="preserve" stroke="#e5d7c4" stroke-width="0.00256" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="10.751999999999999"></g><g id="SVGRepo_iconCarrier"> <path d="M233.7,140.3c0-0.5,0-1,0-1.6c0-35.3-29.3-63.6-65.4-63.6c-0.8,0-13,0-28.6-0.3c-1.6,1-3.1,1.8-4.7,2.6 c-13,7.5-26.5,13.5-38.7,17.4c-0.8-1.6-1.6-2.9-2.3-4.2c11.7-3.4,25.2-9.3,38.7-17.1c35-20,57.9-45.7,50.9-57.6 c-6.7-11.7-40.5-5.2-75.3,15.1C84.5,44.8,66.3,61.4,59.5,74.2c-2.9,0.3-5.7,1-8.6,1.8c-5.5,1.3-11.2,3.4-16.6,6.2 C7.6,96.5-5.4,124,5.3,144c8,15.3,27.8,21.5,48.3,17.4l0.5,1c-1.3,1.8-2.3,3.9-3.1,6c-16.9,1.8-30.1,16.1-30.1,33.5l1.8-1.8 l-2.1,2.6l26.5-0.3H105c0-19.7,16.4-36.1,36.1-36.1v4.7c-17.4,0-31.4,14-31.4,31.1h5.7h55l0,0c19.2-0.8,36.3-9.3,47.8-22.8 c3.6,2.9,8.3,4.7,13.5,4.7c12.2,0,22.1-9.9,22.1-22.1C254,150.5,245.1,141.1,233.7,140.3z M52.8,113.1c-5.5,0-9.9-4.4-9.9-9.9 c0-5.5,4.4-9.9,9.9-9.9s9.9,4.4,9.9,9.9C62.7,108.7,58.2,113.1,52.8,113.1z"></path> </g></svg>
-      <p> More content coming soon...</p>
+
+    <!--<app-news-section></app-news-section>-->
+    <div class="catalog-latest-container">
+      <p class="catalog-latest-container-title">Check out our newest posts!</p>
+      <div class="catalog-container">
+        <div [class]="imagesLoaded ? 'header-posts' : 'header-posts-unloaded'">
+          @if (imagesLoaded) {
+            @for (post of postList?.items; track post; let i = $index) {
+              <div class="post" (click)="routeToPost(post)">
+                <img
+                  [src]="getImageForPost(post.postID)"
+                  class="post-image"
+                  crossorigin="anonymous"
+                />
+                <div class="post-detail">
+                  <h3>{{ post.name }}</h3>
+                  <p>
+                    {{ post.breed }},
+                    @if (this.genderListForDisplay.items[0].id === post.genderID) {
+                      Female
+                    } @else {
+                      Male
+                    }
+                  </p>
+
+                  <p>{{ post.dateAdded | date: 'short' }}</p>
+                </div>
+              </div>
+            }
+          } @else if (!imagesLoaded) {
+            <div class="loading-container">
+              <br />
+              <p class="loading-spinner-text">Loading posts</p>
+              <mat-spinner></mat-spinner>
+            </div>
+          }
+        </div>
       </div>
-      <div class="footer-secondary">
-        <p style="color:rgb(230, 226, 221); text-align: center; width:100%; padding-top:15px;">© This seminar project is owned by Iris-Zain Kazazić and Abdulah Kotorić</p>
+      <button class="primarybtn" routerLink="/catalog">TAKE ME THERE!</button>
+    </div>
+
+    <div class="footer-main">
+      <div class="footer-content">
+        <div class="footer-left">
+          <h2 class="footer-title">Encountering problems?</h2>
+          <p class="footer-description">
+            Our customer service is always available.<br />
+            Fill the form below and we'll get in touch as soon as possible.
+          </p>
+          <textarea
+            class="footer-textarea"
+            placeholder="Describe your problem/Ask your question."
+            rows="4"
+          ></textarea>
+          <div class="footer-buttons">
+            <button class="secondarybtn">CLEAR</button>
+            <button class="primarybtn">SEND</button>
+          </div>
+        </div>
+        <div class="footer-right">
+          <div class="footer-nav-column">
+            <h3 class="footer-nav-title">NEWS</h3>
+            <ul class="footer-nav-list">
+              <li>
+                <a href="#" class="footer-nav-link" routerLink="/user-stories">USER STORIES</a>
+              </li>
+              <li><a href="#" class="footer-nav-link" routerLink="/news">NEWS</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-column">
+            <h3 class="footer-nav-title">ABOUT US</h3>
+            <ul class="footer-nav-list">
+              <li><a href="#" class="footer-nav-link">WHO ARE WE?</a></li>
+              <li><a href="#" class="footer-nav-link">CONTACT</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-column">
+            <h3 class="footer-nav-title">TIPS</h3>
+            <ul class="footer-nav-list">
+              <li><a href="#" class="footer-nav-link">FAQ</a></li>
+              <li><a href="#" class="footer-nav-link">CATEGORIES</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-column">
+            <h3 class="footer-nav-title">ANIMAL CATALOG</h3>
+            <ul class="footer-nav-list">
+              <li>
+                <a routerLink="/catalog" class="footer-nav-link" routerLink="/catalog">CATALOG</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          ©This seminar project is done by Iris-Zain Kazazić and Abdulah Kotorić. Faculty of
+          Information Technology in Mostar - 2026
+        </p>
       </div>
     </div>
   </body>

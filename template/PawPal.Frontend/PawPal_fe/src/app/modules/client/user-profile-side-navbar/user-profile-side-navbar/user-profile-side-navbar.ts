@@ -15,23 +15,21 @@ export class UserProfileSideNavbar implements OnInit {
   }
   matListItems = {
     My_Profile: '/client/my-profile',
-    My_Favorites: '',
+    My_Favorites: '/client/my-profile/my-favorties',
     My_Posts: '/client/my-profile/myPosts',
-    My_Requests: '',
-    My_Messages: '',
-    My_Animals: '',
-    Settings: '',
+    Recieved_Requests: '/client/my-profile/my-requests',
+    Sent_Requests: '/client/my-profile/my-sent-requests',
+    Request_History: '/client/my-profile/request-history',
+    Settings: '/client/my-profile/settings',
   };
   keepOrder = (a: any, b: any) => 0;
   onSelect(item: string) {
     this.selectedItem = item;
   }
 
-  
-  openDialog(){
-     const dialogConfig = new MatDialogConfig();
-     dialogConfig.data = {postDelete: false, profileDelete:true};
-     this.dialog.open(DialogueComponent,dialogConfig);
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = { postDelete: false, profileDelete: true };
+    this.dialog.open(DialogueComponent, dialogConfig);
   }
 }
-

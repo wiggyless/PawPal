@@ -19,6 +19,9 @@ namespace PawPal.Application.Modules.Places.Cities.Queries.Lists
             {
                 cit = cit.Where(x => x.Name.Contains(request.Search));
             }
+            if (request.CantonId != null) {
+                cit = cit.Where(x => x.CantonId == request.CantonId);   
+            }
             var result = cit.OrderBy(x => x.Name).
                 Select(x => new ListCitiesQueryDto
                 {

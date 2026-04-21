@@ -10,5 +10,6 @@ namespace PawPal.Application.Modules.Places.Cities.Queries.Lists
     public sealed class ListCitiesQuery : BasePagedQuery<ListCitiesQueryDto>
     {
         public string? Search { get; set; }
+        public int? CantonId { get; set; }
     }
 }

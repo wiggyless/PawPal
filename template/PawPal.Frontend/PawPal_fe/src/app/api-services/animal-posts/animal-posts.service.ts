@@ -6,8 +6,10 @@ import { buildHttpParams } from '../../core/models/build-http-params';
 import {
   AddAnimalPost,
   AnimalPostByIdQuery,
+  GetPostQuery,
   ListAnimal,
   listAnimalPostsByUserIdDto,
+  ListPostsByRange,
 } from './animal-posts.model';
 import { PageResult } from '../../core/models/paging/page-result';
 interface ResponseImage {
@@ -22,9 +24,7 @@ export class AnimalPostService {
 
   listAnimalPosts(request?: any): Observable<PageResult<ListAnimal>> {
     const params = request ? buildHttpParams(request as any) : undefined;
-    console.log(params?.toString());
     return this.httpClient.get<PageResult<ListAnimal>>(this.apiUrl, { params });
-    //.pipe(map((response) => response.items));
   }
   listAnimalPostsByUserId(request: any): Observable<PageResult<listAnimalPostsByUserIdDto>> {
     const params = request ? buildHttpParams(request as any) : undefined;
@@ -41,7 +41,13 @@ export class AnimalPostService {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.post<ResponseImage>(`${this.apiUrl}`, request, { params });
   }
-
+  listPostRange(request: ListPostsByRange): Observable<PageResult<listAnimalPostsByUserIdDto>> {
+    const params = request ? buildHttpParams(request as any) : undefined;
+    console.log(request);
+    return this.httpClient.get<PageResult<listAnimalPostsByUserIdDto>>(`${this.apiUrl}/likedPost`, {
+      params,
+    });
+  }
   deletePost(postId: number, animalId: number): Observable<number> {
     return this.httpClient.delete<number>(`${this.apiUrl}/${postId}`, {
       body: {

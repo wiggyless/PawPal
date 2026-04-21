@@ -75,7 +75,15 @@ public partial class Program
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCors();
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Append("Cross-Origin-Resource-Policy", "cross-origin");
+                await next();
+            });
+            app.UseCors(policy => policy
+    .WithOrigins("http://localhost:4200") // Your Angular URL
+    .AllowAnyMethod()
+    .AllowAnyHeader());
             app.UseAuthentication();
             app.UseAuthorization();
 

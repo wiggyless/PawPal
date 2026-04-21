@@ -1,0 +1,42 @@
+<app-navbar [roleId]="currentUser.roleid()"></app-navbar>
+<div class="client-layout-container">
+  <div class="client-layout">
+    <app-user-profile-side-navbar class="client-side-navbar"></app-user-profile-side-navbar>
+    <div class="client-content-posts-container">
+      <h1 class="my-post-title">MY FAVORITES:</h1>
+      <div [class]="imagesLoaded ? 'client-content-posts' : 'client-content-posts-unloaded'">
+        @if (imagesLoaded) {
+          @if (animalPostList | async; as posts) {
+            @for (post of posts.items; track post) {
+              <div class="post" (click)="routeToPost(post)">
+                <div class="post-image">
+                  <img [src]="getPostImage(post.postID)" crossorigin="anonymous" />
+                </div>
+                <div class="post-info">
+                  <p class="post-info-name">{{ post.name }}</p>
+                  <p class="post-info-views">0 views</p>
+                </div>
+              </div>
+            }
+          }
+        } @else if (!isLoaded) {
+          <div class="loading-container">
+            <br />
+            <p class="loading-spinner-text">Loading posts</p>
+            <mat-spinner></mat-spinner>
+          </div>
+        }
+      </div>
+      @if (animalPostList | async; as posts) {
+        <mat-paginator
+          [length]="posts.totalItems"
+          [pageSize]="posts.pageSize"
+          [pageSizeOptions]="[4, 8, 16, 32]"
+          aria-label="Select page"
+          (page)="handlePageEvent($event)"
+        >
+        </mat-paginator>
+      }
+    </div>
+  </div>
+</div>

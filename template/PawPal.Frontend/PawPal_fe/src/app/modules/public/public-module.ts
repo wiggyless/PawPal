@@ -20,9 +20,10 @@ import { CommonModule } from '@angular/common';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonIcon } from 'primeng/button';
 import { SharedModule } from 'primeng/api';
-  import { MatPaginatorModule } from '@angular/material/paginator';
-import { Bind } from "primeng/bind";
-import { MatSelect } from "@angular/material/select";
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { Bind } from 'primeng/bind';
+import { MatSelect } from '@angular/material/select';
+import { MatProgressSpinner, MatSpinner } from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [PublicLayout, CatalogComponent, PostComponent],
   imports: [
@@ -49,7 +50,8 @@ import { MatSelect } from "@angular/material/select";
     MatPaginatorModule,
     AsyncPipe,
     MatSelect,
-    MatOption
+    MatOption,
+    MatProgressSpinner,
   ],
 })
 export class PublicModule {}
