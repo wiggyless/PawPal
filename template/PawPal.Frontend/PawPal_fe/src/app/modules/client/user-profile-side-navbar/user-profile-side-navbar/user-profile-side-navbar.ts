@@ -5,7 +5,7 @@ import { DialogueComponent } from '../../dialogue-component/dialogue-component';
   selector: 'app-user-profile-side-navbar',
   standalone: false,
   templateUrl: './user-profile-side-navbar.html',
-  styleUrl: './user-profile-side-navbar.scss',
+  styleUrl: './user-profile-side-navbar.scss'
 })
 export class UserProfileSideNavbar implements OnInit {
   selectedItem: string = 'My_Profile';

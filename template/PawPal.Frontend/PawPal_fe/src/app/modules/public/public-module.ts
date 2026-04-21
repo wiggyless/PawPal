@@ -24,6 +24,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { Bind } from 'primeng/bind';
 import { MatSelect } from '@angular/material/select';
 import { MatProgressSpinner, MatSpinner } from '@angular/material/progress-spinner';
+import { FooterComponent } from '../shared/components/footer/footer-component';
 @NgModule({
   declarations: [PublicLayout, CatalogComponent, PostComponent],
   imports: [
@@ -52,6 +53,7 @@ import { MatProgressSpinner, MatSpinner } from '@angular/material/progress-spinn
     MatSelect,
     MatOption,
     MatProgressSpinner,
+    FooterComponent
   ],
 })
 export class PublicModule {}

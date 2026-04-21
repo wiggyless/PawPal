@@ -7,18 +7,39 @@
   width: 90%;
   margin-top: 150px;
   margin-bottom: 100%;
+  ::ng-deep {
+    .mat-mdc-list-item {
+      background-color: transparent !important;
+    }
+    .mat-mdc-list-item .mdc-list-item__content .mat-mdc-list-item-unscoped-content {
+      color: #473619;
+    }
+    .mat-mdc-list-item .mdc-list-item__state-layer {
+      display: none;
+    }
+  }
 }
+:host ::ng-deep .mat-mdc-list-option:hover {
+  background-color: transparent !important;
+}
+
+/* This targets the ripple/state layer in newer versions (MDC) */
+:host ::ng-deep .mat-mdc-list-option .mdc-list-item__state-layer {
+  display: none;
+}
+
 .user-profile-option {
   font-size: 25px;
   font-weight: 100;
-  border-bottom: 1px solid black;
-  padding: 15px;
+  border-bottom: 1px solid #473619;
+  padding: 30px;
   width: 100%;
   --mat-list-active-indicator-shape: 0px;
-}
-.user-profile-option:hover {
-  cursor: pointer;
-  background-color: rgb(189, 167, 130);
+  text-align: center;
+  font-family: Inter;
+  font-style: normal;
+  line-height: normal;
+  transition: transform 0.3s ease;
 }
 .user-profile-option-footer {
   display: flex;
@@ -27,11 +48,36 @@
   color: white;
   font-weight: bold;
   font-size: 22px;
-  background-color: #473619;
+  background-color: #28241b;
   padding: 30px;
   position: absolute;
   bottom: 0px;
+  gap: 10px;
+}
+.delete-profile-footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.logout-profile-footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.delete-profile-footer a {
+  transition: transform 0.3s ease;
+}
+.delete-profile-footer a:hover {
+  transform: scale(1.1);
+}
+.logout-profile-footer a {
+  transition: transform 0.3s ease;
+}
+.logout-profile-footer a:hover {
+  transform: scale(1.1);
 }
 .user-profile-option-bold {
-  font-weight: bold;
+  font-weight: 800;
 }
