@@ -23,6 +23,7 @@ import { SharedModule } from 'primeng/api';
   import { MatPaginatorModule } from '@angular/material/paginator';
 import { Bind } from "primeng/bind";
 import { MatSelect } from "@angular/material/select";
+import { FooterComponent } from '../shared/components/footer/footer-component';
 @NgModule({
   declarations: [PublicLayout, CatalogComponent, PostComponent],
   imports: [
@@ -49,7 +50,8 @@ import { MatSelect } from "@angular/material/select";
     MatPaginatorModule,
     AsyncPipe,
     MatSelect,
-    MatOption
+    MatOption,
+    FooterComponent
   ],
 })
 export class PublicModule {}
