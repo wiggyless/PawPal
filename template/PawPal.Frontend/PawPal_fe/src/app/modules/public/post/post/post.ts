@@ -94,6 +94,8 @@ export class PostComponent implements OnInit {
       this.userId = params['userID'];
       this.dateAdded = params['dateAdded'];
     });
+    console.log(this.userId);
+    console.log(this.currentUser.userId);
     this.imagesList = this.postImageService.getImagePost(this.postId);
     forkJoin({
       animal: this.animalService.getAnimalById(this.animalId as number),
@@ -131,7 +133,19 @@ export class PostComponent implements OnInit {
   deletePost() {
     console.log(this.postId);
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {postDelete: true, profileDelete:false, postId: this.postId, animalId: this.animalId};
-    this.dialog.open(DialogueComponent,dialogConfig);
+    dialogConfig.data = {
+      postDelete: true,
+      profileDelete: false,
+      postId: this.postId,
+      animalId: this.animalId,
+    };
+    this.dialog.open(DialogueComponent, dialogConfig);
+  }
+  routeAdopt(): void {
+    this.routeNext.navigate(['/client/adoption'], {
+      queryParams: {
+        postID: this.postId,
+      },
+    });
   }
 }

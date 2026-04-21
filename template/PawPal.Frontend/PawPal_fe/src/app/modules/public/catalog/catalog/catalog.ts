@@ -1,4 +1,12 @@
-import { Component, inject, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef,
+  HostListener,
+} from '@angular/core';
 import { AnimalCategoriesService } from '../../../../api-services/animal-categories/animal-categories.service';
 import { AnimalBreedService } from '../../../../api-services/anima-breed/animal-breed.service';
 import { ListAnimalBreedQueryDto } from '../../../../api-services/anima-breed/animal-breed.model';
@@ -15,10 +23,10 @@ import { GenderService } from '../../../../api-services/gender/gender-service';
 import { ListGenderDto } from '../../../../api-services/gender/gender-model';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { CantonsService } from '../../../../api-services/cantons/cantons-service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
-import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { PageResult } from '../../../../core/models/paging/page-result';
 import { BaseListPagedComponent } from '../../../../core/components/base-classes/base-list-paged-component';
 import { PageEvent } from '@angular/material/paginator';
@@ -28,6 +36,10 @@ import {
   GetMainImagePostBlobClass,
   ListMainImageId,
 } from '../../../../api-services/animal-post-images/animal-post-images-model';
+import { ListCantonsDto } from '../../../../api-services/cantons/cantons-model';
+import { LikedPostsService } from '../../../../api-services/likedPosts/likedPosts-service';
+import { GetLikedPostListQuery } from '../../../../api-services/likedPosts/likedPosts-model';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-catalog',
@@ -50,6 +62,8 @@ export class CatalogComponent
   router = inject(Router);
   postImages = inject(PostImagesService);
   cd = inject(ChangeDetectorRef);
+  activeRoute = inject(ActivatedRoute);
+  likedPosts = inject(LikedPostsService);
   // Page Values ( didnt use the template cuz whats going on???)
   page = {
     pageSize: 4,
@@ -65,7 +79,7 @@ export class CatalogComponent
   animalBreed: any = [];
   animalPosts: Observable<PageResult<ListAnimal>> = new Observable<PageResult<ListAnimal>>();
   genderList: any = [];
-  cantonsList: any = [];
+  cantonsList: PageResult<ListCantonsDto> | undefined;
   breedArr: Array<ListAnimalBreedQueryDto> = new Array<ListAnimalBreedQueryDto>();
   postArr: Observable<PageResult<ListAnimal>> = new Observable<PageResult<ListAnimal>>();
 
@@ -80,79 +94,60 @@ export class CatalogComponent
     start: new FormControl<any>(null),
     end: new FormControl<any>(null),
   });
-
+  favoritePostList: number[] = [];
+  deleteFavoritePostList: number[] = [];
   // random values
 
   fromInputMax: MatInput = new MatInput();
   tempList: number[] = [];
+  cantonID: number | undefined;
+  catalogImages: GetMainImagePostBlobClass[] = [];
+  imagesLoaded = false;
   constructor() {
     super();
     this.request = new GetPostQuery();
     this.request.paging.pageSize = 4;
     this.request.paging.page = 1;
+    const navigation = this.router.currentNavigation();
+    this.cantonID = navigation?.extras.state?.['cantonID'];
   }
-  catalogImages: GetMainImagePostBlobClass[] = [];
+
   ngOnInit(): void {
     this.loadPagedData();
   }
-  /*
-  loadCategories(): void {
-    this.animalCategories = this.animalCatService.listAnimalCategories().subscribe((response) => {
-      this.animalCategories = response;
-    });
-  }
-  loadCantons(): void {
-    this.cantonsList = this.cantonsService.listCantons().subscribe((response) => {
-      this.cantonsList = response;
-    });
-  }
-  loadAnimalBreed(): void {
-    this.animalBreed = this.animalBreedService.listAnimalBreed().subscribe((response) => {
-      this.animalBreed = response;
-    });
-  }
-  loadGender(): void {
-    this.genderList = this.genderService.listGender().subscribe((resposne) => {
-      this.genderList = resposne;
-    });
-  }
-*/
   protected override loadPagedData(): void {
-    this.animalPosts = this.animalPostsService.listAnimalPosts(this.request).pipe(
-      shareReplay(1),
-      tap((res) => {
-        this.page = {
-          pageSize: res.pageSize,
-          currentPage: res.currentPage,
-          includedTotal: res.includedTotal,
-          totalItems: res.totalItems,
-          totalPages: res.totalPages,
-          pageSizeOption: this.page.pageSizeOption,
-        };
-      }),
-    );
-    this.postArr = this.animalPosts;
     forkJoin({
       categories: this.animalCatService.listAnimalCategories(),
-      breed: this.animalBreedService.listAnimalBreed(),
       cantons: this.cantonsService.listCantons(),
       gender: this.genderService.listGender(),
-      post: this.animalPosts,
-      cities: this.citiesService.listCities(),
     }).subscribe({
       next: (response) => {
-        this.animalBreed = response.breed;
         this.animalCategories = response.categories;
         this.cantonsList = response.cantons;
         this.genderList = response.gender;
-        this.loadPostImages(response.post.items);
-        this.cd.detectChanges();
+        const state = history.state;
+        const categoryName = this.activeRoute.snapshot.queryParamMap.get('categoryName');
+        if (state != null && categoryName != null) {
+          this.selectedCanton = this.cantonsList.items.find((x) => x.id == state.cantonID);
+          this.selectedCat = categoryName;
+          this.searchCatalog();
+        } else this.loadPosts();
       },
     });
-
-    /*
+  }
+  loadPosts() {
     this.animalPosts = this.animalPostsService.listAnimalPosts(this.request).pipe(
+      shareReplay(1),
       tap((res) => {
+        this.likedPosts
+          .listLikedPosts({
+            userId: this.currentUser.userId!,
+            postIdList: res.items.map((x) => x.postID),
+          })
+          .subscribe((response) => {
+            this.favoritePostList = response.postList!;
+            this.loadPostImages(res.items);
+          });
         this.page = {
           pageSize: res.pageSize,
           currentPage: res.currentPage,
@@ -163,17 +158,13 @@ export class CatalogComponent
         };
       }),
     );
-    this.animalPosts.subscribe((x) => {
-      this.loadPostImages(x.items);
-    });
-    */
+    this.cd.detectChanges();
   }
   loadPostImages(idList: ListAnimal[]): void {
     idList.forEach((element) => {
       this.tempList.push(element.postID);
     });
     this.postImages.getMainImagePostBlob(this.tempList).subscribe((response) => {
-      console.log(response);
       this.setImages(response);
     });
   }
@@ -209,13 +200,21 @@ export class CatalogComponent
         this.catalogImages.push(new GetMainImagePostBlobClass(x.postID, imageUrl));
       }
     });
+    this.imagesLoaded = true;
+    this.cd.detectChanges();
   }
-
+  getPostImage(index: number) {
+    return this.catalogImages.find((x) => x.postID == index)?.mainImage;
+  }
   getBreedSelect(): void {
-    this.breedArr = this.animalBreed.items;
-    this.breedArr = this.breedArr.filter((x) => x.categoryId == this.selectedCat);
-    this.selectedBreed = null;
+    this.animalBreedService
+      .listAnimalBreed({ searchName: '', searchCategoryName: this.selectedCat })
+      .subscribe((response) => {
+        this.breedArr = response.items;
+        this.cd.detectChanges();
+      });
   }
+  getCitiesSelect(): void {}
   compareDates(postDate: Date) {
     var postTime = new Date(postDate);
     var chosenTimeMin =
@@ -229,24 +228,17 @@ export class CatalogComponent
     return postTime.getTime() >= chosenTimeMin! && postTime.getTime() <= chosenTimeMax!;
   }
   searchCatalog(): void {
-    this.animalPosts = this.postArr.pipe(
-      map((post) => {
-        return {
-          ...post,
-          items: post.items.filter((x) => {
-            const matchesCat = this.selectedCat == null || this.selectedCat === x.categoryID;
-            const matchesBreed =
-              this.selectedBreed == null || (this.selectedBreed as string) === x.breed;
-            const matchesDate = this.compareDates(x.dateAdded);
-            const matchesGender = this.selectedGender == null || this.selectedGender === x.genderID;
-            const matchesCity = this.selectedCity == null || this.selectedCity === x.cityID;
-
-            return matchesCat && matchesBreed && matchesDate && matchesGender && matchesCity;
-          }),
-        };
-      }),
-      shareReplay(1),
-    );
+    this.request = {
+      searchCategoryName: this.selectedCat,
+      searchBreed: this.selectedBreed,
+      searchCityName: this.selectedCity,
+      searchDateAddedMax: this.datePicker.value.end,
+      searchDateAddedMin: this.datePicker.value.start,
+      searchGender: this.selectedGender,
+      searchCantonId: this.selectedCanton.id,
+      paging: this.request.paging,
+    };
+    this.loadPosts();
   }
   clearSearch(): void {
     //this.postArr = this.animalPosts.items;
@@ -264,7 +256,9 @@ export class CatalogComponent
     });
   }
   changeCity() {
+    console.log(this.selectedCanton);
     this.selectedCity = null;
+    this.cd.detectChanges();
   }
   routeToPost(post: ListAnimal) {
     this.router.navigate(['post'], {
@@ -280,9 +274,31 @@ export class CatalogComponent
   handlePageEvent(event: PageEvent) {
     this.request.paging.page = event.pageIndex + 1;
     this.request.paging.pageSize = event.pageSize;
-    this.loadPagedData();
+    this.loadPosts();
   }
-  getPostImage(index: number) {
-    return this.catalogImages.find((x) => x.postID == index)?.mainImage;
+
+  isFavorite(index: number): boolean {
+    return this.favoritePostList.find((x) => x == index) == undefined ? false : true;
+  }
+  likeUnlikePost(index: number, event: Event) {
+    event.stopPropagation();
+    if (this.favoritePostList.find((x) => x == index) != undefined) {
+      let indexNum = this.favoritePostList.findIndex((x) => x == index);
+      this.favoritePostList.splice(indexNum, 1);
+      this.deleteFavoritePostList.push(index);
+      this.likedPosts
+        .deletePost({ userId: this.currentUser.userId!, postId: index })
+        .subscribe((response) => {
+          console.log('Unliked');
+        });
+    } else {
+      this.favoritePostList.push(index);
+      this.likedPosts
+        .addLikedPosts({ userID: this.currentUser.userId!, postID: index })
+        .subscribe((response) => {
+          console.log('LIKED POST');
+          console.log(response);
+        });
+    }
   }
 }

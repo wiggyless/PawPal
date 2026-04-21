@@ -2,16 +2,19 @@
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Delete;
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.GetById;
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.List;
+using PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.ListHistory;
 using PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Create;
 using PawPal.Application.Modules.Adoptions.AdoptionRequirements.Queries.GetById;
 using PawPal.Application.Modules.Adoptions.AdoptionRequirements.Queries.List;
 
 namespace PawPal.API.Controllers.Adoptions
 {
+    [AllowAnonymous]
     [ApiController]
     [Route("[controller]")]
     public class AdoptionRequestController(ISender sender) : ControllerBase
     {
+        [AllowAnonymous]
         [HttpPost]  
         public async Task<ActionResult<int>> CreateRequest(CreateAdoptionRequestCommand crc,CancellationToken cancellationToken)
         {
@@ -29,6 +32,13 @@ namespace PawPal.API.Controllers.Adoptions
         [HttpGet]
         public async Task<PageResult<ListAdoptionRequestQueryDto>> List([FromQuery] ListAdoptionRequestQuery query,
             CancellationToken cancellationToken)
+        {
+            var res = await sender.Send(query, cancellationToken);
+            return res;
+        }
+        [HttpGet("history")]
+        public async Task<PageResult<ListAdoptionRequestHistoryQueryDto>> List([FromQuery] ListAdoptionRequestHistoryQuery query,
+           CancellationToken cancellationToken)
         {
             var res = await sender.Send(query, cancellationToken);
             return res;

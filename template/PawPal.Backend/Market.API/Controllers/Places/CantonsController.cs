@@ -8,6 +8,7 @@ namespace PawPal.API.Controllers.Places
     [Route("[controller]")]
     public class CantonsController(ISender sender) : ControllerBase
     {
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<GetCantonByIdQueryDto> GetById(int id,CancellationToken tk)
         {

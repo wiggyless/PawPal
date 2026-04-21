@@ -16,11 +16,26 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Queries.GetB
                 Select(y => new GetRequirementByIdQueryDto
                 {
                     Id = y.Id,
-                    ChildrenAround = y.ChildrenAround,
+                    HouseType = y.HouseType,
+                    Address = y.Address,
+                    FloorNumber = y.FloorNumber,
                     PeopleCount = y.PeopleCount,
+                    ChildrenAround = y.ChildrenAround,
+                    ElderlyAround = y.ElderlyAround,
                     OtherPetsAround = y.OtherPetsAround,
                     YardAvailable = y.YardAvailable,
-                    HouseType = y.HouseType,
+                    YardDetails = y.YardDetails,
+                    PetExp = y.PetExp,
+                    ExpDetails = y.ExpDetails,
+                    PeopleAva = y.PeopleAva,
+                    IsGift = y.IsGift,
+                    PlanedStay = y.PlanedStay,
+                    SumMoney = y.SumMoney,
+                    Allergy = y.Allergy,
+                    Aggressiveness = y.Aggressiveness,
+                    TakeBack = y.TakeBack,
+                    HouseDetials = y.HouseDetials,
+                    FinalComment = y.FinalComment
                 }).FirstOrDefaultAsync(cancellationToken);
             if (newReq is null) throw new PawPalNotFoundException($"Requirement with ID ->{command.Id} does not exist");
             return newReq;
