@@ -15,7 +15,29 @@ export class NavbarComponent {
   currentUser = inject(CurrentUserService);
   @Input() roleId: number | null = null;
   menuOpened = false;
+  tipsMenuOpen = false;
+  aboutUsMenuOpen = false;
+  newsMenuOpen = false;
+
   toggleMenu(): void {
     this.menuOpened = !this.menuOpened;
+  }
+
+  toggleTipsMenu(): void {
+    this.tipsMenuOpen = !this.tipsMenuOpen;
+    this.aboutUsMenuOpen = false;
+    this.newsMenuOpen = false;
+  }
+
+  toggleAboutUsMenu(): void {
+    this.aboutUsMenuOpen = !this.aboutUsMenuOpen;
+    this.tipsMenuOpen = false;
+    this.newsMenuOpen = false;
+  }
+
+  toggleNewsMenu(): void {
+    this.newsMenuOpen = !this.newsMenuOpen;
+    this.tipsMenuOpen = false;
+    this.aboutUsMenuOpen = false;
   }
 }
