@@ -11,7 +11,6 @@
     padding: 0 16px;
     box-sizing: border-box;
      background-image: linear-gradient(to bottom, #2e2310, #473619);
-     
 }
 .navcontent .primarybtn{
     padding:10px 20px;
@@ -65,6 +64,7 @@
     background-color: #2e2310;
     font-size:18px;
     text-align:right;
+    animation: slideDown 0.3s ease-out;
 }
 
 .menu-item{
@@ -72,9 +72,148 @@
     padding:20px;
     color:#C7B18C;
     border: 1px solid #473619;
-    background-color: #2e2310
+    background-color: #2e2310;
+    transition: all 0.3s ease;
 }
 
 .menu-item:hover{
     background-color: #54411f;
+    color: #a89878;
+}
+
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  min-width: 200px;
+  background-color: #2e2310;
+  font-size: 18px;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: slideDown 0.3s ease-out;
+
+  .menu-item {
+    cursor: pointer;
+    padding: 20px;
+    color: #C7B18C;
+    border: 1px solid #473619;
+    background-color: #2e2310;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #54411f;
+      color: #a89878;
+    }
+  }
+}
+
+.avatar-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: #231c15;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #4a4035;
+    transform: scale(1.05);
+  }
+
+  svg {
+    transition: all 0.3s ease;
+  }
+}
+
+.avatar-icon {
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.icons-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.messages-icon {
+  &:hover {
+    background-color: #4a4035;
+  }
+}
+
+// Invisible bridge to connect avatar and menu
+.menu-bridge {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  width: 100%;
+  height: 10px; // Bridge height to cover the gap
+  background: transparent;
+  z-index: 999;
+}
+
+.avatar-menu {
+  position: absolute;
+  top: 100%;
+  left: -110px;
+  z-index: 1000;
+  min-width: 220px;
+  background-color: #2e2310;
+  font-size: 18px;
+  text-align: right;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: slideDown 0.3s ease-out;
+  margin-top: 8px;
+
+  .menu-item {
+    cursor: pointer;
+    padding: 20px;
+    color: #C7B18C;
+    border: 1px solid #473619;
+    background-color: #2e2310;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #54411f;
+      color: #a89878;
+    }
+  }
+
+  .logout-item {
+    color: #ff6b6b;
+
+    &:hover {
+      color: #ff5252;
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
