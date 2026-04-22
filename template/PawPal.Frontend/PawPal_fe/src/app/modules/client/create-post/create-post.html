@@ -1,45 +1,217 @@
 <div class="container">
-  <div class="stepper-container">
-    <!-- First stepper images -->
-    <mat-stepper #stepper linear="true" (selectionChange)="showImagesCtrl()">
-      <mat-step [stepControl]="firstFormGroup" class="mat-step-container">
+  <!-- First stepper images -->
+  <mat-stepper #stepper linear="true" (selectionChange)="showImagesCtrl()" class="create-stepper">
+    <ng-template matStepperIcon="number" let-index="index">
+      @if(index==0){
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
+        fill="none"
+      >
+        <path
+          d="M10.4167 43.75C9.27083 43.75 8.28125 43.3507 7.44792 42.5521C6.64931 41.7188 6.25 40.7292 6.25 39.5833V10.4167C6.25 9.27083 6.64931 8.29861 7.44792 7.5C8.28125 6.66667 9.27083 6.25 10.4167 6.25H39.5833C40.7292 6.25 41.7014 6.66667 42.5 7.5C43.3333 8.29861 43.75 9.27083 43.75 10.4167V39.5833C43.75 40.7292 43.3333 41.7188 42.5 42.5521C41.7014 43.3507 40.7292 43.75 39.5833 43.75H10.4167ZM10.4167 39.5833H39.5833V10.4167H10.4167V39.5833ZM12.5 35.4167H37.5L29.6875 25L23.4375 33.3333L18.75 27.0833L12.5 35.4167ZM10.4167 39.5833V10.4167V39.5833Z"
+          fill="#889063"
+        />
+      </svg>
+      }@else if(index==1){
+      <svg
+        class="step-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
+        fill="none"
+      >
+        <path d="M25 35.4167V22.9167" stroke-width="3.75" stroke-linecap="round" />
+        <path
+          d="M24.9998 14.5833C26.1504 14.5833 27.0832 15.5161 27.0832 16.6667C27.0832 17.8173 26.1504 18.75 24.9998 18.75C23.8492 18.75 22.9165 17.8173 22.9165 16.6667C22.9165 15.5161 23.8492 14.5833 24.9998 14.5833Z"
+          fill="#354024"
+        />
+        <path
+          d="M14.5834 6.95387C17.6477 5.18127 21.2055 4.16675 25.0001 4.16675C36.5059 4.16675 45.8334 13.4941 45.8334 25.0001C45.8334 36.5059 36.5059 45.8334 25.0001 45.8334C13.4941 45.8334 4.16675 36.5059 4.16675 25.0001C4.16675 21.2055 5.18127 17.6477 6.95387 14.5834"
+          stroke-width="3.75"
+          stroke-linecap="round"
+        />
+      </svg>
+      }@else if(index==2){
+      <svg
+        class="step-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
+        fill="none"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M22.9165 10.4167C20.6153 10.4167 18.7498 12.2822 18.7498 14.5834V18.7501H14.5832C12.282 18.7501 10.4165 20.6156 10.4165 22.9167V27.0834C10.4165 29.3847 12.282 31.2501 14.5832 31.2501H18.7498V35.4167C18.7498 37.718 20.6153 39.5834 22.9165 39.5834H27.0832C29.3844 39.5834 31.2498 37.718 31.2498 35.4167V31.2501H35.4165C37.7178 31.2501 39.5832 29.3847 39.5832 27.0834V22.9167C39.5832 20.6156 37.7178 18.7501 35.4165 18.7501H31.2498V14.5834C31.2498 12.2822 29.3844 10.4167 27.0832 10.4167H22.9165ZM22.9165 14.5834H27.0832V19.7917C27.0832 21.5176 28.4823 22.9167 30.2082 22.9167H35.4165V27.0834H30.2082C28.4823 27.0834 27.0832 28.4826 27.0832 30.2084V35.4167H22.9165V30.2084C22.9165 28.4826 21.5173 27.0834 19.7915 27.0834H14.5832V22.9167H19.7915C21.5173 22.9167 22.9165 21.5176 22.9165 19.7917V14.5834Z"
+          fill="#252D19"
+        />
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M41.6668 2.08325C45.1187 2.08325 47.9168 4.88148 47.9168 8.33325V41.6666C47.9168 45.1185 45.1187 47.9166 41.6668 47.9166H8.3335C4.88173 47.9166 2.0835 45.1185 2.0835 41.6666V8.33325C2.0835 4.88148 4.88173 2.08325 8.3335 2.08325H41.6668ZM41.6668 6.24992C42.8175 6.24992 43.7502 7.18267 43.7502 8.33325V41.6666C43.7502 42.8172 42.8175 43.7499 41.6668 43.7499H8.3335C7.18291 43.7499 6.25016 42.8172 6.25016 41.6666V8.33325C6.25016 7.18267 7.18291 6.24992 8.3335 6.24992H41.6668Z"
+          fill="#252D19"
+        />
+      </svg>
+      } @else if(index==3){
+      <svg
+        class="step-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
+        fill="none"
+      >
+        <path
+          d="M43.75 31.25V39.5833C43.75 40.6884 43.311 41.7482 42.5296 42.5296C41.7482 43.311 40.6884 43.75 39.5833 43.75H10.4167C9.3116 43.75 8.25179 43.311 7.47039 42.5296C6.68899 41.7482 6.25 40.6884 6.25 39.5833V31.25M35.4167 16.6667L25 6.25M25 6.25L14.5833 16.6667M25 6.25V31.25"
+          stroke="#252D19"
+          stroke-width="3.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      }
+    </ng-template>
+    <ng-template matStepperIcon="edit" let-index="index">
+      @if(index==0){
+      <svg
+        class="step-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
+        fill="#354024"
+      >
+        <path
+          d="M10.4167 43.75C9.27083 43.75 8.28125 43.3507 7.44792 42.5521C6.64931 41.7188 6.25 40.7292 6.25 39.5833V10.4167C6.25 9.27083 6.64931 8.29861 7.44792 7.5C8.28125 6.66667 9.27083 6.25 10.4167 6.25H39.5833C40.7292 6.25 41.7014 6.66667 42.5 7.5C43.3333 8.29861 43.75 9.27083 43.75 10.4167V39.5833C43.75 40.7292 43.3333 41.7188 42.5 42.5521C41.7014 43.3507 40.7292 43.75 39.5833 43.75H10.4167ZM10.4167 39.5833H39.5833V10.4167H10.4167V39.5833ZM12.5 35.4167H37.5L29.6875 25L23.4375 33.3333L18.75 27.0833L12.5 35.4167ZM10.4167 39.5833V10.4167V39.5833Z"
+          fill="#354024"
+        />
+      </svg>
+      }@else if(index==1){
+      <svg
+        class="step-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
+        fill="#889063"
+      >
+        <path d="M25 35.4167V22.9167" stroke-width="3.75" stroke-linecap="round" />
+        <path
+          d="M24.9998 14.5833C26.1504 14.5833 27.0832 15.5161 27.0832 16.6667C27.0832 17.8173 26.1504 18.75 24.9998 18.75C23.8492 18.75 22.9165 17.8173 22.9165 16.6667C22.9165 15.5161 23.8492 14.5833 24.9998 14.5833Z"
+          fill="#889063"
+          stroke="#889063"
+        />
+        <path
+          d="M14.5834 6.95387C17.6477 5.18127 21.2055 4.16675 25.0001 4.16675C36.5059 4.16675 45.8334 13.4941 45.8334 25.0001C45.8334 36.5059 36.5059 45.8334 25.0001 45.8334C13.4941 45.8334 4.16675 36.5059 4.16675 25.0001C4.16675 21.2055 5.18127 17.6477 6.95387 14.5834"
+          stroke-width="3.75"
+          stroke-linecap="round"
+        />
+      </svg>
+      }@else if(index==2){
+      <svg
+        class="step-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
+        fill="none"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M22.9165 10.4167C20.6153 10.4167 18.7498 12.2822 18.7498 14.5834V18.7501H14.5832C12.282 18.7501 10.4165 20.6156 10.4165 22.9167V27.0834C10.4165 29.3847 12.282 31.2501 14.5832 31.2501H18.7498V35.4167C18.7498 37.718 20.6153 39.5834 22.9165 39.5834H27.0832C29.3844 39.5834 31.2498 37.718 31.2498 35.4167V31.2501H35.4165C37.7178 31.2501 39.5832 29.3847 39.5832 27.0834V22.9167C39.5832 20.6156 37.7178 18.7501 35.4165 18.7501H31.2498V14.5834C31.2498 12.2822 29.3844 10.4167 27.0832 10.4167H22.9165ZM22.9165 14.5834H27.0832V19.7917C27.0832 21.5176 28.4823 22.9167 30.2082 22.9167H35.4165V27.0834H30.2082C28.4823 27.0834 27.0832 28.4826 27.0832 30.2084V35.4167H22.9165V30.2084C22.9165 28.4826 21.5173 27.0834 19.7915 27.0834H14.5832V22.9167H19.7915C21.5173 22.9167 22.9165 21.5176 22.9165 19.7917V14.5834Z"
+          fill="#252D19"
+        />
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M41.6668 2.08325C45.1187 2.08325 47.9168 4.88148 47.9168 8.33325V41.6666C47.9168 45.1185 45.1187 47.9166 41.6668 47.9166H8.3335C4.88173 47.9166 2.0835 45.1185 2.0835 41.6666V8.33325C2.0835 4.88148 4.88173 2.08325 8.3335 2.08325H41.6668ZM41.6668 6.24992C42.8175 6.24992 43.7502 7.18267 43.7502 8.33325V41.6666C43.7502 42.8172 42.8175 43.7499 41.6668 43.7499H8.3335C7.18291 43.7499 6.25016 42.8172 6.25016 41.6666V8.33325C6.25016 7.18267 7.18291 6.24992 8.3335 6.24992H41.6668Z"
+          fill="#252D19"
+        />
+      </svg>
+      } @else if(index==3){
+      <svg
+        class="step-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
+        fill="none"
+      >
+        <path
+          d="M43.75 31.25V39.5833C43.75 40.6884 43.311 41.7482 42.5296 42.5296C41.7482 43.311 40.6884 43.75 39.5833 43.75H10.4167C9.3116 43.75 8.25179 43.311 7.47039 42.5296C6.68899 41.7482 6.25 40.6884 6.25 39.5833V31.25M35.4167 16.6667L25 6.25M25 6.25L14.5833 16.6667M25 6.25V31.25"
+          stroke="#252D19"
+          stroke-width="3.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      }
+    </ng-template>
+    <mat-step [stepControl]="firstFormGroup" class="mat-step-container">
+      <div class="step-content">
         <div class="mat-step-image-container">
           <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Image upload</ng-template>
-            <input
-              placeholder="Image"
-              type="file"
-              formArrayName="firstCtrl"
-              required
-              class="image-input"
-              multiple
-              (change)="showImages($event)"
-              accept="image/png, image/jpeg,image/jpg"
-            />
+            <div class="image-input-container">
+              <svg
+                class="image-input-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="80"
+                height="80"
+                viewBox="0 0 50 50"
+                fill="none"
+              >
+                <path
+                  d="M10.4167 43.75C9.27083 43.75 8.28125 43.3507 7.44792 42.5521C6.64931 41.7188 6.25 40.7292 6.25 39.5833V10.4167C6.25 9.27083 6.64931 8.29861 7.44792 7.5C8.28125 6.66667 9.27083 6.25 10.4167 6.25H39.5833C40.7292 6.25 41.7014 6.66667 42.5 7.5C43.3333 8.29861 43.75 9.27083 43.75 10.4167V39.5833C43.75 40.7292 43.3333 41.7188 42.5 42.5521C41.7014 43.3507 40.7292 43.75 39.5833 43.75H10.4167ZM10.4167 39.5833H39.5833V10.4167H10.4167V39.5833ZM12.5 35.4167H37.5L29.6875 25L23.4375 33.3333L18.75 27.0833L12.5 35.4167ZM10.4167 39.5833V10.4167V39.5833Z"
+                  fill="#1D1B20"
+                />
+              </svg>
+              <input
+                placeholder="Image"
+                type="file"
+                formArrayName="firstCtrl"
+                required
+                class="image-input"
+                multiple
+                (change)="showImages($event)"
+                accept="image/png, image/jpeg,image/jpg"
+              />
+              <p class="image-input-text">Choose an image</p>
+              <p class="image-input-text-warning">Maximum number of pictures: 10</p>
+            </div>
           </form>
           <div class="image-container">
-            @if (newImage == true) {
-              @for (i of [].constructor(10); track $index) {
-                @if (imageControls[$index]) {
-                  <div class="image-holder">
-                    <img
-                      class="image"
-                      [src]="imageControls[$index].value"
-                      crossorigin="anonymous"
-                    />
-                    <div class="image-holder-button">
-                      <button class="image-delete-button" (click)="deleteImage($index)">
-                        <mat-icon style="font-size: 26px; color: white">delete</mat-icon>
-                      </button>
-                    </div>
-                  </div>
-                } @else {
-                  <div class="image-holder">
-                    <img class="image" [src]="" />
-                    <div class="image-holder-button"></div>
-                  </div>
-                }
-              }
+            @for (control of imageControls; track $index) {
+            <div class="image-holder">
+              <img class="image" [src]="control.value" crossorigin="anonymous" />
+              <div class="star-image-holder">
+                <button
+                  class="image-star-button"
+                  [style.background-color]="
+                    $index == selectedMainImageIndex ? ' #cc8a27' : 'rgb(110, 110, 110)'
+                  "
+                  (click)="setMainImage($index)"
+                >
+                  <mat-icon style="font-size: 26px; color: white">star</mat-icon>
+                </button>
+              </div>
+              <div class="image-holder-button">
+                <button class="image-delete-button" (click)="deleteImage($index)">
+                  <mat-icon style="font-size: 26px; color: white">delete</mat-icon>
+                </button>
+              </div>
+            </div>
+            } @for (empty of [].constructor(10 - imageControls.length); track $index) {
+            <div class="image-holder placeholder">
+              <img class="image" src="" />
+              <div class="image-holder-button"></div>
+            </div>
             }
           </div>
         </div>
@@ -47,113 +219,112 @@
           <button mat-button (click)="getPageBack()" class="secondarybtn">BACK</button>
           <button mat-button matStepperNext (click)="changeStep()" class="primarybtn">NEXT</button>
         </div>
-      </mat-step>
+      </div>
+    </mat-step>
 
-      <!-- Second stepper main info -->
-      <mat-step [stepControl]="secondFormGroup" label="Main information" class="mat-step-container">
+    <!-- Second stepper main info -->
+    <mat-step [stepControl]="secondFormGroup" label="Main information" class="mat-step-container">
+      <div class="step-content">
         <div class="mat-step-main-info-container">
           <div class="second-step-image-holder">
-            <svg
-              fill="#473619"
-              viewBox="0 0 35 35"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              stroke="#473619"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                <title>rabbit</title>
-                <path
-                  d="M23.961 5.99c-0.333-0.007-0.681 0.013-1.030 0.065-4.414-1.996-5.841-4.914-7.812-4.914-1.705 0-1.62 3.149 4.884 6.521-0.012 0.015-0.023 0.030-0.035 0.046-0.496 0.68-6.986-3.097-8.985-3.093-2.692 0.006 1.257 6.368 7.689 5.369 0.61-0.095-0.302 0.909-0.227 1.48v-0c0.023 0.176 0.065 0.345 0.123 0.506-6.275-0.164-10.188 0.982-12.463 2.774-1.616-0.903-1.672-4.089-3.337-3.265-1.77 0.876-0.679 5.582 0.831 7.142-1.022 4.432 2.247 9.722 4.846 11.331h20.509c1.112-0.789 0.487-1.41 0-1.997-0.602-0.725-2.461-1.199-3.993-0.998-2.23-0.908 5.444-5.973 0.027-11.95 1.021 0.058 2.186-0.023 3.2-0.342 0.023 0.016 0.047 0.033 0.071 0.049l0.045-0.086c0.931-0.313 1.723-0.836 2.137-1.648 0.51-0.998-3.303-6.922-6.479-6.989zM24.957 10.973c-0.551 0-0.998-0.447-0.998-0.998s0.447-0.998 0.998-0.998c0.551 0 0.998 0.447 0.998 0.998s-0.447 0.998-0.998 0.998z"
-                ></path>
-              </g>
-            </svg>
-            <span class="input-label"> Enter some basic information about your pet!</span>
+            @if(imageControls.length > 0){
+            <div class="main-image-selected">
+              <img class="main-image-second-step" [src]="selectedMainImage" />
+            </div>
+            }
+            <span class="input-label"> The thumbnail of your post</span>
           </div>
           <form [formGroup]="secondFormGroup" class="mat-step-form">
-            <div class="form-field-format">
-              <label class="input-label">Name</label>
-              <mat-form-field>
-                <input matInput formControlName="name" placeholder="e.g Rex" required />
-                @if (secondFormGroup.get('name')?.hasError('required')) {
-                  <mat-error>Please enter a name!</mat-error>
-                }
-              </mat-form-field>
-            </div>
-
-            <div class="form-field-format">
-              <label class="input-label">Gender</label>
-              <mat-form-field>
-                <mat-select
-                  placeholder="Select gender"
-                  required
-                  formControlName="genderID"
-                  (selectionChange)="setGender()"
-                >
-                  @for (gen of genderList.items; track gen) {
-                    <mat-option [value]="gen.id">{{ gen.name }}</mat-option>
-                  }
-                </mat-select>
-                @if (secondFormGroup.get('genderID')?.hasError('required')) {
-                  <mat-error>Please select a gender!</mat-error>
-                }
-              </mat-form-field>
-            </div>
-
-            <div class="form-field-format">
-              <label class="input-label">Category</label>
-              <mat-form-field>
-                <mat-select
-                  placeholder="Select category"
-                  required
-                  formControlName="categoryID"
-                  (selectionChange)="getBreedSelect()"
-                >
-                  @for (cat of categoryList.items; track cat) {
-                    <mat-option [value]="cat.id">
-                      {{ cat.categoryName }}
-                    </mat-option>
-                  }
-                </mat-select>
-                @if (secondFormGroup.get('categoryID')?.hasError('required')) {
-                  <mat-error>Please select an animal category!</mat-error>
-                }
-              </mat-form-field>
-            </div>
-            <div class="form-field-format">
-              <label class="input-label">Age</label>
-              <mat-form-field>
-                <input matInput type="number" formControlName="age" placeholder="e.g 2" required />
-              </mat-form-field>
-            </div>
-            <div class="form-field-format">
-              <label class="input-label">Breed</label>
-              <mat-form-field>
-                <mat-select placeholder="Select breed" required formControlName="breed">
-                  <!-- required -->
-                  @for (breed of breedArr; track breed) {
-                    <mat-option [value]="breed.name"> {{ breed.name }}</mat-option>
-                  }
-                </mat-select>
-                @if (secondFormGroup.get('breed')?.hasError('required')) {
-                  <mat-error>Please select a breed!</mat-error>
-                }
-              </mat-form-field>
-            </div>
-            <mat-checkbox
-              formControlName="passportCheck"
-              (change)="togglePass()"
-              style="margin-top: 30px"
-              >Passport</mat-checkbox
-            >
-            <div class="form-field-format">
-              <label class="input-label">Passport number</label>
-              <mat-form-field>
-                <input matInput formControlName="passportCtrl" placeholder="e.g 77232" />
-              </mat-form-field>
-            </div>
-          </form>
+  <div class="form-field-format">
+    <label class="input-label">Name</label>
+    <mat-form-field>
+      <input matInput formControlName="name" placeholder="e.g Rex" required />
+      @if (secondFormGroup.get('name')?.hasError('required')) {
+      <mat-error>Please enter a name!</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  
+  <div class="form-field-format">
+    <label class="input-label">Gender</label>
+    <mat-form-field>
+      <mat-select
+        placeholder="Select gender"
+        required
+        formControlName="genderID"
+        (selectionChange)="setGender()"
+      >
+        @for (gen of genderList.items; track gen) {
+        <mat-option [value]="gen.id">{{ gen.name }}</mat-option>
+        }
+      </mat-select>
+      @if (secondFormGroup.get('genderID')?.hasError('min')) {
+      <mat-error>Please select a gender!</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  
+  <div class="form-field-format">
+    <label class="input-label">Category</label>
+    <mat-form-field>
+      <mat-select
+        placeholder="Select category"
+        required
+        formControlName="categoryID"
+        (selectionChange)="getBreedSelect()"
+      >
+        @for (cat of categoryList.items; track cat) {
+        <mat-option [value]="cat.id">
+          {{ cat.categoryName }}
+        </mat-option>
+        }
+      </mat-select>
+      @if (secondFormGroup.get('categoryID')?.hasError('min')) {
+      <mat-error>Please select an animal category!</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  
+  <div class="form-field-format">
+    <label class="input-label">Age</label>
+    <mat-form-field>
+      <input matInput type="number" formControlName="age" placeholder="e.g 2" required />
+    </mat-form-field>
+  </div>
+  
+  <!-- Wrapper for breed and passport fields in same row -->
+  <div class="form-row">
+    <div class="form-field-format">
+      <label class="input-label">Breed</label>
+      <mat-form-field>
+        <mat-select placeholder="Select breed" required formControlName="breed">
+          @for (breed of breedArr; track breed) {
+          <mat-option [value]="breed.name"> {{ breed.name }}</mat-option>
+          }
+        </mat-select>
+        @if (secondFormGroup.get('breed')?.hasError('required')) {
+        <mat-error>Please select a breed!</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    
+    <!-- Passport section -->
+    <div class="passport-section">
+      <mat-checkbox
+        formControlName="passportCheck"
+        (change)="togglePass()"
+        class="passport-checkbox"
+      >Passport</mat-checkbox>
+      
+      <div class="form-field-format passport-input">
+        <label class="input-label">Passport number</label>
+        <mat-form-field>
+          <input matInput formControlName="passportCtrl" placeholder="e.g 77232" />
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</form>
         </div>
         <div class="stepper-buttons">
           <button matButton matStepperPrevious class="secondarybtn" (click)="changeStep()">
@@ -161,10 +332,12 @@
           </button>
           <button matButton matStepperNext class="primarybtn">NEXT</button>
         </div>
-      </mat-step>
+      </div>
+    </mat-step>
 
-      <!-- Third stepper health info -->
-      <mat-step [stepControl]="thridFormGroup" class="mat-step-container" [optional]="true">
+    <!-- Third stepper health info -->
+    <mat-step [stepControl]="thridFormGroup" class="mat-step-container" [optional]="true">
+      <div class="step-content">
         <div class="mat-step-health-info-container">
           <div class="second-step-image-holder">
             <svg
@@ -201,7 +374,7 @@
                     (selectionChange)="addAllergyToList()"
                   >
                     @for (allergy of allergyList.items; track allergy) {
-                      <mat-option [value]="allergy.name">{{ allergy.name }}</mat-option>
+                    <mat-option [value]="allergy.name">{{ allergy.name }}</mat-option>
                     }
                   </mat-select>
                 </mat-form-field>
@@ -219,10 +392,20 @@
                     (selectionChange)="addDisabilityToList()"
                   >
                     @for (dis of disabilityList.items; track dis) {
-                      <mat-option [value]="dis.name">{{ dis.name }}</mat-option>
+                    <mat-option [value]="dis.name">{{ dis.name }}</mat-option>
                     }
                   </mat-select>
                 </mat-form-field>
+              </div>
+              <div class="form-field-format">
+                <label>Dietary restrictions:</label>
+                 <textarea 
+     
+    cdkTextareaAutosize
+    cdkAutosizeMinRows="5"
+    cdkAutosizeMaxRows="10"
+    placeholder="What is it not allowed to eat? Any foods that could be dangerous, that it's not allergic to?">
+  </textarea>
               </div>
             </div>
             <div class="date-checkbox-container">
@@ -264,10 +447,12 @@
           <button mat-button matStepperPrevious class="secondarybtn">BACK</button>
           <button mat-button matStepperNext class="primarybtn">NEXT</button>
         </div>
-      </mat-step>
+      </div>
+    </mat-step>
 
-      <!-- Fouth step final -->
-      <mat-step [stepControl]="fourthFromGroup" class="mat-step-container">
+    <!-- Fouth step final -->
+    <mat-step [stepControl]="fourthFromGroup" class="mat-step-container">
+      <div class="step-content">
         <div class="mat-step-final-container">
           <form [formGroup]="fourthFromGroup">
             <ng-template matStepLabel>Upload post</ng-template>
@@ -279,78 +464,66 @@
             POST
           </button>
         </div>
-        <div class="post-container">
-          <div class="post">
-            @if (secondStep) {
-              <p-carousel
-                [value]="imageControls"
-                [numVisible]="1"
-                [numScroll]="1"
-                [circular]="true"
-              >
-                <ng-template pTemplate="previousicon">
-                  <span class="chevron-left"></span>
-                </ng-template>
+      </div>
 
-                <ng-template pTemplate="nexticon">
-                  <span class="chevron-right"></span>
-                </ng-template>
-                <ng-template let-image pTemplate="img">
-                  <img class="post-image" src="{{ image.value }}" />
-                </ng-template>
-              </p-carousel>
-            }
+      <div class="post-container">
+        <div class="post">
+          @if (secondStep) {
+          <p-carousel [value]="imageControls" [numVisible]="1" [numScroll]="1" [circular]="true">
+            <ng-template let-image pTemplate="img">
+              <img class="post-image" src="{{ image.value }}" />
+            </ng-template>
+          </p-carousel>
+          }
 
-            <div class="post-information-container">
-              <h2 class="pet-name">
-                <p>{{ fourthFromGroup.value.mainInfo?.name }}</p>
-              </h2>
-              <div class="post-information">
-                <div class="post-information-pet">
-                  <div class="post-information-pet-info">
-                    <div class="post-information-pet-attributes">
-                      <p>Category:</p>
-                      <p>Race:</p>
-                      <p>Gender:</p>
-                      <p>Age:</p>
-                      <p>Vaccinated:</p>
-                      <p>Sprayed:</p>
-                      <p>Parasite free:</p>
-                      <p>Passport:</p>
-                      <p>Date added:</p>
-                      <p>City:</p>
-                    </div>
-                    <div class="straight-border"></div>
-                    <div class="post-information-pet-attributes-values">
-                      <p>{{ selectedCategory.categoryName }}</p>
-                      <p>{{ fourthFromGroup.value.mainInfo?.breed }}</p>
-                      <p>{{ selectedGender }}</p>
-                      <p>{{ fourthFromGroup.value.mainInfo?.age }}</p>
-                      @if (!selectedVaccinated) {
-                        <p><mat-icon>close</mat-icon></p>
-                      } @else {
-                        <p><mat-icon>check</mat-icon></p>
-                      }
-                      @if (!selectedParasiteFree) {
-                        <p><mat-icon>close</mat-icon></p>
-                      } @else {
-                        <p><mat-icon>check</mat-icon></p>
-                      }
-                      @if (!selectedSprayed) {
-                        <p><mat-icon>close</mat-icon></p>
-                      } @else {
-                        <p><mat-icon>check</mat-icon></p>
-                      }
-                      <p>
-                        {{
-                          fourthFromGroup.value.mainInfo?.passportCheck
-                            ? fourthFromGroup.value.mainInfo?.passportCtrl
-                            : 'None'
-                        }}
-                      </p>
-                      <p>{{ currentDate }}</p>
-                      <p>{{ userData.city }}</p>
-                      <!--
+          <div class="post-information-container">
+            <h2 class="pet-name">
+              <p>{{ fourthFromGroup.value.mainInfo?.name }}</p>
+            </h2>
+            <div class="post-information">
+              <div class="post-information-pet">
+                <div class="post-information-pet-info">
+                  <div class="post-information-pet-attributes">
+                    <p>Category:</p>
+                    <p>Race:</p>
+                    <p>Gender:</p>
+                    <p>Age:</p>
+                    <p>Vaccinated:</p>
+                    <p>Sprayed:</p>
+                    <p>Parasite free:</p>
+                    <p>Passport:</p>
+                    <p>Date added:</p>
+                    <p>City:</p>
+                  </div>
+                  <div class="straight-border"></div>
+                  <div class="post-information-pet-attributes-values">
+                    <p>{{ selectedCategory.categoryName }}</p>
+                    <p>{{ fourthFromGroup.value.mainInfo?.breed }}</p>
+                    <p>{{ selectedGender }}</p>
+                    <p>{{ fourthFromGroup.value.mainInfo?.age }}</p>
+                    @if (!selectedVaccinated) {
+                    <p><mat-icon>close</mat-icon></p>
+                    } @else {
+                    <p><mat-icon>check</mat-icon></p>
+                    } @if (!selectedParasiteFree) {
+                    <p><mat-icon>close</mat-icon></p>
+                    } @else {
+                    <p><mat-icon>check</mat-icon></p>
+                    } @if (!selectedSprayed) {
+                    <p><mat-icon>close</mat-icon></p>
+                    } @else {
+                    <p><mat-icon>check</mat-icon></p>
+                    }
+                    <p>
+                      {{
+                        fourthFromGroup.value.mainInfo?.passportCheck
+                          ? fourthFromGroup.value.mainInfo?.passportCtrl
+                          : 'None'
+                      }}
+                    </p>
+                    <p>{{ currentDate }}</p>
+                    <p>{{ userData.city }}</p>
+                    <!--
                   @for(ani of animal|keyvalue: keepOrder;track ani.key){
                   <p>{{ ani.value }}</p>
                   }
@@ -359,42 +532,40 @@
                   <p>{{ animalHealth.parasiteFree }}</p>
                   <p>{{ dateAdded }}</p>
                   <p>{{ city.name }}</p>
-                  -->
-                    </div>
-                  </div>
-                  <div class="post-information-pet-add-info">
-                    <p class="post-information-pet-add-info-label">Additional information</p>
-                    <div class="post-information-pet-add-info-text">
-                      <p>Allergies: {{ selectedAllergies }}</p>
-                      <p>Disabilities: {{ selectedDisabilities }}</p>
-                    </div>
+                  --></div>
+                </div>
+                <div class="post-information-pet-add-info">
+                  <p class="post-information-pet-add-info-label">Additional information</p>
+                  <div class="post-information-pet-add-info-text">
+                    <p>Allergies: {{ selectedAllergies }}</p>
+                    <p>Disabilities: {{ selectedDisabilities }}</p>
                   </div>
                 </div>
-                <div class="post-information-user-container">
-                  <div class="post-information-user">
-                    <div class="post-information-user-logo">
-                      <div class="post-information-user-logo-activity"></div>
-                    </div>
-                    <p class="post-information-user-username">
-                      {{ userData.firstName }} {{ userData.lastName }}
-                    </p>
-                    <p class="post-information-user-activity">Last time active:</p>
-                    <div class="post-information-user-border"></div>
-                    <div class="post-information-user-buttons">
-                      <button class="primarybtn">ADOPT</button>
-                      <button class="primarybtn">SEND MESSAGE</button>
-                    </div>
+              </div>
+              <div class="post-information-user-container">
+                <div class="post-information-user">
+                  <div class="post-information-user-logo">
+                    <div class="post-information-user-logo-activity"></div>
                   </div>
-                  <div class="post-information-user-report">
-                    <p>Inappropriate content?</p>
-                    <button class="secondarybtn">REPORT</button>
+                  <p class="post-information-user-username">
+                    {{ userData.firstName }} {{ userData.lastName }}
+                  </p>
+                  <p class="post-information-user-activity">Last time active:</p>
+                  <div class="post-information-user-border"></div>
+                  <div class="post-information-user-buttons">
+                    <button class="primarybtn">ADOPT</button>
+                    <button class="primarybtn">SEND MESSAGE</button>
                   </div>
+                </div>
+                <div class="post-information-user-report">
+                  <p>Inappropriate content?</p>
+                  <button class="secondarybtn">REPORT</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </mat-step>
-    </mat-stepper>
-  </div>
+      </div>
+    </mat-step>
+  </mat-stepper>
 </div>

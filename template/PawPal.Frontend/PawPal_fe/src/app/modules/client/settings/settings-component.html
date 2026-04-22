@@ -1,0 +1,225 @@
+<app-navbar [roleId]="currentUser.roleid()"></app-navbar>
+<div class="client-layout-container">
+  <div class="client-layout">
+    <app-user-profile-side-navbar class="client-side-navbar"></app-user-profile-side-navbar>
+    <div class="main-container">
+      <div class="settings-container">
+        <div class="settings-header">
+          <h1>Account Settings</h1>
+          <p class="settings-subtitle">Manage your account preferences and security</p>
+        </div>
+        <div class="settings-content">
+          <!-- Email Section -->
+          <div class="settings-section">
+            <div class="section-header">
+              <mat-icon>email</mat-icon>
+              <div class="section-title">Email Address</div>
+            </div>
+            <div class="section-body">
+              <p class="current-value">
+                Current Email: <span class="highlight">{{ this.userEmail }}</span>
+              </p>
+              <button
+                class="action-btn secondarybtn"
+                (click)="toggleChangeEmailForm()"
+                [class.active]="showChangeEmailForm"
+              >
+                {{ showChangeEmailForm ? 'Cancel' : 'Change Email' }}
+              </button>
+              <!-- with ngIf but browser is saying big nono poopoo words
+              <div class="form-section" *ngIf="showChangeEmailForm">
+                <div class="form-group">
+                  <label>New Email Address</label>
+                  <input
+                    type="email"
+                    class="form-input"
+                    [(ngModel)]="newEmail"
+                    placeholder="Enter your new email"
+                  />
+                </div>
+                <button class="primarybtn" (click)="saveEmail()">Save Email</button>
+              </div>
+              -->
+              @if (showChangeEmailForm) {
+                <div class="form-section">
+                  <div class="form-group">
+                    <label>New Email Address</label>
+                    <input
+                      type="email"
+                      class="form-input"
+                      [(ngModel)]="newEmail"
+                      placeholder="Enter your new email"
+                    />
+                  </div>
+                  <button class="primarybtn" (click)="saveEmail()">Save Email</button>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Password Section -->
+          <div class="settings-section">
+            <div class="section-header">
+              <mat-icon>lock</mat-icon>
+              <div class="section-title">Password</div>
+            </div>
+            <div class="section-body">
+              <p class="current-value">Keep your password secure and unique</p>
+              <button
+                class="action-btn secondarybtn"
+                (click)="toggleChangePasswordForm()"
+                [class.active]="showChangePasswordForm"
+              >
+                {{ showChangePasswordForm ? 'Cancel' : 'Change Password' }}
+              </button>
+
+              <!-- Same thing here
+              <div class="form-section" *ngIf="showChangePasswordForm">
+                <div class="form-group">
+                  <label>Current Password</label>
+                  <input
+                    type="password"
+                    class="form-input"
+                    [(ngModel)]="currentPassword"
+                    placeholder="Enter your current password"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>New Password</label>
+                  <input
+                    type="password"
+                    class="form-input"
+                    [(ngModel)]="newPassword"
+                    placeholder="Enter your new password (min 8 characters)"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Confirm Password</label>
+                  <input
+                    type="password"
+                    class="form-input"
+                    [(ngModel)]="confirmPassword"
+                    placeholder="Confirm your new password"
+                  />
+                </div>
+                <button class="primarybtn" (click)="savePassword()">Update Password</button>
+              </div>
+              -->
+              @if (showChangePasswordForm) {
+                <div class="form-section">
+                  <div class="form-group">
+                    <label>Current Password</label>
+                    <input
+                      type="password"
+                      class="form-input"
+                      [(ngModel)]="currentPassword"
+                      placeholder="Enter your current password"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>New Password</label>
+                    <input
+                      type="password"
+                      class="form-input"
+                      [(ngModel)]="newPassword"
+                      placeholder="Enter your new password (min 8 characters)"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input
+                      type="password"
+                      class="form-input"
+                      [(ngModel)]="confirmPassword"
+                      placeholder="Confirm your new password"
+                    />
+                  </div>
+                  <button class="primarybtn" (click)="savePassword()">Update Password</button>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Privacy & Security Section -->
+          <div class="settings-section">
+            <div class="section-header">
+              <mat-icon>security</mat-icon>
+              <div class="section-title">Privacy & Security</div>
+            </div>
+            <div class="section-body">
+              <div class="privacy-option">
+                <div class="option-label">
+                  <strong>Two-Factor Authentication</strong>
+                  <p class="option-description">Add an extra layer of security to your account</p>
+                </div>
+                <button class="secondarybtn">Enable</button>
+              </div>
+              <div class="privacy-option">
+                <div class="option-label">
+                  <strong>Activity Log</strong>
+                  <p class="option-description">
+                    View your recent account activity and login history
+                  </p>
+                </div>
+                <button class="secondarybtn">View</button>
+              </div>
+              <div class="privacy-option">
+                <div class="option-label">
+                  <strong>Session Management</strong>
+                  <p class="option-description">
+                    Manage active sessions and logout from other devices
+                  </p>
+                </div>
+                <button class="secondarybtn">Manage</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notification Settings Section -->
+          <div class="settings-section">
+            <div class="section-header">
+              <mat-icon>notifications</mat-icon>
+              <div class="section-title">Notification Preferences</div>
+            </div>
+            <div class="section-body">
+              <div class="notification-option">
+                <label class="checkbox-label">
+                  <input type="checkbox" checked />
+                  <span>Email notifications for new messages</span>
+                </label>
+              </div>
+              <div class="notification-option">
+                <label class="checkbox-label">
+                  <input type="checkbox" checked />
+                  <span>Email notifications for adoption updates</span>
+                </label>
+              </div>
+              <div class="notification-option">
+                <label class="checkbox-label">
+                  <input type="checkbox" />
+                  <span>Marketing emails and promotions</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Danger Zone -->
+        </div>
+        <div class="settings-section danger-section" style="margin-top: 50px">
+          <div class="section-header danger-header">
+            <mat-icon>warning</mat-icon>
+            <div class="section-title">Danger Zone</div>
+          </div>
+          <div class="section-body">
+            <p class="danger-text">
+              Once you delete your account, there is no going back. Please be certain.
+            </p>
+            <button class="delete-profile-btn primarybtn" (click)="openDeleteProfileDialog()">
+              Delete Profile
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

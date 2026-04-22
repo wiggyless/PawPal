@@ -1,0 +1,729 @@
+<div class="stepper-container">
+  <mat-stepper linear #stepper class="adoption-stepper">
+    <!-- Step 1: Informacije o prebivalištu -->
+    <ng-template matStepperIcon="number" let-index="index">
+      @if(index==0){
+      <svg
+        class="step-icon"
+        width="50"
+        height="50"
+        viewBox="-5 -5 60 60"
+        fill="none"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          class="icon-path"
+          d="M44.4444 17.9657V36.2979C44.4444 41.0939 44.4444 43.4921 43.5361 45.3239C42.7372 46.9353 41.4625 48.2456 39.8944 49.0665C39.4753 49.2861 39.0256 49.4539 38.5222 49.5824M38.5222 49.5824C37.0828 43.2765 31.575 38.5815 25 38.5815C18.425 38.5815 12.9171 43.2765 11.4778 49.5824M38.5222 49.5824C36.8853 50 34.6806 50 31.1111 50H18.8889C15.3193 50 13.1148 50 11.4778 49.5824M5.55556 17.9638V36.2979C5.55556 41.0939 5.55556 43.4921 6.46383 45.3239C7.26278 46.9353 8.53761 48.2456 10.1056 49.0665C10.5248 49.2861 10.9745 49.4539 11.4778 49.5824M50 24.3085L34.9078 7.07782C31.4753 3.15909 29.7592 1.19974 27.7378 0.476385C25.9628 -0.158938 24.0306 -0.158795 22.2553 0.476813C20.2342 1.20046 18.5184 3.16009 15.0865 7.07934L0 24.3085M30.5556 24.3085C30.5556 27.4614 28.0683 30.0177 25 30.0177C21.9317 30.0177 19.4444 27.4614 19.4444 24.3085C19.4444 21.1553 21.9317 18.5991 25 18.5991C28.0683 18.5991 30.5556 21.1553 30.5556 24.3085Z"
+          stroke-width="5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      }@else if(index==1){
+      <svg
+        class="step-icon"
+        width="50"
+        height="50"
+        viewBox="-5 -5 60 60"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          class="icon-path"
+          d="M0 50V43.2432C0 35.0335 6.84008 28.3784 15.2778 28.3784H26.3889M11.1111 50V41.8919M33.3333 10.8108C33.3333 16.7815 28.3586 21.6216 22.2222 21.6216C16.0857 21.6216 11.1111 16.7815 11.1111 10.8108C11.1111 4.84016 16.0857 0 22.2222 0C28.3586 0 33.3333 4.84016 33.3333 10.8108ZM37.5 28.3778C36.2331 26.737 34.2161 25.6757 31.9444 25.6757C28.1092 25.6757 25 28.7008 25 32.4324C25 34.1068 25.6258 35.6389 26.6625 36.8192L37.5 50L48.3375 36.8192C49.3742 35.6389 50 34.1068 50 32.4324C50 28.7008 46.8908 25.6757 43.0556 25.6757C40.7839 25.6757 38.7669 26.737 37.5 28.3778Z"
+          stroke-width="3.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      }@else if(index==2){
+      <svg
+        class="step-icon"
+        width="50"
+        height="50"
+        viewBox="-5 -5 60 60"
+        fill="#354024"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          class="icon-path"
+          d="M12.4998 29.1665H37.4998V24.9998H12.4998V29.1665ZM12.4998 22.9165H37.4998V18.7498H12.4998V22.9165ZM12.4998 16.6665H37.4998V12.4998H12.4998V16.6665ZM45.8332 45.8332L37.4998 37.4998H8.33317C7.18734 37.4998 6.20643 37.0919 5.39046 36.2759C4.57449 35.4599 4.1665 34.479 4.1665 33.3332V8.33317C4.1665 7.18734 4.57449 6.20643 5.39046 5.39046C6.20643 4.57449 7.18734 4.1665 8.33317 4.1665H41.6665C42.8123 4.1665 43.7932 4.57449 44.6092 5.39046C45.4252 6.20643 45.8332 7.18734 45.8332 8.33317V45.8332ZM8.33317 33.3332H39.2707L41.6665 35.6769V8.33317H8.33317V33.3332Z"
+          fill="#354024"
+        />
+      </svg>
+      }
+    </ng-template>
+    <ng-template matStepperIcon="edit" let-index="index">
+      @if(index==0){
+      <svg
+        class="step-icon"
+        width="50"
+        height="50"
+        viewBox="-5 -5 60 60"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M44.4444 17.9657V36.2979C44.4444 41.0939 44.4444 43.4921 43.5361 45.3239C42.7372 46.9353 41.4625 48.2456 39.8944 49.0665C39.4753 49.2861 39.0256 49.4539 38.5222 49.5824M38.5222 49.5824C37.0828 43.2765 31.575 38.5815 25 38.5815C18.425 38.5815 12.9171 43.2765 11.4778 49.5824M38.5222 49.5824C36.8853 50 34.6806 50 31.1111 50H18.8889C15.3193 50 13.1148 50 11.4778 49.5824M5.55556 17.9638V36.2979C5.55556 41.0939 5.55556 43.4921 6.46383 45.3239C7.26278 46.9353 8.53761 48.2456 10.1056 49.0665C10.5248 49.2861 10.9745 49.4539 11.4778 49.5824M50 24.3085L34.9078 7.07782C31.4753 3.15909 29.7592 1.19974 27.7378 0.476385C25.9628 -0.158938 24.0306 -0.158795 22.2553 0.476813C20.2342 1.20046 18.5184 3.16009 15.0865 7.07934L0 24.3085M30.5556 24.3085C30.5556 27.4614 28.0683 30.0177 25 30.0177C21.9317 30.0177 19.4444 27.4614 19.4444 24.3085C19.4444 21.1553 21.9317 18.5991 25 18.5991C28.0683 18.5991 30.5556 21.1553 30.5556 24.3085Z"
+          class="icon-path"
+          stroke-width="5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      }@else if(index==1){
+      <svg
+        class="step-icon"
+        width="50"
+        height="50"
+        viewBox="-5 -5 60 60"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M0 50V43.2432C0 35.0335 6.84008 28.3784 15.2778 28.3784H26.3889M11.1111 50V41.8919M33.3333 10.8108C33.3333 16.7815 28.3586 21.6216 22.2222 21.6216C16.0857 21.6216 11.1111 16.7815 11.1111 10.8108C11.1111 4.84016 16.0857 0 22.2222 0C28.3586 0 33.3333 4.84016 33.3333 10.8108ZM37.5 28.3778C36.2331 26.737 34.2161 25.6757 31.9444 25.6757C28.1092 25.6757 25 28.7008 25 32.4324C25 34.1068 25.6258 35.6389 26.6625 36.8192L37.5 50L48.3375 36.8192C49.3742 35.6389 50 34.1068 50 32.4324C50 28.7008 46.8908 25.6757 43.0556 25.6757C40.7839 25.6757 38.7669 26.737 37.5 28.3778Z"
+          class="icon-path"
+          stroke-width="3.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      }@else if(index==2){
+      <svg
+        class="step-icon"
+        width="50"
+        height="50"
+        viewBox="-5 -5 60 60"
+        fill="#354024"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12.4998 29.1665H37.4998V24.9998H12.4998V29.1665ZM12.4998 22.9165H37.4998V18.7498H12.4998V22.9165ZM12.4998 16.6665H37.4998V12.4998H12.4998V16.6665ZM45.8332 45.8332L37.4998 37.4998H8.33317C7.18734 37.4998 6.20643 37.0919 5.39046 36.2759C4.57449 35.4599 4.1665 34.479 4.1665 33.3332V8.33317C4.1665 7.18734 4.57449 6.20643 5.39046 5.39046C6.20643 4.57449 7.18734 4.1665 8.33317 4.1665H41.6665C42.8123 4.1665 43.7932 4.57449 44.6092 5.39046C45.4252 6.20643 45.8332 7.18734 45.8332 8.33317V45.8332ZM8.33317 33.3332H39.2707L41.6665 35.6769V8.33317H8.33317V33.3332Z"
+          class="icon-path"
+          fill="#354024"
+        />
+      </svg>
+      }
+    </ng-template>
+
+    <mat-step [stepControl]="step1FormGroup">
+      <ng-template matStepLabel>
+        <span class="custom-step-label-text">Residence information</span>
+      </ng-template>
+      <div class="step-content">
+        <form [formGroup]="step1FormGroup">
+          <div class="form-row">
+            <!-- Left Column -->
+            <div class="form-column" id="form-column-1">
+              <div class="dvoriste-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="50"
+                  height="50"
+                  viewBox="0 0 40 40"
+                  fill="none"
+                >
+                  <path
+                    d="M15 36.6666V19.9999H25V36.6666M5 14.9999L20 3.33325L35 14.9999V33.3333C35 34.2173 34.6488 35.0652 34.0237 35.6903C33.3986 36.3154 32.5507 36.6666 31.6667 36.6666H8.33333C7.44928 36.6666 6.60143 36.3154 5.97631 35.6903C5.35119 35.0652 5 34.2173 5 33.3333V14.9999Z"
+                    stroke="#473619"
+                    stroke-width="3.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+
+              <div class="form-child">
+                <div class="form-field">
+                  <label class="field-label">
+                    Residence type <span class="required">*</span>
+                  </label>
+                  <mat-form-field appearance="outline" class="custom-field">
+                    <mat-select
+                      formControlName="houseType"
+                      placeholder="Choose a type of residence"
+                    >
+                        <mat-option value="House">House</mat-option>
+                      <mat-option value="Apartment">Apartment</mat-option>
+                      <mat-option value="Villa">Villa</mat-option>
+                      <mat-option value="Duplex house">Duplex house</mat-option>
+                      <mat-option value="Mobile home">Mobile home</mat-option>
+                    </mat-select>
+                    <mat-icon matPrefix class="field-icon">home</mat-icon>
+                  </mat-form-field>
+                   @if(this.step1FormGroup.controls['houseType']?.hasError('required') && 
+                   this.step1FormGroup.controls['houseType'].touched){
+                    <mat-error>You must choose your residence type!</mat-error>
+                    }
+                   
+                  
+                </div>
+
+                <!-- Adresa -->
+                <div class="form-field">
+                  <label class="field-label"> Address <span class="required">*</span> </label>
+                  <mat-form-field appearance="outline" class="custom-field">
+                    <input
+                      matInput
+                      formControlName="adress"
+                      placeholder="e.g. Ulica Braće Fejića 28b"
+                    />
+                  </mat-form-field>
+                   @if(this.step1FormGroup.controls['adress']?.hasError('required') && 
+                   this.step1FormGroup.controls['adress'].touched){
+                      <mat-error>Please enter your address!</mat-error>
+                    }
+                </div>
+
+                <!-- Broj sprata -->
+                <div class="form-field">
+                  <label class="field-label">Floor number</label>
+                  <mat-form-field appearance="outline" class="custom-field number-field">
+                    <input matInput type="number" formControlName="numOfFloor" />
+                    <div matSuffix class="arrow-container">
+                      <mat-icon (click)="$event.stopPropagation(); addToInput(1, 'numOfFloor')"
+                        >arrow_drop_up</mat-icon
+                      >
+                      <mat-icon (click)="$event.stopPropagation(); addToInput(-1, 'numOfFloor')"
+                        >arrow_drop_down</mat-icon
+                      >
+                    </div>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <!-- Middle Column -->
+            <div class="form-column" id="form-column-1">
+              <div class="dvoriste-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="50"
+                  height="50"
+                  viewBox="0 0 40 40"
+                  fill="none"
+                >
+                  <g clip-path="url(#clip0_161_870)">
+                    <path
+                      d="M28.3332 35V31.6667C28.3332 29.8986 27.6308 28.2029 26.3805 26.9526C25.1303 25.7024 23.4346 25 21.6665 25H8.33317C6.56506 25 4.86937 25.7024 3.61913 26.9526C2.36888 28.2029 1.6665 29.8986 1.6665 31.6667V35M38.3332 35V31.6667C38.3321 30.1895 37.8404 28.7546 36.9354 27.5872C36.0305 26.4198 34.7634 25.5859 33.3332 25.2167M26.6665 5.21667C28.1005 5.58384 29.3716 6.41783 30.2792 7.58718C31.1869 8.75653 31.6796 10.1947 31.6796 11.675C31.6796 13.1553 31.1869 14.5935 30.2792 15.7628C29.3716 16.9322 28.1005 17.7662 26.6665 18.1333M21.6665 11.6667C21.6665 15.3486 18.6817 18.3333 14.9998 18.3333C11.3179 18.3333 8.33317 15.3486 8.33317 11.6667C8.33317 7.98477 11.3179 5 14.9998 5C18.6817 5 21.6665 7.98477 21.6665 11.6667Z"
+                      stroke="#473619"
+                      stroke-width="3.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_161_870">
+                      <rect width="40" height="40" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
+              </div>
+              <!-- Broj ukućana -->
+              <div class="form-child">
+                <div class="form-field">
+                  <label class="field-label"> Number of residents <span class="required">*</span> </label>
+                  <mat-form-field appearance="outline" class="custom-field number-field">
+                    <input matInput type="number" formControlName="numOfFamily" value="0" />
+                    <div matSuffix class="arrow-container">
+                      <mat-icon (click)="$event.stopPropagation(); addToInput(1, 'numOfFamily')"
+                        >arrow_drop_up</mat-icon
+                      >
+                      <mat-icon (click)="$event.stopPropagation(); addToInput(-1, 'numOfFamily')"
+                        >arrow_drop_down</mat-icon
+                      >
+                    </div>
+                  </mat-form-field>
+                </div>
+
+                <!-- Djeca prisutna -->
+                <div class="checkbox-field">
+                  <mat-checkbox formControlName="children" class="custom-checkbox">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="44"
+                      height="44"
+                      viewBox="5 0 44 44"
+                      fill="none"
+                    >
+                      <path
+                        d="M34.7337 18.9828C33.9939 16.7939 32.7309 14.8308 31.0605 13.2735C29.3901 11.7162 27.3657 10.6145 25.1729 10.0694C25.5677 9.80824 26.029 9.67319 26.4985 9.68133C26.8962 9.68133 27.2776 9.51908 27.5588 9.23028C27.84 8.94147 27.998 8.54977 27.998 8.14134C27.998 7.73292 27.84 7.34121 27.5588 7.05241C27.2776 6.76361 26.8962 6.60136 26.4985 6.60136C25.4778 6.57879 24.4724 6.85892 23.6027 7.40819C22.7331 7.95745 22.036 8.75256 21.5951 9.69827C18.8658 9.77943 16.225 10.7109 14.0231 12.3691C11.8212 14.0273 10.1623 16.3339 9.26633 18.9828C8.21439 19.161 7.25828 19.7171 6.56847 20.552C5.87866 21.3869 5.5 22.4462 5.5 23.5412C5.5 24.6361 5.87866 25.6955 6.56847 26.5303C7.25828 27.3652 8.21439 27.9213 9.26633 28.0995C10.1854 30.816 11.9053 33.1711 14.1872 34.8379C16.4692 36.5046 19.1998 37.4001 22 37.4001C24.8002 37.4001 27.5308 36.5046 29.8128 34.8379C32.0947 33.1711 33.8146 30.816 34.7337 28.0995C35.7856 27.9213 36.7417 27.3652 37.4315 26.5303C38.1213 25.6955 38.5 24.6361 38.5 23.5412C38.5 22.4462 38.1213 21.3869 37.4315 20.552C36.7417 19.7171 35.7856 19.161 34.7337 18.9828ZM34.0064 25.0812L33.801 25.0534C33.4369 25.0066 33.0687 25.0976 32.7651 25.3093C32.4616 25.521 32.2434 25.839 32.1516 26.2038C31.5779 28.524 30.2675 30.5817 28.4277 32.0514C26.5878 33.5211 24.3234 34.319 21.9925 34.319C19.6616 34.319 17.3972 33.5211 15.5573 32.0514C13.7175 30.5817 12.4071 28.524 11.8335 26.2038C11.7515 25.8722 11.5643 25.578 11.3015 25.3677C11.0386 25.1575 10.7151 25.0431 10.3819 25.0427C10.319 25.0427 10.256 25.0427 10.1915 25.0534L10.0041 25.0812C9.60639 25.0828 9.22435 24.9221 8.94202 24.6345C8.65969 24.3468 8.50018 23.9558 8.49859 23.5473C8.497 23.1389 8.65345 22.7466 8.93354 22.4566C9.21362 22.1666 9.59439 22.0028 9.99208 22.0012L10.1915 22.0274C10.5555 22.0767 10.9245 21.9872 11.2286 21.7757C11.5326 21.5642 11.7505 21.2456 11.841 20.8801C12.3569 18.7998 13.4679 16.926 15.0307 15.5003C16.5934 14.0746 18.5362 13.1624 20.6085 12.8814C20.5401 13.3515 20.504 13.826 20.5005 14.3013C20.5005 14.7097 20.6585 15.1014 20.9397 15.3902C21.2209 15.679 21.6023 15.8413 22 15.8413C22.3977 15.8413 22.7791 15.679 23.0603 15.3902C23.3415 15.1014 23.4995 14.7097 23.4995 14.3013C23.5114 13.8307 23.5616 13.3619 23.6494 12.8999C25.6721 13.2287 27.5565 14.1595 29.0693 15.5771C30.5821 16.9947 31.6569 18.8369 32.1605 20.8755C32.251 21.2409 32.4689 21.5596 32.7729 21.7711C33.077 21.9825 33.446 22.0721 33.81 22.0228L34.0049 22.0012C34.4026 22.0012 34.784 22.1634 35.0652 22.4522C35.3464 22.741 35.5044 23.1327 35.5044 23.5412C35.5044 23.9496 35.3464 24.3413 35.0652 24.6301C34.784 24.9189 34.4041 25.0812 34.0064 25.0812ZM19.7508 23.5412C19.7508 23.998 19.6188 24.4447 19.3717 24.8245C19.1245 25.2044 18.7733 25.5005 18.3623 25.6753C17.9513 25.8501 17.499 25.8959 17.0627 25.8068C16.6264 25.7176 16.2256 25.4976 15.9111 25.1746C15.5965 24.8515 15.3823 24.4399 15.2955 23.9918C15.2087 23.5437 15.2533 23.0793 15.4235 22.6572C15.5937 22.2351 15.882 21.8743 16.2519 21.6205C16.6218 21.3667 17.0567 21.2312 17.5015 21.2312C18.0981 21.2312 18.6702 21.4746 19.092 21.9078C19.5138 22.341 19.7508 22.9285 19.7508 23.5412ZM28.7477 23.5412C28.7477 23.998 28.6158 24.4447 28.3686 24.8245C28.1215 25.2044 27.7702 25.5005 27.3592 25.6753C26.9482 25.8501 26.496 25.8959 26.0597 25.8068C25.6234 25.7176 25.2226 25.4976 24.908 25.1746C24.5935 24.8515 24.3792 24.4399 24.2925 23.9918C24.2057 23.5437 24.2502 23.0793 24.4204 22.6572C24.5907 22.2351 24.879 21.8743 25.2489 21.6205C25.6187 21.3667 26.0536 21.2312 26.4985 21.2312C27.095 21.2312 27.6671 21.4746 28.0889 21.9078C28.5107 22.341 28.7477 22.9285 28.7477 23.5412Z"
+                        fill="#473619"
+                      />
+                    </svg>
+                    <span>Children present:</span>
+                  </mat-checkbox>
+                </div>
+
+                <!-- Starije osobe prisutne -->
+                <div class="checkbox-field">
+                  <mat-checkbox formControlName="olderPeople" class="custom-checkbox">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="50"
+                      height="50"
+                      viewBox="5 0 27 40"
+                      fill="none"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M8.06524 4.93974C8.06524 3.30206 9.60407 1.97518 11.5013 1.97518C13.3985 1.97518 14.9373 3.30206 14.9373 4.93974C14.9373 6.57745 13.3985 7.90428 11.5013 7.90428C9.60407 7.90428 8.06524 6.57745 8.06524 4.93974ZM11.5013 0C8.33805 0 5.77463 2.212 5.77463 4.93974C5.77463 5.45694 5.86683 5.95557 6.03771 6.42418H5.35442C4.8254 6.42418 4.23855 6.60856 3.73026 6.83847C3.18647 7.08448 2.5987 7.44327 2.05433 7.91228C0.959537 8.85533 0 10.2832 0 12.1625C0 14.4746 0.889215 16.1637 1.98894 17.2861C2.53296 17.8414 3.12668 18.256 3.68399 18.5372C3.85246 18.6222 4.02895 18.7007 4.20911 18.768V37.3981C4.20911 38.8314 5.56435 40 7.22653 40L7.23077 39.9999H7.2444L7.24852 40C8.9107 40 10.2659 38.8314 10.2659 37.3981V26.8783H12.8428V37.3981C12.8428 38.8314 14.198 40 15.8602 40L15.8644 39.9999H15.8781L15.8822 40C17.5444 40 18.8996 38.8314 18.8996 37.3981V18.8953L19.1757 19.5776C19.5639 20.5369 20.5692 21.1586 21.6741 21.2275C20.7427 21.7575 20.1282 22.668 20.1282 23.7022V24.3606C20.1282 24.9061 20.6409 25.3482 21.2735 25.3482C21.906 25.3482 22.4188 24.9061 22.4188 24.3606V23.7022C22.4188 23.1567 22.9315 22.7146 23.5641 22.7146C24.1966 22.7146 24.7094 23.1567 24.7094 23.7022V37.5285C24.7094 38.0739 25.2221 38.516 25.8547 38.516C26.4872 38.516 27 38.0739 27 37.5285V23.7022C27 22.0757 25.4801 20.7553 23.5981 20.7395C24.5692 20.1115 25.0037 18.9919 24.5826 17.9508L20.8568 8.74294C20.2952 7.35498 18.7768 6.42517 17.0719 6.42517H16.9645C17.1356 5.95626 17.2279 5.4573 17.2279 4.93974C17.2279 2.212 14.6645 0 11.5013 0ZM5.35442 8.39936H7.41368C8.45281 9.31279 9.90025 9.87946 11.5013 9.87946C13.1017 9.87946 14.5487 9.31318 15.5877 8.40035H17.0719C17.8026 8.40035 18.4533 8.79884 18.694 9.39367L22.4198 18.6016C22.524 18.859 22.3664 19.1406 22.0677 19.2305C21.7692 19.3203 21.4426 19.1843 21.3384 18.9269L18.8357 12.7416L16.609 13.0669V37.3981C16.609 37.7405 16.2794 38.0248 15.8822 38.0248L15.8781 38.0247H15.8644L15.8602 38.0248C15.4631 38.0248 15.1334 37.7405 15.1334 37.3981V25.8907V24.9031H13.9881H9.12064H7.97533V25.8907V37.3981C7.97533 37.7405 7.64571 38.0248 7.24852 38.0248L7.2444 38.0247H7.23077L7.22653 38.0248C6.82946 38.0248 6.49972 37.7405 6.49972 37.3981V18.0139V17.0263H6.4964V11.8511H4.20579V16.4276C4.05129 16.308 3.89369 16.1696 3.73862 16.0114C2.99119 15.2485 2.29061 14.0118 2.29061 12.1625C2.29061 10.9054 2.92087 9.95778 3.67322 9.30962C4.05243 8.98303 4.4526 8.74216 4.79448 8.5875C5.12249 8.43916 5.31399 8.40657 5.34926 8.40055C5.35453 8.39966 5.35442 8.39936 5.35442 8.39936Z"
+                        fill="#473619"
+                      />
+                    </svg>
+                    <span>Elderly present:</span>
+                  </mat-checkbox>
+                </div>
+
+                <!-- Drugi ljubimci -->
+                <div class="checkbox-field">
+                  <mat-checkbox formControlName="otherPets" class="custom-checkbox">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="40"
+                      height="40"
+                      viewBox="5 0 27 40"
+                      fill="none"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M2.43663 0.0167148C5.23144 0.461743 8.15489 1.79915 10.3596 3.6006C11.8211 3.1361 13.3882 2.88488 15.0153 2.88488C16.6533 2.88488 18.2305 3.13947 19.7003 3.60993C21.9576 1.8388 24.7458 0.451586 27.5795 0.0187923C28.1828 -0.0713358 28.8102 0.238017 29.0856 0.79692C30.1911 3.44702 30.2287 6.60704 29.5488 9.36644L29.5383 9.40922C29.3561 10.1497 29.1206 11.1067 28.3648 11.4286C28.9266 12.83 29.2356 14.3498 29.2356 15.9455C29.2356 19.9454 27.6171 24.0606 26.1657 27.7503L26.0189 28.1237C25.1376 30.3672 23.1658 31.9123 20.8812 32.3429L17.653 32.9513C16.6576 33.1388 15.664 32.7745 15.0153 32.0402C14.3665 32.7745 13.3731 33.1388 12.3777 32.9513L9.14943 32.3429C6.86486 31.9123 4.89302 30.3672 4.01171 28.1237L3.86491 27.7503C2.41361 24.0606 0.794916 19.9454 0.794916 15.9455C0.794916 14.3498 1.10397 12.83 1.66586 11.4286C0.909276 11.1063 0.679901 10.1726 0.49751 9.43007L0.481868 9.36644C-0.167705 6.73025 -0.292561 3.31316 0.94504 0.79692C1.21901 0.241003 1.83161 -0.0786432 2.43663 0.0167148ZM7.3146 4.96325C5.70823 5.91568 4.31404 7.16297 3.23185 8.62897C2.80807 6.87357 2.80329 4.92143 3.17672 3.15553C4.6179 3.57789 6.02822 4.17673 7.3146 4.96325ZM26.7987 8.62899C25.7236 7.17255 24.3406 5.93195 22.7475 4.98194C24.0259 4.18415 25.4023 3.545 26.8499 3.13679C27.2283 4.90767 27.2239 6.8679 26.7987 8.62899ZM10.541 6.58839C11.9106 6.0631 13.4221 5.77037 15.0153 5.77037C16.6085 5.77037 18.12 6.0631 19.4896 6.58839C23.6263 8.17493 26.3916 11.8274 26.3916 15.9455C26.3916 19.4297 24.954 23.0654 23.6702 26.3122C23.5714 26.5622 23.4733 26.8102 23.377 27.0553C22.8779 28.326 21.7429 29.2456 20.3617 29.5058L17.1335 30.1143L16.3122 28.2622C16.0825 27.7444 15.5748 27.4114 15.0153 27.4114C14.4557 27.4114 13.9482 27.7444 13.7185 28.2622L12.897 30.1143L9.66885 29.5058C8.2877 29.2456 7.1528 28.326 6.65368 27.0553C6.55749 26.8105 6.45965 26.5631 6.36092 26.3133C5.07712 23.0666 3.63899 19.4297 3.63899 15.9455C3.63899 11.8274 6.40441 8.17493 10.541 6.58839ZM12.8822 21.6405C12.3435 21.6405 11.8512 21.9492 11.6103 22.438C11.3694 22.9268 11.4214 23.5117 11.7446 23.9488L13.8776 26.8343C14.1462 27.1976 14.5676 27.4114 15.0153 27.4114C15.4629 27.4114 15.8843 27.1976 16.1529 26.8343L18.2859 23.9488C18.6092 23.5117 18.6611 22.9268 18.4202 22.438C18.1793 21.9492 17.687 21.6405 17.1483 21.6405H12.8822ZM11.6327 14.6017C11.6327 15.7971 10.6777 16.7659 9.49965 16.7659C8.32159 16.7659 7.36659 15.7971 7.36659 14.6017C7.36659 13.4066 8.32159 12.4377 9.49965 12.4377C10.6777 12.4377 11.6327 13.4066 11.6327 14.6017ZM20.7034 16.5909C21.8814 16.5909 22.8365 15.6221 22.8365 14.4267C22.8365 13.2316 21.8814 12.2627 20.7034 12.2627C19.5254 12.2627 18.5704 13.2316 18.5704 14.4267C18.5704 15.6221 19.5254 16.5909 20.7034 16.5909Z"
+                        fill="#473619"
+                      />
+                    </svg>
+                    <span>Other pets present:</span>
+                  </mat-checkbox>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="form-column">
+              <div class="dvoriste-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="50"
+                  height="50"
+                  viewBox="0 0 50 50"
+                  fill="none"
+                >
+                  <path
+                    d="M12.4998 20.8333H20.8332M29.1665 33.3333H37.4998M29.1665 20.8333H37.4998M12.4998 33.3333H20.8332M20.8332 41.6666H29.1665V14.5833L24.9998 8.33325L20.8332 14.5833V41.6666ZM4.1665 41.6666H12.4998V14.5833L8.33317 8.33325L4.1665 14.5833V41.6666ZM37.4998 41.6666H45.8332V14.5833L41.6665 8.33325L37.4998 14.5833V41.6666Z"
+                    stroke="#473619"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <!-- Dostupno dvorište -->
+              <div id="dvoriste-child">
+                <div class="checkbox-field" id="dvoriste-checkbox">
+                  <mat-checkbox
+                    (change)="toggleYard()"
+                    formControlName="yardAvail"
+                    class="custom-checkbox"
+                  >
+                    <span>Yard available:</span>
+                  </mat-checkbox>
+                </div>
+
+                <!-- Detalji o dvorištu -->
+                <div class="form-field">
+                  <label class="field-label">Yard details:</label>
+                  <mat-form-field
+                    appearance="outline"
+                    [class]="yard ? 'custom-field textarea-field' : 'custom-field textarea-field'"
+                  >
+                    <textarea
+                      matInput
+                      formControlName="yardInfo"
+                      rows="6"
+                      placeholder="How wide is it in m2? Will your pet be safe in the yard during the day? Are there any other animals present in or around the yard?"
+                    ></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="step-actions">
+            <button
+              (click)="getMeBack()"
+              mat-raised-button
+              class="secondarybtn"
+              type="button"
+              matStepperPrevious
+            >
+              BACK
+            </button>
+            <button mat-raised-button class="primarybtn" type="button" matStepperNext (click)="validateNextStep()">
+              NEXT
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-step>
+
+    <!-- Step 2: Briga o ljubimcu -->
+    <mat-step [stepControl]="step2FormGroup">
+      <ng-template matStepLabel>
+        <span class="custom-step-label-text">Pet care</span>
+      </ng-template>
+      <div class="step-content">
+        <form [formGroup]="step2FormGroup">
+          <div class="form-row">
+            <!-- Left Column -->
+            <div class="form-column">
+              <div class="dvoriste-icon" style="visibility: hidden;">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="50"
+                  height="50"
+                  viewBox="0 0 50 50"
+                  fill="none"
+                >
+                  <path
+                    d="M12.4998 20.8333H20.8332M29.1665 33.3333H37.4998M29.1665 20.8333H37.4998M12.4998 33.3333H20.8332M20.8332 41.6666H29.1665V14.5833L24.9998 8.33325L20.8332 14.5833V41.6666ZM4.1665 41.6666H12.4998V14.5833L8.33317 8.33325L4.1665 14.5833V41.6666ZM37.4998 41.6666H45.8332V14.5833L41.6665 8.33325L37.4998 14.5833V41.6666Z"
+                    stroke="#473619"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div class="form-child">
+                <!-- Prethodno iskustvo -->
+                <div class="checkbox-field">
+                  <mat-checkbox
+                    (change)="toggleExp()"
+                    formControlName="pastExp"
+                    class="custom-checkbox"
+                  >
+                    <span>Do you have any previous experience with owning a pet?</span>
+                  </mat-checkbox>
+                </div>
+
+                <div class="form-field" id="iskustvo-field">
+                  <label class="field-label">Your experience:</label>
+                  <mat-form-field appearance="outline" class="custom-field textarea-field">
+                    <textarea matInput formControlName="yourExp" rows="8" placeholder="Describe how it was like taking care of your pet."></textarea>
+                  </mat-form-field>
+                </div>
+
+                <!-- Da li će vaš ljubimac biti u vašoj kući ili van nje -->
+                <div class="form-field">
+                  <label class="field-label">
+                    Will your pet be inside or outside of your house?
+                    <span class="required">*</span>
+                  </label>
+                  <mat-form-field appearance="outline" class="custom-field">
+                    <mat-select
+                      formControlName="petInHouse"
+                      placeholder="Choose type of pet"
+                      [panelClass]="'custom-below-panel'"
+                      [disableOptionCentering]="true"
+                    >
+                      <mat-option value="u_kuci">Inside</mat-option>
+                      <mat-option value="van_kuce">Outside</mat-option>
+                      <mat-option value="oboje">Mix</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <!-- Middle Column -->
+            <div class="form-column">
+              <div class="dvoriste-icon" style="visibility: hidden;">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="50"
+                  height="50"
+                  viewBox="0 0 50 50"
+                  fill="none"
+                >
+                  <path
+                    d="M12.4998 20.8333H20.8332M29.1665 33.3333H37.4998M29.1665 20.8333H37.4998M12.4998 33.3333H20.8332M20.8332 41.6666H29.1665V14.5833L24.9998 8.33325L20.8332 14.5833V41.6666ZM4.1665 41.6666H12.4998V14.5833L8.33317 8.33325L4.1665 14.5833V41.6666ZM37.4998 41.6666H45.8332V14.5833L41.6665 8.33325L37.4998 14.5833V41.6666Z"
+                    stroke="#473619"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div class="form-child">
+                <!-- Dostupnost ukućana -->
+                <div class="form-field">
+                  <label class="field-label">
+                    How available will the residents be during the day?
+                    <span class="required">*</span>
+                  </label>
+                  <mat-form-field appearance="outline" class="custom-field textarea-field">
+                    <textarea
+                      matInput
+                      formControlName="familyAvail"
+                      rows="4"
+                      placeholder="Which member of the family is available the most? How many hours would the pet spend alone at your residence?"
+                    ></textarea>
+                  </mat-form-field>
+                     @if(this.step2FormGroup.controls['familyAvail']?.hasError('required') &&
+                  this.step2FormGroup.controls['familyAvail'].touched){
+                    <mat-error class="drugi-error">Please put the availability of house residents!</mat-error>
+                  }
+                </div>
+
+                <!-- Da li ovog ljubimca uzimate kao poklon -->
+                <div class="checkbox-field" style="margin: 40px 0px 40px 0px;">
+                  <mat-checkbox formControlName="gift" class="custom-checkbox">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="40"
+                      height="40"
+                      viewBox="0 0 40 40"
+                      fill="none"
+                    >
+                      <path
+                        d="M20 10.2778V35.5556M20 10.2778H13.125C12.112 10.2778 11.1405 9.86806 10.4243 9.13874C9.70796 8.40944 9.30556 7.42028 9.30556 6.38889C9.30556 5.3575 9.70796 4.36834 10.4243 3.63904C11.1405 2.90971 12.112 2.5 13.125 2.5C18.4722 2.5 20 10.2778 20 10.2778ZM20 10.2778H26.875C27.888 10.2778 28.8595 9.86806 29.5758 9.13874C30.2919 8.40944 30.6944 7.42028 30.6944 6.38889C30.6944 5.3575 30.2919 4.36834 29.5758 3.63904C28.8595 2.90971 27.888 2.5 26.875 2.5C21.5277 2.5 20 10.2778 20 10.2778ZM6.38889 20H33.6111V31.2778C33.6111 33.4557 33.6111 34.5448 33.1872 35.3767C32.8145 36.1084 32.2195 36.7034 31.4878 37.0761C30.6559 37.5 29.5669 37.5 27.3889 37.5H12.6111C10.4331 37.5 9.34413 37.5 8.51226 37.0761C7.78051 36.7034 7.18559 36.1084 6.81276 35.3767C6.38889 34.5448 6.38889 33.4557 6.38889 31.2778V20ZM5.61111 20H34.3889C35.478 20 36.0224 20 36.4383 19.7881C36.8043 19.6016 37.1016 19.3043 37.2881 18.9383C37.5 18.5224 37.5 17.978 37.5 16.8889V13.3889C37.5 12.2999 37.5 11.7554 37.2881 11.3395C37.1016 10.9736 36.8043 10.6761 36.4383 10.4897C36.0224 10.2778 35.478 10.2778 34.3889 10.2778H5.61111C4.52212 10.2778 3.97762 10.2778 3.56169 10.4897C3.19582 10.6761 2.89836 10.9736 2.71192 11.3395C2.5 11.7554 2.5 12.2999 2.5 13.3889V16.8889C2.5 17.978 2.5 18.5224 2.71192 18.9383C2.89836 19.3043 3.19582 19.6016 3.56169 19.7881C3.97762 20 4.52212 20 5.61111 20Z"
+                        stroke="#473619"
+                        stroke-width="5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <span>Is this pet a gift for somebody?</span>
+                  </mat-checkbox>
+                </div>
+
+                <!-- Koliko planirate prebivati u vašem trenutnom domu -->
+                <div class="form-field">
+                  <label class="field-label">
+                    How long will you be staying at your residence?
+                    <span class="required">*</span>
+                  </label>
+                  <mat-form-field appearance="outline" class="custom-field textarea-field">
+                    <textarea
+                      matInput
+                      formControlName="placeToLive"
+                      rows="4"
+                      placeholder="Will you be residing long-term or short-term?"
+                    ></textarea>
+                  </mat-form-field>
+                  @if(this.step2FormGroup.controls['placeToLive']?.hasError('required') &&
+                  this.step2FormGroup.controls['placeToLive'].touched){
+                    <mat-error class="drugi-error">Please put the length of your residing!</mat-error>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="form-column">
+              <!-- Finansijski ulog -->
+              <div class="dvoriste-icon" style="visibility: hidden;">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="50"
+                  height="50"
+                  viewBox="0 0 50 50"
+                  fill="none"
+                >
+                  <path
+                    d="M12.4998 20.8333H20.8332M29.1665 33.3333H37.4998M29.1665 20.8333H37.4998M12.4998 33.3333H20.8332M20.8332 41.6666H29.1665V14.5833L24.9998 8.33325L20.8332 14.5833V41.6666ZM4.1665 41.6666H12.4998V14.5833L8.33317 8.33325L4.1665 14.5833V41.6666ZM37.4998 41.6666H45.8332V14.5833L41.6665 8.33325L37.4998 14.5833V41.6666Z"
+                    stroke="#473619"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div id="dvoriste-child">
+                <div class="form-field">
+                  <label class="field-label">
+                   How much money are you willing to invest in your pet, yearly?
+                    <span class="required">*</span>
+                  </label>
+                  <mat-form-field appearance="outline" class="custom-field">
+                    <input matInput formControlName="financialSupport" placeholder="e.g. 1000 KM" />
+                  </mat-form-field>
+                </div>
+
+                <!-- Alergije -->
+                 <div class="checkbox-container">
+<div class="checkbox-field">
+                  <mat-checkbox formControlName="allergies" class="custom-checkbox">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="35"
+                      height="35"
+                      viewBox="0 0 35 35"
+                      fill="none"
+                    >
+                      <path
+                        d="M31.9764 3.02056C29.9602 1.00413 27.3129 -0.00402122 24.6699 1.24658e-05C22.0267 -0.00408959 19.3794 1.0042 17.3632 3.02063L11.7285 8.65589L26.3376 23.2667L31.9723 17.6315C36.0089 13.5946 36.0089 7.05343 31.9764 3.02056ZM28.0219 3.90988C27.8416 4.85254 26.9277 5.47154 25.9812 5.28694C25.4443 5.1846 24.8912 5.13127 24.3379 5.1271C23.7887 5.1271 23.2354 5.18036 22.6946 5.28694C22.1086 5.39763 21.5308 5.20511 21.1333 4.80741C20.8958 4.56977 20.7276 4.26239 20.6578 3.90585C20.4777 2.96327 21.0922 2.05336 22.0389 1.86884C22.793 1.7213 23.5716 1.6476 24.342 1.6476C25.1124 1.6476 25.887 1.7254 26.645 1.86891C27.5875 2.04919 28.2064 2.9632 28.0219 3.90988Z"
+                        fill="#473619"
+                      />
+                      <path
+                        d="M3.02435 17.3607C1.00406 19.3813 0 22.0247 0 24.6723C0 27.3117 1.00803 29.9593 3.02422 31.9757C7.0566 36.0086 13.5971 36.0085 17.6334 31.9716L23.264 26.3404L8.65491 11.7295L3.02435 17.3607Z"
+                        fill="#473619"
+                      />
+                    </svg>
+                    <span>Are you allergic to any types of animals?</span>
+                  </mat-checkbox>
+                </div>
+
+                <!-- Spremnost za agresivnost -->
+                <div class="checkbox-field">
+                  <mat-checkbox formControlName="angerIssues" class="custom-checkbox">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="40"
+                      height="37"
+                      viewBox="0 0 40 37"
+                      fill="none"
+                    >
+                      <path
+                        d="M39.8921 35.7467L20.6751 0.412837C20.5355 0.156849 20.2784 0 19.9992 0C19.7255 0 19.4697 0.156849 19.3343 0.412837L0.108922 35.7467C-0.0320748 36.0056 -0.0376041 36.3223 0.100628 36.5827C0.243007 36.8402 0.497354 37 0.775201 37H39.2231C39.5009 37 39.7608 36.8402 39.8977 36.5827C39.9626 36.4525 40 36.3075 40 36.1669C40.0013 36.0204 39.964 35.8754 39.8921 35.7467ZM22.6269 12.5405L21.9883 26.5873H18.6859L18.0487 12.5405H22.6269ZM20.3351 33.7787H20.277C18.7716 33.7787 17.7294 32.5698 17.7294 30.9569C17.7294 29.2833 18.7993 28.1351 20.3351 28.1351C21.8708 28.1351 22.8868 29.2819 22.9158 30.9569C22.9172 32.5698 21.9012 33.7787 20.3351 33.7787Z"
+                        fill="#473619"
+                      />
+                    </svg>
+                    <span>Are you ready to handle unexpected aggressiveness or fear from this animal?</span>
+                  </mat-checkbox>
+                </div>
+
+                <!-- Spremnost za vraćanje -->
+                <div class="checkbox-field" id="second-field">
+                  <mat-checkbox formControlName="readyToBack" class="custom-checkbox">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="48"
+                      height="48"
+                      viewBox="0 0 48 48"
+                      fill="none"
+                    >
+                      <path
+                        d="M36 12L12 36M12 12L36 36"
+                        stroke="#473619"
+                        stroke-width="4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <span>Are you willing to return your pet in case of incompatibility?</span>
+                  </mat-checkbox>
+                </div>
+                 </div>
+                
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="step-actions">
+            <button mat-raised-button class="secondarybtn" type="button" matStepperPrevious>
+              BACK
+            </button>
+            <button mat-raised-button class="primarybtn" type="button" matStepperNext (click)="validateNextStep()"
+            >
+              NEXT
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-step>
+
+    <!-- Step 3: Finalni komentari -->
+    <mat-step [stepControl]="step3FormGroup">
+      <ng-template matStepLabel>
+        <span class="custom-step-label-text">Final comments</span>
+      </ng-template>
+      <div class="step-content">
+        <form [formGroup]="step3FormGroup">
+          <div class="form-row final-step">
+            <!-- Left Column -->
+            <div class="form-column-wide">
+              <!-- Opis prebivališta -->
+              <div class="form-field">
+                <label class="field-label">
+                 Describe your residence in details. <span class="required">*</span>
+                </label>
+                <mat-form-field appearance="outline" class="custom-field textarea-field">
+                  <textarea
+                    matInput
+                    formControlName="placeDesc"
+                    rows="5"
+                    placeholder="What are the surroundings like around your residence? What are the relations between the residents? Where would your pet spend their days?"
+                  ></textarea>
+                </mat-form-field>
+                @if(this.step3FormGroup.controls['placeDesc']?.hasError('required')&&
+                this.step3FormGroup.controls['placeDesc'].touched){
+                  <mat-error class="drugi-error">Please describe your residence!</mat-error>
+                }
+              </div>
+
+              <!-- Dodatni komentar -->
+              <div class="form-field">
+                <label class="field-label">Additional comments for the author of this post?</label>
+                <mat-form-field appearance="outline" class="custom-field textarea-field">
+                  <textarea
+                    matInput
+                    formControlName="comment"
+                    rows="5"
+                    placeholder="Write your comment."
+                  ></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="form-column-wide declaration-column">
+              <div>
+                <p class="declaration-text">
+                  I declare that I take full
+                  obligation and responsibility for the pet, and that I am ready to provide a comfortable home, pay
+                  vet visits and give love to my new member of the family.
+                  <span class="required">*</span>
+                </p>
+
+                <div class="agreement-checkbox">
+                  <mat-checkbox formControlName="iAmReady" class="custom-checkbox large-checkbox">
+                    <span>I agree</span>
+                  </mat-checkbox>
+                   @if(this.step3FormGroup.controls['iAmReady']?.hasError('required')&&
+                this.step3FormGroup.controls['iAmReady'].touched){
+                  <mat-error class="drugi-error"></mat-error>
+                }
+                </div>
+
+                <p class="warning-text">
+                  Please check the information you have entered in your application.<br />
+                  You CANNOT delete nor edit your request after you have successfully sent it.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="step-actions">
+            <button mat-raised-button class="secondarybtn" type="button" matStepperPrevious>
+              BACK
+            </button>
+            <button
+              mat-raised-button
+              class="primarybtn btn-submit"
+              type="button"
+              (click)="sendRequest()"
+              [disabled]="this.step3FormGroup.invalid"
+            >
+              SEND REQUEST
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</div>

@@ -20,7 +20,6 @@ html {
   );
 }
 html {
-  height: 100%;
   margin: 0;
   background-image: linear-gradient(#e5d7c4, #c9ab81);
   background-size: cover;
@@ -57,16 +56,17 @@ html {
   background-color: #424f2d;
   color: #c7b18c;
   border-color: #c7b18c;
+  cursor: pointer;
 }
 .primarybtn:active {
   background-color: #252d19;
   color: #c7b18c;
   border-color: #c7b18c;
 }
-.primarybtn:disabled{
-  background-color: #4F5547;
-  color: #9E978D;
-  border-color: #9E978D;
+.primarybtn:disabled {
+  background-color: #4f5547;
+  color: #9e978d;
+  border-color: #9e978d;
 }
 .secondarybtn {
   background-color: #c7b18c;
@@ -82,6 +82,7 @@ html {
   background-color: #d9c6a5;
   color: #51432d;
   border-color: #51432d;
+  cursor: pointer;
 }
 
 .secondarybtn:active {

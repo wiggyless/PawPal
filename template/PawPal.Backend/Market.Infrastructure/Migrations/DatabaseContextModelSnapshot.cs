@@ -73,14 +73,37 @@ namespace PawPal.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("ChildrenAround")
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Aggressiveness")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Allergy")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("ChildrenAround")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("ElderlyAround")
+                    b.Property<bool?>("ElderlyAround")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ExpDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FinalComment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("FloorNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HouseDetials")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HouseType")
                         .IsRequired()
@@ -89,17 +112,41 @@ namespace PawPal.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("IsGift")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("ModifiedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("OtherPetsAround")
+                    b.Property<bool?>("OtherPetsAround")
                         .HasColumnType("bit");
+
+                    b.Property<string>("PeopleAva")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PeopleCount")
                         .HasColumnType("int");
 
-                    b.Property<bool>("YardAvailable")
+                    b.Property<bool?>("PetExp")
                         .HasColumnType("bit");
+
+                    b.Property<string>("PlanedStay")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("SumMoney")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool?>("TakeBack")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("YardAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("YardDetails")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

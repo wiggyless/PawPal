@@ -25,7 +25,7 @@
                 (selectionChange)="getBreedSelect()"
               >
                 @for (cat of animalCategories.items; track cat) {
-                  <mat-option [value]="cat.id">
+                  <mat-option [value]="cat.categoryName">
                     {{ cat.categoryName }}
                   </mat-option>
                 }
@@ -49,7 +49,7 @@
             <mat-form-field class="custom">
               <mat-select [(ngModel)]="selectedGender" placeholder="Choose gender">
                 @for (gen of genderList.items; track gen) {
-                  <mat-option [value]="gen.id">
+                  <mat-option [value]="gen.name">
                     {{ gen.name }}
                   </mat-option>
                 }
@@ -64,7 +64,7 @@
                 placeholder="Choose canton"
                 (selectionChange)="changeCity()"
               >
-                @for (can of cantonsList.items; track can) {
+                @for (can of cantonsList?.items; track can) {
                   <mat-option [value]="can">
                     {{ can.fullName }}
                   </mat-option>
@@ -77,7 +77,7 @@
             <mat-form-field class="custom">
               <mat-select [(ngModel)]="selectedCity" placeholder="Choose city">
                 @for (cit of selectedCanton?.cities; track cit) {
-                  <mat-option [value]="cit.id">
+                  <mat-option [value]="cit.name">
                     {{ cit.name }}
                   </mat-option>
                 }
@@ -119,15 +119,41 @@
         </div>
         <div class="header-posts">
           @if (animalPosts | async; as posts) {
-            @for (post of posts.items; track post) {
-              <div class="post" (click)="routeToPost(post)">
-                <img [src]="getPostImage(post.postID)" class="post-image" crossorigin="anonymous" />
-                <div class="post-detail">
-                  <h3>{{ post.name }}</h3>
-                  <p>{{ post.breed }}</p>
-                  <p>{{ post.dateAdded | date: 'short' }}</p>
+            @if (imagesLoaded) {
+              @for (post of posts.items; track post) {
+                <div class="post" (click)="routeToPost(post)">
+                  <button class="favorite-post" (click)="likeUnlikePost(post.postID, $event)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="29"
+                      height="26"
+                      viewBox="0 0 29 26"
+                      fill="none"
+                    >
+                      <path
+                        d="M24.987 3.93285C24.3747 3.32008 23.6475 2.83399 22.8473 2.50234C22.047 2.1707 21.1892 2 20.323 2C19.4567 2 18.5989 2.1707 17.7987 2.50234C16.9984 2.83399 16.2713 3.32008 15.6589 3.93285L14.388 5.20397L13.117 3.93285C11.88 2.69568 10.2023 2.00064 8.45294 2.00064C6.70357 2.00064 5.02585 2.69568 3.78886 3.93285C2.55187 5.17003 1.85693 6.848 1.85693 8.59762C1.85693 10.3473 2.55187 12.0252 3.78886 13.2624L14.388 23.8631L24.987 13.2624C25.5997 12.6499 26.0857 11.9227 26.4173 11.1223C26.7489 10.3219 26.9196 9.46401 26.9196 8.59762C26.9196 7.73124 26.7489 6.87334 26.4173 6.07295C26.0857 5.27255 25.5997 4.54534 24.987 3.93285Z"
+                        [class]="isFavorite(post.postID) ? 'filled' : 'non-filled'"
+                        stroke="white"
+                        stroke-width="4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <img
+                    [src]="getPostImage(post.postID)"
+                    class="post-image"
+                    crossorigin="anonymous"
+                  />
+                  <div class="post-detail">
+                    <h3>{{ post.name }}</h3>
+                    <p>{{ post.breed }}</p>
+                    <p>{{ post.dateAdded | date: 'short' }}</p>
+                  </div>
                 </div>
-              </div>
+              }
+            } @else {
+              <mat-spinner></mat-spinner>
             }
           }
         </div>

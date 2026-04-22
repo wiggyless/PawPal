@@ -17,7 +17,9 @@ export class UserProfileSideNavbar implements OnInit {
     My_Profile: '/client/my-profile',
     My_Favorites: '/client/my-profile/my-favorties',
     My_Posts: '/client/my-profile/myPosts',
-    My_Requests: '/client/my-profile/my-requests',
+    Recieved_Requests: '/client/my-profile/my-requests',
+    Sent_Requests: '/client/my-profile/my-sent-requests',
+    Request_History: '/client/my-profile/request-history',
     Settings: '/client/my-profile/settings',
   };
   keepOrder = (a: any, b: any) => 0;

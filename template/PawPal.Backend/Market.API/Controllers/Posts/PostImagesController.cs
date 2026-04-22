@@ -97,8 +97,7 @@ namespace PawPal.API.Controllers.Posts
             List<ListMainImageQueryDto> newPostImage = new();
             foreach (var img in postImage)
             {
-                string route = root.Replace("\\", "/");
-                string drugiRut = route + img.MainImage;
+                string drugiRut = root + img.MainImage;    
                 newPostImage.Add(new ListMainImageQueryDto {PostID=img.PostId, MainImage =
                     await System.IO.File.ReadAllBytesAsync(drugiRut,cancellationToken) });
             }

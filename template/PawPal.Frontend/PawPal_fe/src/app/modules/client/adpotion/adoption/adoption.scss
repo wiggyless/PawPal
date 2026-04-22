@@ -1,0 +1,649 @@
+.stepper-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(187, 116, 34, 0.2) 100%), #e5d7c4;
+  padding: 2rem 1rem;
+
+  @media (min-width: 768px) {
+    padding: 3rem 2rem;
+  }
+}
+
+// icons
+::ng-deep .mat-step-header .mat-step-icon-selected,
+::ng-deep .mat-step-header.mat-step-header-selected .mat-step-icon {
+  background-color: #354024 !important;
+  box-shadow: 5px 10px 10px #262d18 inset !important;
+}
+::ng-deep
+  .mat-step-header
+  .mat-step-icon.mat-step-icon-state-number.mat-step-icon-selected
+  .mat-step-icon-content
+  .step-icon {
+  stroke: #889063;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-number .mat-step-icon-content .step-icon {
+  stroke: #354024;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-done {
+  stroke: #889063;
+  box-shadow: 5px 10px 10px #627440 inset;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-edit .mat-step-icon-content .step-icon {
+  stroke: #354024 !important;
+}
+.adoption-stepper {
+  max-width: 1600px;
+  margin: 0 auto;
+  background: transparent;
+
+  ::ng-deep {
+    // Stepper header customization
+    .mat-step-header {
+      padding: 1.5rem 1rem;
+      pointer-events: none;
+      height: 100%;
+      display: flex;
+      width: 200px;
+      flex-direction: column;
+      .mat-step-icon {
+        background-color: #889063;
+        color: white;
+        width: 105px;
+        height: 105px;
+        box-shadow: inset 0 -10px 10px 0 rgba(0, 0, 0, 0.25);
+        border-radius: 50%;
+        margin-right: 0;
+      }
+
+      .mat-step-icon-selected,
+      .mat-step-icon-state-done {
+        background-color: #354024;
+      }
+
+      .mat-step-label {
+        color: #473619;
+        font-size: 20px;
+        font-weight: 300;
+        font-style: italic;
+        margin-top: 1rem;
+      }
+
+      .mat-step-label-selected {
+        font-weight: 700;
+        font-style: normal;
+      }
+    }
+
+    // Content area styling
+    .mat-horizontal-content-container {
+      padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+      box-shadow: 0 10px 16px 2px #51432d;
+      background-color: #51432d;
+      border-radius: 30px;
+    }
+    .mat-horizontal-stepper-wrapper {
+      position: relative;
+      top: -200px;
+    }
+    .mat-horizontal-stepper-header-container {
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      position: relative;
+      top: 150px;
+      z-index: 2;
+    }
+
+    .mat-stepper-horizontal-line {
+      min-width: 100px;
+      border-top-width: 2px;
+      border-color: #51432d;
+      margin: 0 -1rem;
+      top: 52px;
+      display: none;
+    }
+  }
+}
+
+.step-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+
+  .step-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  span {
+    max-width: 160px;
+    line-height: 1.2;
+  }
+}
+
+.step-content {
+  background: #c7b18c;
+  border: 2px solid #e5d7c4;
+  border-radius: 30px;
+  padding: 2rem;
+  padding-top: 100px;
+  box-shadow: 0 10px 16px 2px rgba(78, 41, 16, 0.3);
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -15px;
+    background: #51432d;
+    border-radius: 30px;
+    z-index: -1;
+    box-shadow: 0 10px 16px 2px rgba(78, 41, 16, 0.4);
+  }
+
+  @media (max-width: 767px) {
+    padding: 1.5rem 1rem;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &.final-step {
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+.form-column {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.form-child {
+  padding: 50px;
+}
+.form-column:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 10%; /* Adjust to make the line start lower */
+  bottom: 10%; /* Adjust to make the line end higher */
+  right: 0;
+  width: 1.5px; /* Thickness of the line */
+  background-color: #354024; /* Use your dark green color */
+  opacity: 0.6; /* Makes it look more subtle/cool */
+  border-radius: 2px;
+}
+#dvoriste-child {
+  padding: 50px;
+}
+#iskustvo-field {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.form-column-wide {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  padding: 50px;
+}
+.form-column-wide:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 10%; /* Adjust to make the line start lower */
+  bottom: 10%; /* Adjust to make the line end higher */
+  right: 0;
+  width: 1.5px; /* Thickness of the line */
+  background-color: #354024; /* Use your dark green color */
+  opacity: 0.6; /* Makes it look more subtle/cool */
+  border-radius: 2px;
+}
+/* Ensure the textarea dictates the height of the field */
+.textarea-field {
+  height: auto !important;
+}
+
+/* Reach inside to the MDC internal container */
+::ng-deep .textarea-field .mat-mdc-text-field-wrapper {
+  height: auto !important;
+  min-height: unset !important;
+}
+
+/* Remove default padding that might push the rows out of alignment */
+::ng-deep .textarea-field textarea.mat-mdc-input-element {
+  margin: 0 !important;
+  padding: 8px 0 !important; /* Adjust this to control top/bottom space inside border */
+  line-height: 1.5; /* Setting a specific line-height makes '8 rows' consistent */
+}
+/* Optional: Removes the extra spacing at the bottom used for hints/errors */
+::ng-deep #iskustvo-field .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field-label {
+  color: #473619;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.2;
+  margin-left: 5px;
+  .required {
+    color: #de0000;
+  }
+}
+
+.dvoriste-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.custom-field {
+  width: 100%;
+  ::ng-deep {
+    .mat-mdc-form-field-flex {
+      background: #e5d7c4;
+      border-radius: 25px;
+      box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+      padding: 0 1rem;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      padding: 0;
+    }
+
+    .mat-mdc-form-field-infix {
+      padding: 1rem 0;
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+    }
+
+    input,
+    .mat-mdc-select {
+      color: rgba(0, 0, 0, 0.5);
+      font-size: 16px;
+      font-weight: 200;
+
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 16px;
+        font-weight: 200;
+      }
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+
+    .mat-mdc-notch-piece {
+      display: none;
+    }
+  }
+
+  ::ng-deep .number-field input::-webkit-outer-spin-button,
+  ::ng-deep .number-field input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .arrow-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+  }
+  .arrow-container mat-icon:hover {
+    color: #252d19; /* Darker color on hover */
+    transform: scale(1.2); /* Slightly grow the arrow */
+  }
+  .arrow-container {
+    z-index: 10;
+    cursor: pointer;
+  }
+
+  .arrow-container mat-icon {
+    pointer-events: auto !important; /* Forces the icon to be interactive */
+  }
+  &.textarea-field {
+    ::ng-deep {
+      .mat-mdc-form-field-infix {
+        padding: 1rem 0;
+        min-height: auto;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+    }
+  }
+
+  &.number-field {
+    ::ng-deep {
+      .mat-mdc-form-field-icon-suffix {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+
+        button {
+          padding: 0;
+          min-width: 38px;
+          height: 19px;
+          line-height: 1;
+
+          .mat-icon {
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.field-icon {
+  color: #473619;
+  margin-right: 0.5rem;
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  min-height: 57px;
+}
+#dvoriste-checkbox {
+  justify-content: center;
+  margin-bottom: 20px;
+}
+/* In your component.scss */
+::ng-deep .textarea-field {
+  /* This targets the modern Angular Material (MDC) placeholder color */
+  --mdc-filled-text-field-placeholder-text-color: rgba(0, 0, 0, 0.4);
+  --mdc-outlined-text-field-placeholder-text-color: rgba(0, 0, 0, 0.4);
+}
+.textarea-field textarea {
+  resize: none !important; /* This disables the drag handle entirely */
+  overflow: auto; /* Ensures a scrollbar appears if text exceeds 6 rows */
+}
+/* Fallback for standard pseudo-elements */
+::ng-deep .textarea-field textarea::placeholder {
+  color: #888888 !important; /* Adjust hex to your preferred grey */
+  opacity: 1; /* Firefox requires this to show the full color */
+}
+.custom-checkbox {
+  ::ng-deep {
+    .mdc-checkbox {
+      width: 21.24px;
+      height: 21.24px;
+      border-radius: 2.36px;
+    }
+    .mdc-form-field {
+      display: flex;
+      flex-direction: row-reverse;
+    }
+    .mdc-checkbox__background {
+      border-color: #473619;
+      border-width: 2.36px;
+      border-radius: 2.36px;
+    }
+
+    .mdc-checkbox--selected .mdc-checkbox__background {
+      background-color: #473619;
+      border-color: #473619;
+    }
+
+    .mdc-checkbox__checkmark {
+      color: white;
+    }
+
+    .mdc-label {
+      color: #473619;
+      font-size: 18px;
+      font-weight: 300;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+
+  &.large-checkbox {
+    ::ng-deep {
+      .mdc-checkbox {
+        width: 30px;
+        height: 30px;
+      }
+
+      .mdc-label {
+        font-size: 20px;
+        font-weight: 400;
+      }
+    }
+  }
+
+  .checkbox-icon {
+    color: #473619;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+    margin-right: 0.5rem;
+  }
+
+  .checkbox-icon-svg {
+    width: 30px;
+    height: 30px;
+    margin-right: 0.5rem;
+    stroke: #473619;
+    fill: none;
+  }
+}
+
+.step-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+
+  @media (max-width: 767px) {
+    flex-direction: column-reverse;
+  }
+}
+
+.btn-primary,
+.btn-secondary {
+  min-width: 179px;
+  height: 54px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+}
+
+.btn-primary {
+  background: #354024;
+  color: #c7b18c;
+
+  &:hover:not(:disabled) {
+    background: darken(#354024, 5%);
+  }
+
+  &:disabled {
+    background: #4f5547;
+    color: #9e978d;
+  }
+}
+
+.btn-secondary {
+  background: #c7b18c;
+  color: #51432d;
+  border: 1px solid rgba(81, 67, 45, 0.5);
+
+  &:hover {
+    background: darken(#c7b18c, 5%);
+  }
+}
+
+.declaration-column {
+  justify-content: center;
+}
+
+.declaration-box {
+  background: #e5d7c4;
+  border: 1px solid #707070;
+  border-radius: 25px;
+  padding: 2rem;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.declaration-text {
+  color: #473619;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.5;
+  text-align: center;
+  margin: 0;
+
+  strong {
+    font-weight: 700;
+  }
+
+  .required {
+    color: #de0000;
+  }
+}
+
+.warning-text {
+  color: #473619;
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.4;
+  text-align: center;
+  margin: 0;
+}
+
+// ovo je za zadnji ovaj slazem se button
+.agreement-checkbox {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+  ::ng-deep {
+    .mat-mdc-checkbox .mdc-form-field {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.btn-submit {
+  align-self: center;
+  min-width: 200px;
+}
+
+// Responsive adjustments
+@media (max-width: 1023px) {
+  .step-content {
+    padding: 1.5rem;
+  }
+
+  .form-row {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .stepper-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .adoption-stepper {
+    ::ng-deep {
+      .mat-step-header {
+        padding: 1rem 0.5rem;
+
+        .mat-step-icon {
+          width: 70px;
+          height: 70px;
+        }
+      }
+
+      .mat-horizontal-stepper-header-container {
+        gap: 1rem;
+      }
+
+      .mat-stepper-horizontal-line {
+        min-width: 50px;
+        top: 35px;
+      }
+    }
+  }
+
+  .step-label {
+    .step-icon {
+      width: 35px;
+      height: 35px;
+    }
+
+    span {
+      font-size: 14px;
+      max-width: 100px;
+    }
+  }
+
+  .field-label {
+    font-size: 16px;
+  }
+
+  .declaration-box {
+    padding: 1.5rem 1rem;
+  }
+
+  .declaration-text,
+  .warning-text {
+    font-size: 16px;
+  }
+}
+
+mat-error{
+  margin-top: -20px;
+  padding: 5px;
+}
+
+.drugi-error{
+  margin-top: 0px;
+}
+
+.checkbox-container{
+  padding-top:30px;
+  .checkbox-field{
+    padding-top:50px;
+  }
+}

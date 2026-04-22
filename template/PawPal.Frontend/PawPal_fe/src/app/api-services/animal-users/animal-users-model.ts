@@ -7,8 +7,9 @@ export interface GetUserByIdDto {
   city: string;
   cityID: number;
   cantonAbbrevation: string;
+  userName: string;
 }
-export interface UpdateUserCommand{
+export interface UpdateUserCommand {
   firstName: string;
   lastName: string;
   profilePictureURL: string;
@@ -16,6 +17,6 @@ export interface UpdateUserCommand{
   cityId: number;
 }
 
-export interface DeleteUserCommand{
+export interface DeleteUserCommand {
   id: number;
 }

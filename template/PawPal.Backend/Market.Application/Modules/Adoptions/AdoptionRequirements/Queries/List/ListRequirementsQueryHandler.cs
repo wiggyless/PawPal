@@ -21,11 +21,27 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Queries.List
             && x.ChildrenAround == request.SearchChildrenAround && x.YardAvailable == request.SearchYardAvailable);
             var finalResult = reqList.OrderBy(y => y.HouseType).Select(x => new ListRequirementsQueryDto
             {
+                Id = x.Id,
                 HouseType = x.HouseType,
+                Address = x.Address,
+                FloorNumber = x.FloorNumber,
                 PeopleCount = x.PeopleCount,
                 ChildrenAround = x.ChildrenAround,
+                ElderlyAround = x.ElderlyAround,
                 OtherPetsAround = x.OtherPetsAround,
                 YardAvailable = x.YardAvailable,
+                YardDetails = x.YardDetails,
+                PetExp = x.PetExp,
+                ExpDetails = x.ExpDetails,
+                PeopleAva = x.PeopleAva,
+                IsGift = x.IsGift,
+                PlanedStay = x.PlanedStay,
+                SumMoney = x.SumMoney,
+                Allergy = x.Allergy,
+                Aggressiveness = x.Aggressiveness,
+                TakeBack = x.TakeBack,
+                HouseDetials = x.HouseDetials,
+                FinalComment = x.FinalComment
             });
             return await PageResult<ListRequirementsQueryDto>.FromQueryableAsync(finalResult, request.Paging, cancellationToken);
 

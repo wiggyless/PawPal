@@ -9,6 +9,8 @@ import {
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { forkJoin } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { SaveChangesComponent } from './save-changes-component/save-changes-component';
 
 @Component({
   selector: 'app-user-profile-component',
@@ -30,9 +32,13 @@ export class UserProfileComponent implements OnInit {
   }
   currentUser: CurrentUserService;
   userDataService: AnimalUserService;
+  dialog = inject(MatDialog);
   cityService = inject(CitiesService);
   cityList: any = [];
   city: string = '';
+
+  private originalCityId: number = 0;
+
   userData: GetUserByIdDto = {
     id: 0,
     firstName: '',
@@ -42,6 +48,7 @@ export class UserProfileComponent implements OnInit {
     city: '',
     cantonAbbrevation: '',
     cityID: 0,
+    userName: '',
   };
   constructor(currentUser: CurrentUserService, userDataService: AnimalUserService) {
     this.currentUser = currentUser;
@@ -51,7 +58,7 @@ export class UserProfileComponent implements OnInit {
     firstName: new FormControl({ value: '', disabled: true }),
     lastName: new FormControl({ value: '', disabled: true }),
     date: new FormControl({ value: '', disabled: true }),
-    city: new FormControl({ value: '', disabled: true }),
+    city: new FormControl<string | number>({ value: '', disabled: true }), // Accept both types
     aboutMe: new FormControl({ value: '', disabled: true }),
   });
 
@@ -64,11 +71,13 @@ export class UserProfileComponent implements OnInit {
     });
   }
   initializeInputData(): void {
+    this.originalCityId = this.userData.cityID; // Store the original ID
+
     this.profileForm.patchValue({
       firstName: this.userData.firstName,
       lastName: this.userData.lastName,
       date: this.userData.dateTime,
-      city: this.userData.city,
+      city: this.userData.city, // This is the city name (string) for display
     });
   }
 
@@ -83,34 +92,53 @@ export class UserProfileComponent implements OnInit {
     this.editing = true;
     this.loadCities();
     this.profileForm.enable();
+    this.profileForm.get('city')?.setValue(this.originalCityId, { emitEvent: false });
   }
 
   saveChanges() {
     this.editing = false;
-    //prikupljamo sve informacije sa forme
+    this.dialog.open(SaveChangesComponent);
+    // Get the city value from the form
+    const cityValue = this.profileForm.get('city')?.value;
+
+    // Determine the cityId: use form value if it's a number, otherwise use original
+    const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;
+
+    // Collect form data
     this.userData.firstName = this.profileForm.get('firstName')?.value as string;
     this.userData.lastName = this.profileForm.get('lastName')?.value as string;
     this.userData.dateTime = this.profileForm.get('date')?.value as string;
-    this.userData.cityID = this.profileForm.get('city')?.value as any;
-    
-    //pravimo payload 
+    this.userData.cityID = cityId;
+
+    // Create payload
     const payload: UpdateUserCommand = {
       firstName: this.userData.firstName,
       lastName: this.userData.lastName,
       profilePictureURL: '',
       date: this.userData.dateTime,
-      cityId: this.userData.cityID,
+      cityId: cityId,
     };
 
-    this.userDataService.updateUser(this.userData.id, payload).subscribe({ //payload šaljemo našem servisu
+    this.userDataService.updateUser(this.userData.id, payload).subscribe({
       next: (res) => {
-          console.log('SUCCESS =>', res);
-          this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false }); //dodano kako se ne bi broj kasnije prikazivao umjesto imena, mali bug
+        // Find the selected city name to display - with explicit type
+        const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
+
+        if (selectedCity) {
+          this.userData.city = selectedCity.name;
+          this.originalCityId = cityId; // Update the original ID
+        }
+
+        // Set the form back to show city name (not ID)
+        this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
       },
       error: (res) => {
         console.log('ERROR: =>', res);
-      }
-    })
-    this.profileForm.disable(); //onemogućavamo formu kako korisnik ne bi mogao više da edituje
+        // Reset to original city name on error
+        this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+      },
+    });
+
+    this.profileForm.disable();
   }
 }
