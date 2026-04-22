@@ -8,8 +8,16 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.List
 {
     public class ListAdoptionRequestQueryDto
     {
+        public int RequestId { get; set; }
         public string Status { get; set; }
         public DateTime DateSent { get; set; }  
         public int RequirementId { get; set; }
+        public int UserID { get; set; }
+        public int PostID { get; set; }
+        public string Gender { get; set; }
+        public string Breed { get; set; }
+        public string Name { get; set; }
+        public string City { get; set; }
+        public string Canton { get; set; }
     }
 }

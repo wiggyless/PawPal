@@ -1,4 +1,4 @@
-import {PageRequest} from './page-request';
+import { PageRequest } from './page-request';
 
 // pratimo klasu c# BasePagedQuery.cs
 export class BasePagedQuery {

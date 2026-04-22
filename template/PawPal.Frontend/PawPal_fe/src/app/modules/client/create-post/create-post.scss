@@ -1,18 +1,16 @@
-.container {
-  display: flex;
-  width: 100%;
-  height: 100vh;
-  justify-content: center;
+body {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(187, 116, 34, 0.2) 100%), #e5d7c4;
 }
-.mat-step-container {
-  height: 600px;
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(187, 116, 34, 0.2) 100%), #e5d7c4;
+  padding: 2rem 1rem;
+
+  @media (min-width: 768px) {
+    padding: 3rem 2rem;
+  }
 }
 // Main image stepper css
-.stepper-container {
-  width: 80%;
-  height: 500px;
-  margin: auto;
-}
 .mat-grid-tile {
   background-color: lightblue;
 }
@@ -31,19 +29,18 @@ input[type='file']::content {
   font-size: larger;
 }
 
-::ng-deep.mat-horizontal-content-container {
-  padding-left: 15px !important;
-}
 .image-container {
   display: flex;
   flex-wrap: wrap;
-  width: 80%;
   margin-left: 50px;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   column-gap: 30px;
+  width: 60%;
 }
 .image {
+  flex: 0 0 calc(20% - 8px);
   width: 100%;
   height: 120px;
   border: 1px solid #47331a;
@@ -61,18 +58,7 @@ input[type='file']::content {
   width: 100%;
   height: 100%;
 }
-:host ::ng-deep .mat-horizontal-stepper-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-:host ::ng-deep .mat-stepper-horizontal {
-  padding: 30px;
-  border-radius: 10px;
-  background-image: linear-gradient(#b2996f, #dbc49b);
-  border: 3px solid #51432d;
-}
+
 .stepper-buttons {
   display: flex;
   flex-direction: row;
@@ -105,6 +91,12 @@ input::-webkit-inner-spin-button {
 }
 .image-holder-button {
   display: flex;
+  bottom: 60px;
+  left: 100px;
+  position: relative;
+}
+.star-image-holder {
+  display: flex;
   bottom: 140px;
   left: 100px;
   position: relative;
@@ -117,6 +109,16 @@ input[type='number'] {
 .second-step-image-holder {
   width: 400px;
   height: 400px;
+}
+.main-image-selected {
+  width: 400px;
+  height: 400px;
+  margin-bottom: 10px;
+}
+.main-image-second-step {
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
 }
 .mat-step-main-info-container {
   display: flex;
@@ -132,9 +134,6 @@ input[type='number'] {
   margin-left: 20px;
   width: 60%;
   justify-content: center;
-}
-
-::ng-deep .mat-mdc-form-field {
 }
 
 // Thrid stepper
@@ -154,6 +153,44 @@ input[type='number'] {
   margin-top: 100px;
   justify-content: center;
   align-items: center;
+  ::ng-deep {
+    .p-carousel
+      .p-carousel-content-container
+      .p-carousel-content
+      .p-carousel-prev-button
+      .p-button
+      .p-icon {
+      width: 50px;
+      display: inline-block; /* Essential: transforms don't work on inline elements */
+      transition: transform 0.3s ease-in-out;
+    }
+    .p-carousel
+      .p-carousel-content-container
+      .p-carousel-content
+      .p-carousel-prev-button
+      .p-button
+      .p-icon:hover {
+      transform: translateX(-5px);
+    }
+    .p-carousel
+      .p-carousel-content-container
+      .p-carousel-content
+      .p-carousel-next-button
+      .p-button
+      .p-icon {
+      width: 50px;
+      display: inline-block; /* Essential: transforms don't work on inline elements */
+      transition: transform 0.3s ease-in-out;
+    }
+    .p-carousel
+      .p-carousel-content-container
+      .p-carousel-content
+      .p-carousel-next-button
+      .p-button
+      .p-icon:hover {
+      transform: translateX(5px);
+    }
+  }
 }
 .post-container {
   width: 100%;
@@ -339,34 +376,19 @@ input[type='number'] {
   width: 50px;
   height: 50px;
 }
+
 .p-button-icon-only {
   --p-button-icon-only-width: 50px;
   height: 50px;
 }
 
-::ng-deep .mat-horizontal-stepper-header-container {
-  position: absolute;
-
-  top: 14%;
-  left: 450px;
-}
-
-::ng-deep .mat-step-icon {
-  width: 80px !important;
-  height: 80px !important;
-}
-::ng-deep .mat-step-header {
-  height: 130px !important;
-}
 ::ng-deep .mat-stepper-horizontal-line {
   display: none !important;
 }
 
 ::ng-deep .mat-step-header .mat-step-icon {
-  color: white;
   font-size: 24px;
 }
-
 ::ng-deep .mat-step-label {
   color: #51432d;
   font-size: 14px;
@@ -400,6 +422,30 @@ input[type='number'] {
   display: flex;
   flex-direction: column;
   height: 100px;
+  width: 300px;
+}
+
+// New row container
+.form-row {
+  display: flex;
+  gap: 20px; // Space between breed and passport section
+  align-items: flex-start;
+  flex-wrap: wrap; // Makes it responsive
+}
+
+// Passport section container
+.passport-section {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end; // Aligns checkbox with input field
+}
+
+.passport-checkbox {
+  margin-bottom: 20px; // Aligns with the input field
+}
+
+.passport-input {
+  width: 200px; // Adjust as needed
 }
 
 ::ng-deep .mat-step-header .mat-step-icon-selected,
@@ -407,25 +453,107 @@ input[type='number'] {
   background-color: #354024 !important;
   box-shadow: 5px 10px 10px #262d18 inset !important;
 }
+::ng-deep
+  .mat-step-header
+  .mat-step-icon.mat-step-icon-state-number.mat-step-icon-selected
+  .mat-step-icon-content
+  .step-icon {
+  stroke: #889063;
+}
 
-::ng-deep .mat-step-header .mat-step-icon-state-number {
-  background-color: #889063;
-  box-shadow: 5px 10px 10px #627440 inset;
+::ng-deep .mat-step-header .mat-step-icon-state-number .mat-step-icon-content .step-icon {
+  stroke: #354024;
 }
 
 ::ng-deep .mat-step-header .mat-step-icon-state-done {
-  background-color: #889063;
+  stroke: #889063;
   box-shadow: 5px 10px 10px #627440 inset;
 }
 
-::ng-deep .mat-step-header .mat-step-icon-state-edit {
-  background-color: #354024 !important;
-  box-shadow: 5px 10px 10px #262d18 inset !important;
+::ng-deep .mat-step-header .mat-step-icon-state-edit .mat-step-icon-content .step-icon {
+  stroke: #354024 !important;
 }
 
+.create-stepper {
+  max-width: 1400px;
+  height: 100vh;
+  margin: 0 auto;
+  ::ng-deep {
+    // Stepper header customization
+    .mat-step-header {
+      padding: 1.5rem 1rem;
+      pointer-events: none;
+      display: flex;
+      width: 200px;
+      height: 100%;
+      flex-direction: column;
+      .mat-step-icon {
+        background-color: #889063;
+        color: white;
+        width: 105px;
+        height: 105px;
+        box-shadow: inset 0 -10px 10px 0 rgba(0, 0, 0, 0.25);
+        border-radius: 50%;
+        margin-right: 0;
+      }
+
+      .mat-step-icon-selected,
+      .mat-step-icon-state-done {
+        background-color: #354024;
+      }
+
+      .mat-step-label {
+        color: #473619;
+        font-size: 20px;
+        font-weight: 300;
+        font-style: italic;
+        margin-top: 1rem;
+      }
+
+      .mat-step-label-selected {
+        font-weight: 700;
+        font-style: normal;
+      }
+    }
+    .mat-horizontal-stepper-header-container {
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      position: relative;
+      top: 170px;
+      z-index: 2;
+    }
+    .mat-horizontal-content-container {
+      background-color: #51432d;
+      box-shadow: 0 10px 16px 2px #51432d;
+      padding: 10px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      border-radius: 30px;
+    }
+    .mat-horizontal-stepper-wrapper {
+      position: relative;
+      top: -200px;
+    }
+  }
+}
+.step-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #c7b18c;
+  z-index: 1;
+  padding: 50px;
+  border: 2px solid #e5d7c4;
+  border-radius: 30px;
+}
+:host ::ng-deep .mat-stepper-horizontal {
+  padding: 30px;
+  background: transparent;
+}
 .mat-step-health-info-container {
   padding-top: 75px;
-  height: 400px;
 }
 
 .animal-health-container {
@@ -481,4 +609,69 @@ input[type='number'] {
   border: none;
   padding: 5px;
   box-shadow: 2px 3px 5px #504949;
+  cursor: pointer;
+}
+.image-star-button {
+  background-color: rgb(110, 110, 110);
+  border-radius: 100px;
+  border: none;
+  padding: 5px;
+  box-shadow: 2px 3px 5px #504949;
+  cursor: pointer;
+}
+.image-star-button-selected {
+  background-color: #cc8a27;
+  border-radius: 100px;
+  border: none;
+  padding: 5px;
+  box-shadow: 2px 3px 5px #504949;
+  cursor: pointer;
+}
+.image-input {
+  z-index: -1;
+  cursor: pointer;
+}
+.image-input-container {
+  height: 100%;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 1px dashed #000;
+  border-radius: 20px;
+  background: #e5d7c4;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+.image-input-text {
+  position: absolute;
+  font-size: 20px;
+}
+.image-input-text-warning {
+  bottom: 38%;
+  position: absolute;
+  color: rgba(0, 0, 0, 0.5);
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+}
+.image-input-icon {
+  position: absolute;
+  left: 39%;
+  top: 25%;
+}
+input[type='file']::file-selector-button {
+  visibility: hidden;
+}
+input[type='file'] {
+  font-size: 0px;
+}
+
+textarea{
+  border-radius:20px;
+  border:none;
+  box-shadow: 0 10px 16px 2px #917e5f;
+  
 }

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <title>PawPal</title>
   </head>
-  <body>
+  <body class="main-page-layout">
     <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
     <div class="header">
       <p>NEED A NEW MEMBER OF YOUR FAMILY?</p>
@@ -13,21 +13,28 @@
       >
       <br />
       <div class="options">
-        <mat-select class="sel" placeholder="Select an animal category">
-          @for (cat of animalCategories.items; track cat) {
-          <mat-option>{{ cat.categoryName }}</mat-option>
-          }
-        </mat-select>
-        
-        <mat-select class="sel" placeholder="Select a city">
-          @for (city of cities.items; track city) {
-          <mat-option>{{  city.name }}</mat-option>
-          }
-        </mat-select>
-
+        @if (imagesLoaded) {
+          <mat-select
+            class="sel"
+            placeholder="Select an animal category"
+            [(ngModel)]="selectedCategory"
+            (valueChange)="showCategory()"
+          >
+            @for (cat of animalCategories.items; track cat) {
+              <mat-option [value]="cat.categoryName">{{ cat.categoryName }}</mat-option>
+            }
+          </mat-select>
+        }
+        @if (imagesLoaded) {
+          <mat-select class="sel" placeholder="Select a canton" [(ngModel)]="selectedCanton">
+            @for (cant of cantons.items; track cant) {
+              <mat-option [value]="cant.id">{{ cant.fullName }}</mat-option>
+            }
+          </mat-select>
+        }
       </div>
       <div class="search-btn">
-        <button class="primarybtn">SEARCH</button>
+        <button class="primarybtn" (click)="searchCatalog()">SEARCH</button>
       </div>
       <app-footer></app-footer>
     </div>

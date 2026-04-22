@@ -7,6 +7,7 @@ using PawPal.Application.Modules.Adoptions.AdoptionRequirements.Queries.List;
 
 namespace PawPal.API.Controllers.Adoptions
 {
+    [AllowAnonymous]
     [ApiController]
     [Route("[controller]")]
     public class AdotptionRequirementsController(ISender sender) : ControllerBase

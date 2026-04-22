@@ -9,7 +9,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MyPosts } from './my-posts/my-posts';
 import { UserProfileSideNavbar } from './user-profile-side-navbar/user-profile-side-navbar/user-profile-side-navbar';
 import { MatListModule } from '@angular/material/list';
-import { AsyncPipe, KeyValuePipe } from '@angular/common';
+import { AsyncPipe, DatePipe, KeyValuePipe } from '@angular/common';
 import { CreatePost } from './create-post/create-post';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,6 +26,16 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DialogueComponent } from './dialogue-component/dialogue-component';
 import { MatPaginator } from '@angular/material/paginator';
 import { A11yModule } from '@angular/cdk/a11y';
+import { SaveChangesComponent } from './my-profile/user-profile-component/save-changes-component/save-changes-component';
+import { MyFavorites } from './my-favorites/my-favorites/my-favorites';
+import { MatSpinner } from '@angular/material/progress-spinner';
+import { MyRequests } from './my-requests/my-requests/my-requests';
+import { MyRequestsDialog } from './my-requests/my-requests-dialog/my-requests-dialog/my-requests-dialog';
+import { SettingsComponent } from './settings/settings-component';
+import { Adoption } from './adpotion/adoption/adoption';
+import { MySentRequests } from './my-sent-requests/my-sent-requests/my-sent-requests';
+import { MySentRequestDialog } from './my-sent-requests/my-sent-request-dialog/my-sent-request-dialog/my-sent-request-dialog';
+import { RequestHistory } from './request-history/request-history/request-history';
 @NgModule({
   declarations: [
     UserProfileComponent,
@@ -34,6 +44,15 @@ import { A11yModule } from '@angular/cdk/a11y';
     UserProfileSideNavbar,
     CreatePost,
     DialogueComponent,
+    SaveChangesComponent,
+    MyFavorites,
+    MyRequests,
+    MyRequestsDialog,
+    SettingsComponent,
+    Adoption,
+    MySentRequests,
+    MySentRequestDialog,
+    RequestHistory,
   ],
   imports: [
     ClientRoutingModule,
@@ -59,6 +78,8 @@ import { A11yModule } from '@angular/cdk/a11y';
     MatDateRangeInput,
     MatDialogModule,
     A11yModule,
+    MatSpinner,
+    DatePipe,
   ],
   providers: [provideNativeDateAdapter(), MatDialog],
 })

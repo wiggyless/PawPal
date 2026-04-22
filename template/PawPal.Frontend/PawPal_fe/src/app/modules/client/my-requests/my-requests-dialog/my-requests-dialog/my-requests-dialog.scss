@@ -1,0 +1,411 @@
+/* 1. Animate the Backdrop (The dark blur) */
+.smooth-dialog-container {
+  /* This targets the wrapper around your dialog */
+}
+
+/* Target the container specifically when it's being "born" */
+@keyframes dialog-zoom-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+:root {
+  --primary-bg: #28241b;
+  --primary-text: #c7b18c;
+  --input-bg: #d4c4ae;
+  --input-border: #707070;
+  --dark-bg: #191408;
+  --button-bg: #51432d;
+  --button-text: #51432d;
+}
+body {
+  font-family:
+    'Inter',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
+  border-radius: 20px;
+  background-color: transparent;
+  background-image: none;
+  color: #c7b18c;
+  min-height: 100vh;
+  padding: 20px;
+}
+.left-column {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.middle-column {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.right-column {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.left-column::after,
+.middle-column::after {
+  content: '';
+  position: absolute;
+  top: 1%; /* Adjust to make the line start lower */
+  bottom: 1%; /* Adjust to make the line end higher */
+  right: -5%;
+  width: 1.5px; /* Thickness of the line */
+  background: #c7b18c; /* Use your dark green color */
+  opacity: 0.6; /* Makes it look more subtle/cool */
+  border-radius: 2px;
+}
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(157, 142, 71, 0) 0%, rgba(207, 157, 126, 0.2) 100%), #28241b;
+  border-radius: 20px;
+  padding: 30px;
+  min-height: 850px;
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.section-title {
+  color: #c7b18c;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 300;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-title svg {
+  width: 35px;
+  height: 35px;
+}
+
+.input-field {
+  width: 100%;
+  height: 56px;
+  border-radius: 20px;
+  border: 1px solid var(--input-border);
+  background: #d4c4ae;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  padding: 15px 20px;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.input-field::placeholder {
+  color: #999;
+}
+
+.input-field.large {
+  height: 105px;
+  resize: vertical;
+}
+
+.dual-input-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.dual-input-container label {
+  font-size: 18px;
+  font-weight: 300;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.dual-input-container .input-field {
+  margin-bottom: 0;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  font-size: 22px;
+  font-weight: 300;
+  color: #c7b18c;
+}
+
+.checkbox-item svg.icon {
+  width: 35px;
+  height: 35px;
+  fill: var(--primary-text);
+}
+
+.checkbox-container input[type='checkbox'] {
+  width: 28.32px;
+  height: 28.32px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  accent-color: #d4c4ae;
+}
+
+.checkbox-box {
+  width: 21.24px;
+  height: 21.24px;
+  border-radius: 2.36px;
+  background: var(--primary-text);
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox-box svg {
+  width: 29px;
+  height: 29px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--primary-text);
+  margin: 20px 0;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.bottom-border-holder {
+  width: 100%;
+  height: 1px;
+  border: 1px solid #c7b18c;
+  margin-bottom: 15px;
+}
+.avatar {
+  width: 182px;
+  height: 182px;
+  border-radius: 50%;
+  background: var(--dark-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.avatar svg {
+  width: 182px;
+  height: 182px;
+}
+
+.username {
+  font-size: 24px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.last-active {
+  font-size: 20px;
+  font-weight: 400;
+  text-align: center;
+  margin-top: -10px;
+}
+
+.send-message-btn {
+  width: 215px;
+  height: 62px;
+  border-radius: 10px;
+  border: 1px solid rgba(207, 187, 153, 0.5);
+  color: #c7b18c;
+  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+  background: #354024;
+  font-size: 18px;
+  font-weight: 400;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.send-message-btn:hover {
+  transform: translateY(-2px);
+}
+
+.status-section {
+  text-align: center;
+}
+
+.status-label {
+  font-size: 22px;
+  font-weight: 400;
+  text-decoration: underline;
+  margin-bottom: 10px;
+}
+
+.status-value {
+  font-size: 22px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.status-value svg {
+  width: 30px;
+  height: 30px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.info-row {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: 300;
+  width: 100%;
+}
+
+.info-row svg {
+  width: 35px;
+  height: 35px;
+}
+
+.back-btn {
+  width: 140px;
+  height: 46px;
+  border-radius: 10px;
+  border: 1px solid rgba(81, 67, 45, 0.5);
+  background: #c7b18c;
+  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-top: 20px;
+  color: #51432d;
+}
+textarea {
+  resize: none !important; /* This disables the drag handle entirely */
+  overflow: auto; /* Ensures a scrollbar appears if text exceeds 6 rows */
+}
+.back-btn:hover {
+  transform: translateY(-2px);
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .main-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dual-input-container {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
+
+  .checkbox-item {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .send-message-btn {
+    width: 100%;
+  }
+
+  .avatar {
+    width: 150px;
+    height: 150px;
+  }
+
+  .avatar svg {
+    width: 150px;
+    height: 150px;
+  }
+}
+.loading-spinner-text {
+  color: white;
+}
+.profile-buttons-approval {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  gap: 30px;
+}
+.icon-container {
+  width: 80px;
+  height: 80px;
+
+  position: absolute;
+  right: 40px;
+  top: 30px;
+  z-index: 3;
+  transition: all 0.3s ease;
+  border-radius: 100px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+.close-icon {
+  font-size: 70px;
+  width: 70px;
+  height: 70px;
+  line-height: 70px;
+  color: white;
+  cursor: pointer;
+}
+.icon-container:hover {
+  background-color: rgba(255, 255, 255, 0.15); /* Soft white highlight */
+  transform: scale(1.1); /* Subtle "pop" effect */
+  opacity: 0.8; /* Slight fade */
+  cursor: pointer;
+}

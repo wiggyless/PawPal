@@ -96,8 +96,11 @@
                 </p>
                 <div class="post-information-user-border"></div>
                 <div class="post-information-user-buttons">
-                  <button class="primarybtn">ADOPT</button>
-                  <button class="primarybtn">SEND MESSAGE</button>
+                  @if (currentUser.userId == userId) {
+                  } @else {
+                    <button class="primarybtn" (click)="routeAdopt()">ADOPT</button>
+                    <button class="primarybtn">SEND MESSAGE</button>
+                  }
                 </div>
               </div>
               <div class="post-information-user-report">

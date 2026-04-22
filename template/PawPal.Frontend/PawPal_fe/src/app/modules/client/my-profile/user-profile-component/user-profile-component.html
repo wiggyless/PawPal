@@ -2,17 +2,40 @@
   <div class="user-profile-detials-header">
     <div class="user-profile-image">
       <mat-icon>person</mat-icon>
-      </div>
-    <div class="user-profile-detials-header-text">
-      <h1 class="user-profile-details-name">{{ userData.firstName }}</h1>
-      <p class="user-profile-details-prop">@Username</p>
-      <p class="user-profile-details-prop">Number of posts:</p>
-      <p class="user-profile-details-prop">Favorite animal:</p>
+      @if (editing) {
+        <button class="user-profile-image-edit">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="20"
+            viewBox="0 0 24 20"
+            fill="none"
+          >
+            <path
+              d="M23 17.25C23 17.7804 22.7893 18.2891 22.4142 18.6642C22.0391 19.0393 21.5304 19.25 21 19.25H3C2.46957 19.25 1.96086 19.0393 1.58579 18.6642C1.21071 18.2891 1 17.7804 1 17.25V6.25C1 5.71957 1.21071 5.21086 1.58579 4.83579C1.96086 4.46071 2.46957 4.25 3 4.25H7L9 1.25H15L17 4.25H21C21.5304 4.25 22.0391 4.46071 22.4142 4.83579C22.7893 5.21086 23 5.71957 23 6.25V17.25Z"
+              stroke="#473619"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 15.25C14.2091 15.25 16 13.4591 16 11.25C16 9.04086 14.2091 7.25 12 7.25C9.79086 7.25 8 9.04086 8 11.25C8 13.4591 9.79086 15.25 12 15.25Z"
+              stroke="#473619"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      }
     </div>
-    @if(editing){
-    <button class="primarybtn" (click)="saveChanges()">SAVE CHANGES</button>
-    }
-    @else {
+    <div class="user-profile-detials-header-text">
+      <h1 class="user-profile-details-name">{{ userData.firstName }} {{ userData.lastName }}</h1>
+      <p class="user-profile-details-prop">Username: {{ userData.userName }}</p>
+    </div>
+    @if (editing) {
+      <button class="primarybtn" (click)="saveChanges()">SAVE CHANGES</button>
+    } @else {
       <button class="primarybtn" (click)="editMode(userData.id)">EDIT PROFILE</button>
     }
   </div>
@@ -20,53 +43,86 @@
     <form class="user-profile-form" [formGroup]="profileForm">
       <div class="user-profile-form-input-container">
         <div class="form-field-format">
-              <label class="input-label">First name</label>
-              <mat-form-field>
-                <input matInput formControlName="firstName" />
-              </mat-form-field>
-            </div>
-      </div>
-      <div class="user-profile-form-input-container">
-         <div class="form-field-format">
-              <label class="input-label">Last name</label>
-              <mat-form-field>
-                <input matInput formControlName="lastName" />
-              </mat-form-field>
-            </div>
-      </div>
-      <div class="user-profile-form-input-container">
-           <div class="form-field-format-date">
-                <label class="input-label">Date of</label>
-                <mat-form-field>
-                  <input
-                    matInput
-                    [matDatepicker]="picker"
-                    placeholder="dd.MM.yyyy"
-                    formControlName="date"
-                  />
-                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-              </div>
+          <label class="input-label">First name</label>
+          <mat-form-field>
+            <input matInput formControlName="firstName" />
+          </mat-form-field>
+        </div>
       </div>
       <div class="user-profile-form-input-container">
         <div class="form-field-format">
-              <label class="input-label">City</label>
-              @if(editing){
-                 <mat-form-field>
-                  <mat-select placeholder="Select a city" required formControlName="city">
-                    @for (city of this.cityList.items; track city) {
-                      <mat-option [value]="city.id"> {{ city.name }}</mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
-              }
-              @else {
-                 <mat-form-field>
-                <input matInput formControlName="city"/>
-              </mat-form-field>
-              }
-            </div>
+          <label class="input-label">Last name</label>
+          <mat-form-field>
+            <input matInput formControlName="lastName" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="user-profile-form-input-container">
+        <div class="form-field-format-date">
+          <label class="input-label">Date of birth</label>
+          <mat-form-field>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              placeholder="dd.MM.yyyy"
+              formControlName="date"
+            />
+            <mat-datepicker-toggle matIconPrefix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="user-profile-form-input-container">
+        <div class="form-field-format">
+          <label class="input-label">City</label>
+          @if (editing) {
+            <mat-form-field>
+              <mat-icon matIconPrefix
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="25"
+                  viewBox="0 0 30 40"
+                  fill="none"
+                >
+                  <path
+                    d="M13.125 32.0832V17.4998H21.875V32.0832M4.375 13.1248L17.5 2.9165L30.625 13.1248V29.1665C30.625 29.9401 30.3177 30.6819 29.7707 31.2289C29.2237 31.7759 28.4819 32.0832 27.7083 32.0832H7.29167C6.51812 32.0832 5.77625 31.7759 5.22927 31.2289C4.68229 30.6819 4.375 29.9401 4.375 29.1665V13.1248Z"
+                    stroke="#1E1E1E"
+                    stroke-width="3.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </mat-icon>
+              <mat-select placeholder="Select a city" required formControlName="city">
+                @for (city of this.cityList.items; track city) {
+                  <mat-option [value]="city.id"> {{ city.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          } @else {
+            <mat-form-field>
+              <mat-icon matIconPrefix
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="25"
+                  height="25"
+                  viewBox="0 0 30 40"
+                  fill="none"
+                >
+                  <path
+                    d="M13.125 32.0832V17.4998H21.875V32.0832M4.375 13.1248L17.5 2.9165L30.625 13.1248V29.1665C30.625 29.9401 30.3177 30.6819 29.7707 31.2289C29.2237 31.7759 28.4819 32.0832 27.7083 32.0832H7.29167C6.51812 32.0832 5.77625 31.7759 5.22927 31.2289C4.68229 30.6819 4.375 29.9401 4.375 29.1665V13.1248Z"
+                    stroke="#958B7E"
+                    stroke-width="3.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </mat-icon>
+              <input matInput formControlName="city" />
+            </mat-form-field>
+          }
+        </div>
       </div>
       <div class="user-profile-form-input-container" id="user-profile-form-input-aboutme-container">
         <label for="about-Me-Text">About me</label>
