@@ -12,7 +12,7 @@ export class CurrentUserService {
   isAuthenticated = computed(() => this.auth.isAuthenticated());
 
   roleid = computed(() => this.auth.roleid());
-  userId = this.currentUser()?.userId ?? null;
+  userId = computed(() => this.currentUser()?.userId ?? null);
   get snapshot() {
     return this.auth.currentUser();
   }

@@ -17,17 +17,6 @@ import { AuthStorageService } from './auth-storage.service';
 import { CurrentUserDto } from './current-user.dto';
 import { JwtPayloadDto, NET_CLAIM_TYPES } from './jwt-payload.dto';
 
-/**
- * Glavni auth servis (façade).
- * - priča sa AuthApiService (HTTP)
- * - priča sa AuthStorageService (localStorage)
- * - dekodira JWT i drži CurrentUser kao signal
- *
- * Koristi se u:
- * - interceptoru (getAccessToken, refresh)
- * - guardovima (isAuthenticated, isAdmin)
- * - komponentama (login, logout, navbar)
- */
 @Injectable({ providedIn: 'root' })
 export class AuthFacadeService {
   private api = inject(AuthApiService);
@@ -68,25 +57,14 @@ export class AuthFacadeService {
     );
   }
 
-  /**
-   * Logout korisnika:
-   * - lokalno očisti state i tokene
-   * - pokuša invalidirati refresh token na serveru (bez drame na error)
-   */
   logout(): Observable<void> {
     const refreshToken = this.storage.getRefreshToken();
 
-    // 1) lokalno očisti (optimistic logout)
     this.clearUserState();
-
-    // 2) nema refresh tokena → nema ni API poziva
     if (!refreshToken) {
       return of(void 0);
     }
-
     const payload: LogoutCommand = { refreshToken };
-    console.log(payload);
-    // 3) pokušaj server-side logout, ignoriši greške
     return this.api.logout(payload).pipe(catchError(() => of(void 0)));
   }
 

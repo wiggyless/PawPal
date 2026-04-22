@@ -141,7 +141,7 @@ export class CatalogComponent
       tap((res) => {
         this.likedPosts
           .listLikedPosts({
-            userId: this.currentUser.userId!,
+            userId: this.currentUser.userId() as number,
             postIdList: res.items.map((x) => x.postID),
           })
           .subscribe((response) => {
@@ -287,14 +287,14 @@ export class CatalogComponent
       this.favoritePostList.splice(indexNum, 1);
       this.deleteFavoritePostList.push(index);
       this.likedPosts
-        .deletePost({ userId: this.currentUser.userId!, postId: index })
+        .deletePost({ userId: this.currentUser.userId() as number, postId: index })
         .subscribe((response) => {
           console.log('Unliked');
         });
     } else {
       this.favoritePostList.push(index);
       this.likedPosts
-        .addLikedPosts({ userID: this.currentUser.userId!, postID: index })
+        .addLikedPosts({ userID: this.currentUser.userId() as number, postID: index })
         .subscribe((response) => {
           console.log('LIKED POST');
           console.log(response);
