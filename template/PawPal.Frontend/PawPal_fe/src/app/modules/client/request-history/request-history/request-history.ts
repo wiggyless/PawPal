@@ -52,7 +52,7 @@ export class RequestHistory implements OnInit, OnDestroy {
   requestsList: PageResult<GetAdoptionRequestList> | undefined;
   fullName: string = '';
   requestQuery: GetAdoptionRequestListQuery = {
-    userID: this.currentUser.userId as number,
+    userID: this.currentUser.userId() as number,
     sent: false,
     paging: {
       page: 1,
