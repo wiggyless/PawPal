@@ -2,20 +2,17 @@ span{
     color:#51432D;
 }
 
-body{
-    background-color: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(187, 116, 34, 0.2) 100%), #E5D7C4 !important; 
-}
-
 .login-container{
     margin:auto;
     margin-top:60px;
     height:500px;
     width:600px;
-    background-image:linear-gradient(#b2996f, #dbc49b);
+        background-image: linear-gradient(to top, #C7B18C, #b49a68);
+
     background-size: cover;
     border-radius: 20px;
-    border:3px solid #51432D;
-    box-shadow: 5px 10px 18px #888888; 
+    border:3px solid #b49a68;
+    box-shadow: 5px 10px 18px #5e503e; 
     position:relative;
     display:flex;
     justify-content: space-between;

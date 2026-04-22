@@ -99,7 +99,7 @@ export class Adoption implements OnInit{
         const payload: CreateAdoptionRequest={
           status: 'SENT',
           dateSend: new Date,
-          userID: this.currentUserService.userId as number,
+          userID: this.currentUserService.userId() as number,
           postID: this.postID,
           requirementID: res.id
         }

@@ -17,7 +17,7 @@ export class LogoutComponent implements OnInit{
     // Call logout (handles API call + clears state)
     this.authService.logout().subscribe({
       next: () => this.startCountdown(),
-      error: () => this.startCountdown() // Even if API fails, clear local state
+      error: () => this.startCountdown()
     });
   }
 

@@ -14,29 +14,33 @@
       <br />
       <div class="options">
         @if (imagesLoaded) {
-          <mat-select
-            class="sel"
-            placeholder="Select an animal category"
-            [(ngModel)]="selectedCategory"
-            (valueChange)="showCategory()"
-          >
-            @for (cat of animalCategories.items; track cat) {
-              <mat-option [value]="cat.categoryName">{{ cat.categoryName }}</mat-option>
-            }
-          </mat-select>
+          <mat-form-field>
+            <mat-select
+              class="sel"
+              placeholder="Select an animal category"
+              [(ngModel)]="selectedCategory"
+              (valueChange)="showCategory()"
+            >
+              @for (cat of animalCategories.items; track cat) {
+                <mat-option [value]="cat.categoryName">{{ cat.categoryName }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
         }
         @if (imagesLoaded) {
-          <mat-select class="sel" placeholder="Select a canton" [(ngModel)]="selectedCanton">
-            @for (cant of cantons.items; track cant) {
-              <mat-option [value]="cant.id">{{ cant.fullName }}</mat-option>
-            }
-          </mat-select>
+          <mat-form-field>
+            <mat-select class="sel" placeholder="Select a canton" [(ngModel)]="selectedCanton">
+              @for (cant of cantons.items; track cant) {
+                <mat-option [value]="cant.id">{{ cant.fullName }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
         }
       </div>
       <div class="search-btn">
         <button class="primarybtn" (click)="searchCatalog()">SEARCH</button>
       </div>
-      <app-footer></app-footer>
     </div>
+    <app-footer></app-footer>
   </body>
 </html>

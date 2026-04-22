@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AnimalUserService } from '../../../../api-services/animal-users/animal-users-service';
@@ -19,16 +19,29 @@ import { SaveChangesComponent } from './save-changes-component/save-changes-comp
   styleUrl: './user-profile-component.scss',
 })
 export class UserProfileComponent implements OnInit {
-  ngOnInit(): void {
-    forkJoin({
-      userData: this.userDataService.getUser(this.currentUser.userId),
-      cities: this.cityService.listCities(),
-    }).subscribe({
-      next: (response) => {
-        this.userData = response.userData;
-        this.initializeInputData();
-      },
+  constructor(currentUser: CurrentUserService, userDataService: AnimalUserService) {
+    this.currentUser = currentUser;
+    this.userDataService = userDataService;
+     effect(() => {
+      const userId = this.currentUser.userId();
+      if (!userId) {
+        this.resetUserData();
+        return;
+      }
+      forkJoin({
+        userData: this.userDataService.getUser(userId),
+        cities: this.cityService.listCities(),
+      }).subscribe({
+        next: (response) => {
+          this.userData = response.userData;
+          this.initializeInputData();
+        },
+      });
     });
+  }
+
+  ngOnInit(): void {
+  
   }
   currentUser: CurrentUserService;
   userDataService: AnimalUserService;
@@ -50,10 +63,16 @@ export class UserProfileComponent implements OnInit {
     cityID: 0,
     userName: '',
   };
-  constructor(currentUser: CurrentUserService, userDataService: AnimalUserService) {
-    this.currentUser = currentUser;
-    this.userDataService = userDataService;
+
+  
+  private resetUserData(): void {
+    this.userData = {
+      id: 0, firstName: '', lastName: '', email: '',
+      dateTime: '', city: '', cantonAbbrevation: '', cityID: 0, userName: '',
+    };
+    this.profileForm.reset();
   }
+
   profileForm = new FormGroup({
     firstName: new FormControl({ value: '', disabled: true }),
     lastName: new FormControl({ value: '', disabled: true }),
@@ -65,7 +84,7 @@ export class UserProfileComponent implements OnInit {
   editing: boolean = false;
 
   getUserData(): void {
-    this.userDataService.getUser(this.currentUser.userId).subscribe((response) => {
+    this.userDataService.getUser(this.currentUser.userId()).subscribe((response) => {
       this.userData = response;
       this.initializeInputData();
     });
