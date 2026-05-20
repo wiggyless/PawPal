@@ -13,23 +13,7 @@ export class GetPostQuery extends BasePagedQuery {
   isRequest?: boolean;
 }
 
-// List the animals posts (forgor to add Post in the interface name)
-export interface ListAnimal {
-  postID: number;
-  animalID: number;
-  cityID: number;
-  categoryID: number;
-  userID: number;
-  genderID: number;
-  name: string;
-  age: number;
-  breed: string;
-  photoURL: string;
-  dateAdded: Date;
-}
-
-// Get a list of posts when looking by UserID
-export interface listAnimalPostsByUserIdDto {
+export interface ListAnimalPostsByUserIdDto {
   postId: number;
   firstImage: string;
   userId: string;
@@ -41,7 +25,6 @@ export interface listAnimalPostsByUserIdDto {
   dateAdded: Date;
 }
 
-// Get Post by Id
 export interface AnimalPostByIdQuery {
   postID: number;
   animalID: number;
@@ -56,7 +39,6 @@ export interface AnimalPostByIdQuery {
   dateAdded: Date;
 }
 
-// Post new ANimal
 export interface AddAnimalPost {
   animalID: number;
   cityID: number;

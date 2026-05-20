@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogueComponent } from '../dialogue-component/dialogue-component';
 import { CurrentUserService } from '../../../core/services/auth/current-user.service';
-import { AnimalUserService } from '../../../api-services/animal-users/animal-users-service';
+import { UserService } from '../../../api-services/users/users-service';
 
 @Component({
   selector: 'app-settings',
@@ -13,7 +13,7 @@ import { AnimalUserService } from '../../../api-services/animal-users/animal-use
 export class SettingsComponent implements OnInit {
   dialog = inject(MatDialog);
   currentUser = inject(CurrentUserService);
-  userService = inject(AnimalUserService);
+  userService = inject(UserService);
   userEmail: string = '';
   showChangeEmailForm: boolean = false;
   showChangePasswordForm: boolean = false;
@@ -46,8 +46,6 @@ export class SettingsComponent implements OnInit {
 
   saveEmail(): void {
     if (this.newEmail && this.newEmail !== this.userEmail) {
-      // Call service to update email
-      // this.userService.updateEmail(this.newEmail).subscribe(...)
       this.userEmail = this.newEmail;
       this.showChangeEmailForm = false;
       this.newEmail = '';
@@ -65,8 +63,6 @@ export class SettingsComponent implements OnInit {
       return;
     }
 
-    // Call service to update password
-    // this.userService.updatePassword(this.currentPassword, this.newPassword).subscribe(...)
     this.showChangePasswordForm = false;
     this.currentPassword = '';
     this.newPassword = '';

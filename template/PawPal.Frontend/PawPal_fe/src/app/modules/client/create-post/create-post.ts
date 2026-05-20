@@ -3,12 +3,12 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { environment } from '../../../../environments/environment';
 import { GenderService } from '../../../api-services/gender/gender-service';
 import { AnimalCategoriesService } from '../../../api-services/animal-categories/animal-categories.service';
-import { AnimalBreedService } from '../../../api-services/anima-breed/animal-breed.service';
+import { AnimalBreedService } from '../../../api-services/animal-breed/animal-breed.service';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { CurrentUserService } from '../../../core/services/auth/current-user.service';
-import { AnimalUserService } from '../../../api-services/animal-users/animal-users-service';
+import { UserService } from '../../../api-services/users/users-service';
 import { CitiesService } from '../../../api-services/cities/cities.service';
-import { GetUserByIdDto } from '../../../api-services/animal-users/animal-users-model';
+import { GetUserByIdDto } from '../../../api-services/users/users-model';
 import { Location } from '@angular/common';
 import { PostImagesService } from '../../../api-services/animal-post-images/animal-post-images-service';
 import {
@@ -26,8 +26,8 @@ import {
 import { AddAnimalDto, UpdateAnimalDto } from '../../../api-services/animals/animal-model';
 import { AnimalService } from '../../../api-services/animals/animal';
 import { AnimalPostService } from '../../../api-services/animal-posts/animal-posts.service';
-import { ListAnimalBreedQueryDto } from '../../../api-services/anima-breed/animal-breed.model';
-import { AllergyService } from '../../../api-services/alergies/allergy-service';
+import { ListAnimalBreedQueryDto } from '../../../api-services/animal-breed/animal-breed.model';
+import { AllergyService } from '../../../api-services/allergies/allergy-service';
 import { DisabilityService } from '../../../api-services/disabilities/disability-service';
 import { AnimalCategoryByIdQueryDto } from '../../../api-services/animal-categories/animal-categories.model';
 import {
@@ -35,7 +35,7 @@ import {
   UpdateHealthHistory
 } from '../../../api-services/animals-health/animals-health-model';
 import { AnimalsHealthService } from '../../../api-services/animals-health/animals-health-service';
-import { AllergyQueryDto } from '../../../api-services/alergies/allergy-model';
+import { AllergyQueryDto } from '../../../api-services/allergies/allergy-model';
 import { DisabilitiesDto } from '../../../api-services/disabilities/disability-model';
 import { MatDialog } from '@angular/material/dialog';
 import { CreatePostDialog } from './create-post-dialog/create-post-dialog/create-post-dialog';
@@ -54,7 +54,7 @@ export class CreatePost implements OnInit {
   categoryService = inject(AnimalCategoriesService);
   breedService = inject(AnimalBreedService);
   currentUser = inject(CurrentUserService);
-  animalUserService = inject(AnimalUserService);
+  animalUserService = inject(UserService);
   cityService = inject(CitiesService);
   animalService = inject(AnimalService);
   postService = inject(AnimalPostService);
@@ -101,18 +101,17 @@ export class CreatePost implements OnInit {
     healthInfo: this.thridFormGroup
   });
 
-  // injections
-
   allergyService = inject(AllergyService);
   disabilityService = inject(DisabilityService);
   healthHistory = inject(AnimalsHealthService);
-  // lists
+
   genderList: any = [];
   categoryList: any = [];
   breedList: any = [];
   allergyList: any = [];
   disabilityList: any = [];
-  // random variables
+
+  
   env = environment.apiUrl;
   url: string = '';
   substr: string = '';
@@ -120,7 +119,7 @@ export class CreatePost implements OnInit {
   routePostID: number = 0;
   isUpdate: boolean = false;
   routeAnimalID: number = 0;
-  /* iris additions for improving logic!!!!!*/
+
   breedArr: Array<ListAnimalBreedQueryDto> = new Array<ListAnimalBreedQueryDto>();
   selectedCategoryId: any;
   selectedCategory: AnimalCategoryByIdQueryDto = {
@@ -134,7 +133,7 @@ export class CreatePost implements OnInit {
   selectedSprayed: boolean = false;
   selectedAllergies: any = [];
   selectedDisabilities: any = [];
-  //imam id kategorije...
+
   userData: GetUserByIdDto = {
     id: 0,
     firstName: '',

@@ -27,6 +27,7 @@ export class AnimalRequestService {
     console.log(params?.toString());
     return this.httpClient.get<PageResult<GetAdoptionRequestList>>(this.apiUrl, { params });
   }
+  
   listAnimalRequestsHistory(
     request?: GetAdoptionRequestListQuery,
   ): Observable<PageResult<GetAdoptionRequestList>> {
@@ -35,15 +36,18 @@ export class AnimalRequestService {
     return this.httpClient.get<PageResult<GetAdoptionRequestList>>(this.apiUrl + '/history', {
       params,
     });
+
   }
   getAnimalRequestById(request: number): Observable<GetAdoptionRequestById> {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.get<GetAdoptionRequestById>(`${this.apiUrl}/${request}`, { params });
   }
+
   addRequest(request?: CreateAdoptionRequest): Observable<number> {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.post<number>(`${this.apiUrl}`, request, { params });
   }
+
   deleteRequest(requestId: number): Observable<number> {
     return this.httpClient.delete<number>(`${this.apiUrl}/${requestId}`, {
       body: {
@@ -51,6 +55,7 @@ export class AnimalRequestService {
       },
     });
   }
+
   listByPostID(
     request?: GetAdoptionRequestListByPostIDQuery,
   ): Observable<PageResult<GetAdoptionRequestByPostID>> {
@@ -60,6 +65,7 @@ export class AnimalRequestService {
       params,
     });
   }
+
   updateRequest(request: UpdateRequestByID): Observable<number> {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.put<number>(`${this.apiUrl}/${request.requestID}`, request, { params });

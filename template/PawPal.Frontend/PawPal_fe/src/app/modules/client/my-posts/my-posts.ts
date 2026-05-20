@@ -4,7 +4,7 @@ import { AnimalPostService } from '../../../api-services/animal-posts/animal-pos
 import {
   GetPostQuery,
   ListAnimal,
-  listAnimalPostsByUserIdDto,
+  ListAnimalPostsByUserIdDto,
 } from '../../../api-services/animal-posts/animal-posts.model';
 import { environment } from '../../../../environments/environment';
 import { Observable, tap } from 'rxjs';
@@ -23,7 +23,7 @@ import { PageEvent } from '@angular/material/paginator';
 export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> implements OnInit {
   currentUser: any;
   animalPostsService = inject(AnimalPostService);
-  animalPostList: Observable<PageResult<listAnimalPostsByUserIdDto>> | undefined;
+  animalPostList: Observable<PageResult<ListAnimalPostsByUserIdDto>> | undefined;
   envLink = environment;
   route = inject(Router);
   constructor(crr: CurrentUserService) {
@@ -64,7 +64,7 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
       }),
     );
   }
-  loadPost(post: listAnimalPostsByUserIdDto): void {
+  loadPost(post: ListAnimalPostsByUserIdDto): void {
     this.route.navigate(['/post'], {
       queryParams: {
         postID: post.postId,

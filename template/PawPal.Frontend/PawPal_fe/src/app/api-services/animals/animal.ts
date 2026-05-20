@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { buildHttpParams } from '../../core/models/build-http-params';
-import { AddAnimalDto, GetAnimalByIdDto } from './animal-model';
+import { GetAnimalByIdDto } from './animal-model';
 
 @Injectable({
   providedIn: 'root',

@@ -1,5 +1,5 @@
-import { AllergyQueryDto, ListAllergyQueryDto } from '../alergies/allergy-model';
-import { DisabilitiesDto, ListDisabilitiesQueryDto } from '../disabilities/disability-model';
+import { AllergyQueryDto } from '../allergies/allergy-model';
+import { DisabilitiesDto } from '../disabilities/disability-model';
 
 export interface GetAnimalsHealthByIdDto {
   animalHealthHistoryId: number;
