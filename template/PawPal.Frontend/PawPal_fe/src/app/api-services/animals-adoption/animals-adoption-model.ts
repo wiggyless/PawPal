@@ -34,8 +34,6 @@ export interface GetAdoptionRequestById {
   requirementId: number;
 }
 
-// by PostID
-
 export interface GetAdoptionRequestListByPostIDQuery extends BasePagedQuery {
   postID: number;
 }

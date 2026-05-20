@@ -1,16 +1,14 @@
 import { Component, effect, inject, OnInit } from '@angular/core';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { FormControl, FormGroup } from '@angular/forms';
-import { AnimalUserService } from '../../../../api-services/animal-users/animal-users-service';
+import { UserService } from '../../../../api-services/users/users-service';
 import {
   GetUserByIdDto,
   UpdateUserCommand,
-} from '../../../../api-services/animal-users/animal-users-model';
-import { provideNativeDateAdapter } from '@angular/material/core';
+} from '../../../../api-services/users/users-model';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { forkJoin } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
-import { SaveChangesComponent } from './save-changes-component/save-changes-component';
+import { DialoguePopupService } from '../../../shared/components/dialogue-popup/dialogue-popup.service';
 
 @Component({
   selector: 'app-user-profile-component',
@@ -19,7 +17,7 @@ import { SaveChangesComponent } from './save-changes-component/save-changes-comp
   styleUrl: './user-profile-component.scss',
 })
 export class UserProfileComponent implements OnInit {
-  constructor(currentUser: CurrentUserService, userDataService: AnimalUserService) {
+  constructor(currentUser: CurrentUserService, userDataService: UserService) {
     this.currentUser = currentUser;
     this.userDataService = userDataService;
      effect(() => {
@@ -41,11 +39,10 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  
   }
   currentUser: CurrentUserService;
-  userDataService: AnimalUserService;
-  dialog = inject(MatDialog);
+  userDataService: UserService;
+  dialog = inject(DialoguePopupService);
   cityService = inject(CitiesService);
   cityList: any = [];
   city: string = '';
@@ -64,7 +61,6 @@ export class UserProfileComponent implements OnInit {
     userName: '',
   };
 
-  
   private resetUserData(): void {
     this.userData = {
       id: 0, firstName: '', lastName: '', email: '',
@@ -90,13 +86,13 @@ export class UserProfileComponent implements OnInit {
     });
   }
   initializeInputData(): void {
-    this.originalCityId = this.userData.cityID; // Store the original ID
+    this.originalCityId = this.userData.cityID; 
 
     this.profileForm.patchValue({
       firstName: this.userData.firstName,
       lastName: this.userData.lastName,
       date: this.userData.dateTime,
-      city: this.userData.city, // This is the city name (string) for display
+      city: this.userData.city, 
     });
   }
 
@@ -116,20 +112,16 @@ export class UserProfileComponent implements OnInit {
 
   saveChanges() {
     this.editing = false;
-    this.dialog.open(SaveChangesComponent);
-    // Get the city value from the form
+
     const cityValue = this.profileForm.get('city')?.value;
 
-    // Determine the cityId: use form value if it's a number, otherwise use original
     const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;
 
-    // Collect form data
     this.userData.firstName = this.profileForm.get('firstName')?.value as string;
     this.userData.lastName = this.profileForm.get('lastName')?.value as string;
     this.userData.dateTime = this.profileForm.get('date')?.value as string;
     this.userData.cityID = cityId;
 
-    // Create payload
     const payload: UpdateUserCommand = {
       firstName: this.userData.firstName,
       lastName: this.userData.lastName,
@@ -140,21 +132,20 @@ export class UserProfileComponent implements OnInit {
 
     this.userDataService.updateUser(this.userData.id, payload).subscribe({
       next: (res) => {
-        // Find the selected city name to display - with explicit type
         const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
 
         if (selectedCity) {
           this.userData.city = selectedCity.name;
-          this.originalCityId = cityId; // Update the original ID
+          this.originalCityId = cityId; 
         }
 
-        // Set the form back to show city name (not ID)
         this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+        this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
       },
       error: (res) => {
         console.log('ERROR: =>', res);
-        // Reset to original city name on error
         this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+        this.dialog.error('Error', 'An error occurred while updating your profile. Please try again.', 'OK');
       },
     });
 

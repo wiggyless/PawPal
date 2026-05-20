@@ -8,8 +8,8 @@ import {
   HostListener,
 } from '@angular/core';
 import { AnimalCategoriesService } from '../../../../api-services/animal-categories/animal-categories.service';
-import { AnimalBreedService } from '../../../../api-services/anima-breed/animal-breed.service';
-import { ListAnimalBreedQueryDto } from '../../../../api-services/anima-breed/animal-breed.model';
+import { AnimalBreedService } from '../../../../api-services/animal-breed/animal-breed.service';
+import { ListAnimalBreedQueryDto } from '../../../../api-services/animal-breed/animal-breed.model';
 import { ListAnimalCategoriesQueryDto } from '../../../../api-services/animal-categories/animal-categories.model';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 import {
