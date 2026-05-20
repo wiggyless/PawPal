@@ -23,7 +23,6 @@
   background-color: transparent !important;
 }
 
-/* This targets the ripple/state layer in newer versions (MDC) */
 :host ::ng-deep .mat-mdc-list-option .mdc-list-item__state-layer {
   display: none;
 }

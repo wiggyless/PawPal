@@ -13,12 +13,12 @@ import { forkJoin, Subscription } from 'rxjs';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 import {
   ListAnimal,
-  listAnimalPostsByUserIdDto,
+  ListAnimalPostsByUserIdDto,
   ListPostsByRange,
 } from '../../../../api-services/animal-posts/animal-posts.model';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { CantonsService } from '../../../../api-services/cantons/cantons-service';
-import { AnimalBreedService } from '../../../../api-services/anima-breed/animal-breed.service';
+import { AnimalBreedService } from '../../../../api-services/animal-breed/animal-breed.service';
 import { AnimalService } from '../../../../api-services/animals/animal';
 import { ListCantonsDto } from '../../../../api-services/cantons/cantons-model';
 import { environment } from '../../../../../environments/environment';

@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
-import { UserService } from '../../../../api-services/register/users-service';
-import { CreateUserCommand } from '../../../../api-services/register/users-model';
+import { UserService } from '../../../../api-services/users/users-service';
+import { CreateUserCommand } from '../../../../api-services/users/users-model';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.service';
 import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
@@ -23,7 +23,7 @@ export const passwordMatchValidator: ValidatorFn = (group: AbstractControl): Val
   standalone: false,
   templateUrl: './register-component.html',
   styleUrl: './register-component.scss',
-  animations: [ //animacija da mi bude ista kao i mat-error zato jer mi ide na zivce sto nema animacija
+  animations: [ 
     trigger('fadeSlide', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(-4px)' }),
@@ -72,8 +72,8 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCities();
-    this.accountInfo.get('username')?.valueChanges.pipe( //umjesto da ja sad manuelno pravim neki countdown, ovo mi navodno kao prati promjene, i kad prestane bit promjena 600ms, onda tek poziva funkciju
-      catchError(() => of(null)), //it stopped checking after the first error so i think this just returns a null and doesnt break the whole chain
+    this.accountInfo.get('username')?.valueChanges.pipe( 
+      catchError(() => of(null)),
       debounceTime(600),
       distinctUntilChanged(),
       switchMap(username => this.userService.getByUsername(username?.toString() || ''))
