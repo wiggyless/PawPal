@@ -35,6 +35,7 @@ import { Adoption } from './adpotion/adoption/adoption';
 import { MySentRequests } from './my-sent-requests/my-sent-requests/my-sent-requests';
 import { MySentRequestDialog } from './my-sent-requests/my-sent-request-dialog/my-sent-request-dialog/my-sent-request-dialog';
 import { RequestHistory } from './request-history/request-history/request-history';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 @NgModule({
   declarations: [
     UserProfileComponent,
@@ -78,6 +79,7 @@ import { RequestHistory } from './request-history/request-history/request-histor
     A11yModule,
     MatSpinner,
     DatePipe,
+    MatProgressBarModule,
   ],
   providers: [provideNativeDateAdapter(), MatDialog],
 })

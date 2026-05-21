@@ -40,6 +40,47 @@
       <div class="search-btn">
         <button class="primarybtn" (click)="searchCatalog()">SEARCH</button>
       </div>
+      <!--
+       <div class="catalog-latest-container">
+      <p class="catalog-latest-container-title">Check out our newest posts!</p>
+      <div class="catalog-container">
+        <div [class]="imagesLoaded ? 'header-posts' : 'header-posts-unloaded'">
+          @if (imagesLoaded) {
+            @for (post of postList?.items; track post; let i = $index) {
+              <div class="post" (click)="routeToPost(post)">
+                <img
+                  [src]="getImageForPost(post.postID)"
+                  class="post-image"
+                  crossorigin="anonymous"
+                />
+                <div class="post-detail">
+                  <h3>{{ post.name }}</h3>
+                  <p>
+                    {{ post.breed }},
+                    @if (this.genderListForDisplay.items[0].id === post.genderID) {
+                      Female
+                    } @else {
+                      Male
+                    }
+                  </p>
+
+                  <p>{{ post.dateAdded | date: 'short' }}</p>
+                </div>
+              </div>
+            }
+          } @else if (!imagesLoaded) {
+            <div class="loading-container">
+              <br />
+              <p class="loading-spinner-text">Loading posts</p>
+              <mat-spinner></mat-spinner>
+            </div>
+          }
+        </div>
+      </div>
+      <button class="primarybtn" routerLink="/catalog">TAKE ME THERE!</button>
+    </div>
+  -->
+      <app-footer></app-footer>
     </div>
     <app-footer></app-footer>
   </body>
