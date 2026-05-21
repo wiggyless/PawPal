@@ -86,13 +86,13 @@ export class UserProfileComponent implements OnInit {
     });
   }
   initializeInputData(): void {
-    this.originalCityId = this.userData.cityID; 
+    this.originalCityId = this.userData.cityID;
 
     this.profileForm.patchValue({
       firstName: this.userData.firstName,
       lastName: this.userData.lastName,
       date: this.userData.dateTime,
-      city: this.userData.city, 
+      city: this.userData.city,
     });
   }
 
@@ -112,7 +112,7 @@ export class UserProfileComponent implements OnInit {
 
   saveChanges() {
     this.editing = false;
-
+    this.dialog.open(SaveChangesComponent);
     const cityValue = this.profileForm.get('city')?.value;
 
     const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;
@@ -136,9 +136,8 @@ export class UserProfileComponent implements OnInit {
 
         if (selectedCity) {
           this.userData.city = selectedCity.name;
-          this.originalCityId = cityId; 
+          this.originalCityId = cityId;
         }
-
         this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
         this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
       },
@@ -151,4 +150,6 @@ export class UserProfileComponent implements OnInit {
 
     this.profileForm.disable();
   }
+
+  editPhoto() {}
 }

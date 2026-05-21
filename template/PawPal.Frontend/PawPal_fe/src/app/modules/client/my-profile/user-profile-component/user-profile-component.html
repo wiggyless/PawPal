@@ -3,7 +3,7 @@
     <div class="user-profile-image">
       <mat-icon>person</mat-icon>
       @if (editing) {
-        <button class="user-profile-image-edit">
+        <button class="user-profile-image-edit" (click)="editPhoto()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"

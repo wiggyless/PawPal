@@ -273,3 +273,14 @@
   --p-button-icon-only-width: 50px;
   height: 50px;
 }
+.post-comments {
+  display: flex;
+  width: 90%;
+  flex-direction: column;
+}
+.post-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

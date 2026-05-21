@@ -25,8 +25,10 @@ import { Bind } from 'primeng/bind';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinner, MatSpinner } from '@angular/material/progress-spinner';
 import { FooterComponent } from '../shared/components/footer/footer-component';
+import { PostComments } from './post/post/post-comments/post-comments/post-comments';
+import { PageResult } from '../../core/models/paging/page-result';
 @NgModule({
-  declarations: [PublicLayout, CatalogComponent, PostComponent],
+  declarations: [PublicLayout, CatalogComponent, PostComponent, PostComments],
   imports: [
     NavbarComponent,
     PublicRoutingModule,
@@ -52,7 +54,17 @@ import { FooterComponent } from '../shared/components/footer/footer-component';
     AsyncPipe,
     MatSelectModule,
     MatProgressSpinner,
-    FooterComponent
+    FooterComponent,
   ],
 })
 export class PublicModule {}
+export function createEmptyPageResult<T>(): PageResult<T> {
+  return {
+    items: [],
+    pageSize: 0,
+    currentPage: 0,
+    includedTotal: false,
+    totalItems: 0,
+    totalPages: 0,
+  };
+}

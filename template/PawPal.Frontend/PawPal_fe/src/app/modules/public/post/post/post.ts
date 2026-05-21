@@ -93,28 +93,26 @@ export class PostComponent implements OnInit {
       this.cityId = params['cityID'];
       this.userId = params['userID'];
       this.dateAdded = params['dateAdded'];
-
-      this.imagesList = this.postImageService.getImagePost(this.postId);
-
-      forkJoin({
-        animal: this.animalService.getAnimalById(this.animalId),
-        health: this.animalHealthService.getAnimalHealthHistoryById(this.animalId),
-        cities: this.cityService.getCityById(this.cityId),
-        users: this.userService.getUser(this.userId),
-      }).subscribe({
-        next: (response) => {
-          let sourceKeys = Object.keys(response.animal);
-          sourceKeys.forEach((key) => {
-            if (key in this.animal) {
-              (this.animal as any)[key] = (response.animal as any)[key];
-            }
-          });
-          this.animalHealth = response.health;
-          this.city = response.cities;
-          this.user = response.users;
-          this.cd.detectChanges();
-        },
-      });
+    });
+    this.imagesList = this.postImageService.getImagePost(this.postId);
+    forkJoin({
+      animal: this.animalService.getAnimalById(this.animalId as number),
+      health: this.animalHealthService.getAnimalHealthHistoryById(this.animalId),
+      cities: this.cityService.getCityById(this.cityId),
+      users: this.userService.getUser(this.userId),
+    }).subscribe({
+      next: (response) => {
+        let sourceKeys = Object.keys(response.animal);
+        sourceKeys.forEach((key) => {
+          if (key in this.animal) {
+            (this.animal as any)[key] = (response.animal as any)[key];
+          }
+        });
+        this.animalHealth = response.health;
+        this.city = response.cities;
+        this.user = response.users;
+        this.cd.detectChanges();
+      },
     });
   }
 

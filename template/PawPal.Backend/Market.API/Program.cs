@@ -1,44 +1,36 @@
-﻿using PawPal.API;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using PawPal.API;
 using PawPal.API.Middleware;
 using PawPal.Application;
 using PawPal.Infrastructure;
+using PawPal.Infrastructure.Common;
+using PawPal.Infrastructure.Signal;
 using Serilog;
 
 public partial class Program
 {
     private static async Task Main(string[] args)
     {
-        //
-        // 0) Bootstrap logger (very early, no full config yet)
-        //
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console() // minimal sink so we see startup errors
+            .WriteTo.Console()
             .CreateBootstrapLogger();
 
         try
         {
             Log.Information("Starting PawPal API...");
 
-            //
-            // 1) Standard builder (includes appsettings.json, appsettings.{ENV}.json,
-            //    environment variables, user-secrets (Dev), and command-line args)
-            //
             var builder = WebApplication.CreateBuilder(args);
 
-            // 2) Promote Serilog to full configuration from builder.Configuration
-            //    (reads "Serilog" section from appsettings + ENV overrides)
-            //
             builder.Host.UseSerilog((ctx, services, cfg) =>
             {
-                cfg.ReadFrom.Configuration(ctx.Configuration)   // Serilog section in appsettings
-                   .ReadFrom.Services(services)                 // DI enrichers if any
+                cfg.ReadFrom.Configuration(ctx.Configuration)
+                   .ReadFrom.Services(services)
                    .Enrich.FromLogContext()
                    .Enrich.WithThreadId()
                    .Enrich.WithProcessId()
                    .Enrich.WithMachineName();
             });
 
-            // Optional: remove default providers to have only Serilog
             builder.Logging.ClearProviders();
 
             // ---------------------------------------------------------
@@ -47,19 +39,52 @@ public partial class Program
             builder.Services
                 .AddAPI(builder.Configuration, builder.Environment)
                 .AddInfrastructure(builder.Configuration, builder.Environment)
-                .AddApplication();
+                .AddApplication()
+                .AddSignalR();
+            builder.Services.AddScoped<ICommentHubService, CommentHubService>();
 
-            var allowedOrigins = builder.Configuration.GetValue<string>("allowedOrigins")!;
+            // FIX: Instead of calling .AddAuthentication().AddJwtBearer() again,
+            // we safely intercept the existing "Bearer" options setup.
+            builder.Services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                // Save any existing OnMessageReceived logic if something else was using it
+                var existingOnMessageReceived = options.Events?.OnMessageReceived;
+
+                options.Events ??= new JwtBearerEvents();
+                options.Events.OnMessageReceived = async context =>
+                {
+                    // 1. Run the original token logic first if there was any
+                    if (existingOnMessageReceived != null)
+                    {
+                        await existingOnMessageReceived(context);
+                    }
+
+                    // 2. Fall back to extracting the token from query string for SignalR
+                    var accessToken = context.Request.Query["access_token"];
+                    var path = context.HttpContext.Request.Path;
+
+                    if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/commentHub"))
+                    {
+                        context.Token = accessToken;
+                    }
+                };
+            });
+            // CORS Policy setup
+            var allowedOrigins = builder.Configuration.GetValue<string>("allowedOrigins") ?? "http://localhost:4200";
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod();
+                    // Cleaned up to use your configured allowedOrigins as well
+                    policy.WithOrigins("http://localhost:4200", "https://localhost:7260", allowedOrigins)
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials(); // Required for SignalR
                 });
-            }
-            );
+            });
 
             var app = builder.Build();
+
             // ---------------------------------------------------------
             // 4. Middleware pipeline
             // ---------------------------------------------------------
@@ -69,28 +94,18 @@ public partial class Program
                 app.UseSwaggerUI();
             }
 
-            // Global exception handler (IExceptionHandler)
             app.UseExceptionHandler();
-            //app.UseMiddleware<RequestResponseLoggingMiddleware>();
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.Use(async (context, next) =>
-            {
-                context.Response.Headers.Append("Cross-Origin-Resource-Policy", "cross-origin");
-                await next();
-            });
-            app.UseCors(policy => policy
-    .WithOrigins("http://localhost:4200") // Your Angular URL
-    .AllowAnyMethod()
-    .AllowAnyHeader());
+
+            app.UseCors();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.MapHub<CommentHub>("/commentHub");
             app.MapControllers();
 
-
-            // Database migrations + seeding
             await app.Services.InitializeDatabaseAsync(app.Environment);
 
             Log.Information("Pawpal API started successfully.");
@@ -98,18 +113,14 @@ public partial class Program
         }
         catch (HostAbortedException)
         {
-            // EF Core tools abortiraju host nakon što uzmu DbContext.
-            // Ovo nije runtime greška – samo tiho izađi.
             Log.Information("Host aborted by EF Core tooling (design-time) - its ok.");
         }
         catch (Exception ex)
         {
-            // Any startup failure will be logged here
             Log.Fatal(ex, "Pawpal API terminated unexpectedly.");
         }
         finally
         {
-            // Ensure all logs are flushed before the app exits
             Log.CloseAndFlush();
         }
     }
