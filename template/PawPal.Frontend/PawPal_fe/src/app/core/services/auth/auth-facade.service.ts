@@ -53,7 +53,7 @@ export class AuthFacadeService {
         this.storage.saveLogin(response); // access + refresh + expiries
         this.decodeAndSetUser(response.accessToken); // popuni _currentUser
       }),
-      map(() => void 0)
+      map(() => void 0),
     );
   }
 
@@ -75,12 +75,19 @@ export class AuthFacadeService {
   refresh(payload: RefreshTokenCommand): Observable<RefreshTokenCommandDto> {
     return this.api.refresh(payload).pipe(
       tap((response: RefreshTokenCommandDto) => {
+        console.log('Poslat refresh');
         this.storage.saveRefresh(response); // snimi nove tokene
         this.decodeAndSetUser(response.accessToken); // update current usera
-      })
+      }),
     );
   }
-
+  timeoutRefresh(payload: RefreshTokenCommand) {
+    this.api.refresh(payload).subscribe((response) => {
+      console.log('Poslat refresh');
+      this.storage.saveRefresh(response);
+      this.decodeAndSetUser(response.accessToken);
+    });
+  }
   /**
    * Utility za guardove/interceptore – očisti auth state i prebaci na /login.
    */

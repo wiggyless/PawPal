@@ -669,9 +669,64 @@ input[type='file'] {
   font-size: 0px;
 }
 
-textarea{
-  border-radius:20px;
-  border:none;
+textarea {
+  border-radius: 20px;
+  border: none;
   box-shadow: 0 10px 16px 2px #917e5f;
-  
+}
+.upload-overlay-backdrop {
+  // Take over the full screen absolute dimensions
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  // Ensure it sits comfortably on top of dialogs, headers, and navbars
+  z-index: 9999;
+
+  // Center content using Flexbox layout
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  // Darken background slightly and apply the crisp glass blur effect
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); // Safari compatibility support
+
+  // Prevent any interaction clicks into underlying text fields or buttons
+  pointer-events: auto;
+
+  .progress-card {
+    background-color: #2c2c2c; // Matches dark-mode tech aesthetic
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .upload-status-text {
+    font-size: 16px;
+    color: #e0e0e0;
+    margin: 0 0 12px 0;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  .percentage-display {
+    font-size: 36px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 20px;
+  }
+
+  // Styling adjustments for internal Angular Material bar layout
+  mat-progress-bar {
+    border-radius: 4px;
+    height: 6px;
+  }
 }

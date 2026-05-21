@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
 import { DialoguePopupService } from '../../../shared/components/dialogue-popup/dialogue-popup.service';
+import { AuthTimeoutService } from '../../../../core/services/auth/auth-timeout.service';
 
 @Component({
   selector: 'app-login',
@@ -14,15 +15,13 @@ import { DialoguePopupService } from '../../../shared/components/dialogue-popup/
   styleUrl: './login.scss',
 })
 export class LoginComponent extends BaseComponent implements OnInit {
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {}
   private fb = inject(FormBuilder);
   private auth = inject(AuthFacadeService);
   private router = inject(Router);
   private currentUser = inject(CurrentUserService);
   private dialogueService = inject(DialoguePopupService);
-
+  private authTimeoutService = inject(AuthTimeoutService);
   showPassword = false;
 
   form = this.fb.group({
@@ -31,9 +30,8 @@ export class LoginComponent extends BaseComponent implements OnInit {
   });
 
   onSubmit(): void {
-    if (this.form.invalid)
-      return;
-    
+    if (this.form.invalid) return;
+
     const payload: LoginCommand = {
       email: this.form.value.email ?? '',
       password: this.form.value.password ?? '',
@@ -43,6 +41,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
     this.auth.login(payload).subscribe({
       next: () => {
         const target = this.currentUser.getDefaultRoute();
+        this.authTimeoutService.startExpirationTracker();
         this.router.navigate([target]);
       },
       error: (err) => {
