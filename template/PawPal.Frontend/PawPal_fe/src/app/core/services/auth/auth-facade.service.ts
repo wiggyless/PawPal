@@ -81,6 +81,13 @@ export class AuthFacadeService {
       }),
     );
   }
+
+  confirmEmail(token: string): Observable<void> {
+  return this.api.confirmEmail(token).pipe(
+    map(() => void 0)
+  );
+}
+
   timeoutRefresh(payload: RefreshTokenCommand) {
     this.api.refresh(payload).subscribe((response) => {
       console.log('Poslat refresh');

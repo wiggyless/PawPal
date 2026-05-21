@@ -7,7 +7,8 @@ import {
   LoginCommandDto,
   RefreshTokenCommand,
   RefreshTokenCommandDto,
-  LogoutCommand
+  LogoutCommand,
+  ConfirmEmailCommandDto
 } from './auth-api.model';
 
 @Injectable({
@@ -40,4 +41,14 @@ export class AuthApiService {
   logout(payload: LogoutCommand): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/logout`, payload);
   }
+
+  /**
+ * GET /Auth/confirm-email
+ * Confirm user email using token from email link.
+ */
+confirmEmail(token: string): Observable<ConfirmEmailCommandDto> {
+  return this.http.get<ConfirmEmailCommandDto>(`${this.baseUrl}/confirm-email`, {
+    params: { token }
+  });
+}
 }

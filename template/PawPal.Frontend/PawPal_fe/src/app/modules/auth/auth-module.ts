@@ -15,10 +15,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ConfirmEmailComponent } from './confirm-email/confirm-email';
 
 
 @NgModule({
-  declarations: [AuthLayout, LoginComponent, LogoutComponent, RegisterComponent],
+  declarations: [AuthLayout, LoginComponent, LogoutComponent, RegisterComponent, ConfirmEmailComponent],
   imports: [
     AuthRoutingModule,
     ReactiveFormsModule,
