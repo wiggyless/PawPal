@@ -146,18 +146,9 @@ export class RegisterComponent implements OnInit {
 
     this.userService.createUser(payload).subscribe({
       next: () => {
-        const loginPayload: LoginCommand = {
-          email: this.accountInfo.value.email ?? '',
-          password: this.accountInfo.value.password ?? '',
-          fingerprint: null,
-        };
-        this.auth.login(loginPayload).subscribe({
-          next: () => {
-            const target = this.currentUser.getDefaultRoute();
-            this.router.navigate([target]);
-          },
-          error: (res) => { console.log(res); }
-        });
+         this.router.navigate(['/auth/login'], {
+      queryParams: { message: 'Please check your e-mail to confirm your account.' }
+    });
       },
       error: (err) => { console.error('Registration error:', err); },
     });

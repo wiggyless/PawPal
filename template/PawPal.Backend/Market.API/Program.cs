@@ -1,8 +1,12 @@
-﻿using PawPal.API;
+﻿using Microsoft.AspNetCore.Identity;
+using PawPal.API;
 using PawPal.API.Middleware;
 using PawPal.Application;
+using PawPal.Application.Abstractions;
 using PawPal.Infrastructure;
+using PawPal.Infrastructure.Common;
 using Serilog;
+using System.Security.Cryptography;
 
 public partial class Program
 {
@@ -58,6 +62,10 @@ public partial class Program
                 });
             }
             );
+
+            var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+
+            builder.Services.AddTransient<IEmailService, EmailService>();
 
             var app = builder.Build();
             // ---------------------------------------------------------

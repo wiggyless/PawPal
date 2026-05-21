@@ -81,6 +81,12 @@ export class AuthFacadeService {
     );
   }
 
+  confirmEmail(token: string): Observable<void> {
+  return this.api.confirmEmail(token).pipe(
+    map(() => void 0)
+  );
+}
+
   /**
    * Utility za guardove/interceptore – očisti auth state i prebaci na /login.
    */

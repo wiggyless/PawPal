@@ -22,5 +22,7 @@ public sealed class UserEntity : BaseEntity
     public int? RoleId { get; set; } = 1;
     public RolesEntity ?Role { get; set; }
     public DateTime? LastOnline { get; set; } = DateTime.Now;
+    public string? EmailConfirmationToken { get; set; }
+    public bool IsEmailConfirmed { get; set; }
     public ICollection<RefreshTokenEntity> RefreshTokens { get; private set; } = new List<RefreshTokenEntity>();
 }

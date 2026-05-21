@@ -20,6 +20,9 @@ public sealed class LoginCommandHandler(
         if (verify == PasswordVerificationResult.Failed)
             throw new PawPalConflictException("Pogrešni kredencijali.");
 
+        if (!user.IsEmailConfirmed)
+            throw new PawPalConflictException("Please verify your e-mail address before logging in.");
+
         var tokens = jwt.IssueTokens(user);
 
         ctx.RefreshTokens.Add(new RefreshTokenEntity

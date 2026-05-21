@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
 import { DialoguePopupService } from '../../../shared/components/dialogue-popup/dialogue-popup.service';
+import { ActivatedRoute } from '@angular/router'; 
 
 @Component({
   selector: 'app-login',
@@ -14,16 +15,23 @@ import { DialoguePopupService } from '../../../shared/components/dialogue-popup/
   styleUrl: './login.scss',
 })
 export class LoginComponent extends BaseComponent implements OnInit {
-  ngOnInit(): void {
-    
-  }
-  private fb = inject(FormBuilder);
+
+   private fb = inject(FormBuilder);
   private auth = inject(AuthFacadeService);
   private router = inject(Router);
   private currentUser = inject(CurrentUserService);
   private dialogueService = inject(DialoguePopupService);
-
+  private route = inject(ActivatedRoute)
   showPassword = false;
+
+  ngOnInit(): void {
+      const message = this.route.snapshot.queryParamMap.get('message');
+  if (message) {
+    this.dialogueService.success('Registration Successful!', message);
+  }
+  }
+ 
+  
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -46,8 +54,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
         this.router.navigate([target]);
       },
       error: (err) => {
-        console.log('CALLED');
-        this.dialogueService.error('Login Failed', 'Please check your credentials and try again.');
+        this.dialogueService.error('Login Failed', err.error?.message || 'An error occurred during login. Please try again.');
         console.error('Login error:', err);
       },
     });
