@@ -119,7 +119,6 @@
         </div>
         <div class="header-posts">
           @if (animalPosts | async; as posts) {
-            @if (imagesLoaded) {
               @for (post of posts.items; track post) {
                 <div class="post" (click)="routeToPost(post)">
                   <button class="favorite-post" (click)="likeUnlikePost(post.postID, $event)">
@@ -155,7 +154,7 @@
             } @else {
               <mat-spinner></mat-spinner>
             }
-          }
+          
         </div>
         <mat-paginator
           [length]="page.totalItems"

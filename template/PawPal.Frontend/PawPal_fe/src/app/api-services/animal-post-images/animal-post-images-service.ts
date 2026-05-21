@@ -9,9 +9,7 @@ import {
   GetMainImagePostBlob,
   GetPostImageById,
 } from './animal-post-images-model';
-interface ResponseImage {
-  id: number;
-}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -30,7 +28,6 @@ export class PostImagesService {
     return this.httpClient.get<GetImagePostBlob>(`${this.apiUrl}/download/${request}`);
   }
   getMainImagePostBlob(request?: Array<number>): Observable<GetMainImagePostBlob[]> {
-    //const params = request ? buildHttpParams(request as any) : undefined;
     let params = new HttpParams();
     request?.forEach((x) => {
       params = params.append('id', x);

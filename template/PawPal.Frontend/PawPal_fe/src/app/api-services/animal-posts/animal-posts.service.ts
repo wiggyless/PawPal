@@ -8,7 +8,7 @@ import {
   AnimalPostByIdQuery,
   GetPostQuery,
   ListAnimal,
-  listAnimalPostsByUserIdDto,
+   ListAnimalPostsByUserIdDto,
   ListPostsByRange,
 } from './animal-posts.model';
 import { PageResult } from '../../core/models/paging/page-result';
@@ -26,10 +26,10 @@ export class AnimalPostService {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.get<PageResult<ListAnimal>>(this.apiUrl, { params });
   }
-  listAnimalPostsByUserId(request: any): Observable<PageResult<listAnimalPostsByUserIdDto>> {
+  listAnimalPostsByUserId(request: any): Observable<PageResult<ListAnimalPostsByUserIdDto>> {
     const params = request ? buildHttpParams(request as any) : undefined;
     console.log(params?.toString());
-    return this.httpClient.get<PageResult<listAnimalPostsByUserIdDto>>(`${this.apiUrl}/userPost`, {
+    return this.httpClient.get<PageResult<ListAnimalPostsByUserIdDto>>(`${this.apiUrl}/userPost`, {
       params,
     });
   }
@@ -41,10 +41,10 @@ export class AnimalPostService {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.post<ResponseImage>(`${this.apiUrl}`, request, { params });
   }
-  listPostRange(request: ListPostsByRange): Observable<PageResult<listAnimalPostsByUserIdDto>> {
+  listPostRange(request: ListPostsByRange): Observable<PageResult<ListAnimalPostsByUserIdDto>> {
     const params = request ? buildHttpParams(request as any) : undefined;
     console.log(request);
-    return this.httpClient.get<PageResult<listAnimalPostsByUserIdDto>>(`${this.apiUrl}/likedPost`, {
+    return this.httpClient.get<PageResult<ListAnimalPostsByUserIdDto>>(`${this.apiUrl}/likedPost`, {
       params,
     });
   }

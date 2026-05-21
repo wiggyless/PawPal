@@ -26,7 +26,6 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DialogueComponent } from './dialogue-component/dialogue-component';
 import { MatPaginator } from '@angular/material/paginator';
 import { A11yModule } from '@angular/cdk/a11y';
-import { SaveChangesComponent } from './my-profile/user-profile-component/save-changes-component/save-changes-component';
 import { MyFavorites } from './my-favorites/my-favorites/my-favorites';
 import { MatSpinner } from '@angular/material/progress-spinner';
 import { MyRequests } from './my-requests/my-requests/my-requests';
@@ -45,7 +44,6 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     UserProfileSideNavbar,
     CreatePost,
     DialogueComponent,
-    SaveChangesComponent,
     MyFavorites,
     MyRequests,
     MyRequestsDialog,

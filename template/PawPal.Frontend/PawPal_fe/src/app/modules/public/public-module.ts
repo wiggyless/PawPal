@@ -22,7 +22,7 @@ import { ButtonIcon } from 'primeng/button';
 import { SharedModule } from 'primeng/api';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { Bind } from 'primeng/bind';
-import { MatSelect } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinner, MatSpinner } from '@angular/material/progress-spinner';
 import { FooterComponent } from '../shared/components/footer/footer-component';
 import { PostComments } from './post/post/post-comments/post-comments/post-comments';
@@ -52,8 +52,7 @@ import { PageResult } from '../../core/models/paging/page-result';
     Bind,
     MatPaginatorModule,
     AsyncPipe,
-    MatSelect,
-    MatOption,
+    MatSelectModule,
     MatProgressSpinner,
     FooterComponent,
   ],

@@ -7,7 +7,7 @@ import { environment } from '../../../../../environments/environment';
 import {
   ListAnimal,
   GetPostQuery,
-  listAnimalPostsByUserIdDto,
+  ListAnimalPostsByUserIdDto,
 } from '../../../../api-services/animal-posts/animal-posts.model';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 import { PageResult } from '../../../../core/models/paging/page-result';

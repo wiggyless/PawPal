@@ -13,7 +13,7 @@ import { GetAnimalsHealthByIdDto } from '../../../../api-services/animals-health
 import { AnimalService } from '../../../../api-services/animals/animal';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { GetCityByIdDto } from '../../../../api-services/cities/cities.model';
-import { AnimalUserService } from '../../../../api-services/animal-users/animal-users-service';
+import { UserService } from '../../../../api-services/users/users-service';
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
 import { environment } from '../../../../../environments/environment';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
@@ -22,6 +22,7 @@ import { GetPostImageById } from '../../../../api-services/animal-post-images/an
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogueComponent } from '../../../client/dialogue-component/dialogue-component';
+
 @Component({
   selector: 'app-post',
   standalone: false,
@@ -30,13 +31,11 @@ import { DialogueComponent } from '../../../client/dialogue-component/dialogue-c
   encapsulation: ViewEncapsulation.None,
 })
 export class PostComponent implements OnInit {
-  // routing info holders
   animalId: number = 0;
   cityId: number = 0;
   userId: number = 0;
   postId: number = 0;
-
-  // injections
+  currentImageIndex = 0;
 
   route = inject(ActivatedRoute);
   routeNext = inject(Router);
@@ -44,12 +43,12 @@ export class PostComponent implements OnInit {
   animalHealthService = inject(AnimalsHealthService);
   animalService = inject(AnimalService);
   cityService = inject(CitiesService);
-  userService = inject(AnimalUserService);
+  userService = inject(UserService);
   postImageService = inject(PostImagesService);
   postService = inject(AnimalPostService);
-  nextRoute = inject(Router);
   cd = inject(ChangeDetectorRef);
   dialog = inject(MatDialog);
+
   animalHealth: GetAnimalsHealthByIdDto = {
     animalHealthHistoryId: 0,
     animalId: 0,
@@ -69,17 +68,18 @@ export class PostComponent implements OnInit {
     age: 0,
     hasPapers: false,
   };
+
   user = {
     firstName: '',
     lastName: '',
     dateTime: '',
   };
+
   city: GetCityByIdDto = {
     id: 0,
     name: '',
   };
 
-  // random variables
   postImage: any;
   dateAdded: string = '';
   imagesList: Observable<string[]> | undefined;
@@ -128,8 +128,8 @@ export class PostComponent implements OnInit {
       },
     });
   }
+
   deletePost() {
-    console.log(this.postId);
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       postDelete: true,
@@ -139,6 +139,7 @@ export class PostComponent implements OnInit {
     };
     this.dialog.open(DialogueComponent, dialogConfig);
   }
+
   routeAdopt(): void {
     this.routeNext.navigate(['/client/adoption'], {
       queryParams: {
@@ -146,4 +147,18 @@ export class PostComponent implements OnInit {
       },
     });
   }
+
+
+  nextImage(length: number): void {
+    this.currentImageIndex = this.currentImageIndex === length - 1 ? 0 : this.currentImageIndex + 1;
+  }
+prevImage(length: number): void {
+  this.currentImageIndex = this.currentImageIndex === 0 ? length - 1 : this.currentImageIndex - 1;
 }
+
+    getTransformStyle(): string {
+    return `translateX(-${this.currentImageIndex * 100}%)`;
+  }
+
+}
+

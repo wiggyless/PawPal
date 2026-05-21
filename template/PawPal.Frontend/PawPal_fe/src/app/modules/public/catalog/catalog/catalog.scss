@@ -1,3 +1,17 @@
+.loading-container {
+  display: flex;
+  justify-content: center; /* Horizontal centering */
+  align-items: center; /* Vertical centering */
+  height: 100%;
+  flex-direction: column;
+  padding: 50px;
+}
+.loading-spinner-text {
+  color: white;
+  margin-bottom: 20px;
+  font-size: 30px;
+  font-weight: 700;
+}
 .logo {
   background-color: #e5d7c4;
   width: 170px;
@@ -20,6 +34,7 @@
   height: 100%;
   gap: 15px;
 }
+
 .select-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -51,7 +66,7 @@
   height: 100%;
   padding-top: 40px;
   margin-left: 50px;
-  width: 30%;
+  width: 28%;
 }
 .header-buttons button {
   width: 100%;
@@ -70,9 +85,10 @@
 .header-posts-container {
   display: grid;
   margin-top: 50px;
-  background-color: rgb(65, 52, 33);
+  background-color: #413421;
+  background-image: linear-gradient(to bottom, #413421, #352b1b);
   padding: 15px;
-  border: 1px solid rgb(65, 52, 33);
+  border: 1px solid #413421;
   border-radius: 10px;
   width: 90%;
 }
@@ -82,6 +98,7 @@
   justify-self: center;
   width: 20%;
   text-align: center;
+  font-weight: bolder;
   color: #c7b18c;
   background-color: rgb(58, 67, 40);
   border: 1px solid #c7b18c;
@@ -89,12 +106,22 @@
   padding: 8px;
   font-size: 25px;
   font-weight: 100;
+  box-shadow: 0px 4px 6px #25190b;
 }
 .header-posts {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  border: 1px solid #9b8f7a;
+  gap: 60px;
+  border: 1px solid #c7b18c;
+  border-radius: 10px;
+  padding: 50px;
+  padding-bottom: 100px;
+}
+.header-posts-unloaded {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  border: 1px solid white;
   border-radius: 10px;
   padding: 50px;
   padding-bottom: 100px;
@@ -114,20 +141,28 @@
   transition: transform 0.4s ease;
   box-shadow: 5px 10px 5px rgb(36, 29, 18);
 }
+
+.post:hover {
+  transform: scale(1.1);
+}
+
 .post-image {
   width: 100%;
-  border-radius: 10px 10px 0px 0px;
+  border-radius: 25px 25px 0px 0px;
   height: 200px;
 }
 .post-detail {
-  background-color: rgb(202, 184, 146);
+  background-image: linear-gradient(#e1c99f, #cdb58b);
+  padding: 5px;
   border-radius: 0px 0px 10px 10px;
 }
 .post-detail h3 {
   margin-top: 0px;
+  color: #2b2212;
 }
 .post-detail p {
   margin-bottom: 0px;
+  color: #544120;
 }
 .ng-select.custom .ng-select-container.ng-has-value {
   font-weight: bold;
@@ -136,28 +171,7 @@
 .mat-mdc-form-field.date-form .mat-mdc-text-field-wrapper {
   border-radius: 100px;
 }
-@media (max-width: 1400px) {
-  .header-sort {
-    grid-template-columns: repeat(1, 1fr);
-  }
-  .select-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    position: relative;
-  }
-  .header-buttons {
-    width: 100%;
-    margin: 0px 0px 10px 0px;
-    justify-content: center;
-    align-items: center;
-  }
-  .header-buttons button {
-    width: 50%;
-  }
-  .header-posts-container {
-    margin-top: 100px;
-  }
-}
+
 //iris' changess
 .ng-select.custom {
   padding: 5px;
@@ -219,23 +233,23 @@ mat-paginator {
 
 // Main paginator text
 .mat-mdc-paginator {
-  color: white !important;
+  color: #c7b18c !important;
 }
 
 // Navigation icons
 .mat-mdc-paginator .mat-mdc-icon-button {
-  color: white !important;
+  color: #c7b18c !important;
 }
 
 // Dropdown select text and arrow
 .mat-mdc-paginator .mat-mdc-select-value,
 .mat-mdc-paginator .mat-mdc-select-arrow {
-  color: white !important;
+  color: #c7b18c !important;
 }
 
 // Dropdown border (the underline/outline)
 ::ng-deep .mat-mdc-paginator .mat-mdc-form-field {
-  color: white !important;
+  color: #c7b18c !important;
 }
 
 ::ng-deep .mat-mdc-paginator .mat-mdc-text-field-wrapper {
@@ -258,32 +272,32 @@ mat-paginator {
   .mat-mdc-form-field
   .mdc-text-field--outlined
   .mdc-notched-outline__trailing {
-  border-color: #9b8f7a !important;
+  border-color: #c7b18c !important;
 }
 
 // For filled variant
 ::ng-deep .mat-mdc-paginator .mat-mdc-form-field .mdc-line-ripple {
-  background-color: #9b8f7a !important;
+  background-color: #c7b18c !important;
 }
 
 // Page size label
 ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-page-size-label {
-  color: #9b8f7a !important;
+  color: #c7b18c !important;
 }
 
 // Range label (e.g., "1 - 10 of 100")
 ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-range-label {
-  color: #9b8f7a !important;
+  color: #c7b18c !important;
 }
 
 // Add this to target the SVG icons inside the buttons
 ::ng-deep .mat-mdc-paginator .mat-mdc-icon-button svg {
-  fill: #9b8f7a !important;
+  fill: #c7b18c !important;
 }
 
 // Also target the mat-icon if it's being used
 ::ng-deep .mat-mdc-paginator .mat-mdc-icon-button mat-icon {
-  color: #9b8f7a !important;
+  color: #c7b18c !important;
 }
 
 // Target the paginator icons more specifically
@@ -291,64 +305,199 @@ mat-paginator {
 ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-navigation-next,
 ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-navigation-first,
 ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-navigation-last {
-  color: #9b8f7a !important;
+  color: #c7b18c !important;
 }
 
 // Ensure the button itself has white color
 ::ng-deep .mat-mdc-paginator .mat-mdc-icon-button {
-  color: #9b8f7a !important;
-  --mat-icon-button-state-layer-color: #9b8f7a !important;
-  --mdc-icon-button-icon-color: #9b8f7a !important;
+  color: #c7b18c !important;
+  --mat-icon-button-state-layer-color: #c7b18c !important;
+  --mdc-icon-button-icon-color: #c7b18c !important;
 }
 
 // Target the selected value text in the dropdown
 ::ng-deep .mat-mdc-paginator .mat-mdc-select-value-text {
-  color: #9b8f7a !important;
+  color: #c7b18c !important;
 }
 
 // Target the select input itself
 ::ng-deep .mat-mdc-paginator .mat-mdc-select {
-  color: #9b8f7a !important;
+  color: #c7b18c !important;
 }
 
 // Target the trigger text
 ::ng-deep .mat-mdc-paginator .mat-mdc-select-trigger {
-  color: #9b8f7a !important;
+  color: #c7b18c !important;
 }
 
 // Additional targeting for the min-line
 ::ng-deep .mat-mdc-paginator .mat-mdc-select-min-line {
-  color: #9b8f7a !important;
+  color: #c7b18c !important;
 }
 
 .footer-main {
   width: 100%;
-  height: 175px;
-  background-color: #493c1d;
-  position: relative;
-  bottom: 0;
+  background-color: #473619;
+  padding: 60px 80px 0;
+  margin-top: 100px;
 }
 
-.footer-secondary {
-  width: 100%;
-  background-color: #2d2513;
-  height: 55px;
-  position: absolute;
-  bottom: 0;
-}
-
-.footer-container {
-  align-items: center;
-  width: 100%;
+.footer-content {
   display: flex;
-  padding-left: 40%;
-
-  padding-top: 25px;
+  justify-content: space-between;
+  gap: 80px;
+  margin-bottom: 40px;
 }
-.footer-container p {
-  color: rgb(230, 226, 221);
+
+.footer-left {
+  flex: 1;
+  max-width: 700px;
+  border-right: 2px solid #2a241f;
+  padding-right: 80px;
+}
+
+.footer-title {
+  color: #d9cdb8;
+  font-size: 42px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+}
+
+.footer-description {
+  color: #d9cdb8;
+  font-size: 16px;
+  margin: 0 0 30px 0;
+  line-height: 1.5;
+}
+
+.footer-textarea {
+  width: 100%;
+  background-color: #d9cdb8;
+  border: none;
+  border-radius: 20px;
+  padding: 20px 25px;
+  font-size: 16px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  margin-bottom: 25px;
+
+  &::placeholder {
+    color: #6b6456;
+    opacity: 0.8;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(217, 205, 184, 0.3);
+  }
+}
+
+.footer-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.footer-right {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 60px;
+  flex: 1;
+}
+
+.footer-nav-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-nav-title {
+  color: #d9cdb8;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  text-decoration: underline;
+  text-underline-offset: 8px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #c4b59e;
+  }
+}
+
+.footer-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  li {
+    font-size: 24px;
+  }
+}
+
+.footer-nav-link {
+  color: #d9cdb8;
+  text-decoration: none;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s ease;
+
+  &::before {
+    content: '▶';
+    font-size: 10px;
+  }
+
+  &:hover {
+    color: #c4b59e;
+  }
+}
+
+.footer-bottom {
+  width: 100vw;
+  background-color: #252319;
+  margin: 40px calc(-50vw + 50%);
+  padding: 20px calc(50vw - 50%);
   text-align: center;
-  padding: 10px;
+
+  p {
+    color: #d9cdb8;
+    margin: 0;
+    font-size: 18px;
+  }
+}
+
+.dot {
+  opacity: 0;
+  animation: dot-sequence 0.5s infinite;
+  font-size: 30px;
+}
+.dot:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.6s;
+}
+@keyframes dot-sequence {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  90%,
+  100% {
+    opacity: 0;
+  }
 }
 .favorite-post {
   width: 50px;

@@ -7,10 +7,11 @@
   align-items: center;
 }
 .post-image {
-  width: 80%;
+  width: 100%;
   height: 600px;
   border-radius: 10px;
-  align-self: center;
+  object-fit: cover;
+  display: block;
 }
 .post-buttons {
   display: flex;
@@ -29,18 +30,16 @@
   background-color: rgb(72, 59, 40);
   width: 90%;
   margin-top: 50px;
-  border-radius: 0px;
-  border: 1px solid rgb(72, 59, 40);
   border-radius: 10px;
+  border: 1px solid rgb(72, 59, 40);
   justify-content: center;
   padding: 10px;
 }
 .pet-name {
   color: #e5d7c4;
-  font-weight: 100;
+  font-weight: bolder;
   font-size: 35px;
   margin-top: 10px;
-  font-weight: bolder;
 }
 .post-information {
   display: grid;
@@ -166,10 +165,8 @@
   margin-bottom: 10px;
 }
 .p-carousel {
-  width: 100%;
-  padding: 10px;
-  justify-content: center;
-  align-items: center;
+  width: 90%;
+  padding: 0;
 }
 .p-carousel-item {
   align-items: center;
@@ -177,21 +174,95 @@
   justify-content: center;
 }
 .chevron-left {
-  border: solid black;
-  border-width: 0 5px 5px 0;
+  border: solid white;
+  border-width: 0 4px 4px 0;
   display: inline-block;
-  padding: 12px;
+  padding: 8px;
   transform: rotate(135deg);
-  -webkit-transform: rotate(135deg);
+  margin-left: 4px; // slight optical centering
+}
+.chevron-right {
+  border: solid white;
+  border-width: 0 4px 4px 0;
+  display: inline-block;
+  padding: 8px;
+  transform: rotate(-45deg);
+  margin-right: 4px;
 }
 
-.chevron-right {
-  border: solid black;
-  border-width: 0 5px 5px 0;
-  display: inline-block;
-  padding: 12px;
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
+.carousel-container {
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 25px;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 64px;
+  z-index: 10;
+  transition: background 0.2s;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #C7B18C;
+  border: 2px solid #6B4423;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  pointer-events: all;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+ 
+    mat-icon {
+      color: rgb(62, 47, 28);
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+    }
+    
+    &:hover:not(:disabled) {
+      background-color: rgb(62, 47, 28);
+      transform: translateY(-50%) scale(1.1); // Combine both transforms
+      
+      mat-icon {
+        color: rgb(243, 233, 219);
+      }
+    }
+    
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+}
+
+.carousel-arrow:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.carousel-arrow.left {
+  left: 10px;
+}
+
+.carousel-arrow.right {
+  right: 10px;
 }
 
 .p-button {
