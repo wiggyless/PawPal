@@ -94,8 +94,6 @@ export class PostComponent implements OnInit {
       this.userId = params['userID'];
       this.dateAdded = params['dateAdded'];
     });
-    console.log(this.userId);
-    console.log(this.currentUser.userId);
     this.imagesList = this.postImageService.getImagePost(this.postId);
     forkJoin({
       animal: this.animalService.getAnimalById(this.animalId as number),

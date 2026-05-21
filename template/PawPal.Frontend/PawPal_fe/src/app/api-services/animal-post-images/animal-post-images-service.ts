@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpParams } from '@angular/common/http';
 import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { buildHttpParams } from '../../core/models/build-http-params';
@@ -47,7 +47,7 @@ export class PostImagesService {
     });
     return this.httpClient.put<number>(`${this.apiUrl}`, formData);
   }
-  createPostImages(request: AddNewPostImages): Observable<number> {
+  createPostImages(request: AddNewPostImages): Observable<HttpEvent<any>> {
     const params = request ? buildHttpParams(request as any) : undefined;
     const formData = new FormData();
     formData.append('postId', request.postId.toString());
@@ -55,6 +55,9 @@ export class PostImagesService {
     request.postImages.forEach((x) => {
       formData.append('postImages', x, x.name);
     });
-    return this.httpClient.post<number>(`${this.apiUrl}`, formData);
+    return this.httpClient.post<number>(`${this.apiUrl}`, formData, {
+      reportProgress: true, // Required for tracking upload packets!
+      observe: 'events', // Required to stream chunk updates!
+    });
   }
 }

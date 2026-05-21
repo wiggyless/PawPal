@@ -5,8 +5,11 @@ import { PublicRoutingModule } from './shared-routing-module';
 import { NavbarComponent } from './components/navbar/navbar';
 import { RouterOutlet } from '@angular/router';
 import { ClientRoutingModule } from '../client/client-routing-module';
+import { SessionWarningDialog } from './session/session-warning-dialog/session-warning-dialog';
 @NgModule({
-  declarations: [],
+  declarations: [
+    SessionWarningDialog
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,

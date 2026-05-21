@@ -71,13 +71,13 @@ export class UserProfileComponent implements OnInit {
     });
   }
   initializeInputData(): void {
-    this.originalCityId = this.userData.cityID; // Store the original ID
+    this.originalCityId = this.userData.cityID;
 
     this.profileForm.patchValue({
       firstName: this.userData.firstName,
       lastName: this.userData.lastName,
       date: this.userData.dateTime,
-      city: this.userData.city, // This is the city name (string) for display
+      city: this.userData.city,
     });
   }
 
@@ -98,19 +98,15 @@ export class UserProfileComponent implements OnInit {
   saveChanges() {
     this.editing = false;
     this.dialog.open(SaveChangesComponent);
-    // Get the city value from the form
     const cityValue = this.profileForm.get('city')?.value;
 
-    // Determine the cityId: use form value if it's a number, otherwise use original
     const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;
 
-    // Collect form data
     this.userData.firstName = this.profileForm.get('firstName')?.value as string;
     this.userData.lastName = this.profileForm.get('lastName')?.value as string;
     this.userData.dateTime = this.profileForm.get('date')?.value as string;
     this.userData.cityID = cityId;
 
-    // Create payload
     const payload: UpdateUserCommand = {
       firstName: this.userData.firstName,
       lastName: this.userData.lastName,
@@ -121,24 +117,23 @@ export class UserProfileComponent implements OnInit {
 
     this.userDataService.updateUser(this.userData.id, payload).subscribe({
       next: (res) => {
-        // Find the selected city name to display - with explicit type
         const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
 
         if (selectedCity) {
           this.userData.city = selectedCity.name;
-          this.originalCityId = cityId; // Update the original ID
+          this.originalCityId = cityId;
         }
-
-        // Set the form back to show city name (not ID)
         this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
       },
       error: (res) => {
         console.log('ERROR: =>', res);
-        // Reset to original city name on error
+
         this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
       },
     });
 
     this.profileForm.disable();
   }
+
+  editPhoto() {}
 }
