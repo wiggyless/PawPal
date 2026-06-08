@@ -30,6 +30,7 @@
     <Folder Include="Modules\Adoptions\AdoptionStories\" />
     <Folder Include="Modules\Animal_Info\AnimalBreed\Commands\Update\" />
     <Folder Include="Modules\LikedUserPosts\Commands\Update\" />
+    <Folder Include="Modules\UserImages\Commands\Delete\" />
   </ItemGroup>
 
 </Project>

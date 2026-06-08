@@ -23,34 +23,35 @@
           </div>
         }
         @if (imagesList | async; as images) {
-         <div class="carousel-container">
-          <div
-            class="carousel-track"
-            [ngStyle]="{
-              transform: getTransformStyle()
-            }"
-          >
-            @for(image of images;track image; let i = $index){
-            <img src="{{ env.apiUrl + image }}" class="carousel-image" />
-            }
-          </div>
-
-          <ng-container>
-             <button 
-        class="carousel-arrow left" 
-        (click)="prevImage(images.length)"
-        aria-label="Previous image">
-       <mat-icon>chevron_left</mat-icon>
-      </button>
-            <button
-              class="carousel-arrow right"
-              (click)="nextImage(images.length)"
-              aria-label="Next image"
+          <div class="carousel-container">
+            <div
+              class="carousel-track"
+              [ngStyle]="{
+                transform: getTransformStyle(),
+              }"
             >
-             <mat-icon>chevron_right</mat-icon>
-            </button>
-          </ng-container>
-        </div>
+              @for (image of images; track image; let i = $index) {
+                <img src="{{ env.apiUrl + image }}" class="carousel-image" />
+              }
+            </div>
+
+            <ng-container>
+              <button
+                class="carousel-arrow left"
+                (click)="prevImage(images.length)"
+                aria-label="Previous image"
+              >
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+              <button
+                class="carousel-arrow right"
+                (click)="nextImage(images.length)"
+                aria-label="Next image"
+              >
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </ng-container>
+          </div>
         }
         <div class="post-information-container">
           <h2 class="pet-name">{{ animal.name }}</h2>
@@ -101,7 +102,8 @@
             <div class="post-information-user-container">
               <div class="post-information-user">
                 <div class="post-information-user-logo">
-                  <div class="post-information-user-logo-activity"></div>
+                  <img [src]="imageUrl()" alt="User image" class="profile-preview" />
+                  <!--<div class="post-information-user-logo-activity"></div>-->
                 </div>
                 <p class="post-information-user-username">
                   {{ user.firstName }} {{ user.lastName }}

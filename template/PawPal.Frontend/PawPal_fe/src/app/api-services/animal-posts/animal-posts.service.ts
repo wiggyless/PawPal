@@ -8,7 +8,7 @@ import {
   AnimalPostByIdQuery,
   GetPostQuery,
   ListAnimal,
-   ListAnimalPostsByUserIdDto,
+  ListAnimalPostsByUserIdDto,
   ListPostsByRange,
 } from './animal-posts.model';
 import { PageResult } from '../../core/models/paging/page-result';
