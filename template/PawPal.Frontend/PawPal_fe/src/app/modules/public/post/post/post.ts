@@ -6,6 +6,7 @@ import {
   ViewChild,
   ViewEncapsulation,
   inject,
+  signal,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AnimalsHealthService } from '../../../../api-services/animals-health/animals-health-service';
@@ -22,6 +23,8 @@ import { GetPostImageById } from '../../../../api-services/animal-post-images/an
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogueComponent } from '../../../client/dialogue-component/dialogue-component';
+import { UserImageService } from '../../../../api-services/userImage/userImage-service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post',
@@ -48,7 +51,7 @@ export class PostComponent implements OnInit {
   postService = inject(AnimalPostService);
   cd = inject(ChangeDetectorRef);
   dialog = inject(MatDialog);
-
+  userImages = inject(UserImageService);
   animalHealth: GetAnimalsHealthByIdDto = {
     animalHealthHistoryId: 0,
     animalId: 0,
@@ -84,7 +87,9 @@ export class PostComponent implements OnInit {
   dateAdded: string = '';
   imagesList: Observable<string[]> | undefined;
   env = environment;
-
+  objectUrl: string | null = null;
+  private sanitizer = inject(DomSanitizer);
+  imageUrl = signal<SafeUrl | null>(null);
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.route.queryParams.subscribe((params) => {
@@ -100,8 +105,10 @@ export class PostComponent implements OnInit {
       health: this.animalHealthService.getAnimalHealthHistoryById(this.animalId),
       cities: this.cityService.getCityById(this.cityId),
       users: this.userService.getUser(this.userId),
+      userImage: this.userImages.getUserImageByID(this.userId),
     }).subscribe({
       next: (response) => {
+        this.imageUrl.set(response.userImage);
         let sourceKeys = Object.keys(response.animal);
         sourceKeys.forEach((key) => {
           if (key in this.animal) {
@@ -148,17 +155,14 @@ export class PostComponent implements OnInit {
     });
   }
 
-
   nextImage(length: number): void {
     this.currentImageIndex = this.currentImageIndex === length - 1 ? 0 : this.currentImageIndex + 1;
   }
-prevImage(length: number): void {
-  this.currentImageIndex = this.currentImageIndex === 0 ? length - 1 : this.currentImageIndex - 1;
-}
-
-    getTransformStyle(): string {
-    return `translateX(-${this.currentImageIndex * 100}%)`;
+  prevImage(length: number): void {
+    this.currentImageIndex = this.currentImageIndex === 0 ? length - 1 : this.currentImageIndex - 1;
   }
 
+  getTransformStyle(): string {
+    return `translateX(-${this.currentImageIndex * 100}%)`;
+  }
 }
-

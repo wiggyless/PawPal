@@ -41,5 +41,6 @@ public interface IAppDbContext
     DbSet<UserToUserMessages> UserToUserMessages { get; }
     DbSet<BreedEntity> Breeds { get; }
     DbSet<PostImagesEntity> PostImages { get; }
+    DbSet<UserImage> UserImage { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

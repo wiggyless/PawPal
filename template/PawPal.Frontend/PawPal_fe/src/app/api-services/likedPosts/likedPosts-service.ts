@@ -11,9 +11,6 @@ import {
   GetLikedPostListQuery,
   LikePost,
 } from './likedPosts-model';
-interface ResponseImage {
-  id: number;
-}
 @Injectable({
   providedIn: 'root',
 })
