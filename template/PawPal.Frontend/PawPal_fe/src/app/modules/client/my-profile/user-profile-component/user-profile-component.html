@@ -1,32 +1,51 @@
 <div class="user-profile-details">
   <div class="user-profile-detials-header">
     <div class="user-profile-image">
-      <mat-icon>person</mat-icon>
+      @if (imageUrl()) {
+        <img [src]="imageUrl()" alt="User image" class="profile-preview" />
+      } @else {
+        <svg viewBox="0 0 24 24" width="84" height="84">
+          <path
+            fill="currentColor"
+            d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+          />
+        </svg>
+      }
       @if (editing) {
-        <button class="user-profile-image-edit" (click)="editPhoto()">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="20"
-            viewBox="0 0 24 20"
-            fill="none"
-          >
-            <path
-              d="M23 17.25C23 17.7804 22.7893 18.2891 22.4142 18.6642C22.0391 19.0393 21.5304 19.25 21 19.25H3C2.46957 19.25 1.96086 19.0393 1.58579 18.6642C1.21071 18.2891 1 17.7804 1 17.25V6.25C1 5.71957 1.21071 5.21086 1.58579 4.83579C1.96086 4.46071 2.46957 4.25 3 4.25H7L9 1.25H15L17 4.25H21C21.5304 4.25 22.0391 4.46071 22.4142 4.83579C22.7893 5.21086 23 5.71957 23 6.25V17.25Z"
-              stroke="#473619"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M12 15.25C14.2091 15.25 16 13.4591 16 11.25C16 9.04086 14.2091 7.25 12 7.25C9.79086 7.25 8 9.04086 8 11.25C8 13.4591 9.79086 15.25 12 15.25Z"
-              stroke="#473619"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
+        <div class="user-image-input">
+          <input
+            placeholder="Image"
+            type="file"
+            class="image-input"
+            id="my-file-input"
+            (change)="editPhoto($event)"
+            accept="image/png, image/jpeg,image/jpg"
+          />
+          <label for="my-file-input" class="image-input">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="20"
+              viewBox="0 0 24 20"
+              fill="none"
+            >
+              <path
+                d="M23 17.25C23 17.7804 22.7893 18.2891 22.4142 18.6642C22.0391 19.0393 21.5304 19.25 21 19.25H3C2.46957 19.25 1.96086 19.0393 1.58579 18.6642C1.21071 18.2891 1 17.7804 1 17.25V6.25C1 5.71957 1.21071 5.21086 1.58579 4.83579C1.96086 4.46071 2.46957 4.25 3 4.25H7L9 1.25H15L17 4.25H21C21.5304 4.25 22.0391 4.46071 22.4142 4.83579C22.7893 5.21086 23 5.71957 23 6.25V17.25Z"
+                stroke="#473619"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M12 15.25C14.2091 15.25 16 13.4591 16 11.25C16 9.04086 14.2091 7.25 12 7.25C9.79086 7.25 8 9.04086 8 11.25C8 13.4591 9.79086 15.25 12 15.25Z"
+                stroke="#473619"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </label>
+        </div>
       }
     </div>
     <div class="user-profile-detials-header-text">
@@ -34,7 +53,10 @@
       <p class="user-profile-details-prop">Username: {{ userData.userName }}</p>
     </div>
     @if (editing) {
-      <button class="primarybtn" (click)="saveChanges()">SAVE CHANGES</button>
+      <div class="edit-buttons">
+        <button class="primarybtn" (click)="saveChanges()">SAVE CHANGES</button>
+        <button class="secondarybtn" (click)="cancelSaving()">CANCEL</button>
+      </div>
     } @else {
       <button class="primarybtn" (click)="editMode(userData.id)">EDIT PROFILE</button>
     }

@@ -1,0 +1,12 @@
+export interface UserImageQuery {
+  userID: number;
+}
+
+export interface UserImageDto {
+  imageData: Blob;
+}
+
+export interface UserImageCommand {
+  userID: number;
+  imageData?: FormData;
+}
