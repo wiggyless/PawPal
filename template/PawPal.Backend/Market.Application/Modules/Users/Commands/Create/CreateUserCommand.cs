@@ -18,5 +18,6 @@ namespace PawPal.Application.Modules.Users.Commands.Create
         public required string? ProfilePictureURL { get; set; }
         public required int? RoleID { get; set; }
         public required int? City { get; set; } 
+        public required string? Username { get; set; }  
     }
 }

@@ -32,6 +32,7 @@ export class UserProfileComponent implements OnInit {
       }).subscribe({
         next: (response) => {
           this.userData = response.userData;
+          console.log('User Data:', this.userData);
           this.initializeInputData();
         },
       });
@@ -46,7 +47,7 @@ export class UserProfileComponent implements OnInit {
   cityService = inject(CitiesService);
   cityList: any = [];
   city: string = '';
-
+  username: string = '';
   private originalCityId: number = 0;
 
   userData: GetUserByIdDto = {
@@ -58,13 +59,13 @@ export class UserProfileComponent implements OnInit {
     city: '',
     cantonAbbrevation: '',
     cityID: 0,
-    userName: '',
+    username: '',
   };
 
   private resetUserData(): void {
     this.userData = {
       id: 0, firstName: '', lastName: '', email: '',
-      dateTime: '', city: '', cantonAbbrevation: '', cityID: 0, userName: '',
+      dateTime: '', city: '', cantonAbbrevation: '', cityID: 0, username: '',
     };
     this.profileForm.reset();
   }
@@ -92,7 +93,7 @@ export class UserProfileComponent implements OnInit {
       firstName: this.userData.firstName,
       lastName: this.userData.lastName,
       date: this.userData.dateTime,
-      city: this.userData.city,
+      city: this.userData.city
     });
   }
 
@@ -112,7 +113,7 @@ export class UserProfileComponent implements OnInit {
 
   saveChanges() {
     this.editing = false;
-    this.dialog.open(SaveChangesComponent);
+    //this.dialog.open(SaveChangesComponent);
     const cityValue = this.profileForm.get('city')?.value;
 
     const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;

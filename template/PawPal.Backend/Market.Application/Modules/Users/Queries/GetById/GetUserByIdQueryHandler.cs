@@ -25,6 +25,7 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
                     City = x.City.Name,
                     CantonAbbrevation = x.City.Canton.Abbreviation,
                     CityID = x.CityId,
+                    Username = x.Username,
                 }).FirstOrDefaultAsync(cancellationToken);
             if (user == null) throw new PawPalNotFoundException($"User with Id {request.Id} does not exist");
             return user;

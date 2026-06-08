@@ -70,6 +70,10 @@ export class RegisterComponent implements OnInit {
     { validators: passwordMatchValidator }
   );
 
+  additionalInfo = this._formBuilder.group({
+    aboutMe: ['', [Validators.maxLength(500), Validators.required]],
+    favouriteAnimal: [''],
+  });
   ngOnInit(): void {
     this.loadCities();
     this.accountInfo.get('username')?.valueChanges.pipe( 
@@ -130,7 +134,7 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.accountInfo.invalid || this.basicInfo.invalid) return;
+    if (this.accountInfo.invalid || this.basicInfo.invalid || this.additionalInfo.invalid) return;
 
     const payload: CreateUserCommand = {
       firstName: this.basicInfo.value.firstName ?? '',

@@ -27,7 +27,6 @@
             </mat-select>
           </mat-form-field>
         }
-        @if (imagesLoaded) {
           <mat-form-field>
             <mat-select class="sel" placeholder="Select a canton" [(ngModel)]="selectedCanton">
               @for (cant of cantons.items; track cant) {
@@ -35,12 +34,11 @@
               }
             </mat-select>
           </mat-form-field>
-        }
       </div>
       <div class="search-btn">
         <button class="primarybtn" (click)="searchCatalog()">SEARCH</button>
       </div>
-      <!--
+      <!-- 
        <div class="catalog-latest-container">
       <p class="catalog-latest-container-title">Check out our newest posts!</p>
       <div class="catalog-container">
@@ -80,7 +78,6 @@
       <button class="primarybtn" routerLink="/catalog">TAKE ME THERE!</button>
     </div>
   -->
-      <app-footer></app-footer>
     </div>
     <app-footer></app-footer>
   </body>

@@ -8,6 +8,7 @@ export interface LoginCommand {
   email: string;
   password: string;
   fingerprint?: string | null;
+  recaptchaToken?: string | null;
 }
 
 /**

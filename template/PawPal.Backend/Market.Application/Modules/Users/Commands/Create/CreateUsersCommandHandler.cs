@@ -57,7 +57,8 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 CityId = request.City,
                 IsEnabled = true,
                 EmailConfirmationToken = confirmationToken, 
-                IsEmailConfirmed = false
+                IsEmailConfirmed = false,
+                Username = request.Username
             };
             context.Users.Add(newUser);
             await context.SaveChangesAsync(cancellationToken);

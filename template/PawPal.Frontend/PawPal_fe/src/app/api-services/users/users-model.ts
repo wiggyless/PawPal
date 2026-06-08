@@ -19,7 +19,7 @@ export interface GetUserByIdDto {
   city: string;
   cityID: number;
   cantonAbbrevation: string;
-  userName: string;
+  username: string;
 }
 export interface UpdateUserCommand {
   firstName: string;
