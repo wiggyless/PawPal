@@ -116,10 +116,14 @@
   border-radius: 100px;
   border: 1px solid black;
   margin-top: 10%;
-  background-image: url('./usagi.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+.profile-preview {
+  width: 100%;
+  height: 100%;
+  border-radius: 200px;
 }
 .post-information-user-logo-activity {
   width: 50px;
@@ -220,8 +224,8 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #C7B18C;
-  border: 2px solid #6B4423;
+  background-color: #c7b18c;
+  border: 2px solid #6b4423;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -230,27 +234,26 @@
   pointer-events: all;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 
- 
+  mat-icon {
+    color: rgb(62, 47, 28);
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: rgb(62, 47, 28);
+    transform: translateY(-50%) scale(1.1); // Combine both transforms
+
     mat-icon {
-      color: rgb(62, 47, 28);
-      font-size: 32px;
-      width: 32px;
-      height: 32px;
+      color: rgb(243, 233, 219);
     }
-    
-    &:hover:not(:disabled) {
-      background-color: rgb(62, 47, 28);
-      transform: translateY(-50%) scale(1.1); // Combine both transforms
-      
-      mat-icon {
-        color: rgb(243, 233, 219);
-      }
-    }
-    
-    &:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 }
 
 .carousel-arrow:hover {
