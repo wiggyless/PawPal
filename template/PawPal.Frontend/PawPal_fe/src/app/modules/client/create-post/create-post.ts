@@ -236,7 +236,7 @@ export class CreatePost implements OnInit {
         genders: this.genderService.listGender(),
         categories: this.categoryService.listAnimalCategories(),
         breeds: this.breedService.listAnimalBreed(),
-        user: this.animalUserService.getUser(this.currentUser.userId),
+        user: this.animalUserService.getUser(this.currentUser.userId()),
         allergies: this.allergyService.listAnimalAllergies(),
         disabilities: this.disabilityService.listAnimalDisability(),
       }).subscribe({
@@ -263,7 +263,7 @@ export class CreatePost implements OnInit {
       genders: this.genderService.listGender(),
       categories: this.categoryService.listAnimalCategories(),
       breeds: this.breedService.listAnimalBreed(),
-      user: this.animalUserService.getUser(this.currentUser.userId),
+      user: this.animalUserService.getUser(this.currentUser.userId()),
       allergies: this.allergyService.listAnimalAllergies(),
       disabilities: this.disabilityService.listAnimalDisability(),
       images: this.postImages.getImagePostBlob(this.routePostID),

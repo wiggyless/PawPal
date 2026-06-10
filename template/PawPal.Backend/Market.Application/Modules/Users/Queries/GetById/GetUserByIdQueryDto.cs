@@ -17,5 +17,6 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
         public int? CityID { get; set; }
         public required string? CantonAbbrevation { get; set; }    
         public required string? Username { get; set; }
+        public required string? AboutMe { get; set; }
     }
 }

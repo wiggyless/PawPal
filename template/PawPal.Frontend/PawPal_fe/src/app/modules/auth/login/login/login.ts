@@ -45,7 +45,6 @@ export class LoginComponent extends BaseComponent implements OnInit {
 }
  
   
-
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
@@ -61,7 +60,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
      const token = grecaptcha.getResponse();
 
     if (!token) {
-      alert('Please complete the CAPTCHA.');
+      this.dialogueService.error('CAPTCHA Required', 'Please complete the CAPTCHA to proceed.');
       return;
     }
 

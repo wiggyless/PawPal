@@ -120,21 +120,49 @@
     <a class="forgot-password" routerLink="/auth/login">Already have an account? Sign in!</a>
   </div>
 
-    <form [formGroup]="additionalInfo" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="aboutMe">Tell us about yourself!</label>
-        <mat-form-field class="options">
-          <textarea matInput formControlName="aboutMe" rows="4"
-                    placeholder="e.g. Do you have pets of your own? Why do you want to adopt?">
-          </textarea>
-          <mat-error *ngIf="additionalInfo.get('aboutMe')?.hasError('required')">
-            Please tell us something about yourself!
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <button type="button" class="secondarybtn" matStepperPrevious>Go back</button>
-      <button type="submit" class="primarybtn" [disabled]="additionalInfo.invalid">Register</button>
-    </form>
+   <form [formGroup]="additionalInfo" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="aboutMe">Tell us about yourself!</label>
+    <mat-form-field id="aboutMeTextArea">
+      <textarea matInput formControlName="aboutMe" rows="4"
+                placeholder="e.g. Do you have pets of your own? Why do you want to adopt?">
+      </textarea>
+      <mat-error *ngIf="additionalInfo.get('aboutMe')?.hasError('required')">
+        Please tell us something about yourself!
+      </mat-error>
+    </mat-form-field>
+  </div>  
+
+  <div class="form-group profile-picture-group">
+    <label>Profile picture</label>
+    <div class="image-input-container">
+      <input
+        type="file"
+        id="register-profile-image"
+        style="display:none"
+        (change)="onProfileImageSelected($event)"
+        accept="image/png, image/jpeg, image/jpg"
+        #fileInput
+      />
+      @if (profileImagePreview) {
+        <img [src]="profileImagePreview" class="profile-preview" alt="Profile preview" />
+      } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 20" fill="none">
+          <path d="M23 17.25C23 17.7804 22.7893 18.2891 22.4142 18.6642C22.0391 19.0393 21.5304 19.25 21 19.25H3C2.46957 19.25 1.96086 19.0393 1.58579 18.6642C1.21071 18.2891 1 17.7804 1 17.25V6.25C1 5.71957 1.21071 5.21086 1.58579 4.83579C1.96086 4.46071 2.46957 4.25 3 4.25H7L9 1.25H15L17 4.25H21C21.5304 4.25 22.0391 4.46071 22.4142 4.83579C22.7893 5.21086 23 5.71957 23 6.25V17.25Z"
+            stroke="#473619" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 15.25C14.2091 15.25 16 13.4591 16 11.25C16 9.04086 14.2091 7.25 12 7.25C9.79086 7.25 8 9.04086 8 11.25C8 13.4591 9.79086 15.25 12 15.25Z"
+            stroke="#473619" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      }
+      <button type="button" class="image-input-label" (click)="fileInput.click()">
+        Choose a profile picture
+      </button>
+    </div>
+  </div>
+
+  <button type="button" class="secondarybtn" matStepperPrevious>Go back</button>
+  <button type="submit" class="primarybtn" [disabled]="additionalInfo.invalid">Register</button>
+</form>
 
   </div>
 </mat-step>

@@ -12,7 +12,6 @@ import {
   UserImageQuery,
 } from '../../../../api-services/userImage/userImage-model';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { FileSelectEvent } from 'primeng/types/fileupload';
 
 @Component({
   selector: 'app-user-profile-component',
@@ -93,6 +92,7 @@ export class UserProfileComponent implements OnInit {
     cantonAbbrevation: '',
     cityID: 0,
     username: '',
+    aboutMe: '',
   };
   userImage: UserImageCommand = {
     userID: 0,
@@ -107,7 +107,8 @@ export class UserProfileComponent implements OnInit {
       city: '',
       cantonAbbrevation: '',
       cityID: 0,
-      userName: '',
+      username: '',
+      aboutMe: '',
     };
     this.profileForm.reset();
   }
@@ -115,7 +116,7 @@ export class UserProfileComponent implements OnInit {
     firstName: new FormControl({ value: '', disabled: true }),
     lastName: new FormControl({ value: '', disabled: true }),
     date: new FormControl({ value: '', disabled: true }),
-    city: new FormControl<string | number>({ value: '', disabled: true }), // Accept both types
+    city: new FormControl<string | number>({ value: '', disabled: true }),
     aboutMe: new FormControl({ value: '', disabled: true }),
   });
 
@@ -133,7 +134,8 @@ export class UserProfileComponent implements OnInit {
       firstName: this.userData.firstName,
       lastName: this.userData.lastName,
       date: this.userData.dateTime,
-      city: this.userData.city
+      city: this.userData.city,
+      aboutMe: this.userData.aboutMe,
     });
   }
 
@@ -150,134 +152,70 @@ export class UserProfileComponent implements OnInit {
     this.profileForm.enable();
     this.profileForm.get('city')?.setValue(this.originalCityId, { emitEvent: false });
   }
-  saveChanges() {
-    this.editing = false;
-    this.profileForm.disable();
+ saveChanges() {
+  this.editing = false;
+  
+  const cityValue = this.profileForm.get('city')?.value;
+  const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;
+  
+  const firstName = (this.profileForm.get('firstName')?.value as string) || this.userData.firstName;
+  const lastName = (this.profileForm.get('lastName')?.value as string) || this.userData.lastName;
+  const aboutMe = (this.profileForm.get('aboutMe')?.value as string) || this.userData.aboutMe || '';
+  const date = (this.profileForm.get('date')?.value as string) || this.userData.dateTime;
+  
+  const formChanged = this.hasFormFieldChanges(cityId);
+  const imageChanged = this.hasImageChanges();
 
-    const formChanged = this.hasFormFieldChanges();
-    const imageChanged = this.hasImageChanges();
-
-    if (!formChanged && !imageChanged) {
-      // Nothing changed, skip all API calls
-      return;
-    }
-
-    const cityValue = this.profileForm.get('city')?.value;
-    const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;
-
-    const requests: any = {};
-
-    if (formChanged) {
-      this.userData.firstName = this.profileForm.get('firstName')?.value as string;
-      this.userData.lastName = this.profileForm.get('lastName')?.value as string;
-      this.userData.dateTime = this.profileForm.get('date')?.value as string;
-      this.userData.cityID = cityId;
-
-      const payload: UpdateUserCommand = {
-        firstName: this.userData.firstName,
-        lastName: this.userData.lastName,
-        profilePictureURL: '',
-        date: this.userData.dateTime,
-        cityId: cityId,
-      };
-      requests.userPostData = this.userDataService.updateUser(this.userData.id, payload);
-    }
-
-    if (imageChanged) {
-      console.log('WORKS');
-      requests.userImage = this.isUpdate
-        ? this.userImageService.updateUserImage(this.userData.id, this.selectedImage!)
-        : this.userImageService.createUserImage(this.userData.id, this.selectedImage!);
-    }
-
+  this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+  
+  if (!formChanged && !imageChanged) {
+    return;
+  }
+  
+  const requests: any = {};
+  
+  if (formChanged) {
+    const payload: UpdateUserCommand = {
+      firstName: firstName,
+      lastName: lastName,
+      profilePictureURL: this.originalUrl ?? '', 
+      date: date,
+      cityId: cityId,
+      aboutMe: aboutMe,
+    };
+    requests.userPostData = this.userDataService.updateUser(this.userData.id, payload);
+  }
+  if (imageChanged) {
+    requests.userImage = this.isUpdate
+    ? this.userImageService.updateUserImage(this.userData.id, this.selectedImage!)
+    : this.userImageService.createUserImage(this.userData.id, this.selectedImage!);
+  }
+  
     forkJoin(requests).subscribe({
-      next: (res) => {
-        if (formChanged) {
-          const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
-          if (selectedCity) {
-            this.userData.city = selectedCity.name;
-            this.originalCityId = cityId;
-          }
-          this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
-        }
-        if (imageChanged) {
-          this.isUpdate = true;
-          this.imageChanged = false;
-          this.originalImageUrl = this.imageUrl();
-          this.selectedImage = undefined;
-        }
-        this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
-      },
-      error: (res) => {
-        console.log('ERROR: =>', res);
-        this.dialog.error(
-          'Error',
-          'An error occurred while updating your profile. Please try again.',
-          'OK',
-        );
-      },
-    });
+      next: () => {
+  this.userData.firstName = firstName;
+  this.userData.lastName = lastName;
+  this.userData.dateTime = date;
+  this.userData.aboutMe = aboutMe;
+  console.log('aboutMe being sent:', aboutMe);
+
+  const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
+  if (selectedCity) {
+    this.userData.city = selectedCity.name;
+    this.originalCityId = cityId;
   }
-  // need to fix updating, only to update if a change has happened
-  /* saveChanges() {
-    this.editing = false;
-    //this.dialog.open(SaveChangesComponent);
-    if (this.checkFormChanges()) {
-      const cityValue = this.profileForm.get('city')?.value;
-      const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;
-      this.userData.firstName = this.profileForm.get('firstName')?.value as string;
-      this.userData.lastName = this.profileForm.get('lastName')?.value as string;
-      this.userData.dateTime = this.profileForm.get('date')?.value as string;
-      this.userData.cityID = cityId;
-      const payload: UpdateUserCommand = {
-        firstName: this.userData.firstName,
-        lastName: this.userData.lastName,
-        profilePictureURL: '', // needs to be removed
-        date: this.userData.dateTime,
-        cityId: cityId,
-      };
-      forkJoin({
-        userPostData: this.userDataService.updateUser(this.userData.id, payload),
-        userImage:
-          this.isUpdate == false
-            ? this.userImageService.createUserImage(this.userData.id, this.selectedImage!)
-            : this.userImageService.updateUserImage(this.userData.id, this.selectedImage!),
-      }).subscribe({
-        next: (res) => {
-          const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
-          if (selectedCity) {
-            this.userData.city = selectedCity.name;
-            this.originalCityId = cityId;
-          }
-          this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
-          this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
-          window.location.reload();
-        },
-        error: (res) => {
-          console.log('ERROR: =>', res);
-          this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
-          this.dialog.error(
-            'Error',
-            'An error occurred while updating your profile. Please try again.',
-            'OK',
-          );
-        },
-      });
-    }
-    /*
-    this.userDataService.updateUser(this.userData.id, payload).subscribe({
-      next: (res) => {
-        const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
-        if (selectedCity) {
-          this.userData.city = selectedCity.name;
-          this.originalCityId = cityId;
-        }
-        this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
-        this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
-      },
+  this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+
+  if (imageChanged) {
+    this.isUpdate = true;
+    this.imageChanged = false;
+    this.originalImageUrl = this.imageUrl();
+    this.selectedImage = undefined;
+  }
+  this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
+},
       error: (res) => {
         console.log('ERROR: =>', res);
-        this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
         this.dialog.error(
           'Error',
           'An error occurred while updating your profile. Please try again.',
@@ -287,13 +225,23 @@ export class UserProfileComponent implements OnInit {
     });
     this.profileForm.disable();
   }
-    */
-  hasFormFieldChanges(): boolean {
+  hasFormFieldChanges(cityId: number): boolean {
+
+    const formDate = this.profileForm.get('date')?.value;
+  const originalDate = this.userData.dateTime;
+
+  const normalizeDate = (val: any): string => {
+    if (!val) return '';
+    const d = new Date(val);
+    return isNaN(d.getTime()) ? String(val) : d.toISOString().split('T')[0];
+  };
+
     return (
       this.userData.firstName !== this.profileForm.get('firstName')?.value ||
       this.userData.lastName !== this.profileForm.get('lastName')?.value ||
-      this.userData.dateTime !== this.profileForm.get('date')?.value ||
-      this.originalCityId !== this.profileForm.get('city')?.value
+      normalizeDate(originalDate) !== normalizeDate(formDate) ||
+      cityId !== this.originalCityId ||
+      this.userData.aboutMe !== this.profileForm.get('aboutMe')?.value
     );
   }
 
@@ -302,8 +250,9 @@ export class UserProfileComponent implements OnInit {
   }
 
   checkFormChanges(): boolean {
-    return this.hasFormFieldChanges() || this.hasImageChanges();
+    return this.hasFormFieldChanges(this.originalCityId) || this.hasImageChanges();
   }
+
   editPhoto(event: any) {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -324,5 +273,7 @@ export class UserProfileComponent implements OnInit {
     this.selectedImage = undefined;
     this.profileForm.disable();
     this.imageUrl.set(this.originalImageUrl);
+    this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+    this.profileForm.get('aboutMe')?.setValue(this.userData.aboutMe ?? '', { emitEvent: false });
   }
 }

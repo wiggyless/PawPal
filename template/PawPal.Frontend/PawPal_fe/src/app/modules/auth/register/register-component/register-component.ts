@@ -3,12 +3,10 @@ import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorF
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { UserService } from '../../../../api-services/users/users-service';
 import { CreateUserCommand } from '../../../../api-services/users/users-model';
-import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
-import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.service';
-import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
 import { Router } from '@angular/router';
 import { catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { UserImageService } from '../../../../api-services/userImage/userImage-service';
 
 export const passwordMatchValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
   const password = group.get('password')?.value;
@@ -35,15 +33,14 @@ export const passwordMatchValidator: ValidatorFn = (group: AbstractControl): Val
     ])
   ]
 })
+
 export class RegisterComponent implements OnInit {
 
   private _formBuilder = inject(FormBuilder);
   private cityService = inject(CitiesService);
   private userService = inject(UserService);
-  private auth = inject(AuthFacadeService);
-  private currentUser = inject(CurrentUserService);
   private router = inject(Router);
-
+  private userImageService = inject(UserImageService);
   cityList: any = [];
   cityId: number = 0;
   dateOfBirth: Date = new Date();
@@ -70,6 +67,20 @@ export class RegisterComponent implements OnInit {
     { validators: passwordMatchValidator }
   );
 
+profileImagePreview: string | null = null;
+selectedProfileImage: File | undefined;
+
+onProfileImageSelected(event: any) {
+  const file = event.target.files?.[0];
+  if (file) {
+    this.selectedProfileImage = file;
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.profileImagePreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+}
   additionalInfo = this._formBuilder.group({
     aboutMe: ['', [Validators.maxLength(500), Validators.required]],
     favouriteAnimal: [''],
@@ -134,27 +145,41 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.accountInfo.invalid || this.basicInfo.invalid || this.additionalInfo.invalid) return;
+  if (this.accountInfo.invalid || this.basicInfo.invalid || this.additionalInfo.invalid) return;
 
-    const payload: CreateUserCommand = {
-      firstName: this.basicInfo.value.firstName ?? '',
-      lastName: this.basicInfo.value.lastName ?? '',
-      birthDate: new Date(this.basicInfo.value.dateOfBirth ?? ''),
-      username: this.accountInfo.value.username ?? '',
-      email: this.accountInfo.value.email ?? '',
-      password: this.accountInfo.value.password ?? '',
-      roleID: 2,
-      city: this.basicInfo.value.cityId ?? 0,
-      profilePictureURL: null,
-    };
+  const payload: CreateUserCommand = {
+    firstName: this.basicInfo.value.firstName ?? '',
+    lastName: this.basicInfo.value.lastName ?? '',
+    birthDate: new Date(this.basicInfo.value.dateOfBirth ?? ''),
+    username: this.accountInfo.value.username ?? '',
+    email: this.accountInfo.value.email ?? '',
+    password: this.accountInfo.value.password ?? '',
+    roleID: 2,
+    city: this.basicInfo.value.cityId ?? 0,
+    aboutMe: this.additionalInfo.value.aboutMe ?? '',
+  };
 
-    this.userService.createUser(payload).subscribe({
-      next: () => {
-         this.router.navigate(['/auth/login'], {
-      queryParams: { message: 'Please check your e-mail to confirm your account.' }
-    });
-      },
-      error: (err) => { console.error('Registration error:', err); },
-    });
-  }
+  this.userService.createUser(payload).subscribe({
+    next: (response : { id: number }) => {
+      if (this.selectedProfileImage && response.id) {
+        this.userImageService.createUserImage(response.id, this.selectedProfileImage).subscribe({
+          next: () => this.navigateAfterRegister(),
+          error: (err) => {
+            console.error('Image upload failed:', err);
+            this.navigateAfterRegister();
+          }
+        });
+      } else {
+        this.navigateAfterRegister();
+      }
+    },
+    error: (err) => { console.error('Registration error:', err); },
+  });
+}
+
+private navigateAfterRegister(): void {
+  this.router.navigate(['/auth/login'], {
+    queryParams: { message: 'Please check your e-mail to confirm your account.' }
+  });
+}
 }

@@ -19,7 +19,6 @@ namespace PawPal.Application.Modules.Users.Commands.Create
             var userEmail = request.Email?.Trim();
             var birthDate = request.BirthDate;
             var password = request.Password?.Trim();
-            var image = request.ProfilePictureURL;
 
             if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(userLastName) ||
                 string.IsNullOrWhiteSpace(userEmail) || string.IsNullOrWhiteSpace(password) || birthDate == null)
@@ -51,14 +50,14 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 LastName = userLastName,
                 Email = userEmail,
                 BirthDate = birthDate,
-                ProfilePictureURL = image,
                 RoleId = request.RoleID,
                 PasswordHash = hasher.HashPassword(null, password),
                 CityId = request.City,
                 IsEnabled = true,
                 EmailConfirmationToken = confirmationToken, 
                 IsEmailConfirmed = false,
-                Username = request.Username
+                Username = request.Username, 
+                AboutMe = request.AboutMe
             };
             context.Users.Add(newUser);
             await context.SaveChangesAsync(cancellationToken);

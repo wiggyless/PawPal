@@ -17,9 +17,9 @@ import { buildHttpParams } from '../../core/models/build-http-params';
 export class UserService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl + '/Users';
-  createUser(command: CreateUserCommand): Observable<number> {
-    return this.http.post<number>(`${this.apiUrl}`, command);
-  }
+  createUser(payload: CreateUserCommand): Observable<{ id: number }> {
+  return this.http.post<{ id: number }>(this.apiUrl, payload);
+}
 
   getByUsername(username: string): Observable<GetByUsernameQueryDto> {
     return this.http.get<GetByUsernameQueryDto>(`${this.apiUrl}/lookup?username=${username}`);
@@ -35,7 +35,7 @@ export class UserService {
   }
   updateUser(id: number, payload: UpdateUserCommand): Observable<void> {
     const params = payload ? buildHttpParams(payload as any) : undefined;
-    return this.http.put<void>(`${this.apiUrl}/${id}`, { params });
+    return this.http.put<void>(`${this.apiUrl}/${id}`, payload);
   }
 
   deleteUser(id: number): Observable<void> {
