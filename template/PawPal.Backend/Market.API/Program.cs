@@ -1,9 +1,12 @@
-﻿﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using PawPal.API;
 using PawPal.API.Middleware;
 using PawPal.Application;
 using PawPal.Application.Abstractions;
+using PawPal.Application.Services;
 using PawPal.Infrastructure;
 using PawPal.Infrastructure.Common;
 using PawPal.Infrastructure.Signal;
@@ -122,6 +125,12 @@ public partial class Program
 
             builder.Services.AddTransient<IEmailService, EmailService>();
 
+            FirebaseApp.Create(new AppOptions
+            {
+                Credential = GoogleCredential.FromFile("firebase-service-account.json")
+            });
+
+            builder.Services.AddSingleton<FirebaseNotificationService>();
 
             var app = builder.Build();
 

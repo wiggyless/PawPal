@@ -3,7 +3,7 @@
   <div class="client-layout">
     <app-user-profile-side-navbar class="client-side-navbar"></app-user-profile-side-navbar>
     <div class="client-content-posts-container">
-      <h1 class="my-post-title">PUBLIC POSTS:</h1>
+      <h1 class="my-post-title">MY POSTS</h1>
       <div class="client-content-posts">
         @if (animalPostList | async; as posts) {
           @for (post of posts.items; track post) {
@@ -17,6 +17,13 @@
               </div>
             </div>
           }
+        }
+        @else if (!isLoaded) {
+          <div class="loading-container">
+            <br />
+            <p class="loading-spinner-text">Loading posts</p>
+            <mat-spinner></mat-spinner>
+          </div>
         }
       </div>
       <mat-paginator

@@ -61,6 +61,7 @@ export class PostComments implements OnInit, OnDestroy {
   private sanitizer = inject(DomSanitizer);
 
   constructor(private signalRService: SignalRService) {}
+
   ngOnInit(): void {
     this.request.postID = this.postId;
     this.loadComments();

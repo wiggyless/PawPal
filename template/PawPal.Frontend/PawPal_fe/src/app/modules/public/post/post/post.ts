@@ -125,6 +125,8 @@ export class PostComponent implements OnInit {
         this.cd.detectChanges();
       },
     });
+    });
+   
   }
 
   keepOrder = (a: any, b: any) => 0;

@@ -25,6 +25,7 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
   animalPostsService = inject(AnimalPostService);
   animalPostList: Observable<PageResult<ListAnimalPostsByUserIdDto>> | undefined;
   envLink = environment;
+    isLoaded = false;
   route = inject(Router);
   constructor(crr: CurrentUserService) {
     super();
@@ -65,6 +66,7 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
     );
   }
   loadPost(post: ListAnimalPostsByUserIdDto): void {
+    console.log('post:', post); 
     this.route.navigate(['/post'], {
       queryParams: {
         postID: post.postId,

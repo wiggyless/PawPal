@@ -7,6 +7,7 @@ export interface CreateUserCommand{
     password: string;
     roleID: number;
     city: string | number;
+    aboutMe: string;
     profilePictureURL?: string | null;
 
 }
@@ -19,7 +20,8 @@ export interface GetUserByIdDto {
   city: string;
   cityID: number;
   cantonAbbrevation: string;
-  userName: string;
+  username: string;
+  aboutMe?: string;
 }
 export interface UpdateUserCommand {
   firstName: string;
@@ -27,6 +29,7 @@ export interface UpdateUserCommand {
   profilePictureURL: string;
   date: string;
   cityId: number;
+  aboutMe?: string;
 }
 
 export interface DeleteUserCommand {

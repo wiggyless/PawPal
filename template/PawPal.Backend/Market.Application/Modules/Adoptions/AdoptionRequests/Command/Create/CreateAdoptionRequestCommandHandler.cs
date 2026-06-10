@@ -1,26 +1,25 @@
-﻿using PawPal.Domain.Entities.Adoptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PawPal.Application.Services;
+using PawPal.Domain.Entities.Adoptions;
 
 namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create
 {
-    public sealed class CreateAdoptionRequestCommandHandler(IAppDbContext context) : IRequestHandler<CreateAdoptionRequestCommand,int>
+    public sealed class CreateAdoptionRequestCommandHandler(
+        IAppDbContext context,
+        FirebaseNotificationService firebaseNotificationService)
+        : IRequestHandler<CreateAdoptionRequestCommand, int>
     {
-        public async Task<int> Handle(CreateAdoptionRequestCommand request,CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateAdoptionRequestCommand request, CancellationToken cancellationToken)
         {
-            var user = context.Users.Where(x => x.Id == request.UserID).FirstOrDefaultAsync(cancellationToken);
-            var post = context.Posts.Where(x => x.Id == request.PostID).AsNoTracking().FirstOrDefault();
-            var req = context.AdoptionRequirements.Where(x => x.Id == request.RequirementID).FirstOrDefaultAsync(cancellationToken);
+            var user = await context.Users.Where(x => x.Id == request.UserID).FirstOrDefaultAsync(cancellationToken);
+            var post = await context.Posts.Where(x => x.Id == request.PostID).FirstOrDefaultAsync(cancellationToken);
+            var req = await context.AdoptionRequirements.Where(x => x.Id == request.RequirementID).FirstOrDefaultAsync(cancellationToken);
+
             if (user is null) throw new PawPalNotFoundException("User does not exist");
-            else if (post is null) throw new PawPalNotFoundException("Post does not exist");
-            else if (req is null) throw new PawPalNotFoundException("Adoption requirement does not exist");
-            if(post.UserId == request.UserID)
-            {
+            if (post is null) throw new PawPalNotFoundException("Post does not exist");
+            if (req is null) throw new PawPalNotFoundException("Adoption requirement does not exist");
+            if (post.UserId == request.UserID)
                 throw new PawPalConflictException("The same user cannot request to its own post");
-            }
+
             var newRequest = new AdoptionRequestEntity
             {
                 UserId = request.UserID,
@@ -29,8 +28,25 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create
                 DateSent = DateTime.Now,
                 Status = "Sent",
             };
+
             context.AdoptionRequests.Add(newRequest);
             await context.SaveChangesAsync(cancellationToken);
+
+            // notify the post owner
+            var postOwner = await context.Users
+                .Where(x => x.Id == post.UserId)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (postOwner?.FcmToken is not null)
+            {
+                await firebaseNotificationService.SendAsync(
+                    postOwner.FcmToken,
+                    "New Adoption Request",
+                    $"{user.Username} wants to adopt your animal!",
+                    $"/client/my-profile/my-requests"
+                );
+            }
+
             return newRequest.Id;
         }
     }

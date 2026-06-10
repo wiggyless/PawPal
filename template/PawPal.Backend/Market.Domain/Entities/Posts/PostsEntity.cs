@@ -2,11 +2,6 @@
 using PawPal.Domain.Entities.Animal_Info;
 using PawPal.Domain.Entities.Identity;
 using PawPal.Domain.Entities.Places;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PawPal.Domain.Entities.Posts
 {

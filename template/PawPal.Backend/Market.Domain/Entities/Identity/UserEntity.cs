@@ -24,5 +24,7 @@ public sealed class UserEntity : BaseEntity
     public DateTime? LastOnline { get; set; } = DateTime.Now;
     public string? EmailConfirmationToken { get; set; }
     public bool IsEmailConfirmed { get; set; }
+    public string? FcmToken { get; set; }
+    public string? AboutMe { get; set; }    
     public ICollection<RefreshTokenEntity> RefreshTokens { get; private set; } = new List<RefreshTokenEntity>();
 }
