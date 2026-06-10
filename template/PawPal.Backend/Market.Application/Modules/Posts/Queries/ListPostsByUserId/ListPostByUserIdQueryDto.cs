@@ -13,6 +13,8 @@ namespace PawPal.Application.Modules.Posts.Queries.ListPostsByUserId
         public string FirstImage { get; set; }  
         public string AnimalName { get; set;}
         public int AnimalID { get; set; }
-        public int? CityID { get; set; } 
+        public int? CityID { get; set; }
+
+        public DateTime DateAdded { get; set; }
     }
 }

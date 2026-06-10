@@ -1,12 +1,9 @@
 ﻿using PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create;
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Delete;
+using PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.UpdateStatus;
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.GetById;
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.List;
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.ListHistory;
-using PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Create;
-using PawPal.Application.Modules.Adoptions.AdoptionRequirements.Queries.GetById;
-using PawPal.Application.Modules.Adoptions.AdoptionRequirements.Queries.List;
-
 namespace PawPal.API.Controllers.Adoptions
 {
     [AllowAnonymous]
@@ -15,8 +12,8 @@ namespace PawPal.API.Controllers.Adoptions
     public class AdoptionRequestController(ISender sender) : ControllerBase
     {
         [AllowAnonymous]
-        [HttpPost]  
-        public async Task<ActionResult<int>> CreateRequest(CreateAdoptionRequestCommand crc,CancellationToken cancellationToken)
+        [HttpPost]
+        public async Task<ActionResult<int>> CreateRequest(CreateAdoptionRequestCommand crc, CancellationToken cancellationToken)
         {
             int id = await sender.Send(crc, cancellationToken);
             return CreatedAtAction(nameof(GetById), new { id }, new { id });
@@ -44,9 +41,16 @@ namespace PawPal.API.Controllers.Adoptions
             return res;
         }
         [HttpDelete("{id:int}")]
-        public async Task Delete(int id,CancellationToken cancellationToken)
+        public async Task Delete(int id, CancellationToken cancellationToken)
         {
             await sender.Send(new DeleteAdoptionRequestCommand { Id = id }, cancellationToken);
+        }
+
+        [HttpPut("{id:int}/status")]
+        public async Task UpdateStatus(int id, UpdateAdoptionStatusCommand command, CancellationToken cancellationToken)
+        {
+            command.Id = id;
+            await sender.Send(command, cancellationToken);
         }
     }
 }

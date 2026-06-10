@@ -7,14 +7,10 @@ import { environment } from '../../../../../environments/environment';
 import {
   ListAnimal,
   GetPostQuery,
-  ListAnimalPostsByUserIdDto,
 } from '../../../../api-services/animal-posts/animal-posts.model';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 import { PageResult } from '../../../../core/models/paging/page-result';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
-//import { LikedPostsService } from '../../../../api-services/likedPosts/likedPosts-service';
-//import { GetLikedPostListQuery } from '../../../../api-services/likedPosts/likedPosts-model';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   GetMainImagePostBlob,
   GetMainImagePostBlobClass,
@@ -49,7 +45,7 @@ export class MyFavorites
   //listPostRange: ListPostsByRange|undefined;
   isLoaded = false;
   protected override loadPagedData(): void {}
-  // Page Values ( didnt use the template cuz whats going on???)
+  
   page = {
     pageSize: 10,
     currentPage: 1,
@@ -71,7 +67,7 @@ export class MyFavorites
   }
   loadAnimalPosts(): void {
     this.animalPostList = this.animalPostsService.listAnimalPosts({
-      userID: this.currentUser.userId,
+      userID: this.currentUser.userId(),
       isLiked: true,
     });
     this.animalPostList.subscribe((response) => {
@@ -94,7 +90,7 @@ export class MyFavorites
     this.request.paging.pageSize = event.pageSize;
     this.loadAnimalPosts();
   }
-  // images Shit
+
   getPostImage(index: number) {
     return this.catalogImages.find((x) => x.postID == index)?.mainImage;
   }
@@ -130,10 +126,8 @@ export class MyFavorites
             mimeType = 'image/jpeg';
           }
         }
-        // 2. Create the Blob from the typed array
         const blob = new Blob([byteArray], { type: mimeType });
 
-        // 3. Create the URL and add to form
         const imageUrl = URL.createObjectURL(blob);
         this.catalogImages.push(new GetMainImagePostBlobClass(x.postID, imageUrl));
       }

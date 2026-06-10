@@ -98,8 +98,8 @@ export class PostComponent implements OnInit {
       this.cityId = params['cityID'];
       this.userId = params['userID'];
       this.dateAdded = params['dateAdded'];
-    });
-    this.imagesList = this.postImageService.getImagePost(this.postId);
+
+       this.imagesList = this.postImageService.getImagePost(this.postId);
     forkJoin({
       animal: this.animalService.getAnimalById(this.animalId as number),
       health: this.animalHealthService.getAnimalHealthHistoryById(this.animalId),
@@ -121,6 +121,8 @@ export class PostComponent implements OnInit {
         this.cd.detectChanges();
       },
     });
+    });
+   
   }
 
   keepOrder = (a: any, b: any) => 0;

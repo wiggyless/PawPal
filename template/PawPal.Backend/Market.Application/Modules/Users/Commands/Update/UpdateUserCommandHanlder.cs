@@ -23,6 +23,7 @@ namespace PawPal.Application.Modules.Users.Commands.Update
             user.ProfilePictureURL = request.ProfilePictureURL;
             user.BirthDate = request.Date;
             user.CityId = request.CityId;
+            user.AboutMe = request.AboutMe;
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

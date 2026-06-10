@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login/login';
 import { LogoutComponent } from './logout/logout/logout';
 import { ClientLayout } from '../client/client-layout/client-layout/client-layout';
 import { RegisterComponent } from './register/register-component/register-component';
+import { ConfirmEmailComponent } from './confirm-email/confirm-email';
 
 const routes: Routes = [
   {
@@ -16,7 +17,8 @@ const routes: Routes = [
         component: LoginComponent,
       },
       { path: 'logout', component: LogoutComponent },
-      {path: 'register', component:RegisterComponent}
+      {path: 'register', component:RegisterComponent},
+       { path: 'confirm-email', component: ConfirmEmailComponent },
     ],
   },
 ];

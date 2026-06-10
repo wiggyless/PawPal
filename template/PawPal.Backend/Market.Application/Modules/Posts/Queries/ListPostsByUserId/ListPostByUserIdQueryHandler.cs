@@ -23,6 +23,7 @@ namespace PawPal.Application.Modules.Posts.Queries.ListPostsByUserId
                 postImagesList.FirstOrDefault(y => y.PostId == x.Id).MainImage,
                 AnimalID = x.AnimalID,
                 CityID = x.CityId,
+                DateAdded = x.DateAdded
             }); 
             return await PageResult<ListPostByUserIdQueryDto>.FromQueryableAsync(finalList,request.Paging,cancellationToken);
         }

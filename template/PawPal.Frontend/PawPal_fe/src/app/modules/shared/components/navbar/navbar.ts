@@ -4,21 +4,36 @@ import { PublicRoutingModule } from '../../../public/public-routing-module';
 import { CommonModule } from '@angular/common';
 import { ClientModule } from '../../../client/client-module';
 import { SharedModule } from 'primeng/api';
+import { NotificationService, AppNotification } from '../../../../core/services/notifications/notification.service';
+import {DatePipe} from '@angular/common';
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
-  imports: [PublicRoutingModule, SharedModule],
+  imports: [PublicRoutingModule, SharedModule, DatePipe],
 })
 export class NavbarComponent {
   currentUser = inject(CurrentUserService);
+  notificationService = inject(NotificationService);
+
   @Input() roleId: number | null = null;
   menuOpened = false;
   tipsMenuOpen = false;
   aboutUsMenuOpen = false;
   newsMenuOpen = false;
+    notificationsOpen = false;
+bannerDismissed = false;
 
+enableNotifications() {
+  console.log('enableNotifications clicked');
+  this.notificationService.requestPermissionAndRegister();
+}
+
+dismissBanner() {
+  this.bannerDismissed = true;
+}
   toggleMenu(): void {
     this.menuOpened = !this.menuOpened;
   }
@@ -40,4 +55,17 @@ export class NavbarComponent {
     this.tipsMenuOpen = false;
     this.aboutUsMenuOpen = false;
   }
+
+    toggleNotifications(): void {
+    this.notificationsOpen = !this.notificationsOpen;
+    if (this.notificationsOpen) {
+      this.notificationService.markAllAsRead();
+    }
+  }
+
+    onNotificationClick(notification: AppNotification): void {
+    this.notificationsOpen = false;
+    this.notificationService.navigateTo(notification);
+  }
+
 }

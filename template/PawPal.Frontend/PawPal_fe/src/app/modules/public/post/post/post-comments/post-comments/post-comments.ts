@@ -48,13 +48,13 @@ export class PostComments implements OnInit, OnDestroy {
   objectUrl: string | null = null;
   private sanitizer = inject(DomSanitizer);
   constructor(private signalRService: SignalRService) {}
+
   ngOnInit(): void {
     this.request.postID = this.postId;
     this.loadComments();
     this.signalRSubscription = this.signalRService.commentReceived$.subscribe((newComment) => {
       console.log(newComment.postID == this.postId);
       if (newComment && newComment.postID == this.postId) {
-        // Add the new comment to the list instantly
         this.commentsList = {
           ...this.commentsList!,
           items: [newComment, ...this.commentsList!.items],

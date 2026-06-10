@@ -8,6 +8,7 @@ export interface LoginCommand {
   email: string;
   password: string;
   fingerprint?: string | null;
+  recaptchaToken?: string | null;
 }
 
 /**
@@ -56,4 +57,12 @@ export interface RefreshTokenCommandDto {
  */
 export interface LogoutCommand {
   refreshToken: string;
+}
+
+/**
+ * Response for GET /Auth/confirm-email
+ * Corresponds to: ConfirmEmailCommandDto.cs
+ */
+export interface ConfirmEmailCommandDto {
+  message: string;
 }

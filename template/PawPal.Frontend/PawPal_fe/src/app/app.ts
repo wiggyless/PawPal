@@ -1,7 +1,9 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { AuthTimeoutService } from './core/services/auth/auth-timeout.service';
-import { CurrentUserService } from './core/services/auth/current-user.service';
+import { Component, signal } from '@angular/core';
+import { initializeApp } from 'firebase/app';
+import { environment } from '../environments/environment';
+import { getAnalytics } from "firebase/analytics";
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
@@ -10,4 +12,8 @@ import { CurrentUserService } from './core/services/auth/current-user.service';
 })
 export class App {
   protected readonly title = signal('PawPal_fe');
+
+  constructor() {
+    initializeApp(environment.firebase);
+  }
 }

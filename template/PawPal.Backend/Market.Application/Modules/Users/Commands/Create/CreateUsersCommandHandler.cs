@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace PawPal.Application.Modules.Users.Commands.Create
 {
-    public sealed class CreateUsersCommandHandler(IAppDbContext context)
+    public sealed class CreateUsersCommandHandler(IAppDbContext context,
+             IEmailService emailService)
         : IRequestHandler<CreateUserCommand, int>
     {
-        public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateUserCommand request,
+             CancellationToken cancellationToken)
         {
             var userName = request.FirstName?.Trim();
             var userLastName = request.LastName?.Trim();
             var userEmail = request.Email?.Trim();
             var birthDate = request.BirthDate;
             var password = request.Password?.Trim();
-            var image = request.ProfilePictureURL;
+
             if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(userLastName) ||
                 string.IsNullOrWhiteSpace(userEmail) || string.IsNullOrWhiteSpace(password) || birthDate == null)
             {
@@ -38,20 +41,35 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 throw new PawPalConflictException("Email is already being used!");
             }
             var hasher = new PasswordHasher<UserEntity>();
+
+            var confirmationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+
             var newUser = new UserEntity
             {
                 FirstName = userName,
                 LastName = userLastName,
                 Email = userEmail,
                 BirthDate = birthDate,
-                ProfilePictureURL = image,
                 RoleId = request.RoleID,
                 PasswordHash = hasher.HashPassword(null, password),
                 CityId = request.City,
-                IsEnabled = true
+                IsEnabled = true,
+                EmailConfirmationToken = confirmationToken, 
+                IsEmailConfirmed = false,
+                Username = request.Username, 
+                AboutMe = request.AboutMe
             };
             context.Users.Add(newUser);
             await context.SaveChangesAsync(cancellationToken);
+
+            var confirmUrl = $"http://localhost:4200/auth/confirm-email?token={confirmationToken}";
+            await emailService.SendEmailAsync(
+                userEmail,
+                "Confirm your email",
+                $"<p>Hi {userName},</p><p>Click <a href='{confirmUrl}'>here</a> to confirm your account.</p>"
+            );
+
+
             return newUser.Id;
         }
     }
