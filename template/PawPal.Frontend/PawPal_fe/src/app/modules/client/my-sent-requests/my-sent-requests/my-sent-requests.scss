@@ -17,10 +17,11 @@ body {
 .poslati-zahtjevi-container {
   width: 100%;
   padding: 55px;
+  background-color: var(--background-color);
 }
 
 .page-title {
-  color: #473619;
+  color: var(--title-text-color);
   text-align: left;
   font-size: 35px;
   font-weight: 700;
@@ -331,9 +332,10 @@ body {
   height: 100%;
   flex-direction: column;
   padding: 50px;
+  width: 100%;
 }
 .loading-spinner-text {
-  color: black;
+  color: var(--title-text-color);
   margin-bottom: 20px;
   font-size: 30px;
   font-weight: 700;

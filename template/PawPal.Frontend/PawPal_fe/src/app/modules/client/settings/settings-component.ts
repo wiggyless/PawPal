@@ -8,7 +8,7 @@ import { UserService } from '../../../api-services/users/users-service';
   selector: 'app-settings',
   standalone: false,
   templateUrl: './settings-component.html',
-  styleUrl: './settings-component.scss'
+  styleUrl: './settings-component.scss',
 })
 export class SettingsComponent implements OnInit {
   dialog = inject(MatDialog);
@@ -23,9 +23,9 @@ export class SettingsComponent implements OnInit {
   confirmPassword: string = '';
 
   ngOnInit(): void {
-    this.userService.getUser(this.currentUser.userId).subscribe((res)=>{
-      this.userEmail=res.email;
-    })
+    this.userService.getUser(this.currentUser.userId() as number).subscribe((res) => {
+      this.userEmail = res.email;
+    });
   }
 
   toggleChangeEmailForm(): void {
@@ -57,7 +57,7 @@ export class SettingsComponent implements OnInit {
       alert('Passwords do not match');
       return;
     }
-    
+
     if (this.newPassword.length < 8) {
       alert('Password must be at least 8 characters');
       return;

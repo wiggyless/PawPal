@@ -14,6 +14,8 @@ import { PostImagesService } from '../../../api-services/animal-post-images/anim
 import { GenderService } from '../../../api-services/gender/gender-service';
 import { Router } from '@angular/router';
 import { CantonsService } from '../../../api-services/cantons/cantons-service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-public-layout',
   standalone: false,
@@ -37,6 +39,7 @@ export class PublicLayout implements OnInit, OnDestroy {
   router = inject(Router);
   genderListForDisplay: any = [];
   cd = inject(ChangeDetectorRef);
+  sanitizer = inject(DomSanitizer);
   pagingObject = {
     paging: {
       page: 1,
@@ -44,6 +47,7 @@ export class PublicLayout implements OnInit, OnDestroy {
     },
   };
   catalogImages: GetMainImagePostBlobClass[] = [];
+  env = environment;
   imagesLoaded: boolean = false;
   ngOnInit(): void {
     this.mapGenderToText();
@@ -56,51 +60,10 @@ export class PublicLayout implements OnInit, OnDestroy {
         this.postList = response.posts;
         this.cantons = response.cantons;
         this.animalCategories = response.categories;
-        this.loadPostImages(response.posts.items);
+        this.imagesLoaded = true;
         this.cd.detectChanges();
       },
     });
-  }
-  loadPostImages(idList: ListAnimal[]): void {
-    idList.forEach((element) => {
-      this.tempList.push(element.postID);
-    });
-    // this is for loading likedPosts
-    this.postImages.getMainImagePostBlob(this.tempList).subscribe((response) => {
-      this.setImages(response);
-    });
-  }
-  setImages(blobList: GetMainImagePostBlob[]): void {
-    blobList.forEach((x) => {
-      if (x.mainImage != '') {
-        const byteCharacters = atob(x.mainImage);
-        const byteNumbers = new Array(byteCharacters.length);
-
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-        let mimeType = 'image/png';
-        if (byteArray.length > 4) {
-          const header = byteArray.slice(0, 4);
-          let headerHex = '';
-          for (let i = 0; i < header.length; i++) {
-            headerHex += header[i].toString(16).toUpperCase();
-          }
-          if (headerHex.startsWith('89504E47')) {
-            mimeType = 'image/png';
-          } else if (headerHex.startsWith('FFD8FF')) {
-            mimeType = 'image/jpeg';
-          }
-        }
-        const blob = new Blob([byteArray], { type: mimeType });
-        const imageUrl = URL.createObjectURL(blob);
-        this.catalogImages.push(new GetMainImagePostBlobClass(x.postID, imageUrl));
-      }
-    });
-    this.imagesLoaded = true;
-    this.cd.detectChanges();
   }
   ngOnDestroy(): void {
     this.mySubcribe?.unsubscribe();
@@ -134,7 +97,7 @@ export class PublicLayout implements OnInit, OnDestroy {
       },
     });
   }
-  getImageForPost(postID: number) {
-    return this.catalogImages.find((x) => x.postID == postID)?.mainImage;
+  getImageForPost(imagePath: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + imagePath);
   }
 }

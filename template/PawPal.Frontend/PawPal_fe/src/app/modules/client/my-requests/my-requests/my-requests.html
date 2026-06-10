@@ -13,7 +13,7 @@
           @for (request of requestsList?.items; track request; let i = $index) {
             <div class="request-card">
               <div class="pet-image-holder">
-                <img [src]="getPostImage(request.postID)" class="pet-image" />
+                <img [src]="getPostImage(request.mainImage)" class="pet-image" />
               </div>
               <div class="request-info">
                 <h2 class="request-title">

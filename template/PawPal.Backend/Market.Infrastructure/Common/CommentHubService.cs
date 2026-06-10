@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using PawPal.Application.Common;
 using PawPal.Domain.Common;
 using PawPal.Infrastructure.Signal;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace PawPal.Infrastructure.Common
 {
+    [AllowAnonymous]
     public class CommentHubService : ICommentHubService
     {
         private readonly IHubContext<CommentHub> _hubContext;

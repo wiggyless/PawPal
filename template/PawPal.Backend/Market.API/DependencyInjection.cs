@@ -68,6 +68,7 @@ public static class DependencyInjection
             o.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build();
+            o.AddPolicy("StaticFiles", policy => policy.RequireAssertion(_ => true));
         });
 
         // Swagger with Bearer auth

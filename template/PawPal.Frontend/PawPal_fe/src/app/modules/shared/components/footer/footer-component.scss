@@ -1,11 +1,14 @@
 .footer-main {
   width: 100%;
-    background-image: linear-gradient(to bottom, #473619, #372a13);
+  background-image: linear-gradient(
+    to bottom,
+    var(--footer-bottom-background-color),
+    var(--footer-second-background-color)
+  );
   padding: 60px 80px 0;
-  margin-top: 100px;
   height: 500px;
-  position:relative;
-  bottom:0;
+  position: relative;
+  bottom: 0;
 }
 
 .footer-content {
@@ -23,7 +26,7 @@
 }
 
 .footer-title {
-  color: #d9cdb8;
+  color: var(--footer-text-color);
   font-size: 42px;
   font-weight: 700;
   margin: 0 0 20px 0;
@@ -31,7 +34,7 @@
 }
 
 .footer-description {
-  color: #d9cdb8;
+  color: var(--footer-text-color);
   font-size: 16px;
   margin: 0 0 30px 0;
   line-height: 1.5;
@@ -39,7 +42,7 @@
 
 .footer-textarea {
   width: 100%;
-  background-color: #d9cdb8;
+  background-color: var(--footer-text-color);
   border: none;
   border-radius: 20px;
   padding: 20px 25px;
@@ -86,7 +89,7 @@
 
 .footer-btn-send {
   background-color: #3a4a2d;
-  color: #d9cdb8;
+  color: var(--footer-text-color);
 
   &:hover {
     background-color: #2d3a22;
@@ -106,7 +109,7 @@
 }
 
 .footer-nav-title {
-  color: #d9cdb8;
+  color: var(--footer-text-color);
   font-size: 24px;
   font-weight: 700;
   margin: 0 0 20px 0;
@@ -134,7 +137,7 @@
 }
 
 .footer-nav-link {
-  color: #d9cdb8;
+  color: var(--footer-text-color);
   text-decoration: none;
   font-size: 18px;
   display: flex;
@@ -154,15 +157,13 @@
 
 .footer-bottom {
   width: 100vw;
-  background-color: #1c1813;
+  background-color: var(--footer-copyright-bar-color);
   margin: 40px calc(-50vw + 50%);
   padding: 20px calc(50vw - 50%);
   text-align: center;
-    p {
-    color: #d9cdb8;
+  p {
+    color: var(--footer-text-color);
     margin: 0;
     font-size: 18px;
   }
-
-
 }

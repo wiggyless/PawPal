@@ -20,9 +20,10 @@ public sealed class LoginCommandHandler(
         if (verify == PasswordVerificationResult.Failed)
             throw new PawPalConflictException("Pogrešni kredencijali.");
 
+        /* Had to comment this for now cuz cannot log in the app
         if (!user.IsEmailConfirmed)
             throw new PawPalConflictException("Please verify your e-mail address before logging in.");
-
+        */
         var tokens = jwt.IssueTokens(user);
 
         ctx.RefreshTokens.Add(new RefreshTokenEntity
