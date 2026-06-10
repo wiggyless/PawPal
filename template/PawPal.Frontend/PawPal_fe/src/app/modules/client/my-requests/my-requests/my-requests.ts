@@ -28,6 +28,7 @@ import {
   GetMainImagePostBlobClass,
 } from '../../../../api-services/animal-post-images/animal-post-images-model';
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-my-requests',
@@ -63,6 +64,7 @@ export class MyRequests implements OnInit, OnDestroy {
   catalogImages: GetMainImagePostBlobClass[] = [];
   imagesLoaded = false;
   tempList: number[] = [];
+  sanitizer = inject(DomSanitizer);
   ngOnInit(): void {
     this.loadRequest();
   }
@@ -74,8 +76,8 @@ export class MyRequests implements OnInit, OnDestroy {
       next: (response) => {
         this.requestsList = response.request;
         this.cantonsList = response.cantons;
-        this.loadPostImages(this.requestsList.items);
-        console.log(response.request);
+        this.imagesLoaded = true;
+        this.cd.detectChanges();
       },
     });
   }
@@ -87,6 +89,7 @@ export class MyRequests implements OnInit, OnDestroy {
     this.dialog.open(MyRequestsDialog, {
       width: '70%',
       maxWidth: '90vw',
+      maxHeight: '95vh',
       panelClass: 'transparent-dialog',
       data: {
         reqID: request.requirementId,
@@ -97,51 +100,7 @@ export class MyRequests implements OnInit, OnDestroy {
       },
     });
   }
-  loadPostImages(idList: GetAdoptionRequestList[]): void {
-    idList.forEach((element) => {
-      this.tempList.push(element.postID);
-    });
-    console.log(idList);
-    this.postImages.getMainImagePostBlob(this.tempList).subscribe((response) => {
-      this.setImages(response);
-    });
-  }
-  setImages(blobList: GetMainImagePostBlob[]): void {
-    blobList.forEach((x) => {
-      if (x.mainImage != '') {
-        const byteCharacters = atob(x.mainImage);
-        const byteNumbers = new Array(byteCharacters.length);
-
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-        let mimeType = 'image/png';
-        if (byteArray.length > 4) {
-          const header = byteArray.slice(0, 4);
-          let headerHex = '';
-          for (let i = 0; i < header.length; i++) {
-            headerHex += header[i].toString(16).toUpperCase();
-          }
-          if (headerHex.startsWith('89504E47')) {
-            mimeType = 'image/png';
-          } else if (headerHex.startsWith('FFD8FF')) {
-            mimeType = 'image/jpeg';
-          }
-        }
-        // 2. Create the Blob from the typed array
-        const blob = new Blob([byteArray], { type: mimeType });
-
-        // 3. Create the URL and add to form
-        const imageUrl = URL.createObjectURL(blob);
-        this.catalogImages.push(new GetMainImagePostBlobClass(x.postID, imageUrl));
-      }
-    });
-    this.imagesLoaded = true;
-    this.cd.detectChanges();
-  }
-  getPostImage(index: number) {
-    return this.catalogImages.find((x) => x.postID == index)?.mainImage;
+  getPostImage(imagePath: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(this.envLink.apiUrl + imagePath);
   }
 }

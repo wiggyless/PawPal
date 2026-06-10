@@ -90,6 +90,8 @@ export class PostComponent implements OnInit {
   objectUrl: string | null = null;
   private sanitizer = inject(DomSanitizer);
   imageUrl = signal<SafeUrl | null>(null);
+  isCommentsLoaded = false;
+  isImagesLoaded = false;
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.route.queryParams.subscribe((params) => {
@@ -99,6 +101,7 @@ export class PostComponent implements OnInit {
       this.userId = params['userID'];
       this.dateAdded = params['dateAdded'];
     });
+
     this.imagesList = this.postImageService.getImagePost(this.postId);
     forkJoin({
       animal: this.animalService.getAnimalById(this.animalId as number),
@@ -118,6 +121,7 @@ export class PostComponent implements OnInit {
         this.animalHealth = response.health;
         this.city = response.cities;
         this.user = response.users;
+        this.isImagesLoaded = true;
         this.cd.detectChanges();
       },
     });
@@ -148,11 +152,15 @@ export class PostComponent implements OnInit {
   }
 
   routeAdopt(): void {
-    this.routeNext.navigate(['/client/adoption'], {
-      queryParams: {
-        postID: this.postId,
-      },
-    });
+    if (this.currentUser.getDefaultRoute() == '/login') {
+      this.routeNext.navigate(['login']);
+    } else {
+      this.routeNext.navigate(['/client/adoption'], {
+        queryParams: {
+          postID: this.postId,
+        },
+      });
+    }
   }
 
   nextImage(length: number): void {
@@ -164,5 +172,9 @@ export class PostComponent implements OnInit {
 
   getTransformStyle(): string {
     return `translateX(-${this.currentImageIndex * 100}%)`;
+  }
+  onCommentsLoaded() {
+    this.isCommentsLoaded = true;
+    this.cd.detectChanges();
   }
 }

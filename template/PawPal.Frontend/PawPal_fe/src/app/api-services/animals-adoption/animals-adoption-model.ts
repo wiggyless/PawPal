@@ -24,6 +24,7 @@ export interface GetAdoptionRequestList {
   city: string;
   canton: string;
   breed: string;
+  mainImage: string;
 }
 export interface GetAdoptionRequestById {
   requestId: number;

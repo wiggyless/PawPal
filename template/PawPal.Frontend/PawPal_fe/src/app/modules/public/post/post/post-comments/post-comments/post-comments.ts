@@ -1,4 +1,13 @@
-import { ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { SignalRService } from '../../../../../../core/services/signalr.service';
 import { CommentService } from '../../../../../../api-services/comments/comments.service';
 import {
@@ -12,6 +21,7 @@ import { CurrentUserService } from '../../../../../../core/services/auth/current
 import { PageEvent } from '@angular/material/paginator';
 import { UserImageService } from '../../../../../../api-services/userImage/userImage-service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-comments',
@@ -21,11 +31,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class PostComments implements OnInit, OnDestroy {
   @Input({ required: true }) postId!: number;
+  @Output() commentsLoaded = new EventEmitter<void>();
   private signalRSubscription: Subscription = new Subscription();
   commentsService = inject(CommentService);
   commentsList: PageResult<CommentDto> | undefined;
   currentUser = inject(CurrentUserService);
   userImgService = inject(UserImageService);
+  router = inject(Router);
   cd = inject(ChangeDetectorRef);
   hasLoaded: boolean = false;
   comment: string = '';
@@ -47,20 +59,18 @@ export class PostComments implements OnInit, OnDestroy {
   counter: number = 0;
   objectUrl: string | null = null;
   private sanitizer = inject(DomSanitizer);
+
   constructor(private signalRService: SignalRService) {}
   ngOnInit(): void {
     this.request.postID = this.postId;
     this.loadComments();
     this.signalRSubscription = this.signalRService.commentReceived$.subscribe((newComment) => {
-      console.log(newComment.postID == this.postId);
       if (newComment && newComment.postID == this.postId) {
-        // Add the new comment to the list instantly
         this.commentsList = {
           ...this.commentsList!,
           items: [newComment, ...this.commentsList!.items],
         };
         this.cd.detectChanges();
-        console.log('WORKS comment');
       }
     });
   }
@@ -78,25 +88,24 @@ export class PostComments implements OnInit, OnDestroy {
         totalPages: comments.totalPages,
         pageSizeOption: this.page.pageSizeOption,
       };
-      console.log(this.page);
       this.commentsList.items.forEach((element) => {
         this.userImgService.getUserImageByID(element.userID).subscribe({
           next: (safeUrl) => {
             element.imageData = safeUrl;
             this.counter++;
             this.checkCounter();
+            this.commentsLoaded.emit();
           },
           error: () => {
             element.imageData = '';
             this.counter++;
             this.checkCounter();
+            this.commentsLoaded.emit();
           },
         });
       });
     });
   }
-
-  // this is used when all the images are loaded so it can normally show them on the page
   checkCounter() {
     if (this.counter == this.page.pageSizeOption[0]) {
       this.hasLoaded = true;
@@ -105,9 +114,11 @@ export class PostComments implements OnInit, OnDestroy {
     }
   }
   addNewComment() {
-    if (this.comment.trim() != '') {
+    if (this.currentUser.getDefaultRoute() == '/login') {
+      this.router.navigate(['login']);
+    } else if (this.comment.trim() != '') {
       const newComment: CreateCommentCommand = {
-        userID: +this.currentUser.userId,
+        userID: this.currentUser.userId() as number,
         postID: +this.postId,
         content: this.comment,
       };
@@ -117,7 +128,6 @@ export class PostComments implements OnInit, OnDestroy {
       });
     }
   }
-  postComment() {}
   handlePageEvent(event: PageEvent) {
     this.request.paging.page = event.pageIndex + 1;
     this.request.paging.pageSize = event.pageSize;

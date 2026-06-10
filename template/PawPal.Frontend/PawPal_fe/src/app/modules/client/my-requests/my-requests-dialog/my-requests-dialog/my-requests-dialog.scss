@@ -142,23 +142,23 @@ body {
 .checkbox-item {
   display: flex;
   align-items: center;
-  gap: 15px;
+  flex-flow: wrap;
+  gap: 10px;
   margin-bottom: 15px;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 300;
   color: #c7b18c;
 }
 
-.checkbox-item svg.icon {
+.iconBox {
   width: 35px;
   height: 35px;
   fill: var(--primary-text);
 }
 
 .checkbox-container input[type='checkbox'] {
-  width: 28.32px;
+  width: 24.32px;
   height: 28.32px;
-  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;

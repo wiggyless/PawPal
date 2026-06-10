@@ -33,24 +33,34 @@ namespace PawPal.Application.Modules.Posts.Queries.List
                 if (request.SearchDateAddedMax != null && request.SearchDateAddedMin != null)
                     posts = posts.Where(x => x.DateAdded >= request.SearchDateAddedMin && x.DateAdded <= request.SearchDateAddedMax);
             }
+            var filteredPostIds = posts.Select(p => p.Id);
 
+            var imageUrlList = context.PostImages
+                .Where(img => filteredPostIds.Contains(img.PostId))
+                .AsQueryable()
+                .AsNoTracking();
+            var postListQuery = posts
+                .OrderBy(x => x.Animal.Category.CategoryName)
+                .Select(x => new ListPostQueryDto
+                {
+                    PostID = x.Id,
+                    UserID = x.UserId,
+                    Name = x.Animal.Name,
+                    AnimalID = x.AnimalID,
+                    CategoryID = x.Animal.CategoryId,
+                    Breed = x.Animal.Breed,
+                    GenderID = x.Animal.GenderId,
+                    CityID = x.CityId,
+                    Age = x.Animal.Age,
+                    DateAdded = x.DateAdded,
+                    MainImage = context.PostImages
+                        .Where(img => img.PostId == x.Id)
+                        .Select(img => img.MainImage)
+                        .FirstOrDefault() ?? " "
+                });
 
-            var postList = posts.OrderBy(x => x.Animal.Category.CategoryName).Select(x => new ListPostQueryDto
-            {
-                PostID = x.Id,
-                UserID = x.UserId,
-                Name = x.Animal.Name,
-                AnimalID = x.AnimalID,
-                CategoryID = x.Animal.CategoryId,
-                Breed = x.Animal.Breed,
-                GenderID = x.Animal.GenderId,
-                CityID = x.CityId,
-                Age = x.Animal.Age,
-                DateAdded = x.DateAdded,
-            });
-            
-            return await PageResult<ListPostQueryDto>.FromQueryableAsync(postList, request.Paging, cancellationToken);
-        
+            return await PageResult<ListPostQueryDto>.FromQueryableAsync(postListQuery, request.Paging, cancellationToken);
+
         }
     }
 }

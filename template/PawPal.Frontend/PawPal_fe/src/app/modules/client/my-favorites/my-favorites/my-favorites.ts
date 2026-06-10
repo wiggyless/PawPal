@@ -20,6 +20,7 @@ import {
   GetMainImagePostBlobClass,
 } from '../../../../api-services/animal-post-images/animal-post-images-model';
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-my-favorites',
   standalone: false,
@@ -62,6 +63,7 @@ export class MyFavorites
   catalogImages: GetMainImagePostBlobClass[] = [];
   tempList: number[] = [];
   imagesLoaded = false;
+  sanitizer = inject(DomSanitizer);
   private sub: Subscription = new Subscription();
   ngOnInit(): void {
     this.loadAnimalPosts();
@@ -71,11 +73,11 @@ export class MyFavorites
   }
   loadAnimalPosts(): void {
     this.animalPostList = this.animalPostsService.listAnimalPosts({
-      userID: this.currentUser.userId,
+      userID: this.currentUser.userId() as number,
       isLiked: true,
     });
-    this.animalPostList.subscribe((response) => {
-      this.loadPostImages(response.items);
+    this.animalPostList.subscribe((res) => {
+      this.imagesLoaded = true;
     });
   }
   routeToPost(post: ListAnimal) {
@@ -94,10 +96,12 @@ export class MyFavorites
     this.request.paging.pageSize = event.pageSize;
     this.loadAnimalPosts();
   }
-  // images Shit
-  getPostImage(index: number) {
-    return this.catalogImages.find((x) => x.postID == index)?.mainImage;
+  getPostImage(imagePath: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(this.envLink.apiUrl + imagePath);
   }
+  // images Shit RAAAAAAAAAAAAAAAAAH
+  /*
+
   loadPostImages(idList: ListAnimal[]): void {
     idList.forEach((element) => {
       this.tempList.push(element.postID);
@@ -141,4 +145,5 @@ export class MyFavorites
     this.imagesLoaded = true;
     this.cd.detectChanges();
   }
+    */
 }

@@ -4,7 +4,12 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   background: #e5d7c4;
   padding: 2rem;
 }
@@ -12,10 +17,11 @@ body {
 .poslati-zahtjevi-container {
   width: 100%;
   padding: 55px;
+  background-color: var(--background-color);
 }
 
 .page-title {
-  color: #473619;
+  color: var(--title-text-color);
   text-align: left;
   font-size: 35px;
   font-weight: 700;
@@ -174,7 +180,12 @@ body {
   width: 100%;
   height: 46px;
   border-radius: 10px;
-  font-family: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    Roboto,
+    Helvetica,
+    sans-serif;
   font-size: 18px;
   font-weight: 400;
   cursor: pointer;
@@ -323,7 +334,7 @@ body {
   padding: 50px;
 }
 .loading-spinner-text {
-  color: black;
+  color: var(--title-text-color);
   margin-bottom: 20px;
   font-size: 30px;
   font-weight: 700;

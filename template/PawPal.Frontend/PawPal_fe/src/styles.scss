@@ -19,11 +19,12 @@ html {
     )
   );
 }
+
 html {
   margin: 0;
-  background-image: linear-gradient(#e5d7c4, #c9ab81);
-  background-size:cover;
-  height:100%;
+  background-color: var(--background-color);
+  background-size: cover;
+  height: 100%;
 }
 * {
   font-family: nunito, sans-serif;
@@ -31,9 +32,109 @@ html {
   padding: 0px;
   box-sizing: border-box;
 }
+// second color is used for linear gradient but i dont know what to put
 
+:root {
+  // used for the background
+  --background-color: #e5d7c4;
+  --background-color-second: #c9ab81;
+  //navbar coloring
+  --navbar-color: #473619;
+  --navbar-color-second: #473619;
+  --navbar-text-color: #c7b18c;
+  --side-navbar-text-color: #473619;
+  --side-navbar-first-bg-color: #e5d7c4;
+  --side-navbar-second-bg-color: #c9ab81;
+  --side-navbar-text-hover-color: #4736191a;
+
+  // used for animal post cards and comments
+  --card-background-color: #e1c99f;
+  --card-background-second-color: #cdb58b;
+  --card-text-color: #1c1c1c;
+  // catalog and post details will share the same variables (post.scss and catalog.scss)
+  --catalog-first-layer-color: #413421;
+  --catalog-second-layer-color: #51432d;
+  --catalog-border: #c7b18c;
+  --catalog-loading-color: #e5d7c4;
+  // used for input boxes, dropdown boxes and box text color is for lables
+  --box-color: #f3e9db;
+  --box-shadow-color: #b09c85;
+  --box-text-color: #544120;
+  --box-disabled-color: #ccbda9;
+
+  --primary-button-color: #354024;
+
+  // fotter colors
+  --footer-bottom-background-color: #493c1d;
+  --footer-second-background-color: #372a13;
+  --footer-text-color: #e5d7c4;
+  --footer-copyright-bar-color: #1c1813;
+
+  --text-color: #473619;
+  --title-text-color: #473619;
+  --main-page-title-color: #e5d7c4;
+
+  --default-userImage-color: #201811;
+
+  --paginator-color: #4e3716;
+}
+/*
+entire page background: 201811
+
+navbar: 432E1F (napravi gradient where the top is a little darker)
+primary button: 3B4B23 - samo mu se mijenja bg colour
+secondary button ostaje isti
+
+footer: 432E1F (gradient where the bottom is darker)
+footer text: C7B18C
+footer copyright bar: 161410
+
+catalog background: 432E1F
+catalog background 2: 362518
+
+card: 705037
+card text: F1DBB6
+
+combobox, datepicker, textbox background: E5CEA7
+
+most of the text, except in the cards: C7B18C
+*/
+body.dark-theme {
+  --background-color: #201811;
+
+  --navbar-color: #432e1f;
+  --navbar-color-second: #3a281c;
+  --navbar-text-color: #c7b18c;
+  --side-navbar-text-color: #c7b18c;
+  --side-navbar-first-bg-color: #432e1f;
+  --side-navbar-second-bg-color: #3a281c;
+  --side-navbar-text-hover-color: #e5d7c41a;
+
+  --card-background-color: #705037;
+  --card-text-color: #f1dbb6;
+
+  --catalog-first-layer-color: #432e1f;
+  --catalog-second-layer-color: #362518;
+
+  --box-color: #e5cea7;
+  --box-shadow-color: #5e4c3b;
+  --box-text-color: #c7b18c;
+
+  --primary-button-color: #3b4b23;
+
+  --footer-bottom-background-color: #432e1f;
+  --footer-second-background-color: #432e1f;
+  --footer-text-color: #c7b18c;
+  --footer-copyright-bar-color: #161410;
+
+  --default-userImage-color: #e5cea7;
+
+  --paginator-color: #c7b18c;
+  --title-text-color: #c7b18c;
+  --main-page-title-color: #e5d7c4;
+}
 .mat-mdc-form-field {
-  border-radius: 100px; 
+  border-radius: 100px;
   height: 75px;
 }
 
@@ -42,9 +143,8 @@ html {
   height: 75px !important;
   padding: 0px;
 }
-
 .primarybtn {
-  background-color: #354024;
+  background-color: var(--primary-button-color);
   padding: 10px 20px;
   border-radius: 5px;
   border-color: #c7b18c;

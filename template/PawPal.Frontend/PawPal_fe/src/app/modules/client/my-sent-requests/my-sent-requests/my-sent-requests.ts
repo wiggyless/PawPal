@@ -28,6 +28,7 @@ import {
 } from '../../../../api-services/animal-post-images/animal-post-images-model';
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
 import { MySentRequestDialog } from '../my-sent-request-dialog/my-sent-request-dialog/my-sent-request-dialog';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-my-requests',
@@ -62,6 +63,7 @@ export class MySentRequests implements OnInit, OnDestroy {
   dialog = inject(MatDialog);
   catalogImages: GetMainImagePostBlobClass[] = [];
   imagesLoaded = false;
+  sanitizer = inject(DomSanitizer);
   tempList: number[] = [];
   ngOnInit(): void {
     this.loadRequest();
@@ -74,8 +76,8 @@ export class MySentRequests implements OnInit, OnDestroy {
       next: (response) => {
         this.requestsList = response.request;
         this.cantonsList = response.cantons;
-        this.loadPostImages(this.requestsList.items);
-        console.log(response.request);
+        this.imagesLoaded = true;
+        this.cd.detectChanges();
       },
     });
   }
@@ -85,8 +87,9 @@ export class MySentRequests implements OnInit, OnDestroy {
   }
   loadRequestDialog(request: GetAdoptionRequestList) {
     this.dialog.open(MySentRequestDialog, {
-      width: '70%', // Fixed width
-      maxWidth: '90vw', // Prevents it from overflowing on mobile
+      width: '70%',
+      maxWidth: '90vw',
+      maxHeight: '95vh',
       panelClass: 'transparent-dialog',
       data: {
         reqID: request.requirementId,
@@ -97,6 +100,7 @@ export class MySentRequests implements OnInit, OnDestroy {
       },
     });
   }
+  /*
   loadPostImages(idList: GetAdoptionRequestList[]): void {
     idList.forEach((element) => {
       this.tempList.push(element.postID);
@@ -141,7 +145,8 @@ export class MySentRequests implements OnInit, OnDestroy {
     this.imagesLoaded = true;
     this.cd.detectChanges();
   }
-  getPostImage(index: number) {
-    return this.catalogImages.find((x) => x.postID == index)?.mainImage;
+    */
+  getPostImage(mainImage: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(this.envLink.apiUrl + mainImage);
   }
 }

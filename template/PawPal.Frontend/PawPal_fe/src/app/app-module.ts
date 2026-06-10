@@ -3,13 +3,18 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { PublicRoutingModule } from './modules/public/public-routing-module';
-import { DialoguePopupComponent } from "./modules/shared/components/dialogue-popup/dialogue-popup.component";
+import { DialoguePopupComponent } from './modules/shared/components/dialogue-popup/dialogue-popup.component';
+import { authInterceptor } from './core/interceptors/auth-interceptor.service';
+import { rateLimitInterceptor } from './core/interceptors/rate-limit-interceptor.service';
 @NgModule({
   declarations: [App],
   imports: [BrowserModule, AppRoutingModule, PublicRoutingModule, DialoguePopupComponent],
-  providers: [provideBrowserGlobalErrorListeners(), provideHttpClient(withFetch())],
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideHttpClient(withFetch(), withInterceptors([rateLimitInterceptor])),
+  ],
   bootstrap: [App],
 })
 export class AppModule {}
