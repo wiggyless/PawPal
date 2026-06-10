@@ -1,16 +1,18 @@
-﻿using PawPal.Application.Modules.Posts.Commands.Create;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Delete_;
+using PawPal.Application.Modules.PostImages.Commands.Delete;
+using PawPal.Application.Modules.Posts.Commands.Create;
 using PawPal.Application.Modules.Posts.Commands.Delete;
 using PawPal.Application.Modules.Posts.Commands.Update;
 using PawPal.Application.Modules.Posts.Queries.GetByID;
 using PawPal.Application.Modules.Posts.Queries.List;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
-using PawPal.Application.Modules.Posts.Queries.ListPostsByUserId;
-using PawPal.Application.Modules.PostImages.Commands.Delete;
-using PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Delete_;
 using PawPal.Application.Modules.Posts.Queries.ListPostByRange;
+using PawPal.Application.Modules.Posts.Queries.ListPostsByUserId;
 namespace PawPal.API.Controllers.Posts
 {
+    [EnableRateLimiting("IpBasedPolicy")]
     [ApiController]
     [Route("[controller]")]
     public class PostsController(ISender sender) : ControllerBase

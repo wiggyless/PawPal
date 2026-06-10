@@ -56,8 +56,8 @@ export interface ListAnimal {
   name: string;
   age: number;
   breed: string;
-  photoURL: string;
   dateAdded: Date;
+  mainImage: string;
 }
 export class ListPostsByRange extends BasePagedQuery {
   postIdList?: number[];

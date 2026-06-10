@@ -7,6 +7,7 @@ import { PublicRoutingModule } from './modules/public/public-routing-module';
 import { DialoguePopupComponent } from "./modules/shared/components/dialogue-popup/dialogue-popup.component";
 import { authInterceptor } from '../app/core/interceptors/auth-interceptor.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { rateLimitInterceptor } from './core/interceptors/rate-limit-interceptor.service';
 @NgModule({
   declarations: [App],
   imports: [BrowserModule, AppRoutingModule, PublicRoutingModule, DialoguePopupComponent],

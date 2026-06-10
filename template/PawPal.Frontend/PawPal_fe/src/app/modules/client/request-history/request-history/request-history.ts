@@ -28,6 +28,7 @@ import {
 } from '../../../../api-services/animal-post-images/animal-post-images-model';
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
 import { MyRequestsDialog } from '../../my-requests/my-requests-dialog/my-requests-dialog/my-requests-dialog';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-my-requests',
@@ -46,6 +47,7 @@ export class RequestHistory implements OnInit, OnDestroy {
   cd = inject(ChangeDetectorRef);
   cantonsList: any = [];
   envLink = environment;
+  sanitizer = inject(DomSanitizer);
   isLoaded = false;
   private mySubscription?: Subscription;
   private myPostSubscription?: Subscription;
@@ -74,8 +76,6 @@ export class RequestHistory implements OnInit, OnDestroy {
       next: (response) => {
         this.requestsList = response.request;
         this.cantonsList = response.cantons;
-        this.loadPostImages(this.requestsList.items);
-        console.log(response.request);
       },
     });
   }
@@ -87,6 +87,7 @@ export class RequestHistory implements OnInit, OnDestroy {
     this.dialog.open(MyRequestsDialog, {
       width: '70%',
       maxWidth: '90vw',
+      maxHeight: '95vh',
       panelClass: 'transparent-dialog',
       data: {
         reqID: request.requirementId,
@@ -97,6 +98,7 @@ export class RequestHistory implements OnInit, OnDestroy {
       },
     });
   }
+  /*
   loadPostImages(idList: GetAdoptionRequestList[]): void {
     idList.forEach((element) => {
       this.tempList.push(element.postID);
@@ -141,7 +143,8 @@ export class RequestHistory implements OnInit, OnDestroy {
     this.imagesLoaded = true;
     this.cd.detectChanges();
   }
-  getPostImage(index: number) {
-    return this.catalogImages.find((x) => x.postID == index)?.mainImage;
+    */
+  getPostImage(imagePath: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(this.envLink.apiUrl + imagePath);
   }
 }

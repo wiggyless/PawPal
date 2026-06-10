@@ -27,13 +27,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(72, 59, 40);
+  background-color: var(--catalog-first-layer-color);
   width: 90%;
   margin-top: 50px;
   border-radius: 10px;
-  border: 1px solid rgb(72, 59, 40);
+  border: 1px solid var(--catalog-first-layer-color);
   justify-content: center;
   padding: 10px;
+  position: relative;
 }
 .pet-name {
   color: #e5d7c4;
@@ -51,7 +52,7 @@
 .post-information-pet-info {
   display: flex;
   gap: 10px;
-  background-color: rgb(82, 67, 48);
+  background-color: var(--catalog-second-layer-color);
   border: 1px solid rgb(62, 47, 28);
   color: #e5d7c4;
   font-size: 30px;
@@ -102,12 +103,11 @@
   display: flex;
   color: #e5d7c4;
   flex-direction: column;
-  border-left: 1px solid rgb(62, 47, 28);
+  border-left: 1px solid var(--catalog-second-layer-color);
 }
 .post-information-user {
   display: flex;
   flex-direction: column;
-  background-color: rgb(72, 59, 40);
   align-items: center;
 }
 .post-information-user-logo {
@@ -159,9 +159,11 @@
   font-weight: 100;
 }
 .post-information-user-report {
-  margin: 200px 20px 20px 0px;
   display: flex;
   flex-direction: column;
+  position: absolute;
+  right: 2%;
+  top: 90%;
   align-items: end;
 }
 .post-information-user-report p {

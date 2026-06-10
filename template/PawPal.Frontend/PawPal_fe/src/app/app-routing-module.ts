@@ -10,6 +10,7 @@ import { PublicModule } from './modules/public/public-module';
 import { CreatePost } from './modules/client/create-post/create-post';
 import { myAuthGuard } from './core/guards/my-auth-guard';
 import { Adoption } from './modules/client/adpotion/adoption/adoption';
+import { LoginComponent } from './modules/auth/login/login/login';
 
 const routes: Routes = [
   {
@@ -40,6 +41,10 @@ const routes: Routes = [
     path: 'client/adoption',
     component: Adoption,
     loadChildren: () => ClientModule,
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
   },
   {
     path: '',

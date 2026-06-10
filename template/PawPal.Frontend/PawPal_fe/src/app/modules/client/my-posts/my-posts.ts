@@ -49,7 +49,7 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
   }
   loadAnimalPosts(): void {
     const userObject = {
-      userId: this.currentUser?.userId(),
+      userId: this.currentUser?.userId() as number,
       paging: this.request.paging,
     };
     this.animalPostList = this.animalPostsService.listAnimalPostsByUserId(userObject).pipe(
@@ -73,7 +73,7 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
         animalID: post.animalID,
         cityID: post.cityID,
         userID: post.userId,
-        dateAdded: post.dateAdded
+        dateAdded: post.dateAdded,
       },
     });
   }
@@ -81,5 +81,5 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
     this.request.paging.page = event.pageIndex + 1;
     this.request.paging.pageSize = event.pageSize;
     this.loadAnimalPosts();
-    }
+  }
 }

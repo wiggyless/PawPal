@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PawPal.Infrastructure.Signal
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [AllowAnonymous]
     public class CommentHub : Hub
     {
  
