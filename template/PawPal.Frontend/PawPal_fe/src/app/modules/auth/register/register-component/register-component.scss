@@ -39,12 +39,59 @@
   border-radius: 20px;
 }
 
+#aboutMeTextArea {
+  position: absolute;
+  right: -10px;
+  width: 255px;
+  height:150px;
+}
+
+#aboutMeTextArea ::ng-deep .mat-mdc-text-field-wrapper {
+  border-radius: 20px !important;
+  height: 150px !important; 
+}
+.image-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  .image-input {
+    display: none; 
+  }
+
+  .image-input-label {
+    cursor: pointer;
+    background-color: #e5d7c4;
+    padding: 6px 16px;
+    border-radius: 20px;
+    color: #51432d;
+    font-weight: 600;
+    border: 1px solid #b49a68;
+
+    &:hover {
+      background-color: #d9c6a5;
+    }
+  }
+
+  .profile-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #b49a68;
+  }
+  .profile-picture-group {
+  height: 160px;
+}
+}
 .form-container {
   position: relative;
   display: flex;
   margin-top: 5px;
   margin-bottom: 25px;
   padding: 10px;
+  height:450px;
 }
 
 .form-container .primarybtn {
@@ -146,8 +193,25 @@ span {
   height: 80px !important;
 }
 
-::ng-deep .mat-stepper-horizontal-line {
+
+::ng-deep .mat-stepper-label-position-bottom .mat-horizontal-stepper-header .mat-step-icon {
+  margin-right: 0;
+  margin-left: 0;
+  padding:5px;
+  margin-top: 35px;
+}
+
+::ng-deep.mat-stepper-horizontal-line {
   display: none !important;
+  border: none !important;
+  width: 0 !important;
+}
+
+::ng-deep .mat-horizontal-stepper-header::before,
+::ng-deep .mat-horizontal-stepper-header::after {
+  display: none !important;
+  border: none !important;
+  content: none !important;
 }
 
 ::ng-deep .mat-horizontal-stepper-header-container {
@@ -157,25 +221,30 @@ span {
   right: 0;
   background: transparent !important;
   pointer-events: none;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  gap: 40px;
+}
+
+/* Remove the old first/last child absolute positioning */
+::ng-deep .mat-horizontal-stepper-header:first-child {
+  position: static;
+  left: unset;
+  top: unset;
+}
+
+::ng-deep .mat-horizontal-stepper-header:last-child {
+  position: static;
+  right: unset;
+  top: unset;
 }
 
 ::ng-deep .mat-horizontal-stepper-header {
   padding: 0 !important;
   pointer-events: all;
+  position: static !important; /* override any inherited absolute */
 }
-
-::ng-deep .mat-horizontal-stepper-header:first-child {
-  position: absolute;
-  left: 35%;
-  top: 35px;
-}
-
-::ng-deep .mat-horizontal-stepper-header:last-child {
-  position: absolute;
-  right: 35%;
-  top: 35px;
-}
-
 ::ng-deep .mat-step-header .mat-step-icon {
   background-color: #8B6F47;
   color: white;
@@ -229,4 +298,7 @@ span {
 
 .success-hint{
      color: #424f2d !important;
+}
+.options textarea {
+  resize: vertical; // lets the user resize it too, optional
 }

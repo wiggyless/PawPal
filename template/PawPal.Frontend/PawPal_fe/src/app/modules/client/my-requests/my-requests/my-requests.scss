@@ -11,7 +11,7 @@ body {
 
 .poslati-zahtjevi-container {
   width: 100%;
-  padding: 55px;
+  padding: 35px;
 }
 
 .page-title {
@@ -21,7 +21,6 @@ body {
   font-weight: 700;
   text-decoration: underline;
   text-decoration-thickness: 3px;
-  margin-bottom: 2.5rem;
 }
 
 .requests-list {
@@ -54,6 +53,17 @@ body {
   box-shadow: 0 8px 5.6px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
 }
+
+.my-post-title{
+   color: #473619;
+  text-align: left;
+  font-size: 35px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  margin-bottom: 2.5rem;
+}
+
 .request-info {
   display: flex;
   flex-direction: column;
@@ -145,9 +155,6 @@ body {
 
 .status-accepted {
   color: #4e5f33;
-}
-
-.loading-spinner {
 }
 
 @keyframes spin {

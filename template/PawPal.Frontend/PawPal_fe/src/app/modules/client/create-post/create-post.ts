@@ -44,7 +44,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreatePostDialog } from './create-post-dialog/create-post-dialog/create-post-dialog';
 import { base64ToBlobUrl } from '../../shared/utils/image-utils';
 import { HttpEventType } from '@angular/common/http';
-import imageCompression from 'browser-image-compression';
+import  imageCompression from 'browser-image-compression';
 
 @Component({
   selector: 'app-create-post',
@@ -146,7 +146,7 @@ export class CreatePost implements OnInit {
     dateTime: '',
     city: '',
     cantonAbbrevation: '',
-    userName: '',
+    username: '',
     cityID: 0,
   };
   isDateRequired: boolean = true;
@@ -236,7 +236,7 @@ export class CreatePost implements OnInit {
         genders: this.genderService.listGender(),
         categories: this.categoryService.listAnimalCategories(),
         breeds: this.breedService.listAnimalBreed(),
-        user: this.animalUserService.getUser(this.currentUser.userId),
+        user: this.animalUserService.getUser(this.currentUser.userId()),
         allergies: this.allergyService.listAnimalAllergies(),
         disabilities: this.disabilityService.listAnimalDisability(),
       }).subscribe({
@@ -263,7 +263,7 @@ export class CreatePost implements OnInit {
       genders: this.genderService.listGender(),
       categories: this.categoryService.listAnimalCategories(),
       breeds: this.breedService.listAnimalBreed(),
-      user: this.animalUserService.getUser(this.currentUser.userId),
+      user: this.animalUserService.getUser(this.currentUser.userId()),
       allergies: this.allergyService.listAnimalAllergies(),
       disabilities: this.disabilityService.listAnimalDisability(),
       images: this.postImages.getImagePostBlob(this.routePostID),
