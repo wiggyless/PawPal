@@ -10,6 +10,7 @@ $divider-color: #e5d7c4;
 
 .main-container {
   width: 100%;
+  background-color: var(--background-color);
 }
 .client-layout {
   display: flex;
@@ -33,7 +34,7 @@ $divider-color: #e5d7c4;
   h1 {
     font-size: 36px;
     font-weight: bold;
-    color: $primary-color;
+    color: var(--title-text-color);
     margin: 0 0 10px 0;
   }
 

@@ -40,6 +40,7 @@ import { ListCantonsDto } from '../../../../api-services/cantons/cantons-model';
 import { LikedPostsService } from '../../../../api-services/likedPosts/likedPosts-service';
 import { GetLikedPostListQuery } from '../../../../api-services/likedPosts/likedPosts-model';
 import { environment } from '../../../../../environments/environment';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-catalog',
@@ -97,12 +98,13 @@ export class CatalogComponent
   favoritePostList: number[] = [];
   deleteFavoritePostList: number[] = [];
   // random values
-
+  env = environment;
   fromInputMax: MatInput = new MatInput();
   tempList: number[] = [];
   cantonID: number | undefined;
   catalogImages: GetMainImagePostBlobClass[] = [];
   imagesLoaded = false;
+  sanitizer = inject(DomSanitizer);
   constructor() {
     super();
     this.request = new GetPostQuery();
@@ -146,7 +148,8 @@ export class CatalogComponent
           })
           .subscribe((response) => {
             this.favoritePostList = response.postList!;
-            this.loadPostImages(res.items);
+            this.imagesLoaded = true;
+            this.cd.detectChanges();
           });
         this.page = {
           pageSize: res.pageSize,
@@ -160,6 +163,11 @@ export class CatalogComponent
     );
     this.cd.detectChanges();
   }
+  getImageUrl(imagePath: string): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + imagePath);
+  }
+  // no need for this conversion
+  /*
   loadPostImages(idList: ListAnimal[]): void {
     idList.forEach((element) => {
       this.tempList.push(element.postID);
@@ -206,6 +214,7 @@ export class CatalogComponent
   getPostImage(index: number) {
     return this.catalogImages.find((x) => x.postID == index)?.mainImage;
   }
+    */
   getBreedSelect(): void {
     this.animalBreedService
       .listAnimalBreed({ searchName: '', searchCategoryName: this.selectedCat })
@@ -281,24 +290,28 @@ export class CatalogComponent
     return this.favoritePostList.find((x) => x == index) == undefined ? false : true;
   }
   likeUnlikePost(index: number, event: Event) {
-    event.stopPropagation();
-    if (this.favoritePostList.find((x) => x == index) != undefined) {
-      let indexNum = this.favoritePostList.findIndex((x) => x == index);
-      this.favoritePostList.splice(indexNum, 1);
-      this.deleteFavoritePostList.push(index);
-      this.likedPosts
-        .deletePost({ userId: this.currentUser.userId() as number, postId: index })
-        .subscribe((response) => {
-          console.log('Unliked');
-        });
+    if (this.currentUser.getDefaultRoute() == '/login') {
+      this.router.navigate(['login']);
     } else {
-      this.favoritePostList.push(index);
-      this.likedPosts
-        .addLikedPosts({ userID: this.currentUser.userId() as number, postID: index })
-        .subscribe((response) => {
-          console.log('LIKED POST');
-          console.log(response);
-        });
+      event.stopPropagation();
+      if (this.favoritePostList.find((x) => x == index) != undefined) {
+        let indexNum = this.favoritePostList.findIndex((x) => x == index);
+        this.favoritePostList.splice(indexNum, 1);
+        this.deleteFavoritePostList.push(index);
+        this.likedPosts
+          .deletePost({ userId: this.currentUser.userId() as number, postId: index })
+          .subscribe((response) => {
+            console.log('Unliked');
+          });
+      } else {
+        this.favoritePostList.push(index);
+        this.likedPosts
+          .addLikedPosts({ userID: this.currentUser.userId() as number, postID: index })
+          .subscribe((response) => {
+            console.log('LIKED POST');
+            console.log(response);
+          });
+      }
     }
   }
 }

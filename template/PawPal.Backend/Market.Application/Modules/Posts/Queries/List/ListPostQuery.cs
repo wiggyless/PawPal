@@ -18,5 +18,6 @@ namespace PawPal.Application.Modules.Posts.Queries.List
         public DateTime? SearchDateAddedMin { get; set; }
         public bool? IsLiked { get; set; }
         public bool? IsRequest { get; set; }
+
     }
 }

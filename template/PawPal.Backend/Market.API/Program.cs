@@ -12,6 +12,7 @@ using PawPal.Infrastructure.Common;
 using PawPal.Infrastructure.Signal;
 using Serilog;
 using System.Security.Cryptography;
+using System.Threading.RateLimiting;
 
 public partial class Program
 {
@@ -81,13 +82,44 @@ public partial class Program
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    // Cleaned up to use your configured allowedOrigins as well
-                    policy.WithOrigins("http://localhost:4200", "https://localhost:7260", allowedOrigins)
+                    policy.WithOrigins("http://localhost:4200", "https://localhost:4200", allowedOrigins)
                           .AllowAnyHeader()
                           .AllowAnyMethod()
-                          .AllowCredentials(); // Required for SignalR
+                          .AllowCredentials()
+                           .WithExposedHeaders("Content-Disposition");
                 });
             });
+
+            // 1. Add Rate Limiting Services
+            builder.Services.AddRateLimiter(options =>
+            {
+                // Define what happens when a request is rejected
+                options.OnRejected = async (context, token) =>
+                {
+                    context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+                    context.HttpContext.Response.ContentType = "application/json";
+                    await context.HttpContext.Response.WriteAsJsonAsync(new
+                    {
+                        message = "Too many requests. Please slow down.",
+                        retryAfterSeconds = 60
+                    }, token);
+                };
+
+                // Example 1: A Named Policy (Fixed Window based on IP Address)
+                options.AddPolicy("IpBasedPolicy", httpContext =>
+                {
+                    // Get client IP address or default to "anonymous"
+                    var ipAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "anonymous";
+
+                    return RateLimitPartition.GetFixedWindowLimiter(ipAddress, _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 100,           // Max 10 requests
+                        Window = TimeSpan.FromSeconds(60), // Per 1 minute
+                        QueueLimit = 0              // Reject instantly if limit is exceeded
+                    });
+                });
+            });
+
 
             var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
 
@@ -110,12 +142,33 @@ public partial class Program
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseRateLimiter();
             app.UseExceptionHandler();
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseCors();
+
+            app.Use(async (context, next) =>
+            {
+                var path = context.Request.Path.Value ?? "";
+                var isImage = path.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                              path.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                              path.EndsWith(".webp", StringComparison.OrdinalIgnoreCase);
+
+                if (isImage)
+                {
+                    context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+                }
+                await next();
+            });
+
+            app.UseHttpsRedirection(); // ← now after your middleware
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    ctx.Context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+                }
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();

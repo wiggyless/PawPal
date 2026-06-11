@@ -88,8 +88,6 @@ namespace PawPal.API.Controllers.Posts
         public async Task<List<ListMainImageQueryDto>> GetMainImages([FromQuery(Name = "id")] List<int> request, CancellationToken cancellationToken)
         {
             string root = env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-
-
             var postImage = context.PostImages.AsQueryable();
             postImage = postImage.Where(x => request.Contains(x.PostId));
             if (postImage is null)

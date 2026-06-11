@@ -14,121 +14,134 @@
   <body>
     <div class="post-container">
       <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
-
-      <div class="post">
-        @if (currentUser.userId() == userId) {
-          <div class="post-buttons">
-            <button class="primarybtn" (click)="routeEditPost()">EDIT</button>
-            <button class="secondarybtn" (click)="deletePost()">DELETE</button>
-          </div>
-        }
-        @if (imagesList | async; as images) {
-          <div class="carousel-container">
-            <div
-              class="carousel-track"
-              [ngStyle]="{
-                transform: getTransformStyle(),
-              }"
-            >
-              @for (image of images; track image; let i = $index) {
-                <img src="{{ env.apiUrl + image }}" class="carousel-image" />
-              }
+      @if (isCommentsLoaded) {
+        <div class="post">
+          @if (currentUser.userId() == userId) {
+            <div class="post-buttons">
+              <button class="primarybtn" (click)="routeEditPost()">EDIT</button>
+              <button class="secondarybtn" (click)="deletePost()">DELETE</button>
             </div>
+          }
+          @if (imagesList | async; as images) {
+            <div class="carousel-container">
+              <div
+                class="carousel-track"
+                [ngStyle]="{
+                  transform: getTransformStyle(),
+                }"
+              >
+                @for (image of images; track image; let i = $index) {
+                  <img src="{{ env.apiUrl + image }}" class="carousel-image" />
+                }
+              </div>
 
-            <ng-container>
-              <button
-                class="carousel-arrow left"
-                (click)="prevImage(images.length)"
-                aria-label="Previous image"
-              >
-                <mat-icon>chevron_left</mat-icon>
-              </button>
-              <button
-                class="carousel-arrow right"
-                (click)="nextImage(images.length)"
-                aria-label="Next image"
-              >
-                <mat-icon>chevron_right</mat-icon>
-              </button>
-            </ng-container>
-          </div>
-        }
-        <div class="post-information-container">
-          <h2 class="pet-name">{{ animal.name }}</h2>
-          <div class="post-information">
-            <div class="post-information-pet">
-              <div class="post-information-pet-info">
-                <div class="post-information-pet-attributes">
-                  @for (ani of animal | keyvalue: keepOrder; track ani.key) {
-                    <p>{{ ani.key.charAt(0).toUpperCase() + ani.key.slice(1) }}:</p>
-                  }
-                  <p>Vaccinated:</p>
-                  <p>Sprayed:</p>
-                  <p>Parasite free:</p>
-                  <p>Date added:</p>
-                  <p>City:</p>
-                </div>
-                <div class="straight-border"></div>
-                <div class="post-information-pet-attributes-values">
-                  @for (ani of animal | keyvalue: keepOrder; track ani.key) {
-                    <p>{{ ani.value }}</p>
-                  }
-                  @if (!animalHealth.vaccinated) {
-                    <p><mat-icon>close</mat-icon></p>
-                  } @else {
-                    <p><mat-icon>check</mat-icon></p>
-                  }
-                  @if (!animalHealth.spayedOrNeutered) {
-                    <p><mat-icon>close</mat-icon></p>
-                  } @else {
-                    <p><mat-icon>check</mat-icon></p>
-                  }
-                  @if (!animalHealth.parasiteFree) {
-                    <p><mat-icon>close</mat-icon></p>
-                  } @else {
-                    <p><mat-icon>check</mat-icon></p>
-                  }
-                  <p>{{ dateAdded | date: 'short' }}</p>
-                  <p>{{ city.name }}</p>
-                </div>
-              </div>
-              <div class="post-information-pet-add-info">
-                <p class="post-information-pet-add-info-label">Additional information</p>
-                <div class="post-information-pet-add-info-text">
-                  <p>Hello</p>
-                </div>
-              </div>
+              <ng-container>
+                <button
+                  class="carousel-arrow left"
+                  (click)="prevImage(images.length)"
+                  aria-label="Previous image"
+                >
+                  <mat-icon>chevron_left</mat-icon>
+                </button>
+                <button
+                  class="carousel-arrow right"
+                  (click)="nextImage(images.length)"
+                  aria-label="Next image"
+                >
+                  <mat-icon>chevron_right</mat-icon>
+                </button>
+              </ng-container>
             </div>
-            <div class="post-information-user-container">
-              <div class="post-information-user">
-                <div class="post-information-user-logo">
-                  <img [src]="imageUrl()" alt="User image" class="profile-preview" />
-                  <!--<div class="post-information-user-logo-activity"></div>-->
+          }
+          <div class="post-information-container">
+            <h2 class="pet-name">{{ animal.name }}</h2>
+            <div class="post-information">
+              <div class="post-information-pet">
+                <div class="post-information-pet-info">
+                  <div class="post-information-pet-attributes">
+                    @for (ani of animal | keyvalue: keepOrder; track ani.key) {
+                      <p>{{ ani.key.charAt(0).toUpperCase() + ani.key.slice(1) }}:</p>
+                    }
+                    <p>Vaccinated:</p>
+                    <p>Sprayed:</p>
+                    <p>Parasite free:</p>
+                    <p>Date added:</p>
+                    <p>City:</p>
+                  </div>
+                  <div class="straight-border"></div>
+                  <div class="post-information-pet-attributes-values">
+                    @for (ani of animal | keyvalue: keepOrder; track ani.key) {
+                      <p>{{ ani.value }}</p>
+                    }
+                    @if (!animalHealth.vaccinated) {
+                      <p><mat-icon>close</mat-icon></p>
+                    } @else {
+                      <p><mat-icon>check</mat-icon></p>
+                    }
+                    @if (!animalHealth.spayedOrNeutered) {
+                      <p><mat-icon>close</mat-icon></p>
+                    } @else {
+                      <p><mat-icon>check</mat-icon></p>
+                    }
+                    @if (!animalHealth.parasiteFree) {
+                      <p><mat-icon>close</mat-icon></p>
+                    } @else {
+                      <p><mat-icon>check</mat-icon></p>
+                    }
+                    <p>{{ dateAdded | date: 'short' }}</p>
+                    <p>{{ city.name }}</p>
+                  </div>
                 </div>
-                <p class="post-information-user-username">
-                  {{ user.firstName }} {{ user.lastName }}
-                </p>
-                <p class="post-information-user-activity">
-                  Last time active: {{ user.dateTime | date: 'short' }}
-                </p>
-                <div class="post-information-user-border"></div>
-                <div class="post-information-user-buttons">
-                  @if (currentUser.userId() == userId) {
-                  } @else {
-                    <button class="primarybtn" (click)="routeAdopt()">ADOPT</button>
-                    <button class="primarybtn">SEND MESSAGE</button>
-                  }
+                <div class="post-information-pet-add-info">
+                  <p class="post-information-pet-add-info-label">Additional information</p>
+                  <div class="post-information-pet-add-info-text">
+                    <p>Hello</p>
+                  </div>
                 </div>
               </div>
-              <div class="post-information-user-report">
-                <p>Inappropriate content?</p>
-                <button class="secondarybtn">REPORT</button>
+              <div class="post-information-user-container">
+                <div class="post-information-user">
+                  <div class="post-information-user-logo">
+                    <img [src]="imageUrl()" alt="User image" class="profile-preview" />
+                    <!--<div class="post-information-user-logo-activity"></div>-->
+                  </div>
+                  <p class="post-information-user-username">
+                    {{ user.firstName }} {{ user.lastName }}
+                  </p>
+                  <p class="post-information-user-activity">
+                    Last time active: {{ user.dateTime | date: 'short' }}
+                  </p>
+                  <div class="post-information-user-border"></div>
+                  <div class="post-information-user-buttons">
+                    @if (currentUser.userId() == userId) {
+                    } @else {
+                      <button class="primarybtn" (click)="routeAdopt()">ADOPT</button>
+                      <button class="primarybtn">SEND MESSAGE</button>
+                    }
+                  </div>
+                </div>
+                <div class="post-information-user-report">
+                  <p>Inappropriate content?</p>
+                  <button class="secondarybtn">REPORT</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <app-post-comments [postId]="postId" class="post-comments"></app-post-comments>
+      } @else {
+        <div class="loading-container">
+          <br />
+          <p class="loading-spinner-text">Loading requests</p>
+          <mat-spinner></mat-spinner>
+        </div>
+      }
+      @if (isImagesLoaded) {
+        <app-post-comments
+          [postId]="postId"
+          class="post-comments"
+          (commentsLoaded)="onCommentsLoaded()"
+        ></app-post-comments>
+      }
     </div>
 
     <app-footer></app-footer>

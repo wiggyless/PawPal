@@ -4,7 +4,7 @@
   flex-direction: column;
   padding: 10px;
   text-align: center;
-  width: 90%;
+  width: 100%;
   margin-top: 150px;
   margin-bottom: 100%;
   ::ng-deep {
@@ -12,15 +12,15 @@
       background-color: transparent !important;
     }
     .mat-mdc-list-item .mdc-list-item__content .mat-mdc-list-item-unscoped-content {
-      color: #473619;
+      color: var(--side-navbar-text-color);
     }
     .mat-mdc-list-item .mdc-list-item__state-layer {
       display: none;
     }
   }
 }
-:host ::ng-deep .mat-mdc-list-option:hover {
-  background-color: transparent !important;
+:host ::ng-deep .mat-mdc-list-item:hover {
+  background-color: var(--side-navbar-text-hover-color) !important;
 }
 
 :host ::ng-deep .mat-mdc-list-option .mdc-list-item__state-layer {

@@ -19,5 +19,6 @@ namespace PawPal.Application.Modules.Posts.Queries.List
         public int? CityID { get; set; }
         public int UserID { get; set; } 
         public DateTime? DateAdded { get; set; }
+        public string? MainImage { get; set; }
     }
 }
