@@ -10,7 +10,17 @@ body {
     padding: 3rem 2rem;
   }
 }
-// Main image stepper css
+.image-input-container.dragging {
+  border: 2px dashed #889063;
+  background-color: rgba(136, 144, 99, 0.08);
+}
+
+.image-holder {
+  img {
+    pointer-events: none;
+    user-select: none;
+  }
+}
 .mat-grid-tile {
   background-color: lightblue;
 }
@@ -646,7 +656,8 @@ input[type='number'] {
 }
 .image-input-text {
   position: absolute;
-  font-size: 20px;
+  font-size: 18px;
+  padding-top:10px;
 }
 .image-input-text-warning {
   bottom: 38%;

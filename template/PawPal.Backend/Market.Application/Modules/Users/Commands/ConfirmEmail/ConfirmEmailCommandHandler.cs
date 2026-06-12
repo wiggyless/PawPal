@@ -15,8 +15,12 @@ namespace PawPal.Application.Modules.Users.Commands.ConfirmEmail
             if (user == null)
                 throw new PawPalNotFoundException("User with received confirmation token does not exist.");
 
+            if (user.EmailConfirmationTokenExpiresAt < DateTime.UtcNow)
+                throw new PawPalConflictException("Confirmation token has expired. Please request a new one.");
+
             user.IsEmailConfirmed = true;
             user.EmailConfirmationToken = null; //one-time use
+            user.EmailConfirmationTokenExpiresAt = null;
 
             await context.SaveChangesAsync(cancellationToken);
 

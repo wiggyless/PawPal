@@ -15,13 +15,12 @@ import {
   CreateCommentCommand,
   CommentQuery,
 } from '../../../../../../api-services/comments/comments.model';
-import { Observable, Subscription } from 'rxjs';
 import { PageResult } from '../../../../../../core/models/paging/page-result';
 import { CurrentUserService } from '../../../../../../core/services/auth/current-user.service';
 import { PageEvent } from '@angular/material/paginator';
 import { UserImageService } from '../../../../../../api-services/userImage/userImage-service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-post-comments',
@@ -39,8 +38,10 @@ export class PostComments implements OnInit, OnDestroy {
   userImgService = inject(UserImageService);
   router = inject(Router);
   cd = inject(ChangeDetectorRef);
+
   hasLoaded: boolean = false;
   comment: string = '';
+
   page = {
     pageSize: 4,
     currentPage: 1,
@@ -58,62 +59,83 @@ export class PostComments implements OnInit, OnDestroy {
   };
   counter: number = 0;
   objectUrl: string | null = null;
-  private sanitizer = inject(DomSanitizer);
 
   constructor(private signalRService: SignalRService) {}
 
   ngOnInit(): void {
     this.request.postID = this.postId;
     this.loadComments();
-    this.signalRSubscription = this.signalRService.commentReceived$.subscribe((newComment) => {
-      if (newComment && newComment.postID == this.postId) {
+   this.signalRSubscription = this.signalRService.commentReceived$.subscribe((newComment) => {
+  if (newComment && newComment.postID == this.postId) {
+    this.userImgService.getUserImageByID(newComment.userID).subscribe({
+      next: (safeUrl) => {
+        newComment.imageData = safeUrl;
         this.commentsList = {
           ...this.commentsList!,
           items: [newComment, ...this.commentsList!.items],
         };
         this.cd.detectChanges();
-      }
+      },
+      error: () => {
+        newComment.imageData = '';
+        this.commentsList = {
+          ...this.commentsList!,
+          items: [newComment, ...this.commentsList!.items],
+        };
+        this.cd.detectChanges();
+      },
     });
+  }
+});
   }
   ngOnDestroy(): void {
     this.signalRSubscription.unsubscribe();
   }
   loadComments() {
-    this.commentsService.getComments(this.request).subscribe((comments) => {
-      this.commentsList = comments;
-      this.page = {
-        pageSize: comments.pageSize == undefined ? 4 : comments.pageSize,
-        currentPage: comments.currentPage,
-        includedTotal: comments.includedTotal,
-        totalItems: comments.totalItems,
-        totalPages: comments.totalPages,
-        pageSizeOption: this.page.pageSizeOption,
-      };
-      this.commentsList.items.forEach((element) => {
-        this.userImgService.getUserImageByID(element.userID).subscribe({
-          next: (safeUrl) => {
-            element.imageData = safeUrl;
-            this.counter++;
-            this.checkCounter();
-            this.commentsLoaded.emit();
-          },
-          error: () => {
-            element.imageData = '';
-            this.counter++;
-            this.checkCounter();
-            this.commentsLoaded.emit();
-          },
-        });
+  this.commentsService.getComments(this.request).subscribe((comments) => {
+    this.commentsList = comments;
+    this.page = {
+      pageSize: comments.pageSize == undefined ? 4 : comments.pageSize,
+      currentPage: comments.currentPage,
+      includedTotal: comments.includedTotal,
+      totalItems: comments.totalItems,
+      totalPages: comments.totalPages,
+      pageSizeOption: this.page.pageSizeOption,
+    };
+
+    if (this.commentsList.items.length === 0) {
+      this.hasLoaded = true;
+      this.commentsLoaded.emit();
+      this.cd.detectChanges();
+      return;
+    }
+
+    this.counter = 0; 
+    this.commentsList.items.forEach((element) => {
+      this.userImgService.getUserImageByID(element.userID).subscribe({
+        next: (safeUrl) => {
+          element.imageData = safeUrl;
+          this.counter++;
+          this.checkCounter(this.commentsList!.items.length); 
+        },
+        error: () => {
+          element.imageData = '';
+          this.counter++;
+          this.checkCounter(this.commentsList!.items.length);
+        },
       });
     });
+  });
+}
+
+checkCounter(total: number) {
+  if (this.counter >= total) {
+    this.hasLoaded = true;
+    this.counter = 0;
+    this.commentsLoaded.emit();
+    this.cd.detectChanges();
   }
-  checkCounter() {
-    if (this.counter == this.page.pageSizeOption[0]) {
-      this.hasLoaded = true;
-      this.counter = 0;
-      this.cd.detectChanges();
-    }
-  }
+}
   addNewComment() {
     if (this.currentUser.getDefaultRoute() == '/login') {
       this.router.navigate(['login']);
@@ -121,7 +143,7 @@ export class PostComments implements OnInit, OnDestroy {
       const newComment: CreateCommentCommand = {
         userID: this.currentUser.userId() as number,
         postID: +this.postId,
-        content: this.comment,
+        content: this.comment
       };
       this.commentsService.postComment(newComment).subscribe((response) => {
         this.comment = '';

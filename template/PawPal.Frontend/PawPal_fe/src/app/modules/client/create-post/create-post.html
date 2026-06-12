@@ -158,7 +158,11 @@
         <div class="mat-step-image-container">
           <form [formGroup]="firstFormGroup">
             <ng-template matStepLabel>Image upload</ng-template>
-            <div class="image-input-container">
+            <div class="image-input-container"
+             [class.dragging]="isDragging"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onFileDrop($event)">
               <svg
                 class="image-input-icon"
                 xmlns="http://www.w3.org/2000/svg"
@@ -182,14 +186,18 @@
                 (change)="showImages($event)"
                 accept="image/png, image/jpeg,image/jpg"
               />
-              <p class="image-input-text">Choose an image</p>
+              <p class="image-input-text">Drag and drop or click to upload images</p>
               <p class="image-input-text-warning">Maximum number of pictures: 10</p>
             </div>
           </form>
-          <div class="image-container">
+          <div class="image-container"
+         cdkDropList
+  cdkDropListOrientation="horizontal"
+  (cdkDropListDropped)="reorderImages($event)"
+  (dragover)="$event.preventDefault()">
             @for (control of imageControls; track $index) {
-              <div class="image-holder">
-                <img class="image" [src]="control.value" crossorigin="anonymous" />
+              <div class="image-holder" cdkDrag>
+               <img class="image" [src]="control.value" crossorigin="anonymous" />
                 <div class="star-image-holder">
                   <button
                     class="image-star-button"

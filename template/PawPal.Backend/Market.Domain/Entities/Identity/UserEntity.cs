@@ -23,6 +23,7 @@ public sealed class UserEntity : BaseEntity
     public RolesEntity ?Role { get; set; }
     public DateTime? LastOnline { get; set; } = DateTime.Now;
     public string? EmailConfirmationToken { get; set; }
+    public DateTime? EmailConfirmationTokenExpiresAt { get; set; }
     public bool IsEmailConfirmed { get; set; }
     public string? FcmToken { get; set; }
     public string? AboutMe { get; set; }    

@@ -14,16 +14,15 @@ public sealed class LoginCommandHandler(
 
         var user = await ctx.Users
             .FirstOrDefaultAsync(x => x.Email.ToLower() == email && x.IsEnabled && !x.IsDeleted, ct)
-            ?? throw new PawPalNotFoundException("Korisnik nije pronađen ili je onemogućen.");
+            ?? throw new PawPalNotFoundException("User does not exist.");
 
         var verify = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
         if (verify == PasswordVerificationResult.Failed)
-            throw new PawPalConflictException("Pogrešni kredencijali.");
+            throw new PawPalConflictException("Wrong credentials.");
 
-        /* Had to comment this for now cuz cannot log in the app
         if (!user.IsEmailConfirmed)
             throw new PawPalConflictException("Please verify your e-mail address before logging in.");
-        */
+        
         var tokens = jwt.IssueTokens(user);
 
         ctx.RefreshTokens.Add(new RefreshTokenEntity

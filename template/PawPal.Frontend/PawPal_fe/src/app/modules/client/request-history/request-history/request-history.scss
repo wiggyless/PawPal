@@ -16,7 +16,7 @@ body {
 
 .poslati-zahtjevi-container {
   width: 100%;
-  padding: 55px;
+  padding: 35px;
   background-color: var(--background-color);
 }
 
@@ -151,9 +151,6 @@ body {
 
 .status-accepted {
   color: #4e5f33;
-}
-
-.loading-spinner {
 }
 
 @keyframes spin {

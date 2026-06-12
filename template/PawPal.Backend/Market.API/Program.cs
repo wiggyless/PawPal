@@ -8,6 +8,7 @@ using PawPal.Application;
 using PawPal.Application.Abstractions;
 using PawPal.Application.Services;
 using PawPal.Infrastructure;
+using PawPal.Infrastructure.BackgroundServices;
 using PawPal.Infrastructure.Common;
 using PawPal.Infrastructure.Signal;
 using Serilog;
@@ -50,23 +51,19 @@ public partial class Program
                 .AddSignalR();
             builder.Services.AddScoped<ICommentHubService, CommentHubService>();
 
-            // FIX: Instead of calling .AddAuthentication().AddJwtBearer() again,
-            // we safely intercept the existing "Bearer" options setup.
             builder.Services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
             {
-                // Save any existing OnMessageReceived logic if something else was using it
+             
                 var existingOnMessageReceived = options.Events?.OnMessageReceived;
 
                 options.Events ??= new JwtBearerEvents();
                 options.Events.OnMessageReceived = async context =>
                 {
-                    // 1. Run the original token logic first if there was any
                     if (existingOnMessageReceived != null)
                     {
                         await existingOnMessageReceived(context);
                     }
 
-                    // 2. Fall back to extracting the token from query string for SignalR
                     var accessToken = context.Request.Query["access_token"];
                     var path = context.HttpContext.Request.Path;
 
@@ -76,7 +73,7 @@ public partial class Program
                     }
                 };
             });
-            // CORS Policy setup
+            
             var allowedOrigins = builder.Configuration.GetValue<string>("allowedOrigins") ?? "http://localhost:4200";
             builder.Services.AddCors(options =>
             {
@@ -90,10 +87,8 @@ public partial class Program
                 });
             });
 
-            // 1. Add Rate Limiting Services
             builder.Services.AddRateLimiter(options =>
             {
-                // Define what happens when a request is rejected
                 options.OnRejected = async (context, token) =>
                 {
                     context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
@@ -105,17 +100,15 @@ public partial class Program
                     }, token);
                 };
 
-                // Example 1: A Named Policy (Fixed Window based on IP Address)
                 options.AddPolicy("IpBasedPolicy", httpContext =>
                 {
-                    // Get client IP address or default to "anonymous"
                     var ipAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "anonymous";
 
                     return RateLimitPartition.GetFixedWindowLimiter(ipAddress, _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = 100,           // Max 10 requests
-                        Window = TimeSpan.FromSeconds(60), // Per 1 minute
-                        QueueLimit = 0              // Reject instantly if limit is exceeded
+                        PermitLimit = 100,   
+                        Window = TimeSpan.FromSeconds(60),
+                        QueueLimit = 0
                     });
                 });
             });
@@ -124,6 +117,7 @@ public partial class Program
             var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
 
             builder.Services.AddTransient<IEmailService, EmailService>();
+            builder.Services.AddHostedService<ExpiredTokenCleanupService>();
 
             FirebaseApp.Create(new AppOptions
             {
@@ -161,12 +155,13 @@ public partial class Program
                 await next();
             });
 
-            app.UseHttpsRedirection(); // ← now after your middleware
+            app.UseHttpsRedirection();
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
                 {
-                    ctx.Context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+                    ctx.Context.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:4200/";
+                    ctx.Context.Response.Headers["Access-Control-Allow-Credentials"] = "true";
                 }
             });
 

@@ -29,5 +29,26 @@
       </div>
     </div>
   }
+@if (status === 'expired') {
+  <div style="display: flex;">
+    <svg width="172px" height="172px" viewBox="0 0 20.00 20.00" xmlns="http://www.w3.org/2000/svg" fill="#51432D">...</svg>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <p>Your confirmation link has expired.</p>
 
+      @if (!resendSuccess) {
+        <input
+          type="email"
+          placeholder="Enter your email"
+          [(ngModel)]="email"
+          style="margin-bottom: 8px; padding: 6px;"
+        />
+        <button (click)="resendEmail()">Resend confirmation email</button>
+      } @else {
+        <p>A new confirmation email has been sent. Check your inbox!</p>
+      }
+
+      <button (click)="router.navigate(['/auth/login'])">Go to login</button>
+    </div>
+  </div>
+}
 </div>
