@@ -14,7 +14,7 @@
   <body>
     <div class="post-container">
       <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
-      @if (isCommentsLoaded) {
+      @if (isImagesLoaded) {
         <div class="post">
           @if (currentUser.userId() == userId) {
             <div class="post-buttons">
