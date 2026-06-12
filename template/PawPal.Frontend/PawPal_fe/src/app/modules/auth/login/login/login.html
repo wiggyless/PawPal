@@ -34,5 +34,15 @@
         <button class="secondarybtn" routerLink="">Go back</button>
         <button type="submit" class="primarybtn"[disabled]="form.invalid">Login</button>
     </form>
-    
 </div>
+
+    @if (showResend) {
+  <div style="margin-top: 12px; text-align: center;">
+    @if (!resendSuccess) {
+      <p>Your email is not confirmed yet.</p>
+      <button class="primarybtn" (click)="resendEmail()">Resend confirmation email</button>
+    } @else {
+      <p>Confirmation email sent! Please check your inbox.</p>
+    }
+  </div>
+}

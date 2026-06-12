@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
@@ -14,14 +15,12 @@ import { PostImagesService } from '../../../api-services/animal-post-images/anim
 import {
   AddNewPostImages,
   GetImagePostBlob,
-  GetPostImageById,
 } from '../../../api-services/animal-post-images/animal-post-images-model';
 
-import { delay, forkJoin, map, Observable, switchMap } from 'rxjs';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { forkJoin, Observable, switchMap } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   AddAnimalPost,
-  AnimalPostByIdQuery,
 } from '../../../api-services/animal-posts/animal-posts.model';
 import { AddAnimalDto, UpdateAnimalDto } from '../../../api-services/animals/animal-model';
 import { AnimalService } from '../../../api-services/animals/animal';
@@ -31,7 +30,6 @@ import { AllergyService } from '../../../api-services/allergies/allergy-service'
 import { DisabilityService } from '../../../api-services/disabilities/disability-service';
 import {
   AnimalCategoryByIdQueryDto,
-  ListAnimalCategoriesQueryDto,
 } from '../../../api-services/animal-categories/animal-categories.model';
 import {
   AddAnimalHealthHistory,
@@ -55,6 +53,7 @@ import  imageCompression from 'browser-image-compression';
 })
 export class CreatePost implements OnInit {
   isPassChecked = false;
+
   // injections
   private _formBuilder = inject(FormBuilder);
   genderService = inject(GenderService);
@@ -71,6 +70,7 @@ export class CreatePost implements OnInit {
   nextRoute = inject(Router);
   cd = inject(ChangeDetectorRef);
   dialog = inject(MatDialog);
+
   //Group forms
   firstFormGroup = this._formBuilder.group({
     firstCtrl: this._formBuilder.array<string>([]),
@@ -370,40 +370,7 @@ export class CreatePost implements OnInit {
     this.imageControls.splice(index, 1);
     this.firstFormGroup.updateValueAndValidity();
   }
-  /*
-  togglePass(): void {
-    !this.secondFormGroup.value.passportCheck
-      ? this.secondFormGroup.get('passportCtrl')?.disable()
-      : this.secondFormGroup.get('passportCtrl')?.enable();
-  }
-  toggleDate(): void {
-    this.isDateRequired = !this.isDateRequired;
-    !this.isDateRequired
-      ? this.thridFormGroup.get('dateCtrl')?.disable()
-      : this.thridFormGroup.get('dateCtrl')?.enable();
-  }
-  toggleDis(): void {
-    this.isDiseaseChecked = !this.isDiseaseChecked;
-    !this.isDiseaseChecked
-      ? this.thridFormGroup.get('disCtrl')?.disable()
-      : this.thridFormGroup.get('disCtrl')?.enable();
-  }
-  toggleAllergy(): void {
-    this.isAllergyChecked = !this.isAllergyChecked;
-    !this.isAllergyChecked
-      ? this.thridFormGroup.get('allergyCtrl')?.disable()
-      : this.thridFormGroup.get('allergyCtrl')?.enable();
-  }
-        toggleVacc() {
-    this.selectedVaccinated = !this.selectedVaccinated;
-  }
-  toggleSpray() {
-    this.selectedSprayed = !this.selectedSprayed;
-  }
-  toggleParasite() {
-    this.selectedParasiteFree = !this.selectedParasiteFree;
-  }
-      */
+  
   toggleFormControl(checkControlName: string, targetControlName: string, group: FormGroup): void {
     const isChecked = group.get(checkControlName)?.value;
     const targetCtrl = group.get(targetControlName);
@@ -543,4 +510,36 @@ export class CreatePost implements OnInit {
       this.cd.detectChanges();
     }
   }
+
+  onDragOver(event: DragEvent) {
+  event.preventDefault();
+  event.stopPropagation();
+  this.isDragging = true;
+}
+
+onDragLeave(event: DragEvent) {
+  this.isDragging = false;
+}
+
+onFileDrop(event: DragEvent) {
+  event.preventDefault();
+  event.stopPropagation();
+  this.isDragging = false;
+
+  const files = event.dataTransfer?.files;
+  if (files) {
+    this.showImages({ target: { files } } as any);
+  }
+}
+
+isDragging = false;
+
+reorderImages(event: CdkDragDrop<any[]>) {
+  moveItemInArray(this.imageControls, event.previousIndex, event.currentIndex);
+
+  if (event.previousIndex === this.selectedMainImageIndex) {
+    this.selectedMainImageIndex = event.currentIndex;
+  }
+}
+
 }

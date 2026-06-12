@@ -33,7 +33,6 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 throw new PawPalConflictException("City does not exist!");
             }
 
-            // checking if the email is being used
             bool emailUsed = await context.Users.
                 AnyAsync(x => x.Email == userEmail, cancellationToken);
             if (emailUsed)
@@ -54,7 +53,8 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 PasswordHash = hasher.HashPassword(null, password),
                 CityId = request.City,
                 IsEnabled = true,
-                EmailConfirmationToken = confirmationToken, 
+                EmailConfirmationToken = confirmationToken,
+                EmailConfirmationTokenExpiresAt = DateTime.UtcNow.AddSeconds(45),
                 IsEmailConfirmed = false,
                 Username = request.Username, 
                 AboutMe = request.AboutMe

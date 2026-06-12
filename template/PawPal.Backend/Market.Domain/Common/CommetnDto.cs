@@ -13,5 +13,6 @@ namespace PawPal.Domain.Common
         public int UserID { get; set; }
         public string Content { get; set; }
         public DateTime DatePosted { get; set; }
+        public string Username { get; set;  }
     }
 }

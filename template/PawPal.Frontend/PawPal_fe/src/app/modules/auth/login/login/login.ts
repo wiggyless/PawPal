@@ -27,14 +27,14 @@ export class LoginComponent extends BaseComponent implements OnInit {
   private route = inject(ActivatedRoute)
   private authTimeoutService = inject(AuthTimeoutService);
   showPassword = false;
-
+  showResend = false;
+  resendSuccess = false;
   ngOnInit(): void {
   const message = this.route.snapshot.queryParamMap.get('message');
   if (message) {
     this.dialogueService.success('Registration Successful!', message);
   }
 
-  // always render captcha, not just when there's a message
   setTimeout(() => {
     if (typeof grecaptcha !== 'undefined') {
       grecaptcha.render('recaptcha-container', {
@@ -79,6 +79,10 @@ export class LoginComponent extends BaseComponent implements OnInit {
         grecaptcha.reset();
       },
       error: (err) => {
+        const message = err.error?.message || '';
+  if (message.toLowerCase().includes('verify') || message.toLowerCase().includes('confirmed')) {
+    this.showResend = true;
+      }
         this.dialogueService.error('Login Failed', err.error?.message || 'An error occurred during login. Please try again.');
         console.error('Login error:', err);
         grecaptcha.reset();
@@ -90,4 +94,12 @@ export class LoginComponent extends BaseComponent implements OnInit {
   togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
+
+  resendEmail(): void {
+  const email = this.form.value.email ?? '';
+  this.auth.resendConfirmationEmail(email).subscribe({
+    next: () => this.resendSuccess = true,
+    error: () => this.dialogueService.error('Error', 'Could not resend confirmation email. Please try again.')
+  });
+}
 }

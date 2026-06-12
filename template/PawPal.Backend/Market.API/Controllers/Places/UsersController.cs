@@ -1,6 +1,8 @@
-﻿using PawPal.Application.Modules.Animal_Info.Animals.Commands.Delete;
+﻿using MediatR;
+using PawPal.Application.Modules.Animal_Info.Animals.Commands.Delete;
 using PawPal.Application.Modules.Users.Commands.Create;
 using PawPal.Application.Modules.Users.Commands.Delete;
+using PawPal.Application.Modules.Users.Commands.ResendConfirmationEmail;
 using PawPal.Application.Modules.Users.Commands.Update;
 using PawPal.Application.Modules.Users.Queries.GetByEmail;
 using PawPal.Application.Modules.Users.Queries.GetById;
@@ -52,7 +54,7 @@ namespace PawPal.API.Controllers.Places
         }
 
         [AllowAnonymous]
-        [HttpGet("lookup")] //to search by username or email
+        [HttpGet("lookup")]
         public async Task<IActionResult> GetUser(
              [FromQuery] string? username,
              [FromQuery] string? email,
@@ -69,6 +71,16 @@ namespace PawPal.API.Controllers.Places
                 return Ok(user);
             }
             return BadRequest("Provide either username or email.");
+        }
+
+        [AllowAnonymous]
+        [HttpPost("resend-confirmation")]
+        public async Task<IActionResult> ResendConfirmation(
+            [FromBody] ResendConfirmationEmailCommand command,
+            CancellationToken cancellationToken)
+        {
+            var result = await sender.Send(command, cancellationToken);
+            return Ok(result);
         }
     }
 }

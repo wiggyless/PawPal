@@ -1,11 +1,5 @@
 ﻿using PawPal.Domain.Common;
 using PawPal.Domain.Entities.Posts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace PawPal.Application.Modules.Comments.Commands.Create
 {
     public sealed class CreateCommentCommandHandler(IAppDbContext context, ICommentHubService _hubService) : IRequestHandler<CreateCommentCommand,int> 
@@ -25,7 +19,7 @@ namespace PawPal.Application.Modules.Comments.Commands.Create
             }
             if (string.IsNullOrEmpty(command.Content))
             {
-                throw new PawPalConflictException("Conent cannot be emtpy space");
+                throw new PawPalConflictException("Content cannot be empty space");
             }
             var newComment = new CommentsEntity
             {
@@ -44,6 +38,7 @@ namespace PawPal.Application.Modules.Comments.Commands.Create
                 UserID = newComment.UserId,
                 DatePosted = newComment.DatePosted,
                 PostID = newComment.PostId,
+                Username = user.Username
                
             };
             await _hubService.SendCommentNotification(commentDto);

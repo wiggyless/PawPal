@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { AuthRoutingModule } from './auth-routing-module';
 import { LoginComponent } from './login/login/login';
 import { AuthLayout } from './auth-layout/auth-layout/auth-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatInput, MatFormField, MatLabel, MatHint, MatSuffix, MatError } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
@@ -41,7 +41,8 @@ import { ConfirmEmailComponent } from './confirm-email/confirm-email';
     MatProgressSpinner,
     MatError,
     MatOption,
-    MatSelectModule
+    MatSelectModule,
+    FormsModule
 ],
 })
 export class AuthModule {}

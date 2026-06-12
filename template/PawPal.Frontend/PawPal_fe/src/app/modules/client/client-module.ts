@@ -4,8 +4,7 @@ import { UserProfileComponent } from './my-profile/user-profile-component/user-p
 import { ClientLayout } from './client-layout/client-layout/client-layout';
 import { NavbarComponent } from '../shared/components/navbar/navbar';
 import { RouterOutlet } from '@angular/router';
-import { SharedModule } from 'primeng/api';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MyPosts } from './my-posts/my-posts';
 import { UserProfileSideNavbar } from './user-profile-side-navbar/user-profile-side-navbar/user-profile-side-navbar';
 import { MatListModule } from '@angular/material/list';
@@ -27,7 +26,6 @@ import { DialogueComponent } from './dialogue-component/dialogue-component';
 import { MatPaginator } from '@angular/material/paginator';
 import { A11yModule } from '@angular/cdk/a11y';
 import { MyFavorites } from './my-favorites/my-favorites/my-favorites';
-import { MatSpinner } from '@angular/material/progress-spinner';
 import { MyRequests } from './my-requests/my-requests/my-requests';
 import { MyRequestsDialog } from './my-requests/my-requests-dialog/my-requests-dialog/my-requests-dialog';
 import { SettingsComponent } from './settings/settings-component';
@@ -36,6 +34,8 @@ import { MySentRequests } from './my-sent-requests/my-sent-requests/my-sent-requ
 import { MySentRequestDialog } from './my-sent-requests/my-sent-request-dialog/my-sent-request-dialog/my-sent-request-dialog';
 import { RequestHistory } from './request-history/request-history/request-history';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatSpinner } from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [
     UserProfileComponent,
@@ -77,9 +77,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatDateRangeInput,
     MatDialogModule,
     A11yModule,
-    MatSpinner,
     DatePipe,
     MatProgressBarModule,
+    DragDropModule,
+    MatSpinner,
   ],
   providers: [provideNativeDateAdapter(), MatDialog],
 })
