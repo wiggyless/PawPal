@@ -39,6 +39,10 @@ import { ImageCropperComponent } from 'ngx-image-cropper';
 import { SecurityQuestionsDialog } from './settings/securityQuestions-dialog/security-questions-dialog/security-questions-dialog';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatSpinner } from '@angular/material/progress-spinner';
+import { Messaging } from './messaging/messaging';
+import {SlicePipe, UpperCasePipe} from "@angular/common";
+
+
 @NgModule({
   declarations: [
     UserProfileComponent,
@@ -57,6 +61,7 @@ import { MatSpinner } from '@angular/material/progress-spinner';
     RequestHistory,
     UserProfileImageCropDialog,
     SecurityQuestionsDialog,
+    Messaging,
   ],
   imports: [
     ClientRoutingModule,
@@ -87,6 +92,8 @@ import { MatSpinner } from '@angular/material/progress-spinner';
     ImageCropperComponent,
     DragDropModule,
     MatSpinner,
+    SlicePipe,
+    UpperCasePipe
   ],
   providers: [provideNativeDateAdapter(), MatDialog],
 })

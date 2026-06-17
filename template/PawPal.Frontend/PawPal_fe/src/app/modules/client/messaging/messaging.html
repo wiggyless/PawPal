@@ -1,0 +1,96 @@
+<app-navbar [roleId]="currentUser.roleid()"></app-navbar>
+<div class="messaging-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <i class="ti ti-messages"></i>
+      <span>Messages</span>
+    </div>
+    <ul class="convo-list">
+      @for (convo of conversations; track convo.conversationId) {
+        <li
+          class="convo-item"
+          [class.active]="selectedConversation?.conversationId === convo.conversationId"
+          (click)="selectConversation(convo)">
+          <div class="avatar">
+            @if (convo.imageData) {
+              <img [src]="convo.imageData" class="msg-avatar-img" />
+            } @else {
+              {{ convo.otherUsername | slice:0:2 | uppercase }}
+            }
+          </div>
+          <div class="convo-meta">
+            <span class="convo-name">{{ convo.otherUsername }}</span>
+            <span class="convo-preview">{{ convo.lastMessage ?? 'No messages yet' }}</span>
+          </div>
+          @if (convo.unreadCount > 0) {
+            <span class="badge">{{ convo.unreadCount }}</span>
+          }
+        </li>
+      }
+    </ul>
+  </aside>
+  <main class="chat-area">
+    @if (selectedConversation) {
+      <div class="chat-header">
+        <div class="avatar">
+          @if (selectedConversation.imageData) {
+            <img [src]="selectedConversation.imageData" class="msg-avatar-img" />
+          } @else {
+            {{ selectedConversation.otherUsername | slice:0:2 | uppercase }}
+          }
+        </div>
+        <div>
+          <div class="chat-header-name">{{ selectedConversation.otherUsername }}</div>
+          <div class="chat-header-status" [class.online]="isOtherUserOnline">
+            {{ isOtherUserOnline ? 'Online' : 'Offline' }}
+          </div>
+        </div>
+      </div>
+      <div class="messages-area" #messagesContainer (scroll)="onScroll()">
+        @if (hasMoreMessages) {
+          <div class="load-more">
+            @if (isLoadingMore) {
+              <span>Loading...</span>
+            } @else {
+              <button class="primarybtn" id="loadText" (click)="loadMoreMessages()">Load older messages</button>
+            }
+          </div>
+        }
+        @for (msg of messages; track msg.messageId) {
+          <div class="bubble-wrap" [class.sent]="msg.senderId === currentUser.userId()">
+            <div class="bubble" [class.sent]="msg.senderId === currentUser.userId()"
+                                [class.received]="msg.senderId !== currentUser.userId()">
+              {{ msg.content }}
+            </div>
+            <span class="bubble-time">{{ msg.sentAt | date:'shortTime' }}</span>
+          </div>
+        }
+        @if (isOtherUserTyping) {
+          <div class="bubble-wrap">
+            <div class="typing-indicator">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="input-row">
+        <input
+          class="msg-input"
+          [(ngModel)]="newMessage"
+          placeholder="Write a message..."
+          (input)="onTyping()"
+          (keyup.enter)="send()" />
+        <button class="send-btn" (click)="send()" aria-label="Send">
+          <i class="ti ti-send"></i>
+        </button>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <i class="ti ti-message-2"></i>
+        <p>Click any conversation to view</p>
+      </div>
+    }
+  </main>
+</div>

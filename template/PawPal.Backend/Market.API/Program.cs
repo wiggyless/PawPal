@@ -1,7 +1,9 @@
 ﻿using FirebaseAdmin;
+using FirebaseAdmin.Auth;
 using Google.Apis.Auth.OAuth2;
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using PawPal.API;
 using PawPal.API.Middleware;
 using PawPal.Application;
@@ -50,6 +52,8 @@ public partial class Program
                 .AddApplication()
                 .AddSignalR();
             builder.Services.AddScoped<ICommentHubService, CommentHubService>();
+            builder.Services.AddScoped<IMessageHubService, MessageHubService>();
+            builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
             builder.Services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
             {
@@ -67,7 +71,7 @@ public partial class Program
                     var accessToken = context.Request.Query["access_token"];
                     var path = context.HttpContext.Request.Path;
 
-                    if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/commentHub"))
+                    if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/commentHub") || path.StartsWithSegments("/messageHub")))
                     {
                         context.Token = accessToken;
                     }
@@ -168,6 +172,7 @@ public partial class Program
             app.UseAuthorization();
 
             app.MapHub<CommentHub>("/commentHub");
+            app.MapHub<MessageHub>("/messageHub");
             app.MapControllers();
 
             await app.Services.InitializeDatabaseAsync(app.Environment);
