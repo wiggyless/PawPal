@@ -11,6 +11,7 @@ import { CreatePost } from './modules/client/create-post/create-post';
 import { myAuthGuard } from './core/guards/my-auth-guard';
 import { Adoption } from './modules/client/adpotion/adoption/adoption';
 import { LoginComponent } from './modules/auth/login/login/login';
+import { Messaging } from './modules/client/messaging/messaging';
 
 const routes: Routes = [
   {
@@ -23,8 +24,13 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./modules/auth/auth-module').then((m) => m.AuthModule),
   },
+  
+  {path: 'client/messaging',
+    component: Messaging,
+    loadChildren: () => ClientModule,
+  },
   {
-    path: 'client', // bilo ko logiran
+    path: 'client', 
     component: PublicLayout,
     loadChildren: () => PublicModule,
   },

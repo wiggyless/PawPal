@@ -5,7 +5,7 @@ import { UserService } from '../../../../api-services/users/users-service';
 import { GetUserByIdDto, UpdateUserCommand } from '../../../../api-services/users/users-model';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { forkJoin } from 'rxjs';
-import { DialoguePopupService } from '../../../shared/components/dialogue-popup/dialogue-popup.service';
+import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 import { UserImageService } from '../../../../api-services/userImage/userImage-service';
 import {
   UserImageCommand,

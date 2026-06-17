@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { PublicLayout } from './public-layout/public-layout';
 import { CatalogComponent } from './catalog/catalog/catalog';
 import { PostComponent } from './post/post/post';
-import { UserProfileComponent } from '../client/my-profile/user-profile-component/user-profile-component';
 const routes: Routes = [
   {
     path: '',

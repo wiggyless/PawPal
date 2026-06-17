@@ -40,6 +40,9 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<BreedEntity> Breeds => Set<BreedEntity>();
     public DbSet<UserImage> UserImage => Set<UserImage>();
     public DbSet<PostImagesEntity> PostImages => Set<PostImagesEntity>();
+    public DbSet<ConversationEntity> Conversations => Set<ConversationEntity>();
+    public DbSet<MessageEntity> Messages => Set<MessageEntity>();
+
     private readonly TimeProvider _clock;
     public DatabaseContext(DbContextOptions<DatabaseContext> options, TimeProvider clock) : base(options)
     {

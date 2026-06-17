@@ -1,6 +1,4 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { initializeApp } from 'firebase/app';
-import { environment } from '../environments/environment';
 import { AuthTimeoutService } from './core/services/auth/auth-timeout.service';
 
 

@@ -3,23 +3,6 @@ import { inject } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { LoadingBarService } from '../services/loading-bar.service';
 
-/**
- * HTTP Interceptor that shows/hides top loading bar during HTTP requests
- *
- * Features:
- * - Automatically shows loading bar when HTTP request starts
- * - Automatically hides loading bar when HTTP request completes
- * - Handles multiple simultaneous requests (counter-based)
- * - Can skip loading bar for specific endpoints (polling, health checks, etc.)
- *
- * Usage:
- * 1. Register in app.config.ts:
- *    withInterceptors([loadingBarInterceptor, ...])
- *
- * 2. Add <app-fit-loading-bar></app-fit-loading-bar> to app.component.html
- *
- * 3. Done! Loading bar will show automatically for all HTTP requests
- */
 export const loadingBarInterceptor: HttpInterceptorFn = (req, next) => {
   const loadingBar = inject(LoadingBarService);
 

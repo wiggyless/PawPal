@@ -1,9 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
-  ElementRef,
   OnInit,
-  ViewChild,
   ViewEncapsulation,
   inject,
   signal,
@@ -18,13 +16,12 @@ import { UserService } from '../../../../api-services/users/users-service';
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
 import { environment } from '../../../../../environments/environment';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
-import { catchError, forkJoin, Observable, of } from 'rxjs';
-import { GetPostImageById } from '../../../../api-services/animal-post-images/animal-post-images-model';
+import { forkJoin, Observable } from 'rxjs';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogueComponent } from '../../../client/dialogue-component/dialogue-component';
 import { UserImageService } from '../../../../api-services/userImage/userImage-service';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post',
@@ -52,6 +49,7 @@ export class PostComponent implements OnInit {
   cd = inject(ChangeDetectorRef);
   dialog = inject(MatDialog);
   userImages = inject(UserImageService);
+
   animalHealth: GetAnimalsHealthByIdDto = {
     animalHealthHistoryId: 0,
     animalId: 0,
@@ -88,7 +86,7 @@ export class PostComponent implements OnInit {
   imagesList: Observable<string[]> | undefined;
   env = environment;
   objectUrl: string | null = null;
-  private sanitizer = inject(DomSanitizer);
+  
   imageUrl = signal<SafeUrl | null>(null);
   isCommentsLoaded = false;
   isImagesLoaded = false;
@@ -178,4 +176,16 @@ export class PostComponent implements OnInit {
     this.isCommentsLoaded = true;
     this.cd.detectChanges();
   }
+
+  routeMessage(): void {
+  if (this.currentUser.getDefaultRoute() == '/login') {
+    this.routeNext.navigate(['login']);
+  } else {
+    this.routeNext.navigate(['/client/messaging'], {
+      queryParams: {
+        recipientId: this.userId
+      }
+    });
+  }
+}
 }

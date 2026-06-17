@@ -36,6 +36,10 @@ import { RequestHistory } from './request-history/request-history/request-histor
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatSpinner } from '@angular/material/progress-spinner';
+import { Messaging } from './messaging/messaging';
+import {SlicePipe, UpperCasePipe} from "@angular/common";
+
+
 @NgModule({
   declarations: [
     UserProfileComponent,
@@ -52,6 +56,7 @@ import { MatSpinner } from '@angular/material/progress-spinner';
     MySentRequests,
     MySentRequestDialog,
     RequestHistory,
+    Messaging,
   ],
   imports: [
     ClientRoutingModule,
@@ -81,6 +86,8 @@ import { MatSpinner } from '@angular/material/progress-spinner';
     MatProgressBarModule,
     DragDropModule,
     MatSpinner,
+    SlicePipe,
+    UpperCasePipe
   ],
   providers: [provideNativeDateAdapter(), MatDialog],
 })
