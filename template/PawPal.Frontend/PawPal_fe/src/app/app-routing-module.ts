@@ -1,18 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ClientLayout } from './modules/client/client-layout/client-layout/client-layout';
-import { NavbarComponent } from './modules/shared/components/navbar/navbar';
-import { UserProfileComponent } from './modules/client/my-profile/user-profile-component/user-profile-component';
-import { PublicLayout } from './modules/public/public-layout/public-layout';
-import { ClientModule } from './modules/client/client-module';
-import { SharedModule } from 'primeng/api';
-import { PublicModule } from './modules/public/public-module';
-import { CreatePost } from './modules/client/create-post/create-post';
 import { myAuthGuard } from './core/guards/my-auth-guard';
-import { Adoption } from './modules/client/adpotion/adoption/adoption';
-import { LoginComponent } from './modules/auth/login/login/login';
+import { PreloadDashboardStrategy } from './core/preload/preload-strategy';
 
 const routes: Routes = [
+  {
+    path: '',
+    loadChildren: () => import('./modules/public/public-module').then((m) => m.PublicModule),
+  },
   {
     path: 'admin',
     canActivate: [myAuthGuard],
@@ -24,36 +19,12 @@ const routes: Routes = [
     loadChildren: () => import('./modules/auth/auth-module').then((m) => m.AuthModule),
   },
   {
-    path: 'client', // bilo ko logiran
-    component: PublicLayout,
-    loadChildren: () => PublicModule,
+    path: 'client',
+    canActivate: [myAuthGuard],
+    data: { requireAuth: true },
+    loadChildren: () => import('./modules/client/client-module').then((m) => m.ClientModule),
   },
-  {
-    path: 'client/my-profile',
-    loadChildren: () => ClientModule,
-  },
-  {
-    path: 'client/create-post',
-    component: CreatePost,
-    loadChildren: () => ClientModule,
-  },
-  {
-    path: 'client/adoption',
-    component: Adoption,
-    loadChildren: () => ClientModule,
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-  },
-  {
-    path: '',
-    loadChildren: () => import('./modules/public/public-module').then((m) => m.PublicModule),
-  },
-  // fallback 404
-  //{ path: '**', redirectTo: '' },
 ];
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

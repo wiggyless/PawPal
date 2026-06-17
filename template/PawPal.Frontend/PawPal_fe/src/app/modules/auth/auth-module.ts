@@ -4,7 +4,14 @@ import { LoginComponent } from './login/login/login';
 import { AuthLayout } from './auth-layout/auth-layout/auth-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { MatInput, MatFormField, MatLabel, MatHint, MatSuffix, MatError } from '@angular/material/input';
+import {
+  MatInput,
+  MatFormField,
+  MatLabel,
+  MatHint,
+  MatSuffix,
+  MatError,
+} from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { LogoutComponent } from './logout/logout/logout';
 import { RegisterComponent } from './register/register-component/register-component';
@@ -16,10 +23,17 @@ import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ConfirmEmailComponent } from './confirm-email/confirm-email';
-
+import { PasswordRecoveryDialog } from './login/login/password-recovery-dialog/password-recovery-dialog/password-recovery-dialog';
 
 @NgModule({
-  declarations: [AuthLayout, LoginComponent, LogoutComponent, RegisterComponent, ConfirmEmailComponent],
+  declarations: [
+    AuthLayout,
+    LoginComponent,
+    LogoutComponent,
+    RegisterComponent,
+    ConfirmEmailComponent,
+    PasswordRecoveryDialog,
+  ],
   imports: [
     AuthRoutingModule,
     ReactiveFormsModule,
@@ -41,7 +55,7 @@ import { ConfirmEmailComponent } from './confirm-email/confirm-email';
     MatProgressSpinner,
     MatError,
     MatOption,
-    MatSelectModule
-],
+    MatSelectModule,
+  ],
 })
 export class AuthModule {}

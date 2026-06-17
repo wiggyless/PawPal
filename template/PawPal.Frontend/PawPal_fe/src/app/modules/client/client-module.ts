@@ -36,6 +36,9 @@ import { MySentRequests } from './my-sent-requests/my-sent-requests/my-sent-requ
 import { MySentRequestDialog } from './my-sent-requests/my-sent-request-dialog/my-sent-request-dialog/my-sent-request-dialog';
 import { RequestHistory } from './request-history/request-history/request-history';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { UserProfileImageCropDialog } from './my-profile/user-profile-component/user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
+import { ImageCropperComponent } from 'ngx-image-cropper';
+import { SecurityQuestionsDialog } from './settings/securityQuestions-dialog/security-questions-dialog/security-questions-dialog';
 @NgModule({
   declarations: [
     UserProfileComponent,
@@ -52,6 +55,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MySentRequests,
     MySentRequestDialog,
     RequestHistory,
+    UserProfileImageCropDialog,
+    SecurityQuestionsDialog,
   ],
   imports: [
     ClientRoutingModule,
@@ -80,6 +85,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatSpinner,
     DatePipe,
     MatProgressBarModule,
+    ImageCropperComponent,
   ],
   providers: [provideNativeDateAdapter(), MatDialog],
 })

@@ -1,15 +1,14 @@
-export interface CreateUserCommand{
-        firstName: string;
-    lastName: string;
-    birthDate: Date;
-    username: string;
-    email: string;
-    password: string;
-    roleID: number;
-    city: string | number;
-    aboutMe: string;
-    profilePictureURL?: string | null;
-
+export interface CreateUserCommand {
+  firstName: string;
+  lastName: string;
+  birthDate: Date;
+  username: string;
+  email: string;
+  password: string;
+  roleID: number;
+  city: string | number;
+  aboutMe: string;
+  profilePictureURL?: string | null;
 }
 export interface GetUserByIdDto {
   id: number;
@@ -36,16 +35,20 @@ export interface DeleteUserCommand {
   id: number;
 }
 
-export interface GetByUsernameQueryDto{
-    firstName: string;
-    lastName: string;
-    email: string;
-    username: string;
+export interface GetByUsernameQueryDto {
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
 }
 
-export interface GetByEmailQueryDto{
-    firstName: string;
-    lastName: string;
-    email: string;
-    username: string;
+export interface GetByEmailQueryDto {
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+}
+export interface UpdateUserPassword {
+  email: string;
+  newPassword: string;
 }

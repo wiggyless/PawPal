@@ -2,14 +2,13 @@
   background-color: var(--background-color);
   display: flex;
   width: 100%;
-  padding: 55px;
   flex-direction: column;
   gap: 50px;
 }
 
 .client-content-posts {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); 
+  grid-template-columns: repeat(4, 1fr);
   gap: 15px;
   justify-items: center;
 }
@@ -32,8 +31,7 @@
   position: relative;
   z-index: 2;
   transition: transform 0.4s ease;
-   box-shadow: 5px 10px 5px rgb(114, 82, 68);
-
+  box-shadow: 5px 10px 5px rgb(114, 82, 68);
 }
 
 .post:hover {
@@ -59,8 +57,8 @@
   color: #544120;
 }
 
-.my-post-title{
-   color: #473619;
+.my-post-title {
+  color: #473619;
   text-align: left;
   font-size: 35px;
   font-weight: 700;

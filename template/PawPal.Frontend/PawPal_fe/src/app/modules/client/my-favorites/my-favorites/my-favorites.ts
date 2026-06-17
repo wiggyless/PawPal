@@ -4,10 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { Observable, Subscription, tap } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
-import {
-  ListAnimal,
-  GetPostQuery,
-} from '../../../../api-services/animal-posts/animal-posts.model';
+import { ListAnimal, GetPostQuery } from '../../../../api-services/animal-posts/animal-posts.model';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 import { PageResult } from '../../../../core/models/paging/page-result';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
@@ -46,7 +43,7 @@ export class MyFavorites
   //listPostRange: ListPostsByRange|undefined;
   isLoaded = false;
   protected override loadPagedData(): void {}
-  
+
   page = {
     pageSize: 10,
     currentPage: 1,

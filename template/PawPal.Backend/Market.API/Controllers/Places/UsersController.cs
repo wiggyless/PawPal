@@ -2,6 +2,7 @@
 using PawPal.Application.Modules.Users.Commands.Create;
 using PawPal.Application.Modules.Users.Commands.Delete;
 using PawPal.Application.Modules.Users.Commands.Update;
+using PawPal.Application.Modules.Users.Commands.UpdatePassword;
 using PawPal.Application.Modules.Users.Queries.GetByEmail;
 using PawPal.Application.Modules.Users.Queries.GetById;
 using PawPal.Application.Modules.Users.Queries.GetByUsername;
@@ -42,6 +43,13 @@ namespace PawPal.API.Controllers.Places
         {
             uuc.Id = id;
             await sender.Send(uuc, ct);
+        }
+        [AllowAnonymous]
+        [HttpPut("passwordRecovery")]
+        public async Task<Unit> Update(UpdatePasswordCommand uuc, CancellationToken ct)
+        {
+            var result =  await sender.Send(uuc, ct);
+            return result;
         }
 
         [AllowAnonymous]

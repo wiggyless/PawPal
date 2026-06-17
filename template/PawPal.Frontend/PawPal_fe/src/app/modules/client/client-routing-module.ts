@@ -15,39 +15,18 @@ import { RequestHistory } from './request-history/request-history/request-histor
 const routes: Routes = [
   {
     path: '',
-    component: ClientLayout,
-  },
-  {
-    path: 'create-post',
-    component: CreatePost,
-  },
-  {
-    path: 'myPosts',
-    component: MyPosts,
-  },
-  {
-    path: 'my-requests',
-    component: MyRequests,
-  },
-  {
-    path: 'my-sent-requests',
-    component: MySentRequests,
-  },
-  {
-    path: 'my-requests-dialog',
-    component: MyRequestsDialog,
-  },
-  {
-    path: 'request-history',
-    component: RequestHistory,
-  },
-  {
-    path: 'my-favorties',
-    component: MyFavorites,
-  },
-  {
-    path: 'settings',
-    component: SettingsComponent,
+    component: ClientLayout, // this should contain <router-outlet>
+    children: [
+      { path: 'create-post', component: CreatePost },
+      { path: 'myPosts', component: MyPosts },
+      { path: 'my-profile', component: UserProfileComponent },
+      { path: 'my-requests', component: MyRequests },
+      { path: 'my-sent-requests', component: MySentRequests },
+      { path: 'my-requests-dialog', component: MyRequestsDialog },
+      { path: 'request-history', component: RequestHistory },
+      { path: 'my-favorties', component: MyFavorites }, // fixed typo
+      { path: 'settings', component: SettingsComponent },
+    ],
   },
 ];
 

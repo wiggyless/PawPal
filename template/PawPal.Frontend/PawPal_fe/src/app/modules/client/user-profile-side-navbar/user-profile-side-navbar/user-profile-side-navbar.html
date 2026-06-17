@@ -1,21 +1,20 @@
 <mat-nav-list class="user-profile-option-list">
-  @for(items of matListItems|keyvalue: keepOrder;track items.key) {
-  <mat-list-item
-    class="user-profile-option"
-    (click)="onSelect(items.key)"
-    [class.user-profile-option-bold]="selectedItem == items.key"
-    [routerLink]="items.value"
-    [state]="{
-      item: items.key
-    }"
-    >{{ items.key.replace('_', ' ') }}
-  </mat-list-item>
+  @for (items of matListItems | keyvalue: keepOrder; track items.key) {
+    <mat-list-item
+      class="user-profile-option"
+      (click)="onSelect(items.value)"
+      [class.user-profile-option-bold]="selItem == items.value"
+      [routerLink]="items.value"
+      [state]="{
+        item: items.key,
+      }"
+      >{{ items.key.replace('_', ' ') }}
+    </mat-list-item>
   }
 </mat-nav-list>
+
 <div class="user-profile-option-footer">
-  <div class="delete-profile-footer">
-   
-  </div>
+  <div class="delete-profile-footer"></div>
   <div class="logout-profile-footer">
     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 40 40" fill="none">
       <path
@@ -26,6 +25,8 @@
         stroke-linejoin="round"
       />
     </svg>
-    <a style="text-decoration:none; cursor:pointer; color:white" routerLink="/auth/logout">Logout</a>
+    <a style="text-decoration: none; cursor: pointer; color: white" routerLink="/auth/logout"
+      >Logout</a
+    >
   </div>
 </div>

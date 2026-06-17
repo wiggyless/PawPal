@@ -6,10 +6,12 @@ import { Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
 import { DialoguePopupService } from '../../../shared/components/dialogue-popup/dialogue-popup.service';
-import { ActivatedRoute } from '@angular/router'; 
+import { ActivatedRoute } from '@angular/router';
 import { AuthTimeoutService } from '../../../../core/services/auth/auth-timeout.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PasswordRecoveryDialog } from './password-recovery-dialog/password-recovery-dialog/password-recovery-dialog';
 
-declare const grecaptcha: any;  
+declare const grecaptcha: any;
 
 @Component({
   selector: 'app-login',
@@ -18,33 +20,32 @@ declare const grecaptcha: any;
   styleUrl: './login.scss',
 })
 export class LoginComponent extends BaseComponent implements OnInit {
-
-   private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder);
   private auth = inject(AuthFacadeService);
   private router = inject(Router);
   private currentUser = inject(CurrentUserService);
   private dialogueService = inject(DialoguePopupService);
-  private route = inject(ActivatedRoute)
+  private route = inject(ActivatedRoute);
   private authTimeoutService = inject(AuthTimeoutService);
+  private dialog = inject(MatDialog);
   showPassword = false;
 
   ngOnInit(): void {
-  const message = this.route.snapshot.queryParamMap.get('message');
-  if (message) {
-    this.dialogueService.success('Registration Successful!', message);
+    const message = this.route.snapshot.queryParamMap.get('message');
+    if (message) {
+      this.dialogueService.success('Registration Successful!', message);
+    }
+
+    // always render captcha, not just when there's a message
+    setTimeout(() => {
+      if (typeof grecaptcha !== 'undefined') {
+        grecaptcha.render('recaptcha-container', {
+          sitekey: '6Le7KPcsAAAAAPFwAFtqrrAaxMiQqNIRyxaAuyAu',
+        });
+      }
+    }, 500);
   }
 
-  // always render captcha, not just when there's a message
-  setTimeout(() => {
-    if (typeof grecaptcha !== 'undefined') {
-      grecaptcha.render('recaptcha-container', {
-        sitekey: '6Le7KPcsAAAAAPFwAFtqrrAaxMiQqNIRyxaAuyAu'
-      });
-    }
-  }, 500);
-}
- 
-  
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
@@ -54,10 +55,10 @@ export class LoginComponent extends BaseComponent implements OnInit {
     if (this.form.invalid) return;
 
     if (typeof grecaptcha === 'undefined') {
-  alert('CAPTCHA not loaded yet. Please wait a moment and try again.');
-  return;
-}
-     const token = grecaptcha.getResponse();
+      alert('CAPTCHA not loaded yet. Please wait a moment and try again.');
+      return;
+    }
+    const token = grecaptcha.getResponse();
 
     if (!token) {
       this.dialogueService.error('CAPTCHA Required', 'Please complete the CAPTCHA to proceed.');
@@ -68,26 +69,35 @@ export class LoginComponent extends BaseComponent implements OnInit {
       email: this.form.value.email ?? '',
       password: this.form.value.password ?? '',
       fingerprint: null,
-        recaptchaToken: token,
+      recaptchaToken: token,
     };
     console.log(payload);
     this.auth.login(payload).subscribe({
       next: () => {
         const target = this.currentUser.getDefaultRoute();
         this.authTimeoutService.startExpirationTracker();
-        this.router.navigate([target]);
+        this.router.navigate(['/']);
         grecaptcha.reset();
       },
       error: (err) => {
-        this.dialogueService.error('Login Failed', err.error?.message || 'An error occurred during login. Please try again.');
+        this.dialogueService.error(
+          'Login Failed',
+          err.error?.message || 'An error occurred during login. Please try again.',
+        );
         console.error('Login error:', err);
         grecaptcha.reset();
       },
     });
-    
   }
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
+  }
+  loadPasswordRecoveryDialog() {
+    this.dialog.open(PasswordRecoveryDialog, {
+      width: '50%',
+      panelClass: 'transparent-dialog-panel', // Your custom class name
+      hasBackdrop: true,
+    });
   }
 }

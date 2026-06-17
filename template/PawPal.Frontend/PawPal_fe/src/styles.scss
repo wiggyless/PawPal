@@ -212,3 +212,16 @@ body.dark-theme {
 .p-button-icon-only {
   width: 100%;
 }
+.blurred-dialog-backdrop {
+  // Removes the background completely
+  --mdc-dialog-container-color: transparent;
+
+  // Removes the default drop shadow elevation
+  box-shadow: none !important;
+}
+
+// Alternative selector target if the variable does not override it fully
+.transparent-dialog-panel .mdc-dialog__surface {
+  background: transparent !important;
+  box-shadow: none !important;
+}
