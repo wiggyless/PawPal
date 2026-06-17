@@ -45,5 +45,7 @@ public interface IAppDbContext
     DbSet<UserImage> UserImage { get; }
     DbSet<SecurityQuestion> SecurityQuestions { get; }
     DbSet<SecurityAnswers> SecurityAnswers { get; }
+    DbSet<ConversationEntity> Conversations { get; }
+    DbSet<MessageEntity> Messages { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

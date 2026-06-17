@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { myAuthGuard } from './core/guards/my-auth-guard';
-import { PreloadDashboardStrategy } from './core/preload/preload-strategy';
+import { Adoption } from './modules/client/adpotion/adoption/adoption';
+import { LoginComponent } from './modules/auth/login/login/login';
+import { Messaging } from './modules/client/messaging/messaging';
 
 const routes: Routes = [
   {
@@ -18,11 +20,15 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./modules/auth/auth-module').then((m) => m.AuthModule),
   },
+  
+  {path: 'client/messaging',
+    component: Messaging,
+    loadChildren: () => ClientModule,
+  },
   {
-    path: 'client',
-    canActivate: [myAuthGuard],
-    data: { requireAuth: true },
-    loadChildren: () => import('./modules/client/client-module').then((m) => m.ClientModule),
+    path: 'client', 
+    component: PublicLayout,
+    loadChildren: () => PublicModule,
   },
 ];
 @NgModule({

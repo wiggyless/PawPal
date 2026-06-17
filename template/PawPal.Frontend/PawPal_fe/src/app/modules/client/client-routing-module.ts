@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { UserProfileComponent } from './my-profile/user-profile-component/user-profile-component';
 import { ClientLayout } from './client-layout/client-layout/client-layout';
-import { SharedModule } from 'primeng/api';
-import { PublicLayout } from '../public/public-layout/public-layout';
 import { MyPosts } from './my-posts/my-posts';
 import { CreatePost } from './create-post/create-post';
 import { MyRequests } from './my-requests/my-requests/my-requests';
@@ -12,6 +9,7 @@ import { MyFavorites } from './my-favorites/my-favorites/my-favorites';
 import { SettingsComponent } from './settings/settings-component';
 import { MySentRequests } from './my-sent-requests/my-sent-requests/my-sent-requests';
 import { RequestHistory } from './request-history/request-history/request-history';
+import { Messaging } from './messaging/messaging';
 const routes: Routes = [
   {
     path: '',
@@ -28,6 +26,10 @@ const routes: Routes = [
       { path: 'settings', component: SettingsComponent },
     ],
   },
+  {
+    path: 'messaging', 
+    component: Messaging,
+  }
 ];
 
 @NgModule({

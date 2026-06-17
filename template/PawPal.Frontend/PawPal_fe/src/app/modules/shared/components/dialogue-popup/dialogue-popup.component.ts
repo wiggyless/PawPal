@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DialoguePopupService } from './dialogue-popup.service';
-import { DialogueType } from './dialogue-popup.model';
+import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
+import { DialoguePopup, DialogueType } from '../../../../api-services/dialogue-popup/dialogue-popup.model';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'; //for some reason the icons didnt wanna load so i had to use these imports 
 
 const ICONS: Record<DialogueType, string> = {
@@ -25,7 +25,8 @@ const ICONS: Record<DialogueType, string> = {
           <div class="toast-title">{{ n.title }}</div>
           <div class="toast-msg">{{ n.message }}</div>
         </div>
-        <button class="primarybtn" (click)="service.dismiss(n.id)"> {{n.buttonText || 'OK'}}</button>
+        <button class="primarybtn" (click)="handleConfirm(n)">{{ n.buttonText || 'OK' }}</button>
+        <button *ngIf="n.secondaryButtonText" class="secondarybtn" (click)="handleSecondary(n)">{{ n.secondaryButtonText }}</button>
       </div>
     }
   </div>
@@ -39,4 +40,14 @@ private sanitizer = inject(DomSanitizer);
  getIcon(type: DialogueType): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(ICONS[type]);
   }
+
+  handleConfirm(n: DialoguePopup) {
+  n.onConfirm?.();
+  this.service.dismiss(n.id);
 }
+handleSecondary(n: DialoguePopup) {
+  n.onSecondary?.();
+  this.service.dismiss(n.id);
+}
+}
+

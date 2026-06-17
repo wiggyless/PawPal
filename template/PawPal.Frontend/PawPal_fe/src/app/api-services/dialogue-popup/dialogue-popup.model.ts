@@ -8,4 +8,6 @@ export interface DialoguePopup {
   buttonText?: string;
   secondaryButtonText?: string;
   delete: boolean;
+  onConfirm?: () => void; 
+  onSecondary?: () => void;
 }
