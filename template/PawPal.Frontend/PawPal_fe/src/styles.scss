@@ -46,6 +46,7 @@ html {
   --card-background-color: #e1c99f;
   --card-background-second-color: #cdb58b;
   --card-text-color: #1c1c1c;
+  --card-shadow-color: #b09c85;
   // catalog and post details will share the same variables (post.scss and catalog.scss)
   --catalog-first-layer-color: #413421;
   --catalog-second-layer-color: #51432d;
@@ -64,6 +65,7 @@ html {
   --footer-second-background-color: #372a13;
   --footer-text-color: #e5d7c4;
   --footer-copyright-bar-color: #1c1813;
+  --side-navbar-option-footer-bg-color: #372a13;
 
   --text-color: #473619;
   --title-text-color: #473619;
@@ -73,40 +75,21 @@ html {
 
   --paginator-color: #4e3716;
 }
-/*
-entire page background: 201811
 
-navbar: 432E1F (napravi gradient where the top is a little darker)
-primary button: 3B4B23 - samo mu se mijenja bg colour
-secondary button ostaje isti
-
-footer: 432E1F (gradient where the bottom is darker)
-footer text: C7B18C
-footer copyright bar: 161410
-
-catalog background: 432E1F
-catalog background 2: 362518
-
-card: 705037
-card text: F1DBB6
-
-combobox, datepicker, textbox background: E5CEA7
-
-most of the text, except in the cards: C7B18C
-*/
 body.dark-theme {
   --background-color: #201811;
-
+  --background-color-second: #362517;
   --navbar-color: #432e1f;
   --navbar-color-second: #3a281c;
   --navbar-text-color: #c7b18c;
   --side-navbar-text-color: #c7b18c;
-  --side-navbar-first-bg-color: #432e1f;
+  --side-navbar-first-bg-color: #271a11;
   --side-navbar-second-bg-color: #3a281c;
   --side-navbar-text-hover-color: #e5d7c41a;
 
   --card-background-color: #705037;
   --card-text-color: #f1dbb6;
+  --card-shadow-color: #3b2c1c;
 
   --catalog-first-layer-color: #432e1f;
   --catalog-second-layer-color: #362518;
@@ -117,10 +100,11 @@ body.dark-theme {
 
   --primary-button-color: #3b4b23;
 
-  --footer-bottom-background-color: #432e1f;
+  --footer-bottom-background-color: #2a1d14;
   --footer-second-background-color: #432e1f;
   --footer-text-color: #c7b18c;
   --footer-copyright-bar-color: #161410;
+  --side-navbar-option-footer-bg-color: #130e0b;
 
   --default-userImage-color: #e5cea7;
 
@@ -224,4 +208,7 @@ body.dark-theme {
 .transparent-dialog-panel .mdc-dialog__surface {
   background: transparent !important;
   box-shadow: none !important;
+}
+.mdc-text-field--filled{
+  background-color: var(--box-color) !important;
 }

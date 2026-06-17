@@ -16,7 +16,8 @@ body {
 
 .poslati-zahtjevi-container {
   width: 100%;
-  padding: 55px;
+   padding: 35px;
+
   background-color: var(--background-color);
 }
 
@@ -61,7 +62,7 @@ body {
 }
 
 .my-post-title{
-   color: #473619;
+    color: var(--title-text-color);
   text-align: left;
   font-size: 35px;
   font-weight: 700;

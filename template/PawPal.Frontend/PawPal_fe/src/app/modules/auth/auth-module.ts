@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { AuthRoutingModule } from './auth-routing-module';
 import { LoginComponent } from './login/login/login';
 import { AuthLayout } from './auth-layout/auth-layout/auth-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import {
   MatInput,

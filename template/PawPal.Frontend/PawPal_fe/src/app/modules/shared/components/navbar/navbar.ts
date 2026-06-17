@@ -1,8 +1,6 @@
 import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { PublicRoutingModule } from '../../../public/public-routing-module';
-import { CommonModule } from '@angular/common';
-import { ClientModule } from '../../../client/client-module';
 import { SharedModule } from 'primeng/api';
 import { DyanmicThemeService } from '../../../../core/services/dynamic-theme.service';
 import {
@@ -66,7 +64,7 @@ export class NavbarComponent {
     this.dynamicThemeService.toggleTheme();
   }
 
-  toggleNotifications(): void {
+ toggleNotifications(): void {
     this.notificationsOpen = !this.notificationsOpen;
     if (this.notificationsOpen) {
       this.notificationService.markAllAsRead();

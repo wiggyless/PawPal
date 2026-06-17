@@ -125,4 +125,9 @@ export class AuthFacadeService {
     this.storage.clear();
     console.log('Storage cleared!');
   }
+  resendConfirmationEmail(email: string): Observable<void> {
+  return this.api.resendConfirmationEmail(email).pipe(
+    map(() => void 0)
+  );
+}
 }

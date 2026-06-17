@@ -15,8 +15,9 @@ export class ConfirmEmailComponent implements OnInit {
   private auth = inject(AuthFacadeService);
   public router = inject(Router);
 
-  status: 'loading' | 'success' | 'error' = 'loading';
-
+  status: 'loading' | 'success' | 'error' | 'expired' = 'loading';
+email: string | null = null;
+resendSuccess: boolean = false;
   ngOnInit(): void {
     const token = this.route.snapshot.queryParamMap.get('token');
 
@@ -30,9 +31,22 @@ export class ConfirmEmailComponent implements OnInit {
         this.status = 'success';
         setTimeout(() => this.router.navigate(['/auth/login']), 3000);
       },
-      error: () => {
+       error: (err) => {
+      const message = err?.error?.message ?? '';
+      if (message.toLowerCase().includes('expired')) {
+        this.status = 'expired';
+      } else {
         this.status = 'error';
       }
+    }
     });
   }
+  resendEmail(): void {
+  if (!this.email) return;
+  this.auth.resendConfirmationEmail(this.email).subscribe({
+    next: () => this.resendSuccess = true,
+    error: () => alert('Something went wrong. Please try again.')
+  });
+}
+  
 }

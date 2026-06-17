@@ -29,7 +29,8 @@ export class LoginComponent extends BaseComponent implements OnInit {
   private authTimeoutService = inject(AuthTimeoutService);
   private dialog = inject(MatDialog);
   showPassword = false;
-
+  showResend = false;
+  resendSuccess = false;
   ngOnInit(): void {
     const message = this.route.snapshot.queryParamMap.get('message');
     if (message) {
@@ -46,6 +47,16 @@ export class LoginComponent extends BaseComponent implements OnInit {
     }, 500);
   }
 
+  setTimeout(() => {
+    if (typeof grecaptcha !== 'undefined') {
+      grecaptcha.render('recaptcha-container', {
+        sitekey: '6Le7KPcsAAAAAPFwAFtqrrAaxMiQqNIRyxaAuyAu'
+      });
+    }
+  }, 500);
+}
+ 
+  
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
@@ -80,10 +91,11 @@ export class LoginComponent extends BaseComponent implements OnInit {
         grecaptcha.reset();
       },
       error: (err) => {
-        this.dialogueService.error(
-          'Login Failed',
-          err.error?.message || 'An error occurred during login. Please try again.',
-        );
+        const message = err.error?.message || '';
+  if (message.toLowerCase().includes('verify') || message.toLowerCase().includes('confirmed')) {
+    this.showResend = true;
+      }
+        this.dialogueService.error('Login Failed', err.error?.message || 'An error occurred during login. Please try again.');
         console.error('Login error:', err);
         grecaptcha.reset();
       },
@@ -100,4 +112,12 @@ export class LoginComponent extends BaseComponent implements OnInit {
       hasBackdrop: true,
     });
   }
+
+  resendEmail(): void {
+  const email = this.form.value.email ?? '';
+  this.auth.resendConfirmationEmail(email).subscribe({
+    next: () => this.resendSuccess = true,
+    error: () => this.dialogueService.error('Error', 'Could not resend confirmation email. Please try again.')
+  });
+}
 }

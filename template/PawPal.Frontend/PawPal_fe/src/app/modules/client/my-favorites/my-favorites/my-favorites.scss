@@ -28,7 +28,7 @@
   position: relative;
   z-index: 2;
   transition: transform 0.4s ease;
-  box-shadow: 5px 10px 5px rgb(114, 82, 68);
+  box-shadow: 5px 10px 5px var(--card-shadow-color);
 }
 
 .post:hover {
@@ -41,17 +41,17 @@
   height: 200px;
 }
 .post-detail {
-  background-image: linear-gradient(#e1c99f, #cdb58b);
+  background-color: var(--card-background-color);
   padding: 5px;
   border-radius: 0px 0px 10px 10px;
 }
 .post-detail h3 {
   margin-top: 0px;
-  color: #2b2212;
+ color:var(--card-text-color);
 }
 .post-detail p {
   margin-bottom: 0px;
-  color: #544120;
+  color:var(--card-text-color);
 }
 .my-post-title {
   color: var(--title-text-color);
@@ -76,6 +76,7 @@
 .post-info {
   text-align: center;
   background-color: var(--card-background-color);
+  color:var(--card-text-color);
   width: 100%;
   position: relative;
   height: 25%;
@@ -85,18 +86,19 @@
 .post-info-name {
   font-weight: bold;
   font-size: 25px;
+  color:var(--card-text-color);
 }
 
 .loading-container {
   display: flex;
-  justify-content: center; /* Horizontal centering */
-  align-items: center; /* Vertical centering */
+  justify-content: center; 
+  align-items: center; 
   height: 100%;
   flex-direction: column;
   padding: 50px;
 }
 .loading-spinner-text {
-  color: black;
+  color: var(--card-text-color);
   margin-bottom: 20px;
   font-size: 30px;
   font-weight: 700;

@@ -66,3 +66,7 @@ export interface LogoutCommand {
 export interface ConfirmEmailCommandDto {
   message: string;
 }
+
+export interface ResendConfirmationEmailCommand {
+  email: string;
+}

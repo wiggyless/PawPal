@@ -8,7 +8,8 @@ import {
   RefreshTokenCommand,
   RefreshTokenCommandDto,
   LogoutCommand,
-  ConfirmEmailCommandDto
+  ConfirmEmailCommandDto,
+  ResendConfirmationEmailCommand
 } from './auth-api.model';
 
 @Injectable({
@@ -50,5 +51,8 @@ confirmEmail(token: string): Observable<ConfirmEmailCommandDto> {
   return this.http.get<ConfirmEmailCommandDto>(`${this.baseUrl}/confirm-email`, {
     params: { token }
   });
+}
+resendConfirmationEmail(email: string): Observable<ResendConfirmationEmailCommand> {
+  return this.http.post<ResendConfirmationEmailCommand>(`${environment.apiUrl}/Users/resend-confirmation`, { email });
 }
 }
