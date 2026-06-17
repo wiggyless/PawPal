@@ -6,6 +6,8 @@ import { LogoutComponent } from './logout/logout/logout';
 import { ClientLayout } from '../client/client-layout/client-layout/client-layout';
 import { RegisterComponent } from './register/register-component/register-component';
 import { ConfirmEmailComponent } from './confirm-email/confirm-email';
+import { PublicLayout } from '../public/public-layout/public-layout';
+import { PreloadDashboardStrategy } from '../../core/preload/preload-strategy';
 
 const routes: Routes = [
   {
@@ -17,8 +19,8 @@ const routes: Routes = [
         component: LoginComponent,
       },
       { path: 'logout', component: LogoutComponent },
-      {path: 'register', component:RegisterComponent},
-       { path: 'confirm-email', component: ConfirmEmailComponent },
+      { path: 'register', component: RegisterComponent },
+      { path: 'confirm-email', component: ConfirmEmailComponent },
     ],
   },
 ];

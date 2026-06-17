@@ -1,0 +1,34 @@
+.crop-dialog-final-buttons {
+  display: flex;
+  flex-direction: row;
+  column-gap: 10px;
+  width: 100%;
+  justify-content: end;
+}
+.crop-dialog {
+  padding: 20px;
+  background-color: var(--background-color);
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  position: relative;
+}
+.crop-dialog-title {
+  color: var(--title-text-color);
+}
+.crop-dialog-actions {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  flex-wrap: nowrap;
+}
+.crop-dialog-rotate-buttons {
+  column-gap: 10px;
+  display: flex;
+  flex-direction: row;
+}

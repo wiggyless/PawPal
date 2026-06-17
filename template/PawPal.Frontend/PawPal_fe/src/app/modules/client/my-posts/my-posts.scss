@@ -2,14 +2,13 @@
   background-color: var(--background-color);
   display: flex;
   width: 100%;
-  padding: 35px;
   flex-direction: column;
   gap: 50px;
 }
 
 .client-content-posts {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); 
+  grid-template-columns: repeat(4, 1fr);
   gap: 15px;
   justify-items: center;
 }
@@ -57,7 +56,17 @@
 }
 .post-detail p {
   margin-bottom: 0px;
-  color: var(--card-text-color);
+  color: #544120;
+}
+
+.my-post-title {
+    color: var(--card-text-color);
+  text-align: left;
+  font-size: 35px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+
 }
 
 .post-image img {

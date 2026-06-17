@@ -16,6 +16,7 @@ export class CurrentUserService {
   get snapshot() {
     return this.auth.currentUser();
   }
+  email = computed(() => this.auth.email());
 
   /** Pravilo: admin > ostali → client */
   getDefaultRoute(): string {
@@ -23,6 +24,6 @@ export class CurrentUserService {
     if (!user) return '/login';
 
     if (user.roleid == 3) return '/admin';
-    return '/client';
+    return '/client/my-profile';
   }
 }

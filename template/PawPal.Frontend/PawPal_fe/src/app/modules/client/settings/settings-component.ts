@@ -3,7 +3,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogueComponent } from '../dialogue-component/dialogue-component';
 import { CurrentUserService } from '../../../core/services/auth/current-user.service';
 import { UserService } from '../../../api-services/users/users-service';
-
+import { DialoguePopupService } from '../../shared/components/dialogue-popup/dialogue-popup.service';
+import { SecurityQuestionsDialog } from './securityQuestions-dialog/security-questions-dialog/security-questions-dialog';
 @Component({
   selector: 'app-settings',
   standalone: false,
@@ -21,7 +22,7 @@ export class SettingsComponent implements OnInit {
   currentPassword: string = '';
   newPassword: string = '';
   confirmPassword: string = '';
-
+  dialogPopUp = inject(DialoguePopupService);
   ngOnInit(): void {
     this.userService.getUser(this.currentUser.userId() as number).subscribe((res) => {
       this.userEmail = res.email;
@@ -74,5 +75,8 @@ export class SettingsComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = { postDelete: false, profileDelete: true };
     this.dialog.open(DialogueComponent, dialogConfig);
+  }
+  enableSecurityQuestions() {
+    this.dialog.open(SecurityQuestionsDialog);
   }
 }

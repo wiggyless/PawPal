@@ -1,0 +1,28 @@
+.security-dialog {
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  row-gap: 20px;
+}
+.security-title {
+  color: var(--title-text-color);
+  font-size: 30px;
+}
+.security-form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+.security-form-container {
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
+}
+.buttons-wrapper {
+  display: flex;
+  flex-direction: row;
+  column-gap: 10px;
+}

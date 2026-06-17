@@ -1,9 +1,8 @@
-
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of, tap, catchError, map } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
-import {NotificationService} from '../notifications/notification.service';
+import { NotificationService } from '../notifications/notification.service';
 import { AuthApiService } from '../../../api-services/auth/auth-api.service';
 import {
   LoginCommand,
@@ -30,21 +29,22 @@ export class AuthFacadeService {
 
   roleid = computed(() => this.currentUser()?.roleid ?? 1);
   userId = computed(() => this.currentUser()?.userId ?? null);
+  email = computed(() => this.currentUser()?.email ?? null);
   constructor() {
     this.initializeFromToken();
   }
 
- login(payload: LoginCommand): Observable<void> {
-  return this.api.login(payload).pipe(
-    tap((response: LoginCommandDto) => {
-      this.storage.saveLogin(response);
-      this.decodeAndSetUser(response.accessToken);
-      this.notificationService.checkPermission(); // this already calls listenForeground internally
-      // REMOVE the extra if(Notification.permission === 'granted') listenForeground() call
-    }),
-    map(() => void 0),
-  );
-}
+  login(payload: LoginCommand): Observable<void> {
+    return this.api.login(payload).pipe(
+      tap((response: LoginCommandDto) => {
+        this.storage.saveLogin(response);
+        this.decodeAndSetUser(response.accessToken);
+        this.notificationService.checkPermission(); // this already calls listenForeground internally
+        // REMOVE the extra if(Notification.permission === 'granted') listenForeground() call
+      }),
+      map(() => void 0),
+    );
+  }
 
   logout(): Observable<void> {
     const refreshToken = this.storage.getRefreshToken();
@@ -61,17 +61,15 @@ export class AuthFacadeService {
     return this.api.refresh(payload).pipe(
       tap((response: RefreshTokenCommandDto) => {
         console.log('Poslat refresh');
-        this.storage.saveRefresh(response); 
+        this.storage.saveRefresh(response);
         this.decodeAndSetUser(response.accessToken);
       }),
     );
   }
 
   confirmEmail(token: string): Observable<void> {
-  return this.api.confirmEmail(token).pipe(
-    map(() => void 0)
-  );
-}
+    return this.api.confirmEmail(token).pipe(map(() => void 0));
+  }
 
   timeoutRefresh(payload: RefreshTokenCommand) {
     this.api.refresh(payload).subscribe((response) => {
@@ -80,7 +78,7 @@ export class AuthFacadeService {
       this.decodeAndSetUser(response.accessToken);
     });
   }
- 
+
   redirectToLogin(): void {
     this.clearUserState();
     this.router.navigate(['/auth/login']);
@@ -94,13 +92,13 @@ export class AuthFacadeService {
     return this.storage.getRefreshToken();
   }
 
- private initializeFromToken(): void {
-  const token = this.storage.getAccessToken();
-  if (token) {
-    this.decodeAndSetUser(token);
-    this.notificationService.checkPermission(); // handles everything internally
+  private initializeFromToken(): void {
+    const token = this.storage.getAccessToken();
+    if (token) {
+      this.decodeAndSetUser(token);
+      this.notificationService.checkPermission(); // handles everything internally
+    }
   }
-}
 
   private decodeAndSetUser(token: string): void {
     try {

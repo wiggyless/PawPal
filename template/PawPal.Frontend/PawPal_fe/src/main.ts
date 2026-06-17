@@ -5,7 +5,10 @@ import { initializeApp } from 'firebase/app';
 
 initializeApp(environment.firebase);
 
-platformBrowser().bootstrapModule(AppModule, {
-  ngZoneEventCoalescing: true,
-})
-  .catch(err => console.error(err));
+initializeApp(environment.firebase);
+
+platformBrowser()
+  .bootstrapModule(AppModule, {
+    ngZoneEventCoalescing: true,
+  })
+  .catch((err) => console.error(err));

@@ -8,6 +8,7 @@ using PawPal.Domain.Entities.Messaging;
 using PawPal.Domain.Entities.News;
 using PawPal.Domain.Entities.Places;
 using PawPal.Domain.Entities.Posts;
+using PawPal.Domain.Entities.Security;
 
 namespace PawPal.Application.Abstractions;
 
@@ -42,5 +43,7 @@ public interface IAppDbContext
     DbSet<BreedEntity> Breeds { get; }
     DbSet<PostImagesEntity> PostImages { get; }
     DbSet<UserImage> UserImage { get; }
+    DbSet<SecurityQuestion> SecurityQuestions { get; }
+    DbSet<SecurityAnswers> SecurityAnswers { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }
