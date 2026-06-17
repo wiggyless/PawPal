@@ -19,69 +19,73 @@ export class NotificationService {
   private apiUrl = environment.apiUrl + '/Notifications';
   private zone = inject(NgZone);
 
-    notifications = signal<AppNotification[]>([]);
-    unreadCount = computed(() => this.notifications().filter(n => !n.read).length);
+  notifications = signal<AppNotification[]>([]);
+  unreadCount = computed(() => this.notifications().filter((n) => !n.read).length);
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
   async requestPermission(): Promise<boolean> {
-  const permission = await Notification.requestPermission();
-  return permission === 'granted';
-}
+    const permission = await Notification.requestPermission();
+    return permission === 'granted';
+  }
 
-permissionState = signal<NotificationPermission | null>(null);
+  permissionState = signal<NotificationPermission | null>(null);
 
-async checkPermission() {
-  const permission = Notification.permission;
-  console.log('checkPermission called, state:', permission);
-  this.permissionState.set(permission);
+  async checkPermission() {
+    const permission = Notification.permission;
+    console.log('checkPermission called, state:', permission);
+    this.permissionState.set(permission);
 
-  // already granted - register token silently
-  if (permission === 'granted') {
+    // already granted - register token silently
+    if (permission === 'granted') {
+      await this.registerToken();
+      this.listenForeground();
+    }
+  }
+
+  // extract token registration into its own method
+  private async registerToken() {
+    const token = await getToken(this.messaging, {
+      vapidKey:
+        'BGeG2YJ7c5X-SuyD9LkB36cssHI1FEflumZcdaBo8sfz0ATutIqzTMU2RzREPnWs2w0zoCTDR_g9S2EExadeLNM',
+    });
+    this.http.post(`${this.apiUrl}/register-token`, { token }).subscribe({
+      next: () => console.log('FCM token registered'),
+      error: (err) => console.error('Failed to register token', err),
+    });
+  }
+
+  async requestPermissionAndRegister() {
+    const permission = await Notification.requestPermission();
+    this.permissionState.set(permission);
+
+    if (permission !== 'granted') {
+      console.warn('Permission denied');
+      return;
+    }
+
     await this.registerToken();
     this.listenForeground();
   }
-}
+  private foregroundListening = false;
 
-// extract token registration into its own method
-private async registerToken() {
-  const token = await getToken(this.messaging, {
-    vapidKey: 'BGeG2YJ7c5X-SuyD9LkB36cssHI1FEflumZcdaBo8sfz0ATutIqzTMU2RzREPnWs2w0zoCTDR_g9S2EExadeLNM'
-  });
-  this.http.post(`${this.apiUrl}/register-token`, { token }).subscribe({
-    next: () => console.log('FCM token registered'),
-    error: (err) => console.error('Failed to register token', err)
-  });
-}
+  listenForeground() {
+    if (this.foregroundListening) return; // prevent duplicate listeners
+    this.foregroundListening = true;
+    console.log('listenForeground registered');
 
-async requestPermissionAndRegister() {
-  const permission = await Notification.requestPermission();
-  this.permissionState.set(permission);
-
-  if (permission !== 'granted') {
-    console.warn('Permission denied');
-    return;
-  }
-
-  await this.registerToken();
-  this.listenForeground();
-}
-private foregroundListening = false;
-
-listenForeground() {
-  if (this.foregroundListening) return; // prevent duplicate listeners
-  this.foregroundListening = true;
-  console.log('listenForeground registered');
-
-  // FCM foreground messages
-  onMessage(this.messaging, (payload) => {
-    console.log('Foreground message received', payload);
-    this.zone.run(() => {
+    // FCM foreground messages
+    onMessage(this.messaging, (payload) => {
+      console.log('Foreground message received', payload);
+      this.zone.run(() => {
         this.addNotification(payload);
       });
-  });
+    });
 
-  // Service worker messages (background click / background notification)
+    // Service worker messages (background click / background notification)
     navigator.serviceWorker.addEventListener('message', (event) => {
       // CRITICAL FIX: Wrap this inside zone execution
       this.zone.run(() => {
@@ -94,42 +98,37 @@ listenForeground() {
         }
       });
     });
-}
+  }
 
-// Extract into a helper to avoid duplication
-private addNotification(payload: any) {
-  const notification: AppNotification = {
-    id: crypto.randomUUID(),
-    title: payload.notification?.title ?? 'New notification',
-    body: payload.notification?.body ?? '',
-    redirectUrl: payload.data?.['redirectUrl'] ?? '/',
-    read: false,
-    timestamp: new Date()
-  };
-  this.notifications.update(current => [notification, ...current]);
-}
+  // Extract into a helper to avoid duplication
+  private addNotification(payload: any) {
+    const notification: AppNotification = {
+      id: crypto.randomUUID(),
+      title: payload.notification?.title ?? 'New notification',
+      body: payload.notification?.body ?? '',
+      redirectUrl: payload.data?.['redirectUrl'] ?? '/',
+      read: false,
+      timestamp: new Date(),
+    };
+    this.notifications.update((current) => [notification, ...current]);
+  }
 
-    navigateTo(notification: AppNotification) {
+  navigateTo(notification: AppNotification) {
     this.markAsRead(notification.id);
     this.router.navigate([notification.redirectUrl]);
   }
 
   markAsRead(id: string) {
-    this.notifications.update(current =>
-      current.map(n => n.id === id ? { ...n, read: true } : n)
+    this.notifications.update((current) =>
+      current.map((n) => (n.id === id ? { ...n, read: true } : n)),
     );
   }
 
   markAllAsRead() {
-    this.notifications.update(current =>
-      current.map(n => ({ ...n, read: true }))
-    );
+    this.notifications.update((current) => current.map((n) => ({ ...n, read: true })));
   }
 
   clearAll() {
     this.notifications.set([]);
   }
-
-  
-
 }

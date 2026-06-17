@@ -1,0 +1,33 @@
+<div class="crop-dialog">
+  <div class="crop-dialog-header">
+    <h2 class="crop-dialog-title">Crop Profile Photo</h2>
+  </div>
+
+  <div class="crop-dialog-body">
+    <image-cropper
+      [imageFile]="data.imageFile"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="1"
+      [roundCropper]="true"
+      [canvasRotation]="rotation"
+      format="png"
+      (imageCropped)="onCropped($event)"
+      (loadImageFailed)="onLoadFailed()"
+    />
+  </div>
+
+  <div class="crop-dialog-actions">
+    <div class="crop-dialog-rotate-buttons">
+      <button class="primarybtn" (click)="rotation = rotation - 1">
+        <mat-icon>rotate_left</mat-icon>
+      </button>
+      <button class="primarybtn" (click)="rotation = rotation + 1">
+        <mat-icon>rotate_right</mat-icon>
+      </button>
+    </div>
+    <div class="crop-dialog-final-buttons">
+      <button class="secondarybtn" (click)="onCancel()">Cancel</button>
+      <button class="primarybtn" [disabled]="!croppedEvent" (click)="onConfirm()">Apply</button>
+    </div>
+  </div>
+</div>

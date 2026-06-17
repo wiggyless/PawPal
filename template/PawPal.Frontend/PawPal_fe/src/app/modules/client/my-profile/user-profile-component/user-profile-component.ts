@@ -12,6 +12,11 @@ import {
   UserImageQuery,
 } from '../../../../api-services/userImage/userImage-model';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  CropDialogResult,
+  UserProfileImageCropDialog,
+} from './user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
 
 @Component({
   selector: 'app-user-profile-component',
@@ -70,6 +75,7 @@ export class UserProfileComponent implements OnInit {
   currentUser: CurrentUserService;
   userDataService: UserService;
   dialog = inject(DialoguePopupService);
+  dialogRef = inject(MatDialog);
   cityService = inject(CitiesService);
   userImageService = inject(UserImageService);
   cd = inject(ChangeDetectorRef);
@@ -152,68 +158,70 @@ export class UserProfileComponent implements OnInit {
     this.profileForm.enable();
     this.profileForm.get('city')?.setValue(this.originalCityId, { emitEvent: false });
   }
- saveChanges() {
-  this.editing = false;
-  
-  const cityValue = this.profileForm.get('city')?.value;
-  const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;
-  
-  const firstName = (this.profileForm.get('firstName')?.value as string) || this.userData.firstName;
-  const lastName = (this.profileForm.get('lastName')?.value as string) || this.userData.lastName;
-  const aboutMe = (this.profileForm.get('aboutMe')?.value as string) || this.userData.aboutMe || '';
-  const date = (this.profileForm.get('date')?.value as string) || this.userData.dateTime;
-  
-  const formChanged = this.hasFormFieldChanges(cityId);
-  const imageChanged = this.hasImageChanges();
+  saveChanges() {
+    this.editing = false;
 
-  this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
-  
-  if (!formChanged && !imageChanged) {
-    return;
-  }
-  
-  const requests: any = {};
-  
-  if (formChanged) {
-    const payload: UpdateUserCommand = {
-      firstName: firstName,
-      lastName: lastName,
-      profilePictureURL: this.originalUrl ?? '', 
-      date: date,
-      cityId: cityId,
-      aboutMe: aboutMe,
-    };
-    requests.userPostData = this.userDataService.updateUser(this.userData.id, payload);
-  }
-  if (imageChanged) {
-    requests.userImage = this.isUpdate
-    ? this.userImageService.updateUserImage(this.userData.id, this.selectedImage!)
-    : this.userImageService.createUserImage(this.userData.id, this.selectedImage!);
-  }
-  
+    const cityValue = this.profileForm.get('city')?.value;
+    const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;
+
+    const firstName =
+      (this.profileForm.get('firstName')?.value as string) || this.userData.firstName;
+    const lastName = (this.profileForm.get('lastName')?.value as string) || this.userData.lastName;
+    const aboutMe =
+      (this.profileForm.get('aboutMe')?.value as string) || this.userData.aboutMe || '';
+    const date = (this.profileForm.get('date')?.value as string) || this.userData.dateTime;
+
+    const formChanged = this.hasFormFieldChanges(cityId);
+    const imageChanged = this.hasImageChanges();
+
+    this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+
+    if (!formChanged && !imageChanged) {
+      return;
+    }
+
+    const requests: any = {};
+
+    if (formChanged) {
+      const payload: UpdateUserCommand = {
+        firstName: firstName,
+        lastName: lastName,
+        profilePictureURL: this.originalUrl ?? '',
+        date: date,
+        cityId: cityId,
+        aboutMe: aboutMe,
+      };
+      requests.userPostData = this.userDataService.updateUser(this.userData.id, payload);
+    }
+    if (imageChanged) {
+      requests.userImage = this.isUpdate
+        ? this.userImageService.updateUserImage(this.userData.id, this.selectedImage!)
+        : this.userImageService.createUserImage(this.userData.id, this.selectedImage!);
+    }
+
     forkJoin(requests).subscribe({
       next: () => {
-  this.userData.firstName = firstName;
-  this.userData.lastName = lastName;
-  this.userData.dateTime = date;
-  this.userData.aboutMe = aboutMe;
-  console.log('aboutMe being sent:', aboutMe);
+        this.userData.firstName = firstName;
+        this.userData.lastName = lastName;
+        this.userData.dateTime = date;
+        this.userData.aboutMe = aboutMe;
+        console.log('aboutMe being sent:', aboutMe);
 
-  const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
-  if (selectedCity) {
-    this.userData.city = selectedCity.name;
-    this.originalCityId = cityId;
-  }
-  this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+        const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
+        if (selectedCity) {
+          this.userData.city = selectedCity.name;
+          this.originalCityId = cityId;
+        }
+        this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
 
-  if (imageChanged) {
-    this.isUpdate = true;
-    this.imageChanged = false;
-    this.originalImageUrl = this.imageUrl();
-    this.selectedImage = undefined;
-  }
-  this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
-},
+        if (imageChanged) {
+          this.isUpdate = true;
+          this.imageChanged = false;
+          this.originalImageUrl = this.imageUrl();
+          this.selectedImage = undefined;
+        }
+        this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
+      },
       error: (res) => {
         console.log('ERROR: =>', res);
         this.dialog.error(
@@ -226,15 +234,14 @@ export class UserProfileComponent implements OnInit {
     this.profileForm.disable();
   }
   hasFormFieldChanges(cityId: number): boolean {
-
     const formDate = this.profileForm.get('date')?.value;
-  const originalDate = this.userData.dateTime;
+    const originalDate = this.userData.dateTime;
 
-  const normalizeDate = (val: any): string => {
-    if (!val) return '';
-    const d = new Date(val);
-    return isNaN(d.getTime()) ? String(val) : d.toISOString().split('T')[0];
-  };
+    const normalizeDate = (val: any): string => {
+      if (!val) return '';
+      const d = new Date(val);
+      return isNaN(d.getTime()) ? String(val) : d.toISOString().split('T')[0];
+    };
 
     return (
       this.userData.firstName !== this.profileForm.get('firstName')?.value ||
@@ -252,7 +259,7 @@ export class UserProfileComponent implements OnInit {
   checkFormChanges(): boolean {
     return this.hasFormFieldChanges(this.originalCityId) || this.hasImageChanges();
   }
-
+  /*
   editPhoto(event: any) {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -266,6 +273,34 @@ export class UserProfileComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     }
+  }
+    */
+
+  editPhoto(event: any): void {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    const file: File = files[0];
+
+    event.target.value = '';
+    this.dialogRef
+      .open(UserProfileImageCropDialog, {
+        data: { imageFile: file },
+        width: '40vw',
+        maxWidth: '40vw',
+        maxHeight: '95vh',
+        disableClose: true,
+        panelClass: 'image-crop-dialog-panel',
+      })
+      .afterClosed()
+      .subscribe((result: CropDialogResult | undefined) => {
+        if (!result) return;
+
+        this.selectedImage = result.croppedFile;
+        this.imageChanged = true;
+        this.originalUrl = this.imageUrl()?.toString() ?? null;
+        this.imageUrl.set(result.croppedUrl);
+      });
   }
   cancelSaving() {
     this.editing = false;

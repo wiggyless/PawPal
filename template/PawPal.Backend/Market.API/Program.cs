@@ -127,7 +127,6 @@ public partial class Program
             {
                 Credential = GoogleCredential.FromFile("firebase-service-account.json")
             });
-
             builder.Services.AddSingleton<FirebaseNotificationService>();
 
             var app = builder.Build();
@@ -164,7 +163,7 @@ public partial class Program
             {
                 OnPrepareResponse = ctx =>
                 {
-                    ctx.Context.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:4200/";
+                    ctx.Context.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:4200";
                     ctx.Context.Response.Headers["Access-Control-Allow-Credentials"] = "true";
                 }
             });

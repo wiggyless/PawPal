@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, OnInit } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PublicLayout } from './public-layout/public-layout';
 import { CatalogComponent } from './catalog/catalog/catalog';

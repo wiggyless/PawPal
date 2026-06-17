@@ -8,6 +8,7 @@ using PawPal.Domain.Entities.Messaging;
 using PawPal.Domain.Entities.News;
 using PawPal.Domain.Entities.Places;
 using PawPal.Domain.Entities.Posts;
+using PawPal.Domain.Entities.Security;
 namespace Market.Infrastructure.Database;
 
 public partial class DatabaseContext : DbContext, IAppDbContext
@@ -40,6 +41,8 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<BreedEntity> Breeds => Set<BreedEntity>();
     public DbSet<UserImage> UserImage => Set<UserImage>();
     public DbSet<PostImagesEntity> PostImages => Set<PostImagesEntity>();
+    public DbSet<SecurityQuestion> SecurityQuestions => Set<SecurityQuestion>();
+    public DbSet<SecurityAnswers> SecurityAnswers => Set<SecurityAnswers>();
     public DbSet<ConversationEntity> Conversations => Set<ConversationEntity>();
     public DbSet<MessageEntity> Messages => Set<MessageEntity>();
 

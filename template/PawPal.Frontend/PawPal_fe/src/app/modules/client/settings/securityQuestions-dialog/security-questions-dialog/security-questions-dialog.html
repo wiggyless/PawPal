@@ -1,0 +1,57 @@
+<div class="security-dialog">
+  <p class="security-title">Security questions</p>
+  <form class="security-form" [formGroup]="securityFormGroup">
+    <div class="security-form-container">
+      <mat-form-field>
+        <mat-select placeholder="Select first question" required formControlName="firstQuestion">
+          @for (sec of securityQuestionList; track sec) {
+            <mat-option
+              [value]="sec.id"
+              [disabled]="doesItExist(sec.id, 'second') || doesItExist(sec.id, 'third')"
+              >{{ sec.question }}</mat-option
+            >
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput formControlName="firstAnswer" placeholder="First answer" required />
+      </mat-form-field>
+    </div>
+    <div class="security-form-container">
+      <mat-form-field>
+        <mat-select placeholder="Select second question" required formControlName="secondQuestion">
+          @for (sec of securityQuestionList; track sec) {
+            <mat-option
+              [value]="sec.id"
+              [disabled]="doesItExist(sec.id, 'first') || doesItExist(sec.id, 'third')"
+              >{{ sec.question }}</mat-option
+            >
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput formControlName="secondAnswer" placeholder="Second answer" required />
+      </mat-form-field>
+    </div>
+    <div class="security-form-container">
+      <mat-form-field>
+        <mat-select placeholder="Select third question" required formControlName="thirdQuestion">
+          @for (sec of securityQuestionList; track sec) {
+            <mat-option
+              [value]="sec.id"
+              [disabled]="doesItExist(sec.id, 'second') || doesItExist(sec.id, 'first')"
+              >{{ sec.question }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput formControlName="thirdAnswer" placeholder="Third answer" required />
+      </mat-form-field>
+    </div>
+  </form>
+  <div class="buttons-wrapper">
+    <button class="primarybtn" style="width: 100px" (click)="saveSecurityQuestions()">SAVE</button>
+    <button class="secondarybtn" style="width: 100px" (click)="getMeBack()">CANCEL</button>
+  </div>
+</div>

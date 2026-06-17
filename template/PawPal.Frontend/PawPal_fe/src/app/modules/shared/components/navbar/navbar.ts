@@ -3,8 +3,11 @@ import { CurrentUserService } from '../../../../core/services/auth/current-user.
 import { PublicRoutingModule } from '../../../public/public-routing-module';
 import { SharedModule } from 'primeng/api';
 import { DyanmicThemeService } from '../../../../core/services/dynamic-theme.service';
-import { NotificationService, AppNotification } from '../../../../core/services/notifications/notification.service';
-import {DatePipe} from '@angular/common';
+import {
+  NotificationService,
+  AppNotification,
+} from '../../../../core/services/notifications/notification.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -25,17 +28,17 @@ export class NavbarComponent {
   newsMenuOpen = false;
   theme: string = 'light';
   cd = inject(ChangeDetectorRef);
-    notificationsOpen = false;
-bannerDismissed = false;
+  notificationsOpen = false;
+  bannerDismissed = false;
 
-enableNotifications() {
-  console.log('enableNotifications clicked');
-  this.notificationService.requestPermissionAndRegister();
-}
+  enableNotifications() {
+    console.log('enableNotifications clicked');
+    this.notificationService.requestPermissionAndRegister();
+  }
 
-dismissBanner() {
-  this.bannerDismissed = true;
-}
+  dismissBanner() {
+    this.bannerDismissed = true;
+  }
   toggleMenu(): void {
     this.menuOpened = !this.menuOpened;
   }
@@ -68,9 +71,8 @@ dismissBanner() {
     }
   }
 
-    onNotificationClick(notification: AppNotification): void {
+  onNotificationClick(notification: AppNotification): void {
     this.notificationsOpen = false;
     this.notificationService.navigateTo(notification);
   }
-
 }

@@ -152,7 +152,7 @@ export class PostComponent implements OnInit {
 
   routeAdopt(): void {
     if (this.currentUser.getDefaultRoute() == '/login') {
-      this.routeNext.navigate(['login']);
+      this.routeNext.navigate(['/auth/login']);
     } else {
       this.routeNext.navigate(['/client/adoption'], {
         queryParams: {
