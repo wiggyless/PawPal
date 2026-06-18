@@ -56,6 +56,7 @@ import { PasswordRecoveryDialog } from './login/login/password-recovery-dialog/p
     MatError,
     MatOption,
     MatSelectModule,
+    FormsModule
   ],
 })
 export class AuthModule {}

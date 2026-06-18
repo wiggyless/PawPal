@@ -1230,302 +1230,305 @@ namespace PawPal.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SecurityQuestions");
+                });
             modelBuilder.Entity("MessageEntity", b =>
-                {
-                    b.HasOne("ConversationEntity", "Conversation")
-                        .WithMany("Messages")
-                        .HasForeignKey("ConversationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        {
+                            b.HasOne("ConversationEntity", "Conversation")
+                                .WithMany("Messages")
+                                .HasForeignKey("ConversationId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Conversation");
-                });
+                            b.Navigation("Conversation");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Adoptions.AdoptionRequestEntity", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Posts.PostsEntity", "Post")
-                        .WithMany()
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Adoptions.AdoptionRequestEntity", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Posts.PostsEntity", "Post")
+                                .WithMany()
+                                .HasForeignKey("PostId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.HasOne("PawPal.Domain.Entities.Adoptions.AdoptionRequirementEntity", "Requirement")
-                        .WithMany()
-                        .HasForeignKey("RequirementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasOne("PawPal.Domain.Entities.Adoptions.AdoptionRequirementEntity", "Requirement")
+                                .WithMany()
+                                .HasForeignKey("RequirementId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
+                                .WithMany()
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Post");
+                            b.Navigation("Post");
 
-                    b.Navigation("Requirement");
+                            b.Navigation("Requirement");
 
-                    b.Navigation("User");
-                });
+                            b.Navigation("User");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Adoptions.AdoptionStoryEntity", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Adoptions.AdoptionStoryEntity", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
+                                .WithMany()
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("User");
-                });
+                            b.Navigation("User");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.AnimalEntity", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalCategoriesEntity", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.AnimalEntity", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalCategoriesEntity", "Category")
+                                .WithMany()
+                                .HasForeignKey("CategoryId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.HasOne("PawPal.Domain.Entities.Animal_Info.GenderEntity", "Gender")
-                        .WithMany()
-                        .HasForeignKey("GenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasOne("PawPal.Domain.Entities.Animal_Info.GenderEntity", "Gender")
+                                .WithMany()
+                                .HasForeignKey("GenderId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Category");
+                            b.Navigation("Category");
 
-                    b.Navigation("Gender");
-                });
+                            b.Navigation("Gender");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.AnimalHealthHistoryEntity", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalEntity", "Animal")
-                        .WithMany()
-                        .HasForeignKey("AnimalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.AnimalHealthHistoryEntity", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalEntity", "Animal")
+                                .WithMany()
+                                .HasForeignKey("AnimalId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Animal");
-                });
+                            b.Navigation("Animal");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.BreedEntity", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalCategoriesEntity", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.BreedEntity", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalCategoriesEntity", "Category")
+                                .WithMany()
+                                .HasForeignKey("CategoryID")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Category");
-                });
+                            b.Navigation("Category");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.ManyToMany.AllergiesAnimalHealthHistory", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Animal_Info.AllergiesEntity", "Allergy")
-                        .WithMany()
-                        .HasForeignKey("AllergyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.ManyToMany.AllergiesAnimalHealthHistory", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Animal_Info.AllergiesEntity", "Allergy")
+                                .WithMany()
+                                .HasForeignKey("AllergyId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalHealthHistoryEntity", "AnimalHealthHistory")
-                        .WithMany()
-                        .HasForeignKey("AnimalHealthHistoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalHealthHistoryEntity", "AnimalHealthHistory")
+                                .WithMany()
+                                .HasForeignKey("AnimalHealthHistoryId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Allergy");
+                            b.Navigation("Allergy");
 
-                    b.Navigation("AnimalHealthHistory");
-                });
+                            b.Navigation("AnimalHealthHistory");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.ManyToMany.AnimalCharacteristics", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalEntity", "Animal")
-                        .WithMany("AnimalCharacteristics")
-                        .HasForeignKey("AnimalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.ManyToMany.AnimalCharacteristics", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalEntity", "Animal")
+                                .WithMany("AnimalCharacteristics")
+                                .HasForeignKey("AnimalId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.HasOne("PawPal.Domain.Entities.Animal_Info.CharacteristicsEntity", "Characteristic")
-                        .WithMany("AnimalCharacteristics")
-                        .HasForeignKey("CharacteristicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasOne("PawPal.Domain.Entities.Animal_Info.CharacteristicsEntity", "Characteristic")
+                                .WithMany("AnimalCharacteristics")
+                                .HasForeignKey("CharacteristicId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Animal");
+                            b.Navigation("Animal");
 
-                    b.Navigation("Characteristic");
-                });
+                            b.Navigation("Characteristic");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.ManyToMany.DisabilitiesAnimalHealthHistory", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalHealthHistoryEntity", "AnimalHealthHistory")
-                        .WithMany()
-                        .HasForeignKey("AnimalHealthHistoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.ManyToMany.DisabilitiesAnimalHealthHistory", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalHealthHistoryEntity", "AnimalHealthHistory")
+                                .WithMany()
+                                .HasForeignKey("AnimalHealthHistoryId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.HasOne("PawPal.Domain.Entities.Animal_Info.DisabilitiesEntity", "Disability")
-                        .WithMany()
-                        .HasForeignKey("DisabilityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasOne("PawPal.Domain.Entities.Animal_Info.DisabilitiesEntity", "Disability")
+                                .WithMany()
+                                .HasForeignKey("DisabilityId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("AnimalHealthHistory");
+                            b.Navigation("AnimalHealthHistory");
 
-                    b.Navigation("Disability");
-                });
+                            b.Navigation("Disability");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Catalog.ProductEntity", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Catalog.ProductCategoryEntity", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Catalog.ProductEntity", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Catalog.ProductCategoryEntity", "Category")
+                                .WithMany("Products")
+                                .HasForeignKey("CategoryId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Category");
-                });
+                            b.Navigation("Category");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Identity.RefreshTokenEntity", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Identity.RefreshTokenEntity", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
+                                .WithMany("RefreshTokens")
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("User");
-                });
+                            b.Navigation("User");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Identity.UserEntity", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Places.CitiesEntity", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
+                    modelBuilder.Entity("PawPal.Domain.Entities.Identity.UserEntity", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Places.CitiesEntity", "City")
+                                .WithMany()
+                                .HasForeignKey("CityId");
 
-                    b.HasOne("PawPal.Domain.Entities.Identity.RolesEntity", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId");
+                            b.HasOne("PawPal.Domain.Entities.Identity.RolesEntity", "Role")
+                                .WithMany()
+                                .HasForeignKey("RoleId");
 
-                    b.Navigation("City");
+                            b.Navigation("City");
 
-                    b.Navigation("Role");
-                });
+                            b.Navigation("Role");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Places.CitiesEntity", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Places.CantonEntity", "Canton")
-                        .WithMany()
-                        .HasForeignKey("CantonId");
+                    modelBuilder.Entity("PawPal.Domain.Entities.Places.CitiesEntity", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Places.CantonEntity", "Canton")
+                                .WithMany()
+                                .HasForeignKey("CantonId");
 
-                    b.Navigation("Canton");
-                });
+                            b.Navigation("Canton");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Posts.CommentsEntity", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Posts.PostsEntity", "Post")
-                        .WithMany()
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Posts.CommentsEntity", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Posts.PostsEntity", "Post")
+                                .WithMany()
+                                .HasForeignKey("PostId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
+                                .WithMany()
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Post");
+                            b.Navigation("Post");
 
-                    b.Navigation("User");
-                });
+                            b.Navigation("User");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Posts.LikedUserPosts", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Posts.PostsEntity", "Post")
-                        .WithMany()
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Posts.LikedUserPosts", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Posts.PostsEntity", "Post")
+                                .WithMany()
+                                .HasForeignKey("PostId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
+                                .WithMany()
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Post");
+                            b.Navigation("Post");
 
-                    b.Navigation("User");
-                });
+                            b.Navigation("User");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Posts.PostsEntity", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalHealthHistoryEntity", "AnimalHealthHistory")
-                        .WithMany()
-                        .HasForeignKey("AnimalHealthHistoryId");
+                    modelBuilder.Entity("PawPal.Domain.Entities.Posts.PostsEntity", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalHealthHistoryEntity", "AnimalHealthHistory")
+                                .WithMany()
+                                .HasForeignKey("AnimalHealthHistoryId");
 
-                    b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalEntity", "Animal")
-                        .WithMany()
-                        .HasForeignKey("AnimalID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasOne("PawPal.Domain.Entities.Animal_Info.AnimalEntity", "Animal")
+                                .WithMany()
+                                .HasForeignKey("AnimalID")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.HasOne("PawPal.Domain.Entities.Places.CitiesEntity", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
+                            b.HasOne("PawPal.Domain.Entities.Places.CitiesEntity", "City")
+                                .WithMany()
+                                .HasForeignKey("CityId");
 
-                    b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
+                                .WithMany()
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Animal");
+                            b.Navigation("Animal");
 
-                    b.Navigation("AnimalHealthHistory");
+                            b.Navigation("AnimalHealthHistory");
 
-                    b.Navigation("City");
+                            b.Navigation("City");
 
-                    b.Navigation("User");
-                });
+                            b.Navigation("User");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Security.SecurityAnswers", b =>
-                {
-                    b.HasOne("PawPal.Domain.Entities.Security.SecurityQuestion", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("PawPal.Domain.Entities.Security.SecurityAnswers", b =>
+                        {
+                            b.HasOne("PawPal.Domain.Entities.Security.SecurityQuestion", "Question")
+                                .WithMany()
+                                .HasForeignKey("QuestionID")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Question");
-            modelBuilder.Entity("ConversationEntity", b =>
-                {
-                    b.Navigation("Messages");
-                });
+                            b.Navigation("Question");
+                        });
+                    modelBuilder.Entity("ConversationEntity", b =>
+                        {
+                            b.Navigation("Messages");
+                        });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.AnimalEntity", b =>
-                {
-                    b.Navigation("AnimalCharacteristics");
-                });
-
-            modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.CharacteristicsEntity", b =>
+                    modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.AnimalEntity", b =>
                 {
                     b.Navigation("AnimalCharacteristics");
                 });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Catalog.ProductCategoryEntity", b =>
+                    modelBuilder.Entity("PawPal.Domain.Entities.Animal_Info.CharacteristicsEntity", b =>
+                {
+                    b.Navigation("AnimalCharacteristics");
+                });
+
+                    modelBuilder.Entity("PawPal.Domain.Entities.Catalog.ProductCategoryEntity", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("PawPal.Domain.Entities.Identity.UserEntity", b =>
+                    modelBuilder.Entity("PawPal.Domain.Entities.Identity.UserEntity", b =>
                 {
                     b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
-        }
+                }
+         }
     }
-}
+

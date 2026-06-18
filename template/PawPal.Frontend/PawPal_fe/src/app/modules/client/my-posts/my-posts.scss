@@ -4,6 +4,7 @@
   width: 100%;
   flex-direction: column;
   gap: 50px;
+  height:100vh;
 }
 
 .client-content-posts {
@@ -66,7 +67,7 @@
   font-weight: 700;
   text-decoration: underline;
   text-decoration-thickness: 3px;
-
+  color:#544120;
 }
 
 .post-image img {

@@ -3,7 +3,7 @@ import { ClientRoutingModule } from './client-routing-module';
 import { UserProfileComponent } from './my-profile/user-profile-component/user-profile-component';
 import { ClientLayout } from './client-layout/client-layout/client-layout';
 import { NavbarComponent } from '../shared/components/navbar/navbar';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MyPosts } from './my-posts/my-posts';
 import { UserProfileSideNavbar } from './user-profile-side-navbar/user-profile-side-navbar/user-profile-side-navbar';
@@ -35,12 +35,12 @@ import { MySentRequestDialog } from './my-sent-requests/my-sent-request-dialog/m
 import { RequestHistory } from './request-history/request-history/request-history';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { UserProfileImageCropDialog } from './my-profile/user-profile-component/user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
-import { ImageCropperComponent } from 'ngx-image-cropper';
 import { SecurityQuestionsDialog } from './settings/securityQuestions-dialog/security-questions-dialog/security-questions-dialog';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatSpinner } from '@angular/material/progress-spinner';
 import { Messaging } from './messaging/messaging';
 import {SlicePipe, UpperCasePipe} from "@angular/common";
+import { ImageCropperComponent } from 'ngx-image-cropper';
 
 
 @NgModule({
@@ -77,23 +77,20 @@ import {SlicePipe, UpperCasePipe} from "@angular/common";
     MatSelectModule,
     FormsModule,
     MatCheckboxModule,
-    MatDatepickerModule,
+    MatDatepickerModule, 
     CarouselModule,
-    MatSelectModule,
     MatIcon,
     AsyncPipe,
     MatPaginator,
-    MatDatepickerModule,
-    MatDateRangeInput,
     MatDialogModule,
     A11yModule,
     DatePipe,
     MatProgressBarModule,
-    ImageCropperComponent,
     DragDropModule,
     MatSpinner,
     SlicePipe,
-    UpperCasePipe
+    UpperCasePipe,
+    ImageCropperComponent
   ],
   providers: [provideNativeDateAdapter(), MatDialog],
 })

@@ -3,7 +3,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogueComponent } from '../dialogue-component/dialogue-component';
 import { CurrentUserService } from '../../../core/services/auth/current-user.service';
 import { UserService } from '../../../api-services/users/users-service';
-import { DialoguePopupService } from '../../shared/components/dialogue-popup/dialogue-popup.service';
+import { DialoguePopupService } from '../../../api-services/dialogue-popup/dialogue-popup.service';
 import { SecurityQuestionsDialog } from './securityQuestions-dialog/security-questions-dialog/security-questions-dialog';
 @Component({
   selector: 'app-settings',
