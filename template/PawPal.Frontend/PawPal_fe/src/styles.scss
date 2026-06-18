@@ -103,6 +103,12 @@ html, body {
   --messaging-input-general-area: #b38c61;
 
   --messaging-text-tooltip: #8f6d49;
+
+  --settings-section-colour: #efe0d2;
+  --settings-section-secondary-colour: #dbc4af;
+  --settings-section-text: #483c28;
+  --settings-section-border: #c2ad8e;
+
 }
 
 body.dark-theme {
@@ -156,6 +162,12 @@ body.dark-theme {
   --messaging-input-general-area: #191412;
 
   --messaging-text-tooltip: #ddb78e;
+
+  --settings-section-colour: #34291e;
+  --settings-section-secondary-colour: #4f3d2a;
+
+  --settings-section-text: #e3cda7;
+  --settings-section-border: #5e4b38;
 
 }
 .mat-mdc-form-field {
