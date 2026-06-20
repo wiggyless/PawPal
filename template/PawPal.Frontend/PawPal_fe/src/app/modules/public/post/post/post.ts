@@ -49,6 +49,7 @@ export class PostComponent implements OnInit {
   cd = inject(ChangeDetectorRef);
   dialog = inject(MatDialog);
   userImages = inject(UserImageService);
+
   animalHealth: GetAnimalsHealthByIdDto = {
     animalHealthHistoryId: 0,
     animalId: 0,
@@ -172,4 +173,16 @@ export class PostComponent implements OnInit {
     this.isCommentsLoaded.set(true);
     this.cd.detectChanges();
   }
+
+  routeMessage(): void {
+  if (this.currentUser.getDefaultRoute() == '/login') {
+    this.routeNext.navigate(['login']);
+  } else {
+    this.routeNext.navigate(['/client/messaging'], {
+      queryParams: {
+        recipientId: this.userId
+      }
+    });
+  }
+}
 }

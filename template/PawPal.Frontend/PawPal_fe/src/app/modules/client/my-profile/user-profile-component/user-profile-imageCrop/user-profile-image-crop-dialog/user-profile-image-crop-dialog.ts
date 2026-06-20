@@ -1,16 +1,16 @@
-import { Component, Inject, OnInit, signal } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ImageCroppedEvent } from 'ngx-image-cropper';
-import { ImageCropperComponent } from 'ngx-smart-cropper';
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper'; // ← both from same library
+
 export interface CropDialogData {
   imageFile: File;
 }
-
 export interface CropDialogResult {
   croppedFile: File;
   croppedUrl: string;
 }
+
 @Component({
   selector: 'app-user-profile-image-crop-dialog',
   standalone: false,
@@ -20,6 +20,16 @@ export interface CropDialogResult {
 export class UserProfileImageCropDialog implements OnInit {
   imageWidth: number = 0;
   imageHeight: number = 0;
+
+  croppedEvent: ImageCroppedEvent | null = null;
+  rotation = 0;
+
+  constructor(
+    public dialogRef: MatDialogRef<ImageCropperComponent, CropDialogResult>,
+    @Inject(MAT_DIALOG_DATA) public data: CropDialogData,
+    private sanitizer: DomSanitizer,
+  ) {}
+
   ngOnInit(): void {
     const url = URL.createObjectURL(this.data.imageFile);
     const img = new Image();
@@ -36,19 +46,11 @@ export class UserProfileImageCropDialog implements OnInit {
         dialogHeight = maxHeight;
         dialogWidth = maxHeight * ratio;
       }
-      this.dialogRef.updateSize(`${dialogWidth}px`, `${dialogHeight + 130}px`); // +130 for header/footer
+      this.dialogRef.updateSize(`${dialogWidth}px`, `${dialogHeight + 130}px`);
       URL.revokeObjectURL(url);
     };
     img.src = url;
   }
-  croppedEvent: ImageCroppedEvent | null = null;
-  rotation = 0;
-
-  constructor(
-    public dialogRef: MatDialogRef<ImageCropperComponent, CropDialogResult>,
-    @Inject(MAT_DIALOG_DATA) public data: CropDialogData,
-    private sanitizer: DomSanitizer,
-  ) {}
 
   onCropped(event: ImageCroppedEvent): void {
     this.croppedEvent = event;
@@ -60,11 +62,9 @@ export class UserProfileImageCropDialog implements OnInit {
 
   async onConfirm(): Promise<void> {
     if (!this.croppedEvent?.blob) return;
-
     const blob = this.croppedEvent.blob;
     const file = new File([blob], this.data.imageFile.name, { type: 'image/png' });
     const croppedUrl = this.croppedEvent.objectUrl ?? URL.createObjectURL(blob);
-
     this.dialogRef.close({ croppedFile: file, croppedUrl });
   }
 

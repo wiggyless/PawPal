@@ -13,29 +13,15 @@
         </div>
         <div class="section-body">
           <p class="current-value">
-            Current Email: <span class="highlight">{{ this.userEmail }}</span>
+            Current E-mail: <span class="highlight">{{ this.userEmail }}</span>
           </p>
           <button
             class="action-btn secondarybtn"
             (click)="toggleChangeEmailForm()"
             [class.active]="showChangeEmailForm"
           >
-            {{ showChangeEmailForm ? 'Cancel' : 'Change Email' }}
+            {{ showChangeEmailForm ? 'CANCEL' : 'CHANGE E-MAIL' }}
           </button>
-          <!-- with ngIf but browser is saying big nono poopoo words
-              <div class="form-section" *ngIf="showChangeEmailForm">
-                <div class="form-group">
-                  <label>New Email Address</label>
-                  <input
-                    type="email"
-                    class="form-input"
-                    [(ngModel)]="newEmail"
-                    placeholder="Enter your new email"
-                  />
-                </div>
-                <button class="primarybtn" (click)="saveEmail()">Save Email</button>
-              </div>
-              -->
           @if (showChangeEmailForm) {
             <div class="form-section">
               <div class="form-group">
@@ -47,7 +33,7 @@
                   placeholder="Enter your new email"
                 />
               </div>
-              <button class="primarybtn" (click)="saveEmail()">Save Email</button>
+              <button class="primarybtn" (click)="saveEmail()">SAVE E-MAIL</button>
             </div>
           }
         </div>
@@ -66,41 +52,9 @@
             (click)="toggleChangePasswordForm()"
             [class.active]="showChangePasswordForm"
           >
-            {{ showChangePasswordForm ? 'Cancel' : 'Change Password' }}
+            {{ showChangePasswordForm ? 'CANCEL' : 'CHANGE PASSWORD' }}
           </button>
 
-          <!-- Same thing here
-              <div class="form-section" *ngIf="showChangePasswordForm">
-                <div class="form-group">
-                  <label>Current Password</label>
-                  <input
-                    type="password"
-                    class="form-input"
-                    [(ngModel)]="currentPassword"
-                    placeholder="Enter your current password"
-                  />
-                </div>
-                <div class="form-group">
-                  <label>New Password</label>
-                  <input
-                    type="password"
-                    class="form-input"
-                    [(ngModel)]="newPassword"
-                    placeholder="Enter your new password (min 8 characters)"
-                  />
-                </div>
-                <div class="form-group">
-                  <label>Confirm Password</label>
-                  <input
-                    type="password"
-                    class="form-input"
-                    [(ngModel)]="confirmPassword"
-                    placeholder="Confirm your new password"
-                  />
-                </div>
-                <button class="primarybtn" (click)="savePassword()">Update Password</button>
-              </div>
-              -->
           @if (showChangePasswordForm) {
             <div class="form-section">
               <div class="form-group">
@@ -130,7 +84,7 @@
                   placeholder="Confirm your new password"
                 />
               </div>
-              <button class="primarybtn" (click)="savePassword()">Update Password</button>
+              <button class="primarybtn" (click)="savePassword()">UPDATE PASSWORD</button>
             </div>
           }
         </div>
@@ -148,7 +102,7 @@
               <strong>Password recovery with security questions</strong>
               <p class="option-description">Add an extra layer of security to your account</p>
             </div>
-            <button class="secondarybtn" (click)="enableSecurityQuestions()">Enable</button>
+            <button class="secondarybtn" (click)="enableSecurityQuestions()">ENABLE</button>
           </div>
         </div>
       </div>
@@ -156,44 +110,31 @@
       <!-- Notification Settings Section -->
       <div class="settings-section">
         <div class="section-header">
-          <mat-icon>notifications</mat-icon>
-          <div class="section-title">Notification Preferences</div>
+          <mat-icon>dark_mode</mat-icon>
+          <div class="section-title">Display Preferences</div>
         </div>
         <div class="section-body">
           <div class="notification-option">
             <label class="checkbox-label">
-              <input type="checkbox" checked />
-              <span>Email notifications for new messages</span>
-            </label>
-          </div>
-          <div class="notification-option">
-            <label class="checkbox-label">
-              <input type="checkbox" checked />
-              <span>Email notifications for adoption updates</span>
-            </label>
-          </div>
-          <div class="notification-option">
-            <label class="checkbox-label">
-              <input type="checkbox" />
-              <span>Marketing emails and promotions</span>
+              <input type="checkbox" [(ngModel)]="isDarkTheme" (change)="toggleTheme()"/>
+              <span>Dark Theme</span>
             </label>
           </div>
         </div>
       </div>
 
-      <!-- Danger Zone -->
     </div>
     <div class="settings-section danger-section" style="margin-top: 50px">
       <div class="section-header danger-header">
         <mat-icon>warning</mat-icon>
-        <div class="section-title">Danger Zone</div>
+        <div class="section-title" id="danger-zone">Danger Zone</div>
       </div>
       <div class="section-body">
         <p class="danger-text">
           Once you delete your account, there is no going back. Please be certain.
         </p>
         <button class="delete-profile-btn primarybtn" (click)="openDeleteProfileDialog()">
-          Delete Profile
+          DELETE PROFILE
         </button>
       </div>
     </div>

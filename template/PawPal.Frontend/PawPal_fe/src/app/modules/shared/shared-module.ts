@@ -4,13 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PublicRoutingModule } from './shared-routing-module';
 import { NavbarComponent } from './components/navbar/navbar';
 import { RouterOutlet } from '@angular/router';
-import { ClientRoutingModule } from '../client/client-routing-module';
-import { SessionWarningDialog } from './session/session-warning-dialog/session-warning-dialog';
-import { RateLimitDialog } from './rate-limit-dialog/rate-limit-dialog/rate-limit-dialog';
 @NgModule({
   declarations: [
-    SessionWarningDialog,
-    RateLimitDialog
   ],
   imports: [
     CommonModule,

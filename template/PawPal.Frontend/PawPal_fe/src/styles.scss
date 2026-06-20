@@ -19,8 +19,13 @@ html {
   margin: 0;
   background-color: var(--background-color);
   background-size: cover;
-  height: 100%;
 }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 * {
   font-family: nunito, sans-serif;
   margin: 0px;
@@ -28,6 +33,13 @@ html {
   box-sizing: border-box;
 }
 // second color is used for linear gradient but i dont know what to put
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; 
+}
+
 
 :root {
   // used for the background
@@ -75,6 +87,29 @@ html {
   --default-userImage-color: #201811;
 
   --paginator-color: #4e3716;
+
+  //messaging colours
+  --messaging-background-color: #e5d7c4;
+  --messaging-sidebar-background-color: #d1b58d;
+
+  --messaging-sidebar-convo-item-border: #9f784c;
+  --messaging-sidebar-convo-item-hover-bg-color: #ccad7f;
+  --messaging-sidebar-convo-item-active-bg-color: #b38c61;
+
+  --messaging-sidebar-convo-item-text-color: #473619;
+  --messaging-sidebar-convo-item-secondary-text-color: #65502b;
+
+  --messaging-otheruser-text-bubble: #fbf9f4;
+  --messaging-otheruser-text-bubble-highlight: #ffedcd;
+  --messaging-input-general-area: #b38c61;
+
+  --messaging-text-tooltip: #8f6d49;
+
+  --settings-section-colour: #efe0d2;
+  --settings-section-secondary-colour: #dbc4af;
+  --settings-section-text: #483c28;
+  --settings-section-border: #c2ad8e;
+
 }
 
 body.dark-theme {
@@ -113,6 +148,29 @@ body.dark-theme {
   --paginator-color: #c7b18c;
   --title-text-color: #c7b18c;
   --main-page-title-color: #e5d7c4;
+
+  --messaging-background-color: #201811;
+  --messaging-sidebar-background-color: #3e2e1f;
+
+  --messaging-sidebar-convo-item-border: #765c46;
+  --messaging-sidebar-convo-item-hover-bg-color: #483422;
+  --messaging-sidebar-convo-item-active-bg-color: #2e2218;
+
+  --messaging-sidebar-convo-item-text-color: #c7b18c;
+  --messaging-sidebar-convo-item-secondary-text-color: rgb(150, 124, 78);
+
+  --messaging-otheruser-text-bubble: #c7b18c;
+  --messaging-otheruser-text-bubble-highlight: #dcc296;
+  --messaging-input-general-area: #191412;
+
+  --messaging-text-tooltip: #ddb78e;
+
+  --settings-section-colour: #34291e;
+  --settings-section-secondary-colour: #4f3d2a;
+
+  --settings-section-text: #e3cda7;
+  --settings-section-border: #5e4b38;
+
 }
 .mat-mdc-form-field {
   border-radius: 100px;
@@ -156,7 +214,7 @@ body.dark-theme {
   border-color: #51432d;
   color: #51432d;
   font-size: medium;
-  box-shadow: 0px 4px 6px #25190b;
+  box-shadow: 0px 4px 6px #725534;
 }
 
 .secondarybtn:hover {

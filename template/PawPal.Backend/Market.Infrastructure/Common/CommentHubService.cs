@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using PawPal.Application.Common;
+using PawPal.Application.Abstractions;
 using PawPal.Domain.Common;
 using PawPal.Infrastructure.Signal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PawPal.Infrastructure.Common
 {

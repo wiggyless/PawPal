@@ -5,7 +5,7 @@ import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.se
 import { Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
-import { DialoguePopupService } from '../../../shared/components/dialogue-popup/dialogue-popup.service';
+import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthTimeoutService } from '../../../../core/services/auth/auth-timeout.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -44,7 +44,6 @@ export class LoginComponent extends BaseComponent implements OnInit {
       this.dialogueService.success('Registration Successful!', message);
     }
 
-    // always render captcha, not just when there's a message
     setTimeout(() => {
       if (typeof grecaptcha !== 'undefined') {
         grecaptcha.render('recaptcha-container', {
