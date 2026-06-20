@@ -19,18 +19,14 @@ import {
 
 import { forkJoin, Observable, switchMap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AddAnimalPost,
-} from '../../../api-services/animal-posts/animal-posts.model';
+import { AddAnimalPost } from '../../../api-services/animal-posts/animal-posts.model';
 import { AddAnimalDto, UpdateAnimalDto } from '../../../api-services/animals/animal-model';
 import { AnimalService } from '../../../api-services/animals/animal';
 import { AnimalPostService } from '../../../api-services/animal-posts/animal-posts.service';
 import { ListAnimalBreedQueryDto } from '../../../api-services/animal-breed/animal-breed.model';
 import { AllergyService } from '../../../api-services/allergies/allergy-service';
 import { DisabilityService } from '../../../api-services/disabilities/disability-service';
-import {
-  AnimalCategoryByIdQueryDto,
-} from '../../../api-services/animal-categories/animal-categories.model';
+import { AnimalCategoryByIdQueryDto } from '../../../api-services/animal-categories/animal-categories.model';
 import {
   AddAnimalHealthHistory,
   UpdateHealthHistory,
@@ -42,7 +38,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreatePostDialog } from './create-post-dialog/create-post-dialog/create-post-dialog';
 import { base64ToBlobUrl } from '../../shared/utils/image-utils';
 import { HttpEventType } from '@angular/common/http';
-import  imageCompression from 'browser-image-compression';
+import imageCompression from 'browser-image-compression';
 
 @Component({
   selector: 'app-create-post',
@@ -118,7 +114,6 @@ export class CreatePost implements OnInit {
   allergyList: any = [];
   disabilityList: any = [];
 
-  
   env = environment.apiUrl;
   substr: string = '';
   routePostID: number = 0;
@@ -248,7 +243,6 @@ export class CreatePost implements OnInit {
           this.allergyList = results.allergies;
           this.disabilityList = results.disabilities;
           this.cd.detectChanges();
-          // Now you are 100% sure ALL data is ready for the form
         },
         error: (err) => {
           console.error('One of the requests failed', err);
@@ -370,7 +364,7 @@ export class CreatePost implements OnInit {
     this.imageControls.splice(index, 1);
     this.firstFormGroup.updateValueAndValidity();
   }
-  
+
   toggleFormControl(checkControlName: string, targetControlName: string, group: FormGroup): void {
     const isChecked = group.get(checkControlName)?.value;
     const targetCtrl = group.get(targetControlName);
@@ -512,34 +506,33 @@ export class CreatePost implements OnInit {
   }
 
   onDragOver(event: DragEvent) {
-  event.preventDefault();
-  event.stopPropagation();
-  this.isDragging = true;
-}
-
-onDragLeave(event: DragEvent) {
-  this.isDragging = false;
-}
-
-onFileDrop(event: DragEvent) {
-  event.preventDefault();
-  event.stopPropagation();
-  this.isDragging = false;
-
-  const files = event.dataTransfer?.files;
-  if (files) {
-    this.showImages({ target: { files } } as any);
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = true;
   }
-}
 
-isDragging = false;
-
-reorderImages(event: CdkDragDrop<any[]>) {
-  moveItemInArray(this.imageControls, event.previousIndex, event.currentIndex);
-
-  if (event.previousIndex === this.selectedMainImageIndex) {
-    this.selectedMainImageIndex = event.currentIndex;
+  onDragLeave(event: DragEvent) {
+    this.isDragging = false;
   }
-}
 
+  onFileDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+
+    const files = event.dataTransfer?.files;
+    if (files) {
+      this.showImages({ target: { files } } as any);
+    }
+  }
+
+  isDragging = false;
+
+  reorderImages(event: CdkDragDrop<any[]>) {
+    moveItemInArray(this.imageControls, event.previousIndex, event.currentIndex);
+
+    if (event.previousIndex === this.selectedMainImageIndex) {
+      this.selectedMainImageIndex = event.currentIndex;
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
 import { BaseListPagedComponent } from '../../../../core/components/base-classes/base-list-paged-component';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
@@ -55,7 +55,7 @@ export class MyFavorites
   //images Var
   catalogImages: GetMainImagePostBlobClass[] = [];
   tempList: number[] = [];
-  imagesLoaded = false;
+  imagesLoaded = signal(false);
   sanitizer = inject(DomSanitizer);
   private sub: Subscription = new Subscription();
   ngOnInit(): void {
@@ -70,7 +70,7 @@ export class MyFavorites
       isLiked: true,
     });
     this.animalPostList.subscribe((res) => {
-      this.imagesLoaded = true;
+      this.imagesLoaded.set(true);
     });
   }
   routeToPost(post: ListAnimal) {

@@ -1,0 +1,56 @@
+@use '@angular/material' as mat;
+.admin-layout-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.admin-layout {
+  display: flex;
+  width: 100%;
+  margin-top: 75px;
+  height: 100%;
+}
+.admin-side-navbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: linear-gradient(
+    180deg,
+    var(--side-navbar-first-bg-color),
+    var(--side-navbar-second-bg-color)
+  );
+  width: 18%;
+  position: relative;
+  flex-shrink: 0;
+  min-height: 100dvh;
+}
+.admin-content {
+  height: 100%;
+  background-color: var(--background-color);
+  display: flex;
+  width: 100%;
+  padding: 55px;
+}
+.admin-content-center {
+  height: 100%;
+  background-color: var(--background-color);
+  display: flex;
+  width: 100%;
+  padding: 55px;
+  justify-content: center;
+}
+.loading-container {
+  display: flex;
+  justify-content: center; /* Horizontal centering */
+  align-items: center; /* Vertical centering */
+  height: 100%;
+  flex-direction: column;
+  padding: 50px;
+  width: 100%;
+}
+.loading-spinner-text {
+  color: var(--title-text-color);
+  margin-bottom: 20px;
+  font-size: 30px;
+  font-weight: 700;
+}

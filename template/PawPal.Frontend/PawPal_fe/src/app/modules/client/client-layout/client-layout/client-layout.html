@@ -1,4 +1,3 @@
-<app-navbar [roleId]="currentUser.roleid()"></app-navbar>
 <div class="client-layout-container">
   <div class="client-layout">
     <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
@@ -6,7 +5,11 @@
       class="client-side-navbar"
       [selItem]="selectedItem"
     ></app-user-profile-side-navbar>
-    <div class="client-content">
+    <div
+      [class]="
+        url() == '/my-profile' || url() == '/settings' ? 'client-content-center' : 'client-content'
+      "
+    >
       <router-outlet></router-outlet>
     </div>
   </div>

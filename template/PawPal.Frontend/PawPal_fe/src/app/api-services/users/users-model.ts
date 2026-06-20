@@ -1,3 +1,5 @@
+import { BasePagedQuery } from '../../core/models/paging/base-paged-query';
+
 export interface CreateUserCommand {
   firstName: string;
   lastName: string;
@@ -22,6 +24,18 @@ export interface GetUserByIdDto {
   username: string;
   aboutMe?: string;
 }
+export interface GetUserList {
+  id: number;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+}
+export class GetUserQuery extends BasePagedQuery {
+  searchFirstName?: string;
+  searchLastName?: string;
+  searchEmail?: string;
+}
 export interface UpdateUserCommand {
   firstName: string;
   lastName: string;
@@ -29,6 +43,7 @@ export interface UpdateUserCommand {
   date: string;
   cityId: number;
   aboutMe?: string;
+  username: string;
 }
 
 export interface DeleteUserCommand {

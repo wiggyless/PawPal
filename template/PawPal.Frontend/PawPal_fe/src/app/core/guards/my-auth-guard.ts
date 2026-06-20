@@ -8,9 +8,7 @@ export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const router = inject(Router);
 
   const requireAuth = route.data['requireAuth'] === true;
-
   const isAuth = currentUser.isAuthenticated();
-
   // 1) ako ruta traži auth, a user nije logiran → login
   if (requireAuth && !isAuth) {
     router.navigate(['/auth/login']);
@@ -36,6 +34,10 @@ export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
     return false;
   }
     */
+  if (route.data['paht'] == 'client' && user.roleid != 2) {
+    router.navigate(['/']);
+    return false;
+  }
   return true;
 };
 

@@ -29,7 +29,6 @@ export class UserProfileSideNavbar implements OnInit {
   keepOrder = (a: any, b: any) => 0;
   onSelect(item: string) {
     this.selItem = item;
-    console.log(this.selItem);
     this.cd.detectChanges();
   }
 

@@ -86,10 +86,9 @@ export class PostComponent implements OnInit {
   imagesList: Observable<string[]> | undefined;
   env = environment;
   objectUrl: string | null = null;
-  
   imageUrl = signal<SafeUrl | null>(null);
-  isCommentsLoaded = false;
-  isImagesLoaded = false;
+  isCommentsLoaded = signal(false);
+  isImagesLoaded = signal(false);
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.route.queryParams.subscribe((params) => {
@@ -119,12 +118,10 @@ export class PostComponent implements OnInit {
         this.animalHealth = response.health;
         this.city = response.cities;
         this.user = response.users;
-        this.isImagesLoaded = true;
-        this.cd.detectChanges();
+        this.isImagesLoaded.set(true);
       },
     });
   }
-   
 
   keepOrder = (a: any, b: any) => 0;
 
@@ -173,7 +170,7 @@ export class PostComponent implements OnInit {
     return `translateX(-${this.currentImageIndex * 100}%)`;
   }
   onCommentsLoaded() {
-    this.isCommentsLoaded = true;
+    this.isCommentsLoaded.set(true);
     this.cd.detectChanges();
   }
 
