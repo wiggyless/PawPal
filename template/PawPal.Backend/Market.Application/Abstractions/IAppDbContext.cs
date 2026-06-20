@@ -5,6 +5,7 @@ using PawPal.Domain.Entities.Animal_Info.ManyToMany;
 using PawPal.Domain.Entities.Catalog;
 using PawPal.Domain.Entities.Identity;
 using PawPal.Domain.Entities.Messaging;
+using PawPal.Domain.Entities.Moderation;
 using PawPal.Domain.Entities.News;
 using PawPal.Domain.Entities.Places;
 using PawPal.Domain.Entities.Posts;
@@ -47,5 +48,6 @@ public interface IAppDbContext
     DbSet<SecurityAnswers> SecurityAnswers { get; }
     DbSet<ConversationEntity> Conversations { get; }
     DbSet<MessageEntity> Messages { get; }
+    DbSet<ReportedPostsEntity> ReportedPosts { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

@@ -5,6 +5,7 @@ using PawPal.Domain.Entities.Animal_Info.ManyToMany;
 using PawPal.Domain.Entities.Catalog;
 using PawPal.Domain.Entities.Identity;
 using PawPal.Domain.Entities.Messaging;
+using PawPal.Domain.Entities.Moderation;
 using PawPal.Domain.Entities.News;
 using PawPal.Domain.Entities.Places;
 using PawPal.Domain.Entities.Posts;
@@ -45,6 +46,7 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<SecurityAnswers> SecurityAnswers => Set<SecurityAnswers>();
     public DbSet<ConversationEntity> Conversations => Set<ConversationEntity>();
     public DbSet<MessageEntity> Messages => Set<MessageEntity>();
+    public DbSet<ReportedPostsEntity> ReportesPosts => Set<ReportedPostsEntity>();
 
     private readonly TimeProvider _clock;
     public DatabaseContext(DbContextOptions<DatabaseContext> options, TimeProvider clock) : base(options)
