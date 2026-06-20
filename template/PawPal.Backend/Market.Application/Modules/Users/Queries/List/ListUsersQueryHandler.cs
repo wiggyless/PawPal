@@ -11,19 +11,21 @@ namespace PawPal.Application.Modules.Users.Queries.List
     {
         public async Task<PageResult<ListUsersQueryDto>> Handle(ListUsersQuery request, CancellationToken cancellationToken)
         {
-            var usr = context.Users.AsQueryable();
+            var usr = context.Users.Include(x=>x.Role).AsNoTracking().AsQueryable();
             if (!string.IsNullOrWhiteSpace(request.SearchFirstName))
-                usr = context.Users.Where(x => x.FirstName.ToLower().Contains(request.SearchFirstName.ToLower()));
+                usr = usr.Where(x => x.FirstName.ToLower().Contains(request.SearchFirstName.ToLower()));
             if (!string.IsNullOrWhiteSpace(request.SearchLastName))
-                usr = context.Users.Where(x => x.LastName.ToLower().Contains(request.SearchLastName.ToLower()));
+                usr = usr.Where(x => x.LastName.ToLower().Contains(request.SearchLastName.ToLower()));
             if (!string.IsNullOrWhiteSpace(request.SearchEmail))
-                usr = context.Users.Where(x => x.Email.ToLower().Contains(request.SearchEmail.ToLower()));
+                usr = usr.Where(x => x.Email.ToLower().Contains(request.SearchEmail.ToLower()));
+            usr = usr.Where(x => x.Role.RoleName != "Admin");
             var finalResult = usr.OrderBy(x => x.FirstName).Select(x => new ListUsersQueryDto
             {
+                Id = x.Id,  
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Email = x.Email,
-                BirthDate = x.BirthDate,
+                Username = x.Username,
             });
             return await PageResult<ListUsersQueryDto>.FromQueryableAsync(finalResult, request.Paging, cancellationToken);
         }

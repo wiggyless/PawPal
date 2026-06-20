@@ -1,9 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
-  ElementRef,
   OnInit,
-  ViewChild,
   ViewEncapsulation,
   inject,
   signal,
@@ -18,13 +16,12 @@ import { UserService } from '../../../../api-services/users/users-service';
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
 import { environment } from '../../../../../environments/environment';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
-import { catchError, forkJoin, Observable, of } from 'rxjs';
-import { GetPostImageById } from '../../../../api-services/animal-post-images/animal-post-images-model';
+import { forkJoin, Observable } from 'rxjs';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogueComponent } from '../../../client/dialogue-component/dialogue-component';
 import { UserImageService } from '../../../../api-services/userImage/userImage-service';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post',
@@ -88,10 +85,9 @@ export class PostComponent implements OnInit {
   imagesList: Observable<string[]> | undefined;
   env = environment;
   objectUrl: string | null = null;
-  private sanitizer = inject(DomSanitizer);
   imageUrl = signal<SafeUrl | null>(null);
-  isCommentsLoaded = false;
-  isImagesLoaded = false;
+  isCommentsLoaded = signal(false);
+  isImagesLoaded = signal(false);
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.route.queryParams.subscribe((params) => {
@@ -121,12 +117,10 @@ export class PostComponent implements OnInit {
         this.animalHealth = response.health;
         this.city = response.cities;
         this.user = response.users;
-        this.isImagesLoaded = true;
-        this.cd.detectChanges();
+        this.isImagesLoaded.set(true);
       },
     });
   }
-   
 
   keepOrder = (a: any, b: any) => 0;
 
@@ -175,7 +169,7 @@ export class PostComponent implements OnInit {
     return `translateX(-${this.currentImageIndex * 100}%)`;
   }
   onCommentsLoaded() {
-    this.isCommentsLoaded = true;
+    this.isCommentsLoaded.set(true);
     this.cd.detectChanges();
   }
 }

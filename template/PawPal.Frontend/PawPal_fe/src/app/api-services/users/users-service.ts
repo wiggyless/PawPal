@@ -7,10 +7,13 @@ import {
   GetByEmailQueryDto,
   GetByUsernameQueryDto,
   GetUserByIdDto,
+  GetUserList,
+  GetUserQuery,
   UpdateUserCommand,
   UpdateUserPassword,
 } from './users-model';
 import { buildHttpParams } from '../../core/models/build-http-params';
+import { PageResult } from '../../core/models/paging/page-result';
 
 @Injectable({
   providedIn: 'root',
@@ -19,8 +22,8 @@ export class UserService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl + '/Users';
   createUser(payload: CreateUserCommand): Observable<{ id: number }> {
-  return this.http.post<{ id: number }>(this.apiUrl, payload);
-}
+    return this.http.post<{ id: number }>(this.apiUrl, payload);
+  }
 
   getByUsername(username: string): Observable<GetByUsernameQueryDto> {
     return this.http.get<GetByUsernameQueryDto>(`${this.apiUrl}/lookup?username=${username}`);
@@ -29,7 +32,10 @@ export class UserService {
   getByEmail(email: string): Observable<GetByEmailQueryDto> {
     return this.http.get<GetByEmailQueryDto>(`${this.apiUrl}/lookup?email=${email}`);
   }
-
+  getUserList(query: GetUserQuery): Observable<PageResult<GetUserList>> {
+    const params = query ? buildHttpParams(query as any) : undefined;
+    return this.http.get<PageResult<GetUserList>>(this.apiUrl, { params });
+  }
   getUser(request?: any): Observable<GetUserByIdDto> {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.http.get<GetUserByIdDto>(`${this.apiUrl}/${request}`);
@@ -42,7 +48,7 @@ export class UserService {
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
-  updatePassword(request:UpdateUserPassword): Observable<void> {
+  updatePassword(request: UpdateUserPassword): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/passwordRecovery`, request);
   }
 }

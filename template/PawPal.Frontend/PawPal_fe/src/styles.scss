@@ -57,6 +57,7 @@ html {
   --box-shadow-color: #b09c85;
   --box-text-color: #544120;
   --box-disabled-color: #ccbda9;
+  --box-active-color: white;
 
   --primary-button-color: #354024;
 
@@ -97,6 +98,7 @@ body.dark-theme {
   --box-color: #e5cea7;
   --box-shadow-color: #5e4c3b;
   --box-text-color: #c7b18c;
+  --box-active-color: white;
 
   --primary-button-color: #3b4b23;
 
@@ -209,6 +211,6 @@ body.dark-theme {
   background: transparent !important;
   box-shadow: none !important;
 }
-.mdc-text-field--filled{
+.mdc-text-field--filled {
   background-color: var(--box-color) !important;
 }

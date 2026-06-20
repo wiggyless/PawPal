@@ -7,6 +7,8 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  signal,
+  ViewChild,
 } from '@angular/core';
 import { SignalRService } from '../../../../../../core/services/signalr.service';
 import { CommentService } from '../../../../../../api-services/comments/comments.service';
@@ -17,10 +19,10 @@ import {
 } from '../../../../../../api-services/comments/comments.model';
 import { PageResult } from '../../../../../../core/models/paging/page-result';
 import { CurrentUserService } from '../../../../../../core/services/auth/current-user.service';
-import { PageEvent } from '@angular/material/paginator';
 import { UserImageService } from '../../../../../../api-services/userImage/userImage-service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-post-comments',
@@ -31,129 +33,155 @@ import { Subscription } from 'rxjs';
 export class PostComments implements OnInit, OnDestroy {
   @Input({ required: true }) postId!: number;
   @Output() commentsLoaded = new EventEmitter<void>();
+  @ViewChild(CdkVirtualScrollViewport) viewport!: CdkVirtualScrollViewport;
+
   private signalRSubscription: Subscription = new Subscription();
   commentsService = inject(CommentService);
-  commentsList: PageResult<CommentDto> | undefined;
   currentUser = inject(CurrentUserService);
   userImgService = inject(UserImageService);
   router = inject(Router);
   cd = inject(ChangeDetectorRef);
 
-  hasLoaded: boolean = false;
-  comment: string = '';
+  commentsList: PageResult<CommentDto> = this.createEmptyPageResult();
+  hasLoaded = signal(false);
+  isLoadingMore: boolean = false;
+  comment = signal('');
 
-  page = {
-    pageSize: 4,
-    currentPage: 1,
-    includedTotal: true,
-    totalItems: 0,
-    totalPages: 0,
-    pageSizeOption: [4, 16, 32],
-  };
   request: CommentQuery = {
     postID: 0,
     paging: {
       page: 1,
-      pageSize: this.page.pageSize,
+      pageSize: 10,
     },
   };
+
   counter: number = 0;
-  objectUrl: string | null = null;
 
   constructor(private signalRService: SignalRService) {}
 
   ngOnInit(): void {
     this.request.postID = this.postId;
     this.loadComments();
-   this.signalRSubscription = this.signalRService.commentReceived$.subscribe((newComment) => {
-  if (newComment && newComment.postID == this.postId) {
-    this.userImgService.getUserImageByID(newComment.userID).subscribe({
-      next: (safeUrl) => {
-        newComment.imageData = safeUrl;
-        this.commentsList = {
-          ...this.commentsList!,
-          items: [newComment, ...this.commentsList!.items],
-        };
-        this.cd.detectChanges();
-      },
-      error: () => {
-        newComment.imageData = '';
-        this.commentsList = {
-          ...this.commentsList!,
-          items: [newComment, ...this.commentsList!.items],
-        };
-        this.cd.detectChanges();
-      },
+
+    this.signalRSubscription = this.signalRService.commentReceived$.subscribe((newComment) => {
+      if (newComment && newComment.postID == this.postId) {
+        this.userImgService.getUserImageByID(newComment.userID).subscribe({
+          next: (safeUrl) => {
+            newComment.imageData = safeUrl;
+            this.prependSignalRComment(newComment);
+          },
+          error: () => {
+            newComment.imageData = '';
+            this.prependSignalRComment(newComment);
+          },
+        });
+      }
     });
   }
-});
-  }
+
   ngOnDestroy(): void {
     this.signalRSubscription.unsubscribe();
   }
-  loadComments() {
-  this.commentsService.getComments(this.request).subscribe((comments) => {
-    this.commentsList = comments;
-    this.page = {
-      pageSize: comments.pageSize == undefined ? 4 : comments.pageSize,
-      currentPage: comments.currentPage,
-      includedTotal: comments.includedTotal,
-      totalItems: comments.totalItems,
-      totalPages: comments.totalPages,
-      pageSizeOption: this.page.pageSizeOption,
-    };
 
-    if (this.commentsList.items.length === 0) {
-      this.hasLoaded = true;
+  loadComments() {
+    if (this.isLoadingMore) return; // Guard entry
+    this.isLoadingMore = true;
+
+    this.commentsService.getComments(this.request).subscribe({
+      next: (incomingData) => {
+        const existingItems = this.commentsList?.items || [];
+        const newItems = incomingData.items || [];
+
+        this.commentsList = {
+          ...incomingData,
+          items: [...existingItems, ...newItems],
+        };
+        this.hasLoaded.set(false);
+        this.isLoadingMore = false;
+        this.commentsLoaded.emit();
+        if (this.commentsList.items.length == 0) return;
+        this.counter = 0;
+        newItems.forEach((element) => {
+          this.userImgService.getUserImageByID(element.userID).subscribe({
+            next: (safeUrl) => {
+              element.imageData = safeUrl;
+              this.handleImageCounter(newItems.length);
+            },
+            error: () => {
+              element.imageData = '';
+              this.handleImageCounter(newItems.length);
+            },
+          });
+        });
+      },
+      error: () => {
+        this.isLoadingMore = false;
+      },
+    });
+  }
+
+  handleImageCounter(batchTotal: number) {
+    this.counter++;
+    if (this.counter >= batchTotal) {
+      this.hasLoaded.set(true);
+      this.isLoadingMore = false;
+      this.counter = 0;
       this.commentsLoaded.emit();
       this.cd.detectChanges();
+    }
+  }
+
+  prependSignalRComment(newComment: CommentDto) {
+    this.commentsList = {
+      ...this.commentsList,
+      totalItems: (this.commentsList.totalItems || 0) + 1,
+      items: [newComment, ...this.commentsList.items],
+    };
+    this.cd.detectChanges();
+  }
+
+  onScrollIndexChange(index: number) {
+    const currentItemsCount = this.commentsList?.items?.length || 0;
+    const totalPossibleItems = this.commentsList?.totalItems || 0;
+
+    if (this.isLoadingMore || currentItemsCount >= totalPossibleItems) {
       return;
     }
 
-    this.counter = 0; 
-    this.commentsList.items.forEach((element) => {
-      this.userImgService.getUserImageByID(element.userID).subscribe({
-        next: (safeUrl) => {
-          element.imageData = safeUrl;
-          this.counter++;
-          this.checkCounter(this.commentsList!.items.length); 
-        },
-        error: () => {
-          element.imageData = '';
-          this.counter++;
-          this.checkCounter(this.commentsList!.items.length);
-        },
-      });
-    });
-  });
-}
-
-checkCounter(total: number) {
-  if (this.counter >= total) {
-    this.hasLoaded = true;
-    this.counter = 0;
-    this.commentsLoaded.emit();
-    this.cd.detectChanges();
+    if (index >= currentItemsCount - 3) {
+      this.request.paging.page++;
+      this.loadComments();
+    }
   }
-}
+
   addNewComment() {
     if (this.currentUser.getDefaultRoute() == '/login') {
       this.router.navigate(['login']);
-    } else if (this.comment.trim() != '') {
+    } else if (this.comment().trim() != '') {
       const newComment: CreateCommentCommand = {
         userID: this.currentUser.userId() as number,
         postID: +this.postId,
-        content: this.comment
+        content: this.comment(),
       };
-      this.commentsService.postComment(newComment).subscribe((response) => {
-        this.comment = '';
+      this.commentsService.postComment(newComment).subscribe(() => {
+        this.comment.set('');
         this.cd.detectChanges();
       });
     }
   }
-  handlePageEvent(event: PageEvent) {
-    this.request.paging.page = event.pageIndex + 1;
-    this.request.paging.pageSize = event.pageSize;
-    this.loadComments();
+
+  trackComment(index: number, item: CommentDto): any {
+    return item.commentID || index;
+  }
+
+  private createEmptyPageResult<T>(): PageResult<T> {
+    return {
+      items: [],
+      pageSize: 10,
+      currentPage: 1,
+      includedTotal: true,
+      totalItems: 0,
+      totalPages: 0,
+    };
   }
 }

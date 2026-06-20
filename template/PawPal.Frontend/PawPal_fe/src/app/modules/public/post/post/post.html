@@ -14,7 +14,7 @@
   <body>
     <div class="post-container">
       <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
-      @if (isImagesLoaded) {
+      @if (isImagesLoaded()) {
         <div class="post">
           @if (currentUser.userId() == userId) {
             <div class="post-buttons">
@@ -135,7 +135,7 @@
           <mat-spinner></mat-spinner>
         </div>
       }
-      @if (isImagesLoaded) {
+      @if (isImagesLoaded()) {
         <app-post-comments
           [postId]="postId"
           class="post-comments"

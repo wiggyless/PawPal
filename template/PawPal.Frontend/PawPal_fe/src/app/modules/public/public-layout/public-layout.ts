@@ -1,15 +1,11 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { AnimalCategoriesService } from '../../../api-services/animal-categories/animal-categories.service';
-import { CitiesService } from '../../../api-services/cities/cities.service';
 import { CurrentUserService } from '../../../core/services/auth/current-user.service';
 import { AnimalPostService } from '../../../api-services/animal-posts/animal-posts.service';
 import { forkJoin, Subscription } from 'rxjs';
 import { PageResult } from '../../../core/models/paging/page-result';
 import { ListAnimal } from '../../../api-services/animal-posts/animal-posts.model';
-import {
-  GetMainImagePostBlob,
-  GetMainImagePostBlobClass,
-} from '../../../api-services/animal-post-images/animal-post-images-model';
+import { GetMainImagePostBlobClass } from '../../../api-services/animal-post-images/animal-post-images-model';
 import { PostImagesService } from '../../../api-services/animal-post-images/animal-post-images-service';
 import { GenderService } from '../../../api-services/gender/gender-service';
 import { Router } from '@angular/router';
@@ -48,7 +44,7 @@ export class PublicLayout implements OnInit, OnDestroy {
   };
   catalogImages: GetMainImagePostBlobClass[] = [];
   env = environment;
-  imagesLoaded: boolean = false;
+  imagesLoaded = signal(false);
   ngOnInit(): void {
     this.mapGenderToText();
     this.mySubcribe = forkJoin({
@@ -60,7 +56,7 @@ export class PublicLayout implements OnInit, OnDestroy {
         this.postList = response.posts;
         this.cantons = response.cantons;
         this.animalCategories = response.categories;
-        this.imagesLoaded = true;
+        this.imagesLoaded.set(true);
         this.cd.detectChanges();
       },
     });

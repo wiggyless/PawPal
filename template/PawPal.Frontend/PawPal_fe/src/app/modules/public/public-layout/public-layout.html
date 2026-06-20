@@ -13,7 +13,7 @@
       >
       <br />
       <div class="options">
-        @if (imagesLoaded) {
+        @if (imagesLoaded()) {
           <mat-form-field>
             <mat-select
               class="sel"
@@ -27,13 +27,13 @@
             </mat-select>
           </mat-form-field>
         }
-          <mat-form-field>
-            <mat-select class="sel" placeholder="Select a canton" [(ngModel)]="selectedCanton">
-              @for (cant of cantons.items; track cant) {
-                <mat-option [value]="cant.id">{{ cant.fullName }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field>
+          <mat-select class="sel" placeholder="Select a canton" [(ngModel)]="selectedCanton">
+            @for (cant of cantons.items; track cant) {
+              <mat-option [value]="cant.id">{{ cant.fullName }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
       </div>
       <div class="search-btn">
         <button class="primarybtn" (click)="searchCatalog()">SEARCH</button>
@@ -42,8 +42,8 @@
     <div class="catalog-latest-container">
       <p class="catalog-latest-container-title">Check out our newest posts!</p>
       <div class="catalog-container">
-        <div [class]="imagesLoaded ? 'header-posts' : 'header-posts-unloaded'">
-          @if (imagesLoaded) {
+        <div [class]="imagesLoaded() ? 'header-posts' : 'header-posts-unloaded'">
+          @if (imagesLoaded()) {
             @for (post of postList?.items; track post; let i = $index) {
               <div class="post" (click)="routeToPost(post)">
                 <img [src]="getImageForPost(post.mainImage)" class="post-image" />
@@ -62,7 +62,7 @@
                 </div>
               </div>
             }
-          } @else if (!imagesLoaded) {
+          } @else if (!imagesLoaded()) {
             <div class="loading-container">
               <br />
               <p class="loading-spinner-text">Loading posts</p>

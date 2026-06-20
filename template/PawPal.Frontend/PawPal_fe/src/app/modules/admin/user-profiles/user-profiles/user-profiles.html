@@ -1,0 +1,33 @@
+<div class="admin-content-users-container">
+  <h1 class="my-user-title">USER PROFILES</h1>
+  <div class="admin-content-users">
+    @if (userProfilesList | async; as users) {
+      @for (user of users.items; track user) {
+        <div class="user" (click)="routeToProfile(user.id)">
+          <div class="user-image">
+            <img [src]="" />
+          </div>
+          <div class="user-info">
+            <p class="user-info-name">{{ user.firstName }} {{ user.lastName }}</p>
+            <p class="user-info-name">{{ user.username }}</p>
+            <p class="user-info-name">{{ user.username }}</p>
+          </div>
+        </div>
+      }
+    } @else if (!isLoaded()) {
+      <div class="loading-container">
+        <br />
+        <p class="loading-spinner-text">Loading users</p>
+        <mat-spinner></mat-spinner>
+      </div>
+    }
+  </div>
+  <mat-paginator
+    [length]="page.totalItems"
+    [pageSize]=""
+    [pageSizeOptions]="page.pageSizeOption"
+    aria-label="Select page"
+    (page)="handlePageEvent($event)"
+  >
+  </mat-paginator>
+</div>

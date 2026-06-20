@@ -124,9 +124,10 @@ export class UserProfileComponent implements OnInit {
     date: new FormControl({ value: '', disabled: true }),
     city: new FormControl<string | number>({ value: '', disabled: true }),
     aboutMe: new FormControl({ value: '', disabled: true }),
+    username: new FormControl({ value: '', disabled: true }),
   });
 
-  editing: boolean = false;
+  editing = signal(false);
 
   getUserData(): void {
     this.userDataService.getUser(this.currentUser.userId()).subscribe((response) => {
@@ -153,13 +154,13 @@ export class UserProfileComponent implements OnInit {
   }
 
   editMode(id: number) {
-    this.editing = true;
+    this.editing.set(true);
     this.loadCities();
     this.profileForm.enable();
     this.profileForm.get('city')?.setValue(this.originalCityId, { emitEvent: false });
   }
   saveChanges() {
-    this.editing = false;
+    this.editing.set(false);
 
     const cityValue = this.profileForm.get('city')?.value;
     const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;
@@ -167,6 +168,7 @@ export class UserProfileComponent implements OnInit {
     const firstName =
       (this.profileForm.get('firstName')?.value as string) || this.userData.firstName;
     const lastName = (this.profileForm.get('lastName')?.value as string) || this.userData.lastName;
+    const username = (this.profileForm.get('username')?.value as string) || this.userData.username;
     const aboutMe =
       (this.profileForm.get('aboutMe')?.value as string) || this.userData.aboutMe || '';
     const date = (this.profileForm.get('date')?.value as string) || this.userData.dateTime;
@@ -190,6 +192,7 @@ export class UserProfileComponent implements OnInit {
         date: date,
         cityId: cityId,
         aboutMe: aboutMe,
+        username: username,
       };
       requests.userPostData = this.userDataService.updateUser(this.userData.id, payload);
     }
@@ -205,7 +208,7 @@ export class UserProfileComponent implements OnInit {
         this.userData.lastName = lastName;
         this.userData.dateTime = date;
         this.userData.aboutMe = aboutMe;
-        console.log('aboutMe being sent:', aboutMe);
+        this.userData.username = username;
 
         const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
         if (selectedCity) {
@@ -248,7 +251,8 @@ export class UserProfileComponent implements OnInit {
       this.userData.lastName !== this.profileForm.get('lastName')?.value ||
       normalizeDate(originalDate) !== normalizeDate(formDate) ||
       cityId !== this.originalCityId ||
-      this.userData.aboutMe !== this.profileForm.get('aboutMe')?.value
+      this.userData.aboutMe !== this.profileForm.get('aboutMe')?.value ||
+      this.userData.username !== this.profileForm.get('username')?.value
     );
   }
 
@@ -303,7 +307,7 @@ export class UserProfileComponent implements OnInit {
       });
   }
   cancelSaving() {
-    this.editing = false;
+    this.editing.set(false);
     this.imageChanged = false;
     this.selectedImage = undefined;
     this.profileForm.disable();

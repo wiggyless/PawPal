@@ -27,6 +27,8 @@ import { MatProgressSpinner, MatSpinner } from '@angular/material/progress-spinn
 import { FooterComponent } from '../shared/components/footer/footer-component';
 import { PostComments } from './post/post/post-comments/post-comments/post-comments';
 import { PageResult } from '../../core/models/paging/page-result';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 @NgModule({
   declarations: [PublicLayout, CatalogComponent, PostComponent, PostComments],
   imports: [
@@ -55,6 +57,7 @@ import { PageResult } from '../../core/models/paging/page-result';
     MatSelectModule,
     MatProgressSpinner,
     FooterComponent,
+    ScrollingModule,
   ],
 })
 export class PublicModule {}

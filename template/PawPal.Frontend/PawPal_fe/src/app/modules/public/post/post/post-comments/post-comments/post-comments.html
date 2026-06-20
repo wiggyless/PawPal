@@ -1,12 +1,20 @@
-<p class="comments-title">COMMENTS ({{ commentsList?.totalItems }})</p>
+<p class="comments-title">COMMENTS ({{ commentsList.totalItems }})</p>
 <div class="comment-textarea">
   <textarea placeholder="Add your comment here..." [(ngModel)]="comment"></textarea>
   <button class="primarybtn" (click)="addNewComment()">UPLOAD COMMENT</button>
 </div>
+
 <div class="comments">
-  @if (hasLoaded) {
-    @for (comment of commentsList!.items; track comment) {
-      <div class="singl-comment-container">
+  @if (hasLoaded()) {
+    <cdk-virtual-scroll-viewport
+      [itemSize]="200"
+      class="viewport"
+      (scrolledIndexChange)="onScrollIndexChange($event)"
+    >
+      <div
+        *cdkVirtualFor="let comment of commentsList.items; trackBy: trackComment"
+        class="singl-comment-container"
+      >
         <div class="singl-comment-user">
           <div class="singl-comment-user-imgHolder">
             @if (comment.imageData != '') {
@@ -40,14 +48,6 @@
           <p>{{ comment.content }}</p>
         </div>
       </div>
-    }
+    </cdk-virtual-scroll-viewport>
   }
 </div>
-<mat-paginator
-  [length]="page.totalItems"
-  [pageSize]=""
-  [pageSizeOptions]="[4]"
-  aria-label="Select page"
-  (page)="handlePageEvent($event)"
->
-</mat-paginator>

@@ -130,6 +130,8 @@ public partial class Program
             // ---------------------------------------------------------
             // 4. Middleware pipeline
             // ---------------------------------------------------------
+            app.UseMiddleware<InputSanitizationMiddleware>();
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

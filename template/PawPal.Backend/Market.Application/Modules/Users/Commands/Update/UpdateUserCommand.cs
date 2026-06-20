@@ -17,5 +17,6 @@ namespace PawPal.Application.Modules.Users.Commands.Update
         public DateTime Date { get; set; }
         public int CityId { get; set; }
         public string AboutMe { get; set; }
+        public string Username { get; set;   }
     }
 }
