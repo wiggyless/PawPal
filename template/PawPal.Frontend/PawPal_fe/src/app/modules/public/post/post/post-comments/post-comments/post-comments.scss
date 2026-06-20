@@ -21,19 +21,17 @@
   resize: none;
   height: 200px;
   border-radius: 25px;
-  
+
   border: none;
   outline: none;
   resize: none;
-  box-shadow:
-    rgba(30, 26, 25, 0.19) 0px 10px 20px;
+  box-shadow: rgba(30, 26, 25, 0.19) 0px 10px 20px;
   background: #f3e9db;
   padding: 10px;
-  padding:20px;
+  padding: 20px;
   color: #51432d;
   font-size: 25px;
 }
-
 
 .comment-textarea button {
   position: absolute;
@@ -62,9 +60,11 @@ textarea:focus {
   background-color: var(--card-background-color);
   padding: 10px;
   border-radius: 25px;
-  border:none;
-  box-shadow:
-    rgba(30, 26, 25, 0.19) 0px 10px 20px
+  border: none;
+  box-shadow: rgba(30, 26, 25, 0.19) 0px 10px 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 .singl-comment-user-imgHolder {
   width: 120px;
@@ -85,7 +85,7 @@ textarea:focus {
   font-style: italic;
   color: #51432d;
   font-size: 20px;
-  padding:20px;
+  padding: 20px;
 }
 .comments-title {
   font-size: 30px;
@@ -218,4 +218,11 @@ mat-paginator {
 // Additional targeting for the min-line
 ::ng-deep .mat-mdc-paginator .mat-mdc-select-min-line {
   color: var(--text-color) !important;
+}
+.viewport {
+  height: 600px; /* Crucial: Viewport must have an explicit height */
+  width: 100%;
+  border: 1px solid #ccc;
+  display: flex;
+  margin-bottom: 100px;
 }

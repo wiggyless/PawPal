@@ -6,6 +6,7 @@ import {
   ElementRef,
   ChangeDetectorRef,
   HostListener,
+  signal,
 } from '@angular/core';
 import { AnimalCategoriesService } from '../../../../api-services/animal-categories/animal-categories.service';
 import { AnimalBreedService } from '../../../../api-services/animal-breed/animal-breed.service';
@@ -103,7 +104,7 @@ export class CatalogComponent
   tempList: number[] = [];
   cantonID: number | undefined;
   catalogImages: GetMainImagePostBlobClass[] = [];
-  imagesLoaded = false;
+  imagesLoaded = signal(true);
   sanitizer = inject(DomSanitizer);
   constructor() {
     super();
@@ -148,8 +149,7 @@ export class CatalogComponent
           })
           .subscribe((response) => {
             this.favoritePostList = response.postList!;
-            this.imagesLoaded = true;
-            this.cd.detectChanges();
+            this.imagesLoaded.set(true);
           });
         this.page = {
           pageSize: res.pageSize,
@@ -166,55 +166,6 @@ export class CatalogComponent
   getImageUrl(imagePath: string): SafeUrl {
     return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + imagePath);
   }
-  // no need for this conversion
-  /*
-  loadPostImages(idList: ListAnimal[]): void {
-    idList.forEach((element) => {
-      this.tempList.push(element.postID);
-    });
-    this.postImages.getMainImagePostBlob(this.tempList).subscribe((response) => {
-      this.setImages(response);
-    });
-  }
-  setImages(blobList: GetMainImagePostBlob[]): void {
-    blobList.forEach((x) => {
-      if (x.mainImage != '') {
-        const byteCharacters = atob(x.mainImage);
-        const byteNumbers = new Array(byteCharacters.length);
-
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-        let mimeType = 'image/png';
-        if (byteArray.length > 4) {
-          const header = byteArray.slice(0, 4);
-          let headerHex = '';
-          for (let i = 0; i < header.length; i++) {
-            headerHex += header[i].toString(16).toUpperCase();
-          }
-          if (headerHex.startsWith('89504E47')) {
-            mimeType = 'image/png';
-          } else if (headerHex.startsWith('FFD8FF')) {
-            mimeType = 'image/jpeg';
-          }
-        }
-        // 2. Create the Blob from the typed array
-        const blob = new Blob([byteArray], { type: mimeType });
-
-        // 3. Create the URL and add to form
-        const imageUrl = URL.createObjectURL(blob);
-        this.catalogImages.push(new GetMainImagePostBlobClass(x.postID, imageUrl));
-      }
-    });
-    this.imagesLoaded = true;
-    this.cd.detectChanges();
-  }
-  getPostImage(index: number) {
-    return this.catalogImages.find((x) => x.postID == index)?.mainImage;
-  }
-    */
   getBreedSelect(): void {
     this.animalBreedService
       .listAnimalBreed({ searchName: '', searchCategoryName: this.selectedCat })
@@ -250,7 +201,6 @@ export class CatalogComponent
     this.loadPosts();
   }
   clearSearch(): void {
-    //this.postArr = this.animalPosts.items;
     this.animalPosts = this.postArr;
     this.breedArr = new Array<ListAnimalBreedQueryDto>();
     this.selectedCat = null;

@@ -69,6 +69,7 @@ html, body {
   --box-shadow-color: #b09c85;
   --box-text-color: #544120;
   --box-disabled-color: #ccbda9;
+  --box-active-color: white;
 
   --primary-button-color: #354024;
 
@@ -103,6 +104,12 @@ html, body {
   --messaging-input-general-area: #b38c61;
 
   --messaging-text-tooltip: #8f6d49;
+
+  --settings-section-colour: #efe0d2;
+  --settings-section-secondary-colour: #dbc4af;
+  --settings-section-text: #483c28;
+  --settings-section-border: #c2ad8e;
+
 }
 
 body.dark-theme {
@@ -126,6 +133,7 @@ body.dark-theme {
   --box-color: #e5cea7;
   --box-shadow-color: #5e4c3b;
   --box-text-color: #c7b18c;
+  --box-active-color: white;
 
   --primary-button-color: #3b4b23;
 
@@ -156,6 +164,12 @@ body.dark-theme {
   --messaging-input-general-area: #191412;
 
   --messaging-text-tooltip: #ddb78e;
+
+  --settings-section-colour: #34291e;
+  --settings-section-secondary-colour: #4f3d2a;
+
+  --settings-section-text: #e3cda7;
+  --settings-section-border: #5e4b38;
 
 }
 .mat-mdc-form-field {
@@ -255,6 +269,6 @@ body.dark-theme {
   background: transparent !important;
   box-shadow: none !important;
 }
-.mdc-text-field--filled{
+.mdc-text-field--filled {
   background-color: var(--box-color) !important;
 }

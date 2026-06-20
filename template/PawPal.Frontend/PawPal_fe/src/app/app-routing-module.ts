@@ -1,10 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { myAuthGuard } from './core/guards/my-auth-guard';
-import { Adoption } from './modules/client/adpotion/adoption/adoption';
-import { LoginComponent } from './modules/auth/login/login/login';
-import { Messaging } from './modules/client/messaging/messaging';
-
 const routes: Routes = [
   {
     path: '',
@@ -14,21 +10,17 @@ const routes: Routes = [
     path: 'admin',
     canActivate: [myAuthGuard],
     data: { requireAuth: true, requireRoleId: 3 },
-    loadChildren: () => import('./modules/public/public-module').then((m) => m.PublicModule),
+    loadChildren: () => import('./modules/admin/admin-module').then((m) => m.AdminModule),
   },
   {
     path: 'auth',
     loadChildren: () => import('./modules/auth/auth-module').then((m) => m.AuthModule),
   },
-  
-  {path: 'client/messaging',
-    component: Messaging,
-    loadChildren: () => ClientModule,
-  },
   {
-    path: 'client', 
-    component: PublicLayout,
-    loadChildren: () => PublicModule,
+    path: 'client',
+    canActivate: [myAuthGuard],
+    data: { requireAuth: true, path: 'client' },
+    loadChildren: () => import('./modules/client/client-module').then((m) => m.ClientModule),
   },
 ];
 @NgModule({

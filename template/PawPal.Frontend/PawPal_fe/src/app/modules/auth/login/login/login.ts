@@ -5,7 +5,7 @@ import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.se
 import { Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
-import { DialoguePopupService } from '../../../shared/components/dialogue-popup/dialogue-popup.service';
+import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthTimeoutService } from '../../../../core/services/auth/auth-timeout.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -28,16 +28,22 @@ export class LoginComponent extends BaseComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private authTimeoutService = inject(AuthTimeoutService);
   private dialog = inject(MatDialog);
+
   showPassword = false;
   showResend = false;
   resendSuccess = false;
+
+  form = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
+  });
+
   ngOnInit(): void {
     const message = this.route.snapshot.queryParamMap.get('message');
     if (message) {
       this.dialogueService.success('Registration Successful!', message);
     }
 
-    // always render captcha, not just when there's a message
     setTimeout(() => {
       if (typeof grecaptcha !== 'undefined') {
         grecaptcha.render('recaptcha-container', {
@@ -46,21 +52,6 @@ export class LoginComponent extends BaseComponent implements OnInit {
       }
     }, 500);
   }
-
-  setTimeout(() => {
-    if (typeof grecaptcha !== 'undefined') {
-      grecaptcha.render('recaptcha-container', {
-        sitekey: '6Le7KPcsAAAAAPFwAFtqrrAaxMiQqNIRyxaAuyAu'
-      });
-    }
-  }, 500);
-}
- 
-  
-  form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
-  });
 
   onSubmit(): void {
     if (this.form.invalid) return;
@@ -83,6 +74,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
       recaptchaToken: token,
     };
     console.log(payload);
+
     this.auth.login(payload).subscribe({
       next: () => {
         const target = this.currentUser.getDefaultRoute();
@@ -92,10 +84,16 @@ export class LoginComponent extends BaseComponent implements OnInit {
       },
       error: (err) => {
         const message = err.error?.message || '';
-  if (message.toLowerCase().includes('verify') || message.toLowerCase().includes('confirmed')) {
-    this.showResend = true;
-      }
-        this.dialogueService.error('Login Failed', err.error?.message || 'An error occurred during login. Please try again.');
+        if (
+          message.toLowerCase().includes('verify') ||
+          message.toLowerCase().includes('confirmed')
+        ) {
+          this.showResend = true;
+        }
+        this.dialogueService.error(
+          'Login Failed',
+          err.error?.message || 'An error occurred during login. Please try again.',
+        );
         console.error('Login error:', err);
         grecaptcha.reset();
       },
@@ -105,19 +103,23 @@ export class LoginComponent extends BaseComponent implements OnInit {
   togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
-  loadPasswordRecoveryDialog() {
+
+  loadPasswordRecoveryDialog(): void {
     this.dialog.open(PasswordRecoveryDialog, {
       width: '50%',
-      panelClass: 'transparent-dialog-panel', // Your custom class name
+      panelClass: 'transparent-dialog-panel',
       hasBackdrop: true,
     });
   }
-
   resendEmail(): void {
-  const email = this.form.value.email ?? '';
-  this.auth.resendConfirmationEmail(email).subscribe({
-    next: () => this.resendSuccess = true,
-    error: () => this.dialogueService.error('Error', 'Could not resend confirmation email. Please try again.')
-  });
-}
+    const email = this.form.value.email ?? '';
+    this.auth.resendConfirmationEmail(email).subscribe({
+      next: () => (this.resendSuccess = true),
+      error: () =>
+        this.dialogueService.error(
+          'Error',
+          'Could not resend confirmation email. Please try again.',
+        ),
+    });
+  }
 }

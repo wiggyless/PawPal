@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { AnimalRequestService } from '../../../../api-services/animals-adoption/animals-adoption-service';
@@ -63,7 +63,7 @@ export class RequestHistory implements OnInit, OnDestroy {
   };
   dialog = inject(MatDialog);
   catalogImages: GetMainImagePostBlobClass[] = [];
-  imagesLoaded = false;
+  imagesLoaded = signal(false);
   tempList: number[] = [];
   ngOnInit(): void {
     this.loadRequest();
@@ -76,6 +76,7 @@ export class RequestHistory implements OnInit, OnDestroy {
       next: (response) => {
         this.requestsList = response.request;
         this.cantonsList = response.cantons;
+        this.imagesLoaded.set(true);
       },
     });
   }
@@ -98,52 +99,6 @@ export class RequestHistory implements OnInit, OnDestroy {
       },
     });
   }
-  /*
-  loadPostImages(idList: GetAdoptionRequestList[]): void {
-    idList.forEach((element) => {
-      this.tempList.push(element.postID);
-    });
-    console.log(idList);
-    this.postImages.getMainImagePostBlob(this.tempList).subscribe((response) => {
-      this.setImages(response);
-    });
-  }
-  setImages(blobList: GetMainImagePostBlob[]): void {
-    blobList.forEach((x) => {
-      if (x.mainImage != '') {
-        const byteCharacters = atob(x.mainImage);
-        const byteNumbers = new Array(byteCharacters.length);
-
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-        let mimeType = 'image/png';
-        if (byteArray.length > 4) {
-          const header = byteArray.slice(0, 4);
-          let headerHex = '';
-          for (let i = 0; i < header.length; i++) {
-            headerHex += header[i].toString(16).toUpperCase();
-          }
-          if (headerHex.startsWith('89504E47')) {
-            mimeType = 'image/png';
-          } else if (headerHex.startsWith('FFD8FF')) {
-            mimeType = 'image/jpeg';
-          }
-        }
-        // 2. Create the Blob from the typed array
-        const blob = new Blob([byteArray], { type: mimeType });
-
-        // 3. Create the URL and add to form
-        const imageUrl = URL.createObjectURL(blob);
-        this.catalogImages.push(new GetMainImagePostBlobClass(x.postID, imageUrl));
-      }
-    });
-    this.imagesLoaded = true;
-    this.cd.detectChanges();
-  }
-    */
   getPostImage(imagePath: string) {
     return this.sanitizer.bypassSecurityTrustUrl(this.envLink.apiUrl + imagePath);
   }

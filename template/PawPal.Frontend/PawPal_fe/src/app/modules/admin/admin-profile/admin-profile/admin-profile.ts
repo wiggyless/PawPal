@@ -1,0 +1,320 @@
+import { ChangeDetectorRef, Component, effect, inject, OnInit, signal } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { forkJoin } from 'rxjs';
+import { CitiesService } from '../../../../api-services/cities/cities.service';
+import {
+  UserImageQuery,
+  UserImageCommand,
+} from '../../../../api-services/userImage/userImage-model';
+import { UserImageService } from '../../../../api-services/userImage/userImage-service';
+import { GetUserByIdDto, UpdateUserCommand } from '../../../../api-services/users/users-model';
+import { UserService } from '../../../../api-services/users/users-service';
+import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
+import {
+  UserProfileImageCropDialog,
+  CropDialogResult,
+} from '../../../client/my-profile/user-profile-component/user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
+import { DialoguePopupService } from '../../../shared/components/dialogue-popup/dialogue-popup.service';
+
+@Component({
+  selector: 'app-admin-profile',
+  standalone: false,
+  templateUrl: './admin-profile.html',
+  styleUrl: './admin-profile.scss',
+})
+export class AdminProfile implements OnInit {
+  constructor(currentUser: CurrentUserService, userDataService: UserService) {
+    this.currentUser = currentUser;
+    this.userDataService = userDataService;
+    effect(() => {
+      const userId = this.currentUser.userId();
+      const usrImg: UserImageQuery = {
+        userID: userId!,
+      };
+      if (!userId) {
+        this.resetUserData();
+        return;
+      }
+      forkJoin({
+        userData: this.userDataService.getUser(userId),
+        cities: this.cityService.listCities(),
+      }).subscribe({
+        next: (response) => {
+          this.userData = response.userData;
+          this.cityList = response.cities;
+          this.userImageService.getUserImageByID(this.userData.id).subscribe({
+            next: (res) => {
+              this.isUpdate = true;
+              this.imageUrl.set(res);
+              this.originalImageUrl = res;
+            },
+            error: () => {
+              this.isUpdate = false;
+              this.imageUrl.set(null);
+              this.originalImageUrl = null;
+            },
+          });
+          this.initializeInputData();
+        },
+      });
+    });
+  }
+  ngOnInit(): void {
+    this.userData;
+  }
+  ngOnDestroy(): void {
+    if (this.objectUrl) {
+      URL.revokeObjectURL(this.objectUrl);
+    }
+  }
+  //services
+  isUpdate: boolean = false;
+  private imageChanged: boolean = false;
+  currentUser: CurrentUserService;
+  userDataService: UserService;
+  dialog = inject(DialoguePopupService);
+  dialogRef = inject(MatDialog);
+  cityService = inject(CitiesService);
+  userImageService = inject(UserImageService);
+  cd = inject(ChangeDetectorRef);
+  cityList: any = [];
+  city: string = '';
+  selectedImage: File | undefined;
+  objectUrl: string | null = null;
+  private originalCityId: number = 0;
+  private sanitizer = inject(DomSanitizer);
+  imageUrl = signal<SafeUrl | null>(null);
+  private originalImageUrl: SafeUrl | null = null;
+  originalUrl: string | null = null;
+  userData: GetUserByIdDto = {
+    id: 0,
+    firstName: '',
+    lastName: '',
+    email: '',
+    dateTime: '',
+    city: '',
+    cantonAbbrevation: '',
+    cityID: 0,
+    username: '',
+    aboutMe: '',
+  };
+  userImage: UserImageCommand = {
+    userID: 0,
+  };
+  private resetUserData(): void {
+    this.userData = {
+      id: 0,
+      firstName: '',
+      lastName: '',
+      email: '',
+      dateTime: '',
+      city: '',
+      cantonAbbrevation: '',
+      cityID: 0,
+      username: '',
+      aboutMe: '',
+    };
+    this.profileForm.reset();
+  }
+  profileForm = new FormGroup({
+    firstName: new FormControl({ value: '', disabled: true }),
+    lastName: new FormControl({ value: '', disabled: true }),
+    date: new FormControl({ value: '', disabled: true }),
+    city: new FormControl<string | number>({ value: '', disabled: true }),
+    aboutMe: new FormControl({ value: '', disabled: true }),
+    username: new FormControl({ value: '', disabled: true }),
+  });
+
+  editing = signal(false);
+
+  getUserData(): void {
+    this.userDataService.getUser(this.currentUser.userId()).subscribe((response) => {
+      this.userData = response;
+      this.initializeInputData();
+    });
+  }
+  initializeInputData(): void {
+    this.originalCityId = this.userData.cityID;
+    this.profileForm.patchValue({
+      firstName: this.userData.firstName,
+      lastName: this.userData.lastName,
+      date: this.userData.dateTime,
+      city: this.userData.city,
+      aboutMe: this.userData.aboutMe,
+      username: this.userData.username,
+    });
+  }
+
+  loadCities() {
+    this.cityService.listCities().subscribe((res) => {
+      console.log(res);
+      this.cityList = res;
+    });
+  }
+
+  editMode(id: number) {
+    this.editing.set(true);
+    this.loadCities();
+    this.profileForm.enable();
+    this.profileForm.get('city')?.setValue(this.originalCityId, { emitEvent: false });
+  }
+  saveChanges() {
+    this.editing.set(false);
+    this.profileForm.disable();
+    const cityValue = this.profileForm.get('city')?.value;
+    const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;
+
+    const firstName =
+      (this.profileForm.get('firstName')?.value as string) || this.userData.firstName;
+    const lastName = (this.profileForm.get('lastName')?.value as string) || this.userData.lastName;
+    const username = (this.profileForm.get('username')?.value as string) || this.userData.username;
+    const aboutMe =
+      (this.profileForm.get('aboutMe')?.value as string) || this.userData.aboutMe || '';
+    const date = (this.profileForm.get('date')?.value as string) || this.userData.dateTime;
+
+    const formChanged = this.hasFormFieldChanges(cityId);
+    const imageChanged = this.hasImageChanges();
+
+    this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+
+    if (!formChanged && !imageChanged) {
+      console.log();
+      return;
+    }
+
+    const requests: any = {};
+
+    if (formChanged) {
+      const payload: UpdateUserCommand = {
+        firstName: firstName,
+        lastName: lastName,
+        profilePictureURL: this.originalUrl ?? '',
+        date: date,
+        cityId: cityId,
+        aboutMe: aboutMe,
+        username: username,
+      };
+      console.log(payload);
+      requests.userPostData = this.userDataService.updateUser(this.userData.id, payload);
+    }
+    if (imageChanged) {
+      requests.userImage = this.isUpdate
+        ? this.userImageService.updateUserImage(this.userData.id, this.selectedImage!)
+        : this.userImageService.createUserImage(this.userData.id, this.selectedImage!);
+    }
+
+    forkJoin(requests).subscribe({
+      next: () => {
+        this.userData.firstName = firstName;
+        this.userData.lastName = lastName;
+        this.userData.dateTime = date;
+        this.userData.aboutMe = aboutMe;
+        this.userData.username = username;
+
+        const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
+        if (selectedCity) {
+          this.userData.city = selectedCity.name;
+          this.originalCityId = cityId;
+        }
+        this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+        if (imageChanged) {
+          this.isUpdate = true;
+          this.imageChanged = false;
+          this.originalImageUrl = this.imageUrl();
+          this.selectedImage = undefined;
+        }
+        this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
+      },
+      error: (res) => {
+        console.log('ERROR: =>', res);
+        this.dialog.error(
+          'Error',
+          'An error occurred while updating your profile. Please try again.',
+          'OK',
+        );
+      },
+    });
+    this.profileForm.disable();
+  }
+  hasFormFieldChanges(cityId: number): boolean {
+    const formDate = this.profileForm.get('date')?.value;
+    const originalDate = this.userData.dateTime;
+
+    const normalizeDate = (val: any): string => {
+      if (!val) return '';
+      const d = new Date(val);
+      return isNaN(d.getTime()) ? String(val) : d.toISOString().split('T')[0];
+    };
+
+    return (
+      this.userData.firstName !== this.profileForm.get('firstName')?.value ||
+      this.userData.lastName !== this.profileForm.get('lastName')?.value ||
+      normalizeDate(originalDate) !== normalizeDate(formDate) ||
+      cityId !== this.originalCityId ||
+      this.userData.aboutMe !== this.profileForm.get('aboutMe')?.value ||
+      this.userData.username !== this.profileForm.get('username')?.value
+    );
+  }
+
+  hasImageChanges(): boolean {
+    return this.imageChanged && !!this.selectedImage;
+  }
+
+  checkFormChanges(): boolean {
+    return this.hasFormFieldChanges(this.originalCityId) || this.hasImageChanges();
+  }
+  /*
+  editPhoto(event: any) {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      this.selectedImage = file;
+      this.imageChanged = true;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.originalUrl = this.imageUrl()?.toString() ?? null;
+        this.imageUrl.set(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+    */
+
+  editPhoto(event: any): void {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    const file: File = files[0];
+
+    event.target.value = '';
+    this.dialogRef
+      .open(UserProfileImageCropDialog, {
+        data: { imageFile: file },
+        width: '40vw',
+        maxWidth: '40vw',
+        maxHeight: '95vh',
+        disableClose: true,
+        panelClass: 'image-crop-dialog-panel',
+      })
+      .afterClosed()
+      .subscribe((result: CropDialogResult | undefined) => {
+        if (!result) return;
+
+        this.selectedImage = result.croppedFile;
+        this.imageChanged = true;
+        this.originalUrl = this.imageUrl()?.toString() ?? null;
+        this.imageUrl.set(result.croppedUrl);
+      });
+  }
+  cancelSaving() {
+    this.editing.set(false);
+    this.imageChanged = false;
+    this.selectedImage = undefined;
+    this.profileForm.disable();
+    this.imageUrl.set(this.originalImageUrl);
+    this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+    this.profileForm.get('aboutMe')?.setValue(this.userData.aboutMe ?? '', { emitEvent: false });
+  }
+}

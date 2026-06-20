@@ -10,12 +10,13 @@ import { SettingsComponent } from './settings/settings-component';
 import { MySentRequests } from './my-sent-requests/my-sent-requests/my-sent-requests';
 import { RequestHistory } from './request-history/request-history/request-history';
 import { Messaging } from './messaging/messaging';
+import { UserProfileComponent } from './my-profile/user-profile-component/user-profile-component';
+import { Adoption } from './adpotion/adoption/adoption';
 const routes: Routes = [
   {
     path: '',
     component: ClientLayout, // this should contain <router-outlet>
     children: [
-      { path: 'create-post', component: CreatePost },
       { path: 'myPosts', component: MyPosts },
       { path: 'my-profile', component: UserProfileComponent },
       { path: 'my-requests', component: MyRequests },
@@ -27,9 +28,11 @@ const routes: Routes = [
     ],
   },
   {
-    path: 'messaging', 
+    path: 'messages', 
     component: Messaging,
-  }
+  },
+   { path: 'create-post', component: CreatePost },
+   {path: 'adoption', component:Adoption}
 ];
 
 @NgModule({

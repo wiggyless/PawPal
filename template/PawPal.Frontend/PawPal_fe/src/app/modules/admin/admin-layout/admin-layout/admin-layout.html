@@ -1,0 +1,13 @@
+<div class="admin-layout-container">
+  <div class="admin-layout">
+    <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
+    <app-admin-sidenavbar class="admin-side-navbar" [selItem]="selectedItem"></app-admin-sidenavbar>
+    <div
+      [class]="
+        url() == '/my-profile' || url() == '/settings' ? 'admin-content-center' : 'admin-content'
+      "
+    >
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

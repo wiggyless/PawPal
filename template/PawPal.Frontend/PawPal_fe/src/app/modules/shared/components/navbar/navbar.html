@@ -133,9 +133,9 @@
               (mouseenter)="menuOpened = true"
               (mouseleave)="menuOpened = false"
             >
-              <div class="menu-item">POST NEWS</div>
+              <div class="menu-item" routerLink="/admin/my-profile">DETAILS</div>
+              <div class="menu-item">USERS</div>
               <div class="menu-item">REPORTED USERS</div>
-              <div class="menu-item">REPORTED POSTS</div>
             </div>
           }
         </div>
@@ -250,7 +250,6 @@
               />
             </svg>
 
-            <!-- dropdown -->
             @if (notificationsOpen) {
               <div class="notifications-dropdown" (click)="$event.stopPropagation()">
                 <div class="notifications-header">
@@ -283,7 +282,7 @@
             }
           </div>
 
-          <div class="icon-circle messages-icon">
+          <div class="icon-circle messages-icon" routerLink="/client/messages">
             <svg
               width="28px"
               height="28px"
