@@ -28,6 +28,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private authTimeoutService = inject(AuthTimeoutService);
   private dialog = inject(MatDialog);
+
   showPassword = false;
   showResend = false;
   resendSuccess = false;
@@ -73,6 +74,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
       recaptchaToken: token,
     };
     console.log(payload);
+
     this.auth.login(payload).subscribe({
       next: () => {
         const target = this.currentUser.getDefaultRoute();
@@ -82,10 +84,16 @@ export class LoginComponent extends BaseComponent implements OnInit {
       },
       error: (err) => {
         const message = err.error?.message || '';
-        if (message.toLowerCase().includes('verify') || message.toLowerCase().includes('confirmed')) {
+        if (
+          message.toLowerCase().includes('verify') ||
+          message.toLowerCase().includes('confirmed')
+        ) {
           this.showResend = true;
         }
-        this.dialogueService.error('Login Failed', err.error?.message || 'An error occurred during login. Please try again.');
+        this.dialogueService.error(
+          'Login Failed',
+          err.error?.message || 'An error occurred during login. Please try again.',
+        );
         console.error('Login error:', err);
         grecaptcha.reset();
       },
@@ -103,12 +111,15 @@ export class LoginComponent extends BaseComponent implements OnInit {
       hasBackdrop: true,
     });
   }
-
   resendEmail(): void {
     const email = this.form.value.email ?? '';
     this.auth.resendConfirmationEmail(email).subscribe({
-      next: () => this.resendSuccess = true,
-      error: () => this.dialogueService.error('Error', 'Could not resend confirmation email. Please try again.')
+      next: () => (this.resendSuccess = true),
+      error: () =>
+        this.dialogueService.error(
+          'Error',
+          'Could not resend confirmation email. Please try again.',
+        ),
     });
   }
 }

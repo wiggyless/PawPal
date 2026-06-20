@@ -11,7 +11,7 @@
           />
         </svg>
       }
-      @if (editing) {
+      @if (editing()) {
         <div class="user-image-input">
           <input
             placeholder="Image"
@@ -50,9 +50,14 @@
     </div>
     <div class="user-profile-detials-header-text">
       <h1 class="user-profile-details-name">{{ userData.firstName }} {{ userData.lastName }}</h1>
-      <p class="user-profile-details-prop">Username: {{ userData.username }}</p>
+      <form [formGroup]="profileForm" class="username-form">
+        <label class="user-profile-details-prop">Username</label>
+        <mat-form-field>
+          <input matInput formControlName="username" />
+        </mat-form-field>
+      </form>
     </div>
-    @if (editing) {
+    @if (editing()) {
       <div class="edit-buttons">
         <button class="primarybtn" (click)="saveChanges()">SAVE CHANGES</button>
         <button class="secondarybtn" (click)="cancelSaving()">CANCEL</button>
@@ -97,7 +102,7 @@
       <div class="user-profile-form-input-container">
         <div class="form-field-format">
           <label class="input-label">City</label>
-          @if (editing) {
+          @if (editing()) {
             <mat-form-field>
               <mat-icon matIconPrefix
                 ><svg
@@ -148,12 +153,12 @@
       </div>
       <div class="user-profile-form-input-container" id="user-profile-form-input-aboutme-container">
         <label for="about-Me-Text" class="input-label">About me</label>
-        <input
-          class="user-profile-form-input"
+        <textarea
+          [class]="editing() == true ? 'user-profile-form-input-active' : 'user-profile-form-input'"
           id="about-Me-Text"
           type="text"
           formControlName="aboutMe"
-        />
+        ></textarea>
       </div>
     </form>
   </div>

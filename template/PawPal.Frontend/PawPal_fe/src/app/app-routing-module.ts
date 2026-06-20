@@ -10,13 +10,18 @@ const routes: Routes = [
     path: 'admin',
     canActivate: [myAuthGuard],
     data: { requireAuth: true, requireRoleId: 3 },
-    loadChildren: () => import('./modules/public/public-module').then((m) => m.PublicModule),
+    loadChildren: () => import('./modules/admin/admin-module').then((m) => m.AdminModule),
   },
   {
     path: 'auth',
     loadChildren: () => import('./modules/auth/auth-module').then((m) => m.AuthModule),
   },
-  { path: 'client', loadChildren: () => import('./modules/client/client-module').then(m => m.ClientModule) }
+  {
+    path: 'client',
+    canActivate: [myAuthGuard],
+    data: { requireAuth: true, path: 'client' },
+    loadChildren: () => import('./modules/client/client-module').then((m) => m.ClientModule),
+  },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -45,8 +45,6 @@ input[type='file'] {
 }
 .user-profile-details-prop {
   font-size: 20px;
-  margin-top: 10px;
-  margin-bottom: 10px;
 }
 .user-profile-detials-main {
   display: flex;
@@ -129,4 +127,18 @@ input[type='file'] {
 }
 ::ng-deep .mdc-text-field--filled.mdc-text-field--disabled {
   background-color: var(--box-disabled-color) !important;
+}
+.username-form {
+  display: flex;
+  flex-direction: row;
+  column-gap: 10px;
+  margin-top: 10px;
+  height: 100%;
+}
+.username-form .mat-mdc-form-field {
+  height: 60px;
+}
+.user-profile-form-input-active {
+  background-color: var(--box-active-color);
+  resize: none;
 }

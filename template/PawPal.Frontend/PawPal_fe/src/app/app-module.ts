@@ -8,10 +8,18 @@ import { DialoguePopupComponent } from './modules/shared/components/dialogue-pop
 import { authInterceptor } from '../app/core/interceptors/auth-interceptor.service';
 import { rateLimitInterceptor } from './core/interceptors/rate-limit-interceptor.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { provideNativeDateAdapter } from '@angular/material/core';
 @NgModule({
   declarations: [App],
-  imports: [BrowserModule, AppRoutingModule, PublicRoutingModule, DialoguePopupComponent, DragDropModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    PublicRoutingModule,
+    DialoguePopupComponent,
+    DragDropModule,
+  ],
   providers: [
+    provideNativeDateAdapter(),
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(
       withFetch(),
