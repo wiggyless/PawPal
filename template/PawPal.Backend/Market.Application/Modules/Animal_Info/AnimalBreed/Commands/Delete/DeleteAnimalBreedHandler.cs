@@ -11,8 +11,6 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalBreed.Commands.Delete
     {
         public async Task<Unit> Handle(DeleteAnimalBreedCommand request,CancellationToken cancellationToken)
         {
-            if (user is null)
-                throw new PawPalConflictException("User is not allowed to do this action");
             var breed = await context.Breeds.Where(x=>x.Id == request.Id).FirstOrDefaultAsync(cancellationToken);
             if (breed is null)
                 throw new PawPalNotFoundException("Breed does not exist");

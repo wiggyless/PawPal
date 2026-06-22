@@ -22,6 +22,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogueComponent } from '../../../client/dialogue-component/dialogue-component';
 import { UserImageService } from '../../../../api-services/userImage/userImage-service';
 import { SafeUrl } from '@angular/platform-browser';
+import { ReportPostComponent } from '../../../client/report-post-component/report-post-component';
 
 @Component({
   selector: 'app-post',
@@ -185,4 +186,9 @@ export class PostComponent implements OnInit {
     });
   }
 }
+  openReportDialog(): void{
+    this.dialog.open(ReportPostComponent, {
+  data: { postId: this.postId, userId: this.currentUser.userId() }
+});
+  }
 }
