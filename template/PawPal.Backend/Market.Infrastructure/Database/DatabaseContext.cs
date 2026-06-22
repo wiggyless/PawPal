@@ -46,7 +46,7 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<SecurityAnswers> SecurityAnswers => Set<SecurityAnswers>();
     public DbSet<ConversationEntity> Conversations => Set<ConversationEntity>();
     public DbSet<MessageEntity> Messages => Set<MessageEntity>();
-    public DbSet<ReportedPostsEntity> ReportesPosts => Set<ReportedPostsEntity>();
+    public DbSet<ReportedPostsEntity> ReportedPosts => Set<ReportedPostsEntity>();
 
     private readonly TimeProvider _clock;
     public DatabaseContext(DbContextOptions<DatabaseContext> options, TimeProvider clock) : base(options)
