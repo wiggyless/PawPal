@@ -43,7 +43,6 @@ export interface UpdateUserCommand {
   date: string;
   cityId: number;
   aboutMe?: string;
-  username: string;
 }
 
 export interface DeleteUserCommand {

@@ -1,45 +1,26 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  ChangeDetectorRef,
-  HostListener,
-  signal,
-} from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef, signal } from '@angular/core';
 import { AnimalCategoriesService } from '../../../../api-services/animal-categories/animal-categories.service';
 import { AnimalBreedService } from '../../../../api-services/animal-breed/animal-breed.service';
 import { ListAnimalBreedQueryDto } from '../../../../api-services/animal-breed/animal-breed.model';
 import { ListAnimalCategoriesQueryDto } from '../../../../api-services/animal-categories/animal-categories.model';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
-import {
-  AnimalPostByIdQuery,
-  GetPostQuery,
-  ListAnimal,
-} from '../../../../api-services/animal-posts/animal-posts.model';
+import { GetPostQuery, ListAnimal } from '../../../../api-services/animal-posts/animal-posts.model';
 import { MatInput } from '@angular/material/input';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GenderService } from '../../../../api-services/gender/gender-service';
 import { ListGenderDto } from '../../../../api-services/gender/gender-model';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { CantonsService } from '../../../../api-services/cantons/cantons-service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
-import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
+import { shareReplay, tap } from 'rxjs/operators';
 import { PageResult } from '../../../../core/models/paging/page-result';
 import { BaseListPagedComponent } from '../../../../core/components/base-classes/base-list-paged-component';
 import { PageEvent } from '@angular/material/paginator';
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
-import {
-  GetMainImagePostBlob,
-  GetMainImagePostBlobClass,
-  ListMainImageId,
-} from '../../../../api-services/animal-post-images/animal-post-images-model';
 import { ListCantonsDto } from '../../../../api-services/cantons/cantons-model';
 import { LikedPostsService } from '../../../../api-services/likedPosts/likedPosts-service';
-import { GetLikedPostListQuery } from '../../../../api-services/likedPosts/likedPosts-model';
 import { environment } from '../../../../../environments/environment';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
@@ -66,6 +47,7 @@ export class CatalogComponent
   cd = inject(ChangeDetectorRef);
   activeRoute = inject(ActivatedRoute);
   likedPosts = inject(LikedPostsService);
+  private fb = inject(FormBuilder);
   // Page Values ( didnt use the template cuz whats going on???)
   page = {
     pageSize: 4,
@@ -77,20 +59,26 @@ export class CatalogComponent
   };
 
   // Lists //
-  animalCategories: any = [];
-  animalBreed: any = [];
+  animalCategories: PageResult<ListAnimalCategoriesQueryDto> | undefined;
+  animalBreed: PageResult<ListAnimalBreedQueryDto> | undefined;
   animalPosts: Observable<PageResult<ListAnimal>> = new Observable<PageResult<ListAnimal>>();
-  genderList: any = [];
+  genderList: PageResult<ListGenderDto> | undefined;
   cantonsList: PageResult<ListCantonsDto> | undefined;
   breedArr: Array<ListAnimalBreedQueryDto> = new Array<ListAnimalBreedQueryDto>();
   postArr: Observable<PageResult<ListAnimal>> = new Observable<PageResult<ListAnimal>>();
 
   // List selections //
-  selectedCat: any;
-  selectedBreed: any;
-  selectedGender: any;
-  selectedCanton: any;
-  selectedCity: any;
+  filterForm = new FormGroup({
+    selectedCat: new FormControl<string>(''),
+    selectedBreed: new FormControl<string>(''),
+    selectedGender: new FormControl<string>(''),
+    selectedCanton: new FormControl<ListCantonsDto>({
+      id: null,
+      fullName: '',
+      cities: [],
+    }),
+    selectedCity: new FormControl<string>(''),
+  });
   ageValue: string = '';
   datePicker = new FormGroup({
     start: new FormControl<any>(null),
@@ -103,7 +91,6 @@ export class CatalogComponent
   fromInputMax: MatInput = new MatInput();
   tempList: number[] = [];
   cantonID: number | undefined;
-  catalogImages: GetMainImagePostBlobClass[] = [];
   imagesLoaded = signal(true);
   sanitizer = inject(DomSanitizer);
   constructor() {
@@ -118,6 +105,9 @@ export class CatalogComponent
   ngOnInit(): void {
     this.loadPagedData();
   }
+  getValue(valueName: string) {
+    return this.filterForm.get(valueName)?.value;
+  }
   protected override loadPagedData(): void {
     forkJoin({
       categories: this.animalCatService.listAnimalCategories(),
@@ -128,11 +118,21 @@ export class CatalogComponent
         this.animalCategories = response.categories;
         this.cantonsList = response.cantons;
         this.genderList = response.gender;
+        console.log(this.genderList);
         const state = history.state;
         const categoryName = this.activeRoute.snapshot.queryParamMap.get('categoryName');
         if (state != null && categoryName != null) {
-          this.selectedCanton = this.cantonsList.items.find((x) => x.id == state.cantonID);
-          this.selectedCat = categoryName;
+          this.filterForm.setValue({
+            selectedBreed: '',
+            selectedGender: '',
+            selectedCity: '',
+            selectedCanton: this.cantonsList.items.find((x) => x.id == state.cantonID) ?? {
+              id: null,
+              fullName: '',
+              cities: [],
+            },
+            selectedCat: categoryName,
+          });
           this.searchCatalog();
         } else this.loadPosts();
       },
@@ -168,7 +168,7 @@ export class CatalogComponent
   }
   getBreedSelect(): void {
     this.animalBreedService
-      .listAnimalBreed({ searchName: '', searchCategoryName: this.selectedCat })
+      .listAnimalBreed({ searchName: '', searchCategoryName: this.getValue('selectedCat') })
       .subscribe((response) => {
         this.breedArr = response.items;
         this.cd.detectChanges();
@@ -188,35 +188,25 @@ export class CatalogComponent
     return postTime.getTime() >= chosenTimeMin! && postTime.getTime() <= chosenTimeMax!;
   }
   searchCatalog(): void {
-    this.request = {
-      searchCategoryName: this.selectedCat,
-      searchBreed: this.selectedBreed,
-      searchCityName: this.selectedCity,
-      searchDateAddedMax: this.datePicker.value.end,
-      searchDateAddedMin: this.datePicker.value.start,
-      searchGender: this.selectedGender,
-      searchCantonId: this.selectedCanton.id,
-      paging: this.request.paging,
-    };
+    this.mapRequest();
     this.loadPosts();
   }
   clearSearch(): void {
-    this.animalPosts = this.postArr;
+    this.filterForm.reset();
     this.breedArr = new Array<ListAnimalBreedQueryDto>();
-    this.selectedCat = null;
-    this.selectedBreed = null;
-    this.selectedGender = null;
-    this.selectedCanton = null;
-    this.selectedCity = null;
     this.ageValue = '';
     this.datePicker.patchValue({
       start: null,
       end: null,
     });
+    console.log(this.getValue('selectedBreed'));
+    this.mapRequest();
+    this.loadPosts();
   }
   changeCity() {
-    console.log(this.selectedCanton);
-    this.selectedCity = null;
+    this.filterForm.patchValue({
+      selectedCity: null,
+    });
     this.cd.detectChanges();
   }
   routeToPost(post: ListAnimal) {
@@ -263,5 +253,18 @@ export class CatalogComponent
           });
       }
     }
+  }
+  mapRequest() {
+    this.request = {
+      searchCategoryName: this.getValue('selectedCat'),
+      searchBreed: this.getValue('selectedBreed'),
+      searchCityName: this.getValue('selectedCity'),
+      searchDateAddedMax: this.datePicker.value.end,
+      searchDateAddedMin: this.datePicker.value.start,
+      searchGender: this.getValue('selectedGender'),
+      searchCantonId: this.getValue('selectedCanton')?.id,
+      paging: this.request.paging,
+    };
+    console.log(this.request);
   }
 }

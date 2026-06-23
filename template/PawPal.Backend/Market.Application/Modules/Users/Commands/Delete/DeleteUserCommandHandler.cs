@@ -9,7 +9,10 @@ namespace PawPal.Application.Modules.Users.Commands.Delete
         {
             var user = await context.Users.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (user == null) throw new PawPalNotFoundException($"User with Id {request.Id} does not exist!");
-
+            if(user.Id != appCurrentUser.UserId)
+            {
+                throw new PawPalConflictException("User is not allowed to do this action");
+            }
             var userPosts = await context.Posts.Where(x => x.UserId == user.Id). ToListAsync(cancellationToken);  
 
             foreach( var userPost in userPosts ) {

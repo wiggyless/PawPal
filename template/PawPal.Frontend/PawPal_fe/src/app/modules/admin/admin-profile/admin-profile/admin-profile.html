@@ -50,13 +50,7 @@
     </div>
     <div class="user-profile-detials-header-text">
       <h1 class="user-profile-details-name">{{ userData.firstName }} {{ userData.lastName }}</h1>
-
-      <form [formGroup]="profileForm" class="username-form">
-        <label class="user-profile-details-prop">Username</label>
-        <mat-form-field>
-          <input matInput formControlName="username" />
-        </mat-form-field>
-      </form>
+      <p class="user-profile-details-prop">Username: {{ userData.username }}</p>
     </div>
     @if (editing()) {
       <div class="edit-buttons">

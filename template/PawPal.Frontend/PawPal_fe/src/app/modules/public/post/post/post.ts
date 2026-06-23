@@ -176,14 +176,15 @@ export class PostComponent implements OnInit {
   }
 
   routeMessage(): void {
-  if (this.currentUser.getDefaultRoute() == '/login') {
-    this.routeNext.navigate(['login']);
-  } else {
-    this.routeNext.navigate(['/client/messaging'], {
-      queryParams: {
-        recipientId: this.userId
-      }
-    });
+    if (this.currentUser.getDefaultRoute() == '/login') {
+      this.routeNext.navigate(['login']);
+    } else {
+      this.routeNext.navigate(['/client/messages'], {
+        queryParams: {
+          recipientId: this.userId,
+        },
+      });
+    }
   }
 }
   openReportDialog(): void{

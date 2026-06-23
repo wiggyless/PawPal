@@ -1,9 +1,9 @@
 body {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(187, 116, 34, 0.2) 100%), #e5d7c4;
+  background-image: linear-gradient(var(--background-color), var(--background-color-second));
 }
 .container {
   min-height: 100vh;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(187, 116, 34, 0.2) 100%), #e5d7c4;
+  background-image: linear-gradient(var(--background-color), var(--background-color-second));
   padding: 2rem 1rem;
 
   @media (min-width: 768px) {
@@ -32,7 +32,7 @@ input[type='file']::file-selector-button {
   height: 350px;
   border: 1px solid black;
   border-radius: 25px;
-  background-color: #d5ba8d;
+  background-color: var(--background-color);
 }
 input[type='file']::content {
   font-style: italic;
@@ -552,7 +552,7 @@ input[type='number'] {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #c7b18c;
+  background: var(--card-background-color);
   z-index: 1;
   padding: 50px;
   border: 2px solid #e5d7c4;
@@ -657,7 +657,7 @@ input[type='number'] {
 .image-input-text {
   position: absolute;
   font-size: 18px;
-  padding-top:10px;
+  padding-top: 10px;
 }
 .image-input-text-warning {
   bottom: 38%;

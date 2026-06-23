@@ -11,7 +11,7 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
     {
         public async Task<GetUserByIdQueryDto> Handle(GetUserByIdQuery request,CancellationToken cancellationToken)
         {
-            
+
             var user = await context.Users.
                 Include(x =>x.City).
                 Include(x=>x.City.Canton).

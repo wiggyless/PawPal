@@ -1,32 +1,38 @@
 <div class="client-content-posts-container">
   <h1 class="my-post-title">MY POSTS</h1>
   <div class="client-content-posts">
-    @if (animalPostList | async; as posts) {
-      @for (post of posts.items; track post) {
-        <div class="post" (click)="loadPost(post)">
-          <div class="post-image">
-            <img [src]="post.firstImage == '' ? '' : envLink.apiUrl + post.firstImage" />
+    @if (!isEmpty()) {
+      @if (animalPostList | async; as posts) {
+        @for (post of posts.items; track post) {
+          <div class="post" (click)="loadPost(post)">
+            <div class="post-image">
+              <img [src]="post.firstImage == '' ? '' : envLink.apiUrl + post.firstImage" />
+            </div>
+            <div class="post-info">
+              <p class="post-info-name">{{ post.animalName }}</p>
+              <p class="post-info-views">0 views</p>
+            </div>
           </div>
-          <div class="post-info">
-            <p class="post-info-name">{{ post.animalName }}</p>
-            <p class="post-info-views">0 views</p>
-          </div>
+        }
+      } @else if (!isLoaded) {
+        <div class="loading-container">
+          <br />
+          <p class="loading-spinner-text">Loading posts</p>
+          <mat-spinner></mat-spinner>
         </div>
       }
-    } @else if (!isLoaded) {
-      <div class="loading-container">
-        <br />
-        <p class="loading-spinner-text">Loading posts</p>
-        <mat-spinner></mat-spinner>
-      </div>
+    } @else {
+      <p class="loading-spinner-text">No posts found!</p>
     }
   </div>
-  <mat-paginator
-    [length]="page.totalItems"
-    [pageSize]=""
-    [pageSizeOptions]="page.pageSizeOption"
-    aria-label="Select page"
-    (page)="handlePageEvent($event)"
-  >
-  </mat-paginator>
+  @if (!isEmpty()) {
+    <mat-paginator
+      [length]="page.totalItems"
+      [pageSize]=""
+      [pageSizeOptions]="page.pageSizeOption"
+      aria-label="Select page"
+      (page)="handlePageEvent($event)"
+    >
+    </mat-paginator>
+  }
 </div>

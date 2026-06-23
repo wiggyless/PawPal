@@ -5,7 +5,6 @@ import { GetAdoptionRequirementsById } from '../../../../../api-services/animals
 import { forkJoin, Subscription } from 'rxjs';
 import { AnimalPostService } from '../../../../../api-services/animal-posts/animal-posts.service';
 import { UserService } from '../../../../../api-services/users/users-service';
-import { AnimalPostByIdQuery } from '../../../../../api-services/animal-posts/animal-posts.model';
 import { GetUserByIdDto } from '../../../../../api-services/users/users-model';
 import { AnimalRequestService } from '../../../../../api-services/animals-adoption/animals-adoption-service';
 import { UpdateRequestByID } from '../../../../../api-services/animals-adoption/animals-adoption-model';
@@ -16,7 +15,6 @@ import { UpdateRequestByID } from '../../../../../api-services/animals-adoption/
   styleUrl: './my-sent-request-dialog.scss',
 })
 export class MySentRequestDialog implements OnInit, OnDestroy {
-
   dialogReg = inject(MatDialogRef);
   dialogData = inject(MAT_DIALOG_DATA);
   postAPI = inject(AnimalPostService);
@@ -29,7 +27,7 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
   status: string = '';
   cityCantonName: string = '';
   sentDate: Date = new Date();
-  
+
   sentDateString = '';
   isAnotherUser = false;
   requestID: number = 0;

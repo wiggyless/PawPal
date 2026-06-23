@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using PawPal.Domain.Entities.Animal_Info;
 namespace PawPal.Application.Modules.Posts.Commands.Create
 {
-    public sealed class CreatePostCommandHandler(IAppDbContext context)
+    public sealed class CreatePostCommandHandler(IAppDbContext context,IAppCurrentUser currentUser)
             : IRequestHandler<CreatePostCommand, int>
     {
         public async Task<int> Handle(CreatePostCommand request,CancellationToken cancellationToken)
@@ -16,7 +16,7 @@ namespace PawPal.Application.Modules.Posts.Commands.Create
             var user = await context.Users.Where(x => x.Id == request.UserId).FirstOrDefaultAsync(cancellationToken);
             var animal = await context.Animals.Where(x => x.Id == request.AnimalID).FirstOrDefaultAsync(cancellationToken);
             var health = await context.AnimalHealthHistories.Where(x => x.AnimalId == animal.Id).FirstOrDefaultAsync(cancellationToken);
-            if(user.RoleId!=2) // probably have to change this 
+            if(currentUser.RoleId!=2 && currentUser.IsAuthenticated)
             {
                 throw new Exception("User is not verified to make this action");
             }

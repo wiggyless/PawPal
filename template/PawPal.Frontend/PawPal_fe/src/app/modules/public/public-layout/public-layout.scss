@@ -173,7 +173,7 @@
 .header {
   width: 100%;
   height: 550px;
-  background-image: url('../public-layout/images/header-photo.jpg');
+  background-image: url('../public-layout/images/header-photo.webp');
   background-size: cover;
   background-position-y: -100px;
   top: 75px;
@@ -337,7 +337,6 @@
 .post-detail p {
   margin-bottom: 0px;
   color: var(--card-text-color);
-
 }
 .loading-spinner-text {
   color: #cdb58b;
@@ -352,8 +351,8 @@
 }
 .loading-container {
   display: flex;
-  justify-content: center; 
-  align-items: center; 
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
 }
 .loading-spinner-text {

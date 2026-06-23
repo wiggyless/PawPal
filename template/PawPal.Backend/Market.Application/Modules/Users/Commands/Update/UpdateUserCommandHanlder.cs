@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Users.Commands.Update
 {
-    public sealed class UpdateUserCommandHanlder(IAppDbContext context)
+    public sealed class UpdateUserCommandHanlder(IAppDbContext context,IAppCurrentUser currentUser)
         : IRequestHandler<UpdateUserCommand,Unit>
     {
         public async Task<Unit> Handle(UpdateUserCommand request,CancellationToken cancellationToken)
@@ -17,6 +17,10 @@ namespace PawPal.Application.Modules.Users.Commands.Update
             if(user == null)
             {
                 throw new PawPalNotFoundException($"User with Id {request.Id} does not exist!");
+            }
+            if(currentUser.UserId != request.Id)
+            {
+                throw new PawPalConflictException("User is not allowed to do this action");
             }
             var city = await context.Cities.FirstOrDefaultAsync(x => x.Id == request.CityId,cancellationToken);
             if (!request.AreStringPropertiesValid("ProfilePictureURL","AboutMe"))
@@ -29,7 +33,6 @@ namespace PawPal.Application.Modules.Users.Commands.Update
             user.BirthDate = request.Date;
             user.CityId = request.CityId;
             user.AboutMe = request.AboutMe;
-            user.Username = request.Username;
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

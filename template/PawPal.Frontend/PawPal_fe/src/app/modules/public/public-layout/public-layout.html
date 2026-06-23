@@ -21,7 +21,7 @@
               [(ngModel)]="selectedCategory"
               (valueChange)="showCategory()"
             >
-              @for (cat of animalCategories.items; track cat) {
+              @for (cat of animalCategories?.items; track cat) {
                 <mat-option [value]="cat.categoryName">{{ cat.categoryName }}</mat-option>
               }
             </mat-select>
@@ -51,7 +51,7 @@
                   <h3>{{ post.name }}</h3>
                   <p>
                     {{ post.breed }},
-                    @if (this.genderListForDisplay.items[0].id === post.genderID) {
+                    @if (this.genderListForDisplay!.items[0].id === post.genderID) {
                       Female
                     } @else {
                       Male

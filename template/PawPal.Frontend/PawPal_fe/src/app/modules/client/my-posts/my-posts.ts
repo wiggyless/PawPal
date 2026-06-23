@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CurrentUserService } from '../../../core/services/auth/current-user.service';
 import { AnimalPostService } from '../../../api-services/animal-posts/animal-posts.service';
 import {
@@ -8,7 +8,6 @@ import {
 } from '../../../api-services/animal-posts/animal-posts.model';
 import { environment } from '../../../../environments/environment';
 import { Observable, tap } from 'rxjs';
-import { ListAnimalsDto } from '../../../api-services/animals/animal-model';
 import { Router } from '@angular/router';
 import { PageResult } from '../../../core/models/paging/page-result';
 import { BaseListPagedComponent } from '../../../core/components/base-classes/base-list-paged-component';
@@ -43,7 +42,7 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
     totalPages: 0,
     pageSizeOption: [4, 8],
   };
-
+  isEmpty = signal(false);
   ngOnInit(): void {
     this.loadAnimalPosts();
   }
@@ -54,6 +53,9 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
     };
     this.animalPostList = this.animalPostsService.listAnimalPostsByUserId(userObject).pipe(
       tap((res) => {
+        if (res.items.length == 0) {
+          this.isEmpty.set(true);
+        }
         this.page = {
           pageSize: res.pageSize,
           currentPage: res.currentPage,

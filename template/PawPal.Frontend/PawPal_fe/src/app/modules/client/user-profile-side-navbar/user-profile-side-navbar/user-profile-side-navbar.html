@@ -3,7 +3,7 @@
     <mat-list-item
       class="user-profile-option"
       (click)="onSelect(items.value)"
-      [class.user-profile-option-bold]="selItem == items.value"
+      [class.user-profile-option-bold]="url() == items.value"
       [routerLink]="items.value"
       [state]="{
         item: items.key,

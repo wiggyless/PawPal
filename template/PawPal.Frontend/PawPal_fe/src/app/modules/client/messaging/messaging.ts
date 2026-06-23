@@ -1,6 +1,12 @@
 import {
-  Component, OnInit, OnDestroy, inject,
-  ChangeDetectorRef, ViewChild, ElementRef, AfterViewChecked
+  Component,
+  OnInit,
+  OnDestroy,
+  inject,
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
+  AfterViewChecked,
 } from '@angular/core';
 import { Subject, Subscription, debounceTime } from 'rxjs';
 import { MessagingService } from '../../../api-services/messaging/messaging.service';
@@ -14,10 +20,9 @@ import { UserImageService } from '../../../api-services/userImage/userImage-serv
   selector: 'app-messaging',
   standalone: false,
   templateUrl: './messaging.html',
-  styleUrl: './messaging.scss'
+  styleUrl: './messaging.scss',
 })
 export class Messaging implements OnInit, OnDestroy, AfterViewChecked {
-
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
   conversations: ConversationDto[] = [];
@@ -45,30 +50,35 @@ export class Messaging implements OnInit, OnDestroy, AfterViewChecked {
   constructor(
     private messagingService: MessagingService,
     private signalRService: SignalRService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
     this.loadConversations();
 
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       const recipientId = params['recipientId'];
       if (recipientId) {
         this.messagingService
           .getOrCreateConversation({
             senderId: this.currentUser.userId() as number,
-            recipientId: Number(recipientId)
+            recipientId: Number(recipientId),
           })
-          .subscribe(convo => {
-            const exists = this.conversations.find(c => c.conversationId === convo.conversationId);
+          .subscribe((convo) => {
+            const exists = this.conversations.find(
+              (c) => c.conversationId === convo.conversationId,
+            );
             if (!exists) this.conversations = [convo, ...this.conversations];
             this.selectConversation(convo);
           });
       }
     });
 
-    this.messageSub = this.signalRService.messageReceived$.subscribe(msg => {
-      if (this.selectedConversation && msg.conversationId === this.selectedConversation.conversationId) {
+    this.messageSub = this.signalRService.messageReceived$.subscribe((msg) => {
+      if (
+        this.selectedConversation &&
+        msg.conversationId === this.selectedConversation.conversationId
+      ) {
         this.messages = [...this.messages, msg];
         this.shouldScrollToBottom = true;
       }
@@ -87,13 +97,11 @@ export class Messaging implements OnInit, OnDestroy, AfterViewChecked {
       this.cd.detectChanges();
     });
 
-    this.typingDebounceSub = this.typingSubject
-      .pipe(debounceTime(2000))
-      .subscribe(() => {
-        if (this.selectedConversation) {
-          this.signalRService.notifyStoppedTyping(this.selectedConversation.otherUserId);
-        }
-      });
+    this.typingDebounceSub = this.typingSubject.pipe(debounceTime(2000)).subscribe(() => {
+      if (this.selectedConversation) {
+        this.signalRService.notifyStoppedTyping(this.selectedConversation.otherUserId);
+      }
+    });
   }
 
   ngAfterViewChecked() {
@@ -106,36 +114,42 @@ export class Messaging implements OnInit, OnDestroy, AfterViewChecked {
   loadConversations() {
     this.messagingService
       .getConversations(this.currentUser.userId()! as number)
-      .subscribe(convos => {
+      .subscribe((convos) => {
         if (convos.length === 0) {
           this.conversations = [];
           this.cd.detectChanges();
           return;
         }
         let counter = 0;
-        convos.forEach(convo => {
+        convos.forEach((convo) => {
           this.userImgService.getUserImageByID(convo.otherUserId).subscribe({
-            next: (safeUrl) => { convo.imageData = safeUrl; },
-            error: ()        => { convo.imageData = ''; },
-            complete: ()     => {
+            next: (safeUrl) => {
+              convo.imageData = safeUrl;
+            },
+            error: () => {
+              convo.imageData = '';
+            },
+            complete: () => {
               counter++;
               if (counter >= convos.length) {
                 this.conversations = convos;
                 if (this.selectedConversation) {
-                  const updated = convos.find(c => c.conversationId === this.selectedConversation!.conversationId);
+                  const updated = convos.find(
+                    (c) => c.conversationId === this.selectedConversation!.conversationId,
+                  );
                   if (updated) this.selectedConversation = updated;
                 }
                 this.cd.detectChanges();
               }
-            }
+            },
           });
         });
       });
   }
 
   selectConversation(convo: ConversationDto) {
-    this.conversations = this.conversations.map(c =>
-      c.conversationId === convo.conversationId ? { ...c, unreadCount: 0 } : c
+    this.conversations = this.conversations.map((c) =>
+      c.conversationId === convo.conversationId ? { ...c, unreadCount: 0 } : c,
     );
     this.selectedConversation = convo;
     this.messages = [];
@@ -145,7 +159,7 @@ export class Messaging implements OnInit, OnDestroy, AfterViewChecked {
 
     this.messagingService
       .getMessages(convo.conversationId, this.currentUser.userId() as number, 1)
-      .subscribe(result => {
+      .subscribe((result) => {
         this.messages = [...result.items].reverse();
         this.totalItems = result.totalItems;
         this.shouldScrollToBottom = true;
@@ -161,8 +175,12 @@ export class Messaging implements OnInit, OnDestroy, AfterViewChecked {
     this.currentPage++;
 
     this.messagingService
-      .getMessages(this.selectedConversation.conversationId, this.currentUser.userId() as number, this.currentPage)
-      .subscribe(result => {
+      .getMessages(
+        this.selectedConversation.conversationId,
+        this.currentUser.userId() as number,
+        this.currentPage,
+      )
+      .subscribe((result) => {
         this.totalItems = result.totalItems;
         this.messages = [...result.items.reverse(), ...this.messages];
         this.isLoadingMore = false;
@@ -185,22 +203,24 @@ export class Messaging implements OnInit, OnDestroy, AfterViewChecked {
     this.isOtherUserTyping = false;
     this.typingSubject.next();
 
-    this.messagingService.sendMessage({
-      senderId: this.currentUser.userId() as number,
-      recipientId: this.selectedConversation.otherUserId,
-      content
-    }).subscribe(msg => {
-      this.messages = [...this.messages, msg];
-      this.shouldScrollToBottom = true;
+    this.messagingService
+      .sendMessage({
+        senderId: this.currentUser.userId() as number,
+        recipientId: this.selectedConversation.otherUserId,
+        content,
+      })
+      .subscribe((msg) => {
+        this.messages = [...this.messages, msg];
+        this.shouldScrollToBottom = true;
 
-      this.conversations = this.conversations.map(c =>
-        c.conversationId === msg.conversationId
-          ? { ...c, lastMessage: msg.content, lastMessageAt: msg.sentAt }
-          : c
-      );
+        this.conversations = this.conversations.map((c) =>
+          c.conversationId === msg.conversationId
+            ? { ...c, lastMessage: msg.content, lastMessageAt: msg.sentAt }
+            : c,
+        );
 
-      this.cd.detectChanges();
-    });
+        this.cd.detectChanges();
+      });
   }
 
   private scrollToBottom() {

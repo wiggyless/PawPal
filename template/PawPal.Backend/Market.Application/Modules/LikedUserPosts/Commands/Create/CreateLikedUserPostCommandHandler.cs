@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace PawPal.Application.Modules.LikedUserPosts.Commands.Create
 {
-    public sealed class CreateLikedUserPostCommandHandler(IAppDbContext context) : 
+    public sealed class CreateLikedUserPostCommandHandler(IAppDbContext context,IAppCurrentUser currentUser) : 
         IRequestHandler<CreateLikedUserPostCommand,int>
     { 
 
@@ -18,6 +18,10 @@ namespace PawPal.Application.Modules.LikedUserPosts.Commands.Create
             if (user is null)
             {
                 throw new PawPalNotFoundException("User does not exist");
+            }
+            if (!currentUser.IsAuthenticated)
+            {
+                throw new PawPalConflictException("User is not allowed to do this action");
             }
             if (likedPosts.FirstOrDefault(x => x.PostId == command.PostID && x.UserId == command.UserID) != null){
                 return 0;
