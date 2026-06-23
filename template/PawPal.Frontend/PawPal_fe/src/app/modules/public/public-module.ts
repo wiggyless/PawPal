@@ -27,6 +27,9 @@ import { FooterComponent } from '../shared/components/footer/footer-component';
 import { PostComments } from './post/post/post-comments/post-comments/post-comments';
 import { PageResult } from '../../core/models/paging/page-result';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
+import { ClientModule } from '../client/client-module';
+
 @NgModule({
   declarations: [PublicLayout, CatalogComponent, PostComponent, PostComments],
   imports: [
@@ -56,6 +59,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatProgressSpinner,
     FooterComponent,
     ScrollingModule,
+    CommonModule,
+    ClientModule
   ],
 })
 export class PublicModule {}

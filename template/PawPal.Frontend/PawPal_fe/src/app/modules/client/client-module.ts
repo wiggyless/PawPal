@@ -21,7 +21,7 @@ import { MatDatepickerModule, MatDateRangeInput } from '@angular/material/datepi
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { CarouselModule } from 'primeng/carousel';
 import { MatIcon } from '@angular/material/icon';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogContainer, MatDialogModule } from '@angular/material/dialog';
 import { DialogueComponent } from './dialogue-component/dialogue-component';
 import { MatPaginator } from '@angular/material/paginator';
 import { A11yModule } from '@angular/cdk/a11y';
@@ -41,6 +41,8 @@ import { MatSpinner } from '@angular/material/progress-spinner';
 import { Messaging } from './messaging/messaging';
 import { SlicePipe, UpperCasePipe } from '@angular/common';
 import { ImageCropperComponent } from 'ngx-image-cropper';
+import { MatSelect } from '@angular/material/select';
+import { ReportPostComponent } from './report-post-component/report-post-component';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,7 @@ import { ImageCropperComponent } from 'ngx-image-cropper';
     UserProfileImageCropDialog,
     SecurityQuestionsDialog,
     Messaging,
+    ReportPostComponent
   ],
   imports: [
     ClientRoutingModule,
@@ -90,6 +93,11 @@ import { ImageCropperComponent } from 'ngx-image-cropper';
     SlicePipe,
     UpperCasePipe,
     ImageCropperComponent,
+    MatSelect,
+
+  ],
+  exports: [
+    ReportPostComponent, 
   ],
   providers: [provideNativeDateAdapter(), MatDialog],
 })
