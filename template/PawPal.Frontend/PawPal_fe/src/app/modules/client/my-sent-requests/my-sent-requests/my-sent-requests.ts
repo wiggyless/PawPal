@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { AnimalRequestService } from '../../../../api-services/animals-adoption/animals-adoption-service';
 import {
@@ -39,6 +39,7 @@ export class MySentRequests implements OnInit, OnDestroy {
   private mySubscription?: Subscription;
   private myPostSubscription?: Subscription;
   requestsList: PageResult<GetAdoptionRequestList> | undefined;
+  listEmpty = signal(false);
   fullName: string = '';
   requestQuery: GetAdoptionRequestListQuery = {
     userID: this.currentUser.userId() as number,
@@ -63,6 +64,10 @@ export class MySentRequests implements OnInit, OnDestroy {
     }).subscribe({
       next: (response) => {
         this.requestsList = response.request;
+        if (this.requestsList.items.length == 0) {
+          this.listEmpty.set(true);
+        }
+        console.log(this.requestsList);
         this.cantonsList = response.cantons;
         this.imagesLoaded.set(true);
       },

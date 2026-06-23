@@ -60,7 +60,6 @@ export class AuthFacadeService {
   refresh(payload: RefreshTokenCommand): Observable<RefreshTokenCommandDto> {
     return this.api.refresh(payload).pipe(
       tap((response: RefreshTokenCommandDto) => {
-        console.log('Poslat refresh');
         this.storage.saveRefresh(response);
         this.decodeAndSetUser(response.accessToken);
       }),
@@ -73,7 +72,6 @@ export class AuthFacadeService {
 
   timeoutRefresh(payload: RefreshTokenCommand) {
     this.api.refresh(payload).subscribe((response) => {
-      console.log('Poslat refresh');
       this.storage.saveRefresh(response);
       this.decodeAndSetUser(response.accessToken);
     });
@@ -103,15 +101,12 @@ export class AuthFacadeService {
   private decodeAndSetUser(token: string): void {
     try {
       const payload = jwtDecode<JwtPayloadDto>(token);
-      console.log('JWT Payload:', payload);
-
       const user: CurrentUserDto = {
         userId: Number(payload.sub),
         email: payload[NET_CLAIM_TYPES.Email],
         roleid: Number(payload.role_id),
         tokenVersion: Number(payload.ver),
       };
-      console.log(user);
 
       this._currentUser.set(user);
     } catch (error) {
@@ -123,11 +118,8 @@ export class AuthFacadeService {
   private clearUserState(): void {
     this._currentUser.set(null);
     this.storage.clear();
-    console.log('Storage cleared!');
   }
   resendConfirmationEmail(email: string): Observable<void> {
-  return this.api.resendConfirmationEmail(email).pipe(
-    map(() => void 0)
-  );
-}
+    return this.api.resendConfirmationEmail(email).pipe(map(() => void 0));
+  }
 }

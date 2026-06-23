@@ -4,7 +4,7 @@
   <div class="requests-list">
     <!-- Request Card 1 - Processing -->
     @if (imagesLoaded()) {
-      @if (requestsList?.items?.length == 0) {
+      @if (listEmpty()) {
         <p class="loading-spinner-text">No requests found!</p>
       }
       @for (request of requestsList?.items; track request; let i = $index) {

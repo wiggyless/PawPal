@@ -194,7 +194,6 @@ export class AdminProfile implements OnInit {
         date: date,
         cityId: cityId,
         aboutMe: aboutMe,
-        username: username,
       };
       console.log(payload);
       requests.userPostData = this.userDataService.updateUser(this.userData.id, payload);

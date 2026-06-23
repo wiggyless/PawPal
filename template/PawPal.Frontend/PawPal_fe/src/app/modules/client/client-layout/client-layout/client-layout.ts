@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit, signal } from
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-client-layout',
@@ -23,19 +22,17 @@ export class ClientLayout implements OnInit {
   url = signal('');
   ngOnInit(): void {
     this.selectedItem = this.router.url;
-    console.log(this.selectedItem);
+    this.url.set(this.router.url.slice(this.router.url.indexOf('/', 1), this.router.url.length));
+    this.trackRouteChanges();
   }
 
   private trackRouteChanges(): void {
     this.router.events
       .pipe(
-        // Filter out intermediate states (like NavigationStart, ResolveStart)
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        // Automatically unsubscribes when the component or service is destroyed
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((event: NavigationEnd) => {
-        // Access the completed URL
         console.log('URL successfully changed to:', event.urlAfterRedirects);
         this.url.set(
           event.urlAfterRedirects.slice(
@@ -43,7 +40,6 @@ export class ClientLayout implements OnInit {
             event.urlAfterRedirects.length,
           ),
         );
-        // Execute your custom logic here (e.g., analytics, resetting scroll position)
       });
   }
 }

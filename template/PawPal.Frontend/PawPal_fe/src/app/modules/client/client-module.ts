@@ -3,7 +3,7 @@ import { ClientRoutingModule } from './client-routing-module';
 import { UserProfileComponent } from './my-profile/user-profile-component/user-profile-component';
 import { ClientLayout } from './client-layout/client-layout/client-layout';
 import { NavbarComponent } from '../shared/components/navbar/navbar';
-import { Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MyPosts } from './my-posts/my-posts';
 import { UserProfileSideNavbar } from './user-profile-side-navbar/user-profile-side-navbar/user-profile-side-navbar';
@@ -39,7 +39,7 @@ import { SecurityQuestionsDialog } from './settings/securityQuestions-dialog/sec
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatSpinner } from '@angular/material/progress-spinner';
 import { Messaging } from './messaging/messaging';
-import {SlicePipe, UpperCasePipe} from "@angular/common";
+import { SlicePipe, UpperCasePipe } from '@angular/common';
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { MatSelect } from '@angular/material/select';
 import { ReportPostComponent } from './report-post-component/report-post-component';
@@ -79,7 +79,7 @@ import { ReportPostComponent } from './report-post-component/report-post-compone
     MatSelectModule,
     FormsModule,
     MatCheckboxModule,
-    MatDatepickerModule, 
+    MatDatepickerModule,
     CarouselModule,
     MatIcon,
     AsyncPipe,

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Users.Queries.GetByEmail
 {
-    public sealed class GetUserByEmailQueryHandler(IAppDbContext context)
+    public sealed class GetUserByEmailQueryHandler(IAppDbContext context,IAppCurrentUser currentUser)
        : IRequestHandler<GetUserByEmailQuery, GetUserByEmailQueryDto>
     {
         public Task<GetUserByEmailQueryDto> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)

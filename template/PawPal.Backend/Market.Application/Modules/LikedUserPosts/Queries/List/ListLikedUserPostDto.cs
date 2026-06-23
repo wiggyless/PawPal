@@ -9,6 +9,6 @@ namespace PawPal.Application.Modules.LikedUserPosts.Queries.List
     public class ListLikedUserPostDto
     {
         public int UserId { get; set; }
-        public List<int> PostList { get; set; }
+        public List<int>? PostList { get; set; }
     }
 }

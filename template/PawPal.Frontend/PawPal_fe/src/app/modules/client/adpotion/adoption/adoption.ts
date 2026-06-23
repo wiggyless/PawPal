@@ -14,9 +14,9 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-adoption',
   standalone: false,
   templateUrl: './adoption.html',
-  styleUrl: './adoption.scss'
+  styleUrl: './adoption.scss',
 })
-export class Adoption implements OnInit{
+export class Adoption implements OnInit {
   dialog = inject(MatDialog);
   location = inject(Location);
   requestService = inject(AnimalRequestService);
@@ -32,32 +32,32 @@ export class Adoption implements OnInit{
     olderPeople: new FormControl(false),
     otherPets: new FormControl(false),
     yardAvail: new FormControl(false),
-    yardInfo: new FormControl({ value: '', disabled: true })
+    yardInfo: new FormControl({ value: '', disabled: true }),
   });
   step2FormGroup = new FormGroup({
     pastExp: new FormControl(false),
     yourExp: new FormControl({ value: '', disabled: true }),
     petInHouse: new FormControl(''),
-    familyAvail: new FormControl('',[Validators.required]),
+    familyAvail: new FormControl('', [Validators.required]),
     gift: new FormControl(false),
     placeToLive: new FormControl('', [Validators.required]),
     financialSupport: new FormControl(0),
     allergies: new FormControl(false),
     angerIssues: new FormControl(false),
-    readyToBack: new FormControl(false)
+    readyToBack: new FormControl(false),
   });
   step3FormGroup = new FormGroup({
     placeDesc: new FormControl('', [Validators.required]),
     comment: new FormControl(''),
-    iAmReady: new FormControl(false, Validators.requiredTrue)
+    iAmReady: new FormControl(false, Validators.requiredTrue),
   });
 
-  postID : number = 0;
+  postID: number = 0;
   requirementIDFromRes: number = 0;
   ngOnInit(): void {
-     const params = this.route.snapshot.queryParams;
-     if (Object.keys(params).length != 0) {
-      this.route.queryParams.subscribe(params => {
+    const params = this.route.snapshot.queryParams;
+    if (Object.keys(params).length != 0) {
+      this.route.queryParams.subscribe((params) => {
         this.postID = params['postID'];
       });
     }
@@ -66,17 +66,17 @@ export class Adoption implements OnInit{
 
   sendRequest() {
     let isCheckReady = this.step3FormGroup.value.iAmReady;
-    const payload : CreateAdoptionRequirement = {
+    const payload: CreateAdoptionRequirement = {
       houseType: this.step1FormGroup.controls['houseType'].value as string,
       address: this.step1FormGroup.controls['adress'].value as string,
-      floorNumber:  this.step1FormGroup.controls['numOfFloor'].value as number,
-      peopleCount:  this.step1FormGroup.controls['numOfFamily'].value as number,
-      childrenAround:  this.step1FormGroup.controls['children'].value as boolean,
-      elderlyAround:  this.step1FormGroup.controls['olderPeople'].value as boolean,
-      otherPetsAround:  this.step1FormGroup.controls['otherPets'].value as boolean,
+      floorNumber: this.step1FormGroup.controls['numOfFloor'].value as number,
+      peopleCount: this.step1FormGroup.controls['numOfFamily'].value as number,
+      childrenAround: this.step1FormGroup.controls['children'].value as boolean,
+      elderlyAround: this.step1FormGroup.controls['olderPeople'].value as boolean,
+      otherPetsAround: this.step1FormGroup.controls['otherPets'].value as boolean,
       yardAvailable: this.step1FormGroup.controls['yardAvail'].value as boolean,
       yardDetails: this.step1FormGroup.controls['yardInfo'].value as string,
-      
+
       petExp: this.step2FormGroup.controls['pastExp'].value as boolean,
       expDetails: this.step2FormGroup.controls['yourExp'].value as string,
       peopleAva: this.step2FormGroup.controls['familyAvail'].value as string,
@@ -91,31 +91,31 @@ export class Adoption implements OnInit{
       finalComment: this.step3FormGroup.controls['comment'].value as string,
     };
     this.requirementService.addRequirements(payload).subscribe({
-      next: (res)=>{
-        console.log("Requirements made successfully: ", res);
+      next: (res) => {
+        console.log('Requirements made successfully: ', res);
         this.requirementIDFromRes = res;
 
         console.log(this.requirementIDFromRes);
-        const payload: CreateAdoptionRequest={
+        const payload: CreateAdoptionRequest = {
           status: 'SENT',
-          dateSend: new Date,
+          dateSend: new Date(),
           userID: this.currentUserService.userId() as number,
           postID: this.postID,
-          requirementID: res.id
-        }
+          requirementID: res.id,
+        };
         this.requestService.addRequest(payload).subscribe({
-          next: (res)=>{
-            console.log("Request made successfully ", res);
+          next: (res) => {
+            console.log('Request made successfully ', res);
           },
-          error: (err)=>{
-            console.log("ERROR => ", err);
-          }
-        })
+          error: (err) => {
+            console.log('ERROR => ', err);
+          },
+        });
       },
-      error: (err)=>{
-            console.log("ERROR => ", err);
-          }
-    })
+      error: (err) => {
+        console.log('ERROR => ', err);
+      },
+    });
     if (isCheckReady) {
       this.dialog.open(AdoptionDialog);
     }
@@ -124,35 +124,34 @@ export class Adoption implements OnInit{
     return this.step1FormGroup.value.yardAvail;
   }
 
-  validateNextStep(){
-     if (this.step1FormGroup.invalid) {
-    this.step1FormGroup.markAllAsTouched();
-    return;
+  validateNextStep() {
+    if (this.step1FormGroup.invalid) {
+      this.step1FormGroup.markAllAsTouched();
+      return;
+    }
+    if (this.step2FormGroup.invalid) {
+      this.step2FormGroup.markAllAsTouched();
+      return;
+    }
+    if (this.step3FormGroup.invalid) {
+      this.step3FormGroup.markAllAsTouched();
+      return;
+    }
   }
-   if (this.step2FormGroup.invalid) {
-    this.step2FormGroup.markAllAsTouched();
-    return;
-  }
-   if (this.step3FormGroup.invalid) {
-    this.step3FormGroup.markAllAsTouched();
-    return;
-  }
-  }
-
 
   addToInput(value: number, name: string) {
     if (name == 'numOfFloor') {
       const currentVal = this.step1FormGroup.get('numOfFloor')?.value || 0;
       if (currentVal != 0 || value != -1) {
         this.step1FormGroup.patchValue({
-          numOfFloor: currentVal + value
+          numOfFloor: currentVal + value,
         });
       }
     } else if (name == 'numOfFamily') {
       const currentVal = this.step1FormGroup.get('numOfFamily')?.value || 0;
       if (currentVal != 0 || value != -1) {
         this.step1FormGroup.patchValue({
-          numOfFamily: currentVal + value
+          numOfFamily: currentVal + value,
         });
       }
     }

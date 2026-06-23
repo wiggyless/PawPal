@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 import { CantonsService } from '../../../api-services/cantons/cantons-service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
+import { ListAnimalCategoriesQueryDto } from '../../../api-services/animal-categories/animal-categories.model';
+import { ListGenderDto } from '../../../api-services/gender/gender-model';
 @Component({
   selector: 'app-public-layout',
   standalone: false,
@@ -26,14 +28,14 @@ export class PublicLayout implements OnInit, OnDestroy {
   genderService = inject(GenderService);
   postList: PageResult<ListAnimal> | undefined;
   cantons: any = [];
-  animalCategories: any = [];
-  selectedCategory: any;
+  animalCategories: PageResult<ListAnimalCategoriesQueryDto> | undefined;
+  selectedCategory: ListAnimalCategoriesQueryDto | undefined;
   selectedCanton: number = 0;
   tempList: number[] = [];
   mySubcribe: Subscription | undefined;
   postImages = inject(PostImagesService);
   router = inject(Router);
-  genderListForDisplay: any = [];
+  genderListForDisplay: PageResult<ListGenderDto> | undefined;
   cd = inject(ChangeDetectorRef);
   sanitizer = inject(DomSanitizer);
   pagingObject = {
@@ -46,28 +48,23 @@ export class PublicLayout implements OnInit, OnDestroy {
   env = environment;
   imagesLoaded = signal(false);
   ngOnInit(): void {
-    this.mapGenderToText();
     this.mySubcribe = forkJoin({
       posts: this.postService.listAnimalPosts(this.pagingObject),
       cantons: this.cantonService.listCantons(),
       categories: this.animalService.listAnimalCategories(),
+      gender: this.genderService.listGender(),
     }).subscribe({
       next: (response) => {
         this.postList = response.posts;
         this.cantons = response.cantons;
+        this.genderListForDisplay = response.gender;
         this.animalCategories = response.categories;
         this.imagesLoaded.set(true);
-        this.cd.detectChanges();
       },
     });
   }
   ngOnDestroy(): void {
     this.mySubcribe?.unsubscribe();
-  }
-  mapGenderToText() {
-    this.genderService.listGender().subscribe((res) => {
-      this.genderListForDisplay = res;
-    });
   }
   routeToPost(post: ListAnimal) {
     this.router.navigate(['post'], {

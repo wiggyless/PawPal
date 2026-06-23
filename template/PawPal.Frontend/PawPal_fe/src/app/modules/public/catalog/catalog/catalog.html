@@ -15,98 +15,100 @@
     <div class="catalog-container">
       <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
       <div class="header-sort">
-        <div class="select-container">
-          <div class="select-child">
-            <label for="category-select">Categories</label>
-            <mat-form-field class="custom">
-              <mat-select
-                [(ngModel)]="selectedCat"
-                placeholder="Choose an animal category"
-                (selectionChange)="getBreedSelect()"
-              >
-                @for (cat of animalCategories.items; track cat) {
-                  <mat-option [value]="cat.categoryName">
-                    {{ cat.categoryName }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="select-child">
-            <label for="breed-select">Breed</label>
-            <mat-form-field class="custom">
-              <mat-select placeholder="Choose an animal breed" [(ngModel)]="selectedBreed">
-                @for (breed of breedArr; track breed) {
-                  <mat-option [value]="breed.name">
-                    {{ breed.name }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="select-child">
-            <label for="gender-select">Gender</label>
-            <mat-form-field class="custom">
-              <mat-select [(ngModel)]="selectedGender" placeholder="Choose gender">
-                @for (gen of genderList.items; track gen) {
-                  <mat-option [value]="gen.name">
-                    {{ gen.name }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="select-child">
-            <label for="canton-select">Cantons</label>
-            <mat-form-field class="custom">
-              <mat-select
-                [(ngModel)]="selectedCanton"
-                placeholder="Choose canton"
-                (selectionChange)="changeCity()"
-              >
-                @for (can of cantonsList?.items; track can) {
-                  <mat-option [value]="can">
-                    {{ can.fullName }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="select-child">
-            <label for="city-select">City</label>
-            <mat-form-field class="custom">
-              <mat-select [(ngModel)]="selectedCity" placeholder="Choose city">
-                @for (cit of selectedCanton?.cities; track cit) {
-                  <mat-option [value]="cit.name">
-                    {{ cit.name }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="select-child">
-            <label for="date-form">Date</label>
-            <mat-form-field class="date-form">
-              <mat-date-range-input [rangePicker]="picker" [formGroup]="datePicker" disabled>
-                <input
-                  matInput
-                  matStartDate
-                  placeholder="Start date"
-                  #fromInputMin
-                  formControlName="start"
-                />
-                <input
-                  matInput
-                  matEndDate
-                  placeholder="End date"
-                  #fromInputMax
-                  formControlName="end"
-                />
-              </mat-date-range-input>
-              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-date-range-picker #picker disabled="false"></mat-date-range-picker>
-            </mat-form-field>
-          </div>
+        <div>
+          <form [formGroup]="filterForm" class="select-container">
+            <div class="select-child">
+              <label for="category-select">Categories</label>
+              <mat-form-field class="custom">
+                <mat-select
+                  formControlName="selectedCat"
+                  placeholder="Choose an animal category"
+                  (selectionChange)="getBreedSelect()"
+                >
+                  @for (cat of animalCategories?.items; track cat) {
+                    <mat-option [value]="cat.categoryName">
+                      {{ cat.categoryName }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="select-child">
+              <label for="breed-select">Breed</label>
+              <mat-form-field class="custom">
+                <mat-select placeholder="Choose an animal breed" formControlName="selectedBreed">
+                  @for (breed of breedArr; track breed) {
+                    <mat-option [value]="breed.name">
+                      {{ breed.name }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="select-child">
+              <label for="gender-select">Gender</label>
+              <mat-form-field class="custom">
+                <mat-select formControlName="selectedGender" placeholder="Choose gender">
+                  @for (gen of genderList?.items; track gen.id) {
+                    <mat-option [value]="gen.name">
+                      {{ gen.name }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="select-child">
+              <label for="canton-select">Cantons</label>
+              <mat-form-field class="custom">
+                <mat-select
+                  formControlName="selectedCanton"
+                  placeholder="Choose canton"
+                  (selectionChange)="changeCity()"
+                >
+                  @for (can of cantonsList?.items; track can) {
+                    <mat-option [value]="can">
+                      {{ can.fullName }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="select-child">
+              <label for="city-select">City</label>
+              <mat-form-field class="custom">
+                <mat-select formControlName="selectedCity" placeholder="Choose city">
+                  @for (cit of getValue('selectedCanton')?.cities; track cit) {
+                    <mat-option [value]="cit.name">
+                      {{ cit.name }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="select-child">
+              <label for="date-form">Date</label>
+              <mat-form-field class="date-form">
+                <mat-date-range-input [rangePicker]="picker" [formGroup]="datePicker" disabled>
+                  <input
+                    matInput
+                    matStartDate
+                    placeholder="Start date"
+                    #fromInputMin
+                    formControlName="start"
+                  />
+                  <input
+                    matInput
+                    matEndDate
+                    placeholder="End date"
+                    #fromInputMax
+                    formControlName="end"
+                  />
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker disabled="false"></mat-date-range-picker>
+              </mat-form-field>
+            </div>
+          </form>
         </div>
         <div class="header-buttons">
           <button (click)="searchCatalog()" class="primarybtn">SEARCH</button>
@@ -144,6 +146,7 @@
                   <h3>{{ post.name }}</h3>
                   <p>{{ post.breed }}</p>
                   <p>{{ post.dateAdded | date: 'short' }}</p>
+                  <p>{{ post.genderID }}</p>
                 </div>
               </div>
             }

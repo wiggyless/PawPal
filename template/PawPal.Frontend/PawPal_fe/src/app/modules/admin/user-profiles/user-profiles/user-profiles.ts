@@ -4,11 +4,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
-import {
-  ListAnimal,
-  GetPostQuery,
-  ListAnimalPostsByUserIdDto,
-} from '../../../../api-services/animal-posts/animal-posts.model';
 import { GetUserList, GetUserQuery } from '../../../../api-services/users/users-model';
 import { BaseListPagedComponent } from '../../../../core/components/base-classes/base-list-paged-component';
 import { PageResult } from '../../../../core/models/paging/page-result';
