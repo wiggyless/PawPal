@@ -1,7 +1,17 @@
-import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  Input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogueComponent } from '../../dialogue-component/dialogue-component';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 @Component({
   selector: 'app-user-profile-side-navbar',
   standalone: false,
@@ -14,8 +24,12 @@ export class UserProfileSideNavbar implements OnInit {
   private router = inject(Router);
   hasLoaded = false;
   cd = inject(ChangeDetectorRef);
+  destroyRef = inject(DestroyRef);
+  url = signal('');
   ngOnInit(): void {
     console.log('SEL ITEM ->>>> ' + this.selItem);
+    this.url.set(this.selItem as string);
+    this.trackRouteChanges();
   }
   matListItems = {
     My_Profile: '/client/my-profile',
@@ -29,9 +43,20 @@ export class UserProfileSideNavbar implements OnInit {
   keepOrder = (a: any, b: any) => 0;
   onSelect(item: string) {
     this.selItem = item;
+    this.url.set(this.selItem);
     this.cd.detectChanges();
   }
-
+  private trackRouteChanges(): void {
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((event: NavigationEnd) => {
+        this.url.set(event.urlAfterRedirects);
+        this.cd.detectChanges();
+      });
+  }
   openDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = { postDelete: false, profileDelete: true };

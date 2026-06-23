@@ -5,7 +5,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create
 {
     public sealed class CreateAdoptionRequestCommandHandler(
         IAppDbContext context,
-        FirebaseNotificationService firebaseNotificationService)
+        FirebaseNotificationService firebaseNotificationService,IAppCurrentUser currentUser)
         : IRequestHandler<CreateAdoptionRequestCommand, int>
     {
         public async Task<int> Handle(CreateAdoptionRequestCommand request, CancellationToken cancellationToken)
@@ -15,6 +15,13 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create
             var req = await context.AdoptionRequirements.Where(x => x.Id == request.RequirementID).FirstOrDefaultAsync(cancellationToken);
 
             if (user is null) throw new PawPalNotFoundException("User does not exist");
+            if (currentUser.IsAuthenticated)
+            {
+                throw new PawPalConflictException("User is not authenticated to do this action");
+            }
+            if (currentUser.UserId != user.Id) {
+                throw new PawPalConflictException("User is not allowed to do this aciton");
+            }
             if (post is null) throw new PawPalNotFoundException("Post does not exist");
             if (req is null) throw new PawPalNotFoundException("Adoption requirement does not exist");
             if (post.UserId == request.UserID)

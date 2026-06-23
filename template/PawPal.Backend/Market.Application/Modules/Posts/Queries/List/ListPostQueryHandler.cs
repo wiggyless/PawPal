@@ -11,7 +11,7 @@ namespace PawPal.Application.Modules.Posts.Queries.List
     {
         public async Task<PageResult<ListPostQueryDto>> Handle(ListPostQuery request,CancellationToken cancellationToken)
         {
-            var posts = context.Posts.Include(x => x.Animal).Include(x => x.City).AsQueryable();
+            var posts = context.Posts.Include(x => x.Animal).Include(x => x.City).Include(x => x.Animal.Gender).AsNoTracking();
             if (request.IsLiked is not null && (bool)request.IsLiked)
             {
                 var likedUserPosts = context.LikedUserPosts.Where(x => x.UserId == request.UserID).AsNoTracking().Select(x => x.PostId);
@@ -27,7 +27,7 @@ namespace PawPal.Application.Modules.Posts.Queries.List
                 if (!string.IsNullOrWhiteSpace(request.SearchCategoryName))
                     posts = posts.Where(x => x.Animal.Category.CategoryName.ToLower().Contains(request.SearchCategoryName.ToLower()));
                 if (!string.IsNullOrWhiteSpace(request.SearchGender))
-                    posts = posts.Where(x => x.Animal.Gender.GenderName.ToLower().Contains(request.SearchGender.ToLower()));
+                    posts = posts.Where(x => x.Animal.Gender.GenderName.ToLower() == request.SearchGender.ToLower());
                 if (!string.IsNullOrWhiteSpace(request.SearchBreed))
                     posts = posts.Where(x => x.Animal.Breed.ToLower().Contains(request.SearchBreed.ToLower()));
                 if (request.SearchDateAddedMax != null && request.SearchDateAddedMin != null)

@@ -11,14 +11,17 @@ namespace PawPal.Application.Modules.LikedUserPosts.Queries.List
     {
         public async Task<ListLikedUserPostDto> Handle(ListLikedUserPost request,CancellationToken cancellationToken)
         {
-            var list = context.LikedUserPosts.Include(x => x.Post).Where(x => x.UserId == request.UserId).AsNoTracking();
+            var list = await context.LikedUserPosts.Include(x => x.Post).Where(x => x.UserId == request.UserId).ToArrayAsync(cancellationToken);
             if(list is null)
             {
                 throw new PawPalNotFoundException("List is empty");
             }
             var finalList = new ListLikedUserPostDto { UserId = request.UserId,PostList = new List<int>() };
-            var filterSet = new HashSet<int>(request.PostIdList);
-            finalList.PostList = list.Where(x => filterSet.Contains(x.PostId)).Select(x => x.PostId).ToList();
+            if(request.PostIdList is not null)
+            {
+                finalList.PostList = list.Where(x => request.PostIdList.Contains(x.PostId)).Select(x => x.PostId).ToList();
+            }
+      
             return finalList;
         }
     }

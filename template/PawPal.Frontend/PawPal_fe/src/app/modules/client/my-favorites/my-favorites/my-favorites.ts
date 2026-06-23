@@ -8,10 +8,7 @@ import { ListAnimal, GetPostQuery } from '../../../../api-services/animal-posts/
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 import { PageResult } from '../../../../core/models/paging/page-result';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
-import {
-  GetMainImagePostBlob,
-  GetMainImagePostBlobClass,
-} from '../../../../api-services/animal-post-images/animal-post-images-model';
+import { GetMainImagePostBlobClass } from '../../../../api-services/animal-post-images/animal-post-images-model';
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
 import { DomSanitizer } from '@angular/platform-browser';
 @Component({

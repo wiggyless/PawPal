@@ -12,7 +12,7 @@ import {
   UserImageQuery,
 } from '../../../../api-services/userImage/userImage-model';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import {
   CropDialogResult,
   UserProfileImageCropDialog,
@@ -168,7 +168,6 @@ export class UserProfileComponent implements OnInit {
     const firstName =
       (this.profileForm.get('firstName')?.value as string) || this.userData.firstName;
     const lastName = (this.profileForm.get('lastName')?.value as string) || this.userData.lastName;
-    const username = (this.profileForm.get('username')?.value as string) || this.userData.username;
     const aboutMe =
       (this.profileForm.get('aboutMe')?.value as string) || this.userData.aboutMe || '';
     const date = (this.profileForm.get('date')?.value as string) || this.userData.dateTime;
@@ -192,7 +191,6 @@ export class UserProfileComponent implements OnInit {
         date: date,
         cityId: cityId,
         aboutMe: aboutMe,
-        username: username,
       };
       requests.userPostData = this.userDataService.updateUser(this.userData.id, payload);
     }
@@ -208,7 +206,6 @@ export class UserProfileComponent implements OnInit {
         this.userData.lastName = lastName;
         this.userData.dateTime = date;
         this.userData.aboutMe = aboutMe;
-        this.userData.username = username;
 
         const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
         if (selectedCity) {

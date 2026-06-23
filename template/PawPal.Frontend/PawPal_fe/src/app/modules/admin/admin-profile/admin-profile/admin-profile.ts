@@ -16,7 +16,7 @@ import {
   UserProfileImageCropDialog,
   CropDialogResult,
 } from '../../../client/my-profile/user-profile-component/user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
-import { DialoguePopupService } from '../../../shared/components/dialogue-popup/dialogue-popup.service';
+import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 
 @Component({
   selector: 'app-admin-profile',
@@ -194,7 +194,6 @@ export class AdminProfile implements OnInit {
         date: date,
         cityId: cityId,
         aboutMe: aboutMe,
-        username: username,
       };
       console.log(payload);
       requests.userPostData = this.userDataService.updateUser(this.userData.id, payload);

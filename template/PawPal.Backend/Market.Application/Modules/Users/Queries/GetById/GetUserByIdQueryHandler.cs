@@ -11,11 +11,7 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
     {
         public async Task<GetUserByIdQueryDto> Handle(GetUserByIdQuery request,CancellationToken cancellationToken)
         {
-            Console.WriteLine(currUser);
-            if(currUser.UserId != request.Id && currUser.IsAuthenticated! && currUser.RoleId != 3)
-            {
-                throw new PawPalConflictException("User is not allowed to do this action");
-            }
+
             var user = await context.Users.
                 Include(x =>x.City).
                 Include(x=>x.City.Canton).

@@ -2,7 +2,7 @@
 using PawPal.Domain.Entities.Posts;
 namespace PawPal.Application.Modules.Comments.Commands.Create
 {
-    public sealed class CreateCommentCommandHandler(IAppDbContext context, ICommentHubService _hubService) : IRequestHandler<CreateCommentCommand,int> 
+    public sealed class CreateCommentCommandHandler(IAppDbContext context,IAppCurrentUser currentUser, ICommentHubService _hubService) : IRequestHandler<CreateCommentCommand,int> 
     {
 
         public async Task<int> Handle(CreateCommentCommand command,CancellationToken cancellationToken)
@@ -12,6 +12,10 @@ namespace PawPal.Application.Modules.Comments.Commands.Create
             if(user is null)
             {
                 throw new PawPalNotFoundException("User not found");
+            }
+            if(currentUser is null || !currentUser.IsAuthenticated)
+            {
+                throw new PawPalConflictException("User is not allowed to do this action");
             }
             if(post is null)
             {
