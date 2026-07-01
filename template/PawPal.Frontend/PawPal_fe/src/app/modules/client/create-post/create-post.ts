@@ -134,7 +134,7 @@ export class CreatePost implements OnInit {
 
   // --- Selection state ---
   selectedCategoryId: number = 0;
-  selectedCategory: AnimalCategoryByIdQueryDto = {
+  selectedCategory: ListAnimalCategoriesQueryDto = {
     id: 0,
     categoryName: '',
     isEnabled: true,
@@ -146,7 +146,7 @@ export class CreatePost implements OnInit {
   // --- Misc UI state ---
   isDateRequired: boolean = true;
   currentDate: string = new Date().toLocaleDateString();
-  secondStep: boolean = false;
+  secondStep = signal(false);
   newImage = true;
   isDragging = false;
   isUploadingImages = false;
@@ -165,14 +165,16 @@ export class CreatePost implements OnInit {
     cantonAbbrevation: '',
     username: '',
     cityID: 0,
+    photoURL: '',
   };
   imgFileList: Array<File> = [];
   hasLoaded = signal(false);
   imageUrl = signal<SafeUrl | null>(null);
+  currentImageIndex = 0;
   // --- Lifecycle ---
   ngOnInit(): void {
     const params = this.route.snapshot.queryParams;
-    this.secondStep = false;
+    this.secondStep.set(false);
     if (Object.keys(params).length !== 0) {
       this.route.queryParams.subscribe((params) => {
         this.routePostID = params['postID'];
@@ -184,7 +186,8 @@ export class CreatePost implements OnInit {
   }
 
   changeStep(): void {
-    this.secondStep = !this.secondStep;
+    this.secondStep.set(true);
+    this.cd.detectChanges();
   }
 
   // --- Data loading ---
@@ -194,7 +197,7 @@ export class CreatePost implements OnInit {
       genders: this.genderService.listGender(),
       categories: this.categoryService.listAnimalCategories(),
       breeds: this.breedService.listAnimalBreed(),
-      user: this.animalUserService.getUser(this.currentUser.userId()),
+      user: this.animalUserService.getUser(this.currentUser.userId() as number),
       allergies: this.allergyService.listAnimalAllergies(),
       disabilities: this.disabilityService.listAnimalDisability(),
     };
@@ -223,10 +226,8 @@ export class CreatePost implements OnInit {
     }
     forkJoin({
       ...this.commonLookups(),
-      userImage: this.userImageService.getUserImageByID(this.currentUser.userId() as number),
     }).subscribe({
       next: (results) => {
-        this.imageUrl.set(results.userImage);
         this.applyCommonLookups(results);
         this.hasLoaded.set(true);
         this.cd.detectChanges();
@@ -256,7 +257,6 @@ export class CreatePost implements OnInit {
         });
         this.getBreedSelect();
         this.loadBlob(results.images);
-        this.cd.detectChanges();
       },
       error: (err) => console.error('One of the requests failed', err),
     });
@@ -307,6 +307,8 @@ export class CreatePost implements OnInit {
     });
 
     this.newImage = true;
+    this.hasLoaded.set(true);
+    this.cd.detectChanges();
   }
 
   deleteImage(index: number): void {
@@ -358,7 +360,6 @@ export class CreatePost implements OnInit {
     }
   }
 
-  // --- Form helpers ---
   toggleFormControl(checkControlName: string, targetControlName: string, group: FormGroup): void {
     const isChecked = group.get(checkControlName)?.value;
     const targetCtrl = group.get(targetControlName);
@@ -374,10 +375,9 @@ export class CreatePost implements OnInit {
     this.breedArr = this.breedList!.items.filter(
       (x: ListAnimalBreedQueryDto) => x.categoryId === this.selectedCategoryId,
     );
-    this.categoryService.getAnimalCategoryById(this.selectedCategoryId).subscribe((res) => {
-      this.selectedCategory = res;
-    });
-    this.cd.detectChanges();
+    this.selectedCategory = this.categoryList?.items.find(
+      (x) => x.id == this.selectedCategoryId,
+    ) as ListAnimalCategoriesQueryDto;
   }
 
   setGender(): void {
@@ -390,12 +390,10 @@ export class CreatePost implements OnInit {
     this.location.back();
   }
 
-  // --- Submit actions ---
   updatePost(): void {
     this.healthHistory.getAnimalHealthHistoryById(this.routeAnimalID).subscribe((response) => {
       const healthHistoryID = response.animalHealthHistoryId;
 
-      // Built here because it's only ever needed for this single request.
       const updateHealth: UpdateHealthHistory = {
         animalId: this.routeAnimalID,
         vaccinated: this.thridFormGroup.get('vaccineCheck')!.value as boolean,
@@ -433,8 +431,6 @@ export class CreatePost implements OnInit {
   addPost(): void {
     const mainInfo = this.fourthFromGroup.value.mainInfo;
 
-    // Each of these payloads is only used within this method, so they're
-    // built here rather than kept as class fields.
     const newAnimal: AddAnimalDto = {
       name: mainInfo?.name as string,
       age: mainInfo?.age as number,
@@ -456,14 +452,14 @@ export class CreatePost implements OnInit {
     };
 
     const newPost: AddAnimalPost = {
-      animalID: 0, // filled in once addAnimal() returns the new id
+      animalID: 0,
       cityID: this.userData.cityID,
       userId: this.userData.id,
       status: true,
     };
 
     const newPostIamge: AddNewPostImages = {
-      postId: 0, // filled in once addPost() returns the new post id
+      postId: 0,
       postImages: this.imgFileList,
     };
 
@@ -507,5 +503,15 @@ export class CreatePost implements OnInit {
           console.error('Something went wrong while creating the post:', err);
         },
       });
+  }
+  nextImage(length: number): void {
+    this.currentImageIndex = this.currentImageIndex === length - 1 ? 0 : this.currentImageIndex + 1;
+  }
+  prevImage(length: number): void {
+    this.currentImageIndex = this.currentImageIndex === 0 ? length - 1 : this.currentImageIndex - 1;
+  }
+
+  getTransformStyle(): string {
+    return `translateX(-${this.currentImageIndex * 100}%)`;
   }
 }

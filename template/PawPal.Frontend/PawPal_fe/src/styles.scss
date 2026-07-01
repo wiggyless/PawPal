@@ -21,7 +21,8 @@ html {
   background-size: cover;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
@@ -33,13 +34,11 @@ html, body {
   box-sizing: border-box;
 }
 // second color is used for linear gradient but i dont know what to put
-
 :host {
   display: flex;
   flex-direction: column;
-  height: 100vh; 
+  height: 100vh;
 }
-
 
 :root {
   // used for the background
@@ -109,7 +108,6 @@ html, body {
   --settings-section-secondary-colour: #dbc4af;
   --settings-section-text: #483c28;
   --settings-section-border: #c2ad8e;
-
 }
 
 body.dark-theme {
@@ -170,13 +168,11 @@ body.dark-theme {
 
   --settings-section-text: #e3cda7;
   --settings-section-border: #5e4b38;
-
 }
 .mat-mdc-form-field {
   border-radius: 100px;
   height: 75px;
 }
-
 .mat-mdc-text-field-wrapper {
   border-radius: 100px !important;
   height: 75px !important;
@@ -271,4 +267,15 @@ body.dark-theme {
 }
 .mdc-text-field--filled {
   background-color: var(--box-color) !important;
+}
+// Place this inside your GLOBAL styles.scss, NOT your component's scss file.
+// Overlay — darkens the entire background
+.toast-container {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1500;
 }

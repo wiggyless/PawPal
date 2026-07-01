@@ -1,4 +1,6 @@
 ﻿using PawPal.Application.Modules.Gender.List;
+using PawPal.Application.Modules.Moderation.ReportedPosts.Queries.List;
+using PawPal.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,16 +19,27 @@ namespace PawPal.Application.Modules.Comments.Queries.List
             {
                 throw new PawPalNotFoundException("Post does not exist");
             }
-            var comments = context.Comments.Include(x=>x.User).Where(x => x.PostId == post.Id).AsQueryable();
-            var finalList = comments.OrderBy(x => x.DatePosted).Select(x => new ListCommentsQueryDto
-            {
-                CommentID = x.Id,
-                Content = x.Content,
-                UserID = x.UserId,
-                Username = x.User.Username,
-                DatePosted = x.DatePosted,
-            });
-            return await PageResult<ListCommentsQueryDto>.FromQueryableAsync(finalList, request.Paging, cancellationToken);
+            var userImages = context.UserImage.AsNoTracking();
+            var comments = context.Comments.Include(x=>x.User).Where(x => x.PostId == post.Id && !x.User.isUserDisabled).AsQueryable();
+            var result = comments
+          .GroupJoin(
+          userImages,
+          comm => comm.UserId,
+          ui => ui.UserID,
+          (comments, userImage) => new { comments, userImage })
+           .SelectMany(
+          x => x.userImage.DefaultIfEmpty(),
+          (x, usrImg) => new ListCommentsQueryDto
+          {
+              CommentID = x.comments.Id,
+              Content = x.comments.Content,
+              UserID = x.comments.UserId,
+              Username = x.comments.User.Username,
+              DatePosted = x.comments.DatePosted,
+              PhotoURL = usrImg.PhotoURL ?? "",
+
+          }).OrderByDescending(x => x.DatePosted);
+            return await PageResult<ListCommentsQueryDto>.FromQueryableAsync(result, request.Paging, cancellationToken);
         }
     }
 }

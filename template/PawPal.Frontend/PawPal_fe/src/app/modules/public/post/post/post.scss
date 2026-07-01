@@ -17,7 +17,7 @@
   display: flex;
   gap: 20px;
   align-self: flex-end;
-  margin-right: 50px;
+  margin-right: 100px;
   margin-bottom: 50px;
 }
 .post-buttons button {
@@ -53,6 +53,7 @@
   display: flex;
   gap: 10px;
   background-color: var(--catalog-second-layer-color);
+  border-radius: 10px;
   border: 1px solid rgb(62, 47, 28);
   color: #e5d7c4;
   font-size: 30px;
@@ -206,16 +207,18 @@
 
 .carousel-track {
   display: flex;
+  flex-direction: row;
   transition: transform 0.3s ease-in-out;
+  height: 600px;
+  width: 100%;
 }
 
 .carousel-image {
-  width: 100%;
-  height: 600px;
-  object-fit: cover;
+  height: auto;
   flex-shrink: 0;
+  border-radius: 10px;
+  width: 100%;
 }
-
 .carousel-arrow {
   position: absolute;
   top: 50%;

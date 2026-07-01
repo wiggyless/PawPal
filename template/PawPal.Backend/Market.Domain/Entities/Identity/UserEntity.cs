@@ -27,5 +27,6 @@ public sealed class UserEntity : BaseEntity
     public bool IsEmailConfirmed { get; set; }
     public string? FcmToken { get; set; }
     public string? AboutMe { get; set; }    
+    public bool isUserDisabled { get; set; }
     public ICollection<RefreshTokenEntity> RefreshTokens { get; private set; } = new List<RefreshTokenEntity>();
 }

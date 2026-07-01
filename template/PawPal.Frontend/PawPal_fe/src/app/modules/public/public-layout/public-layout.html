@@ -51,11 +51,7 @@
                   <h3>{{ post.name }}</h3>
                   <p>
                     {{ post.breed }},
-                    @if (this.genderListForDisplay!.items[0].id === post.genderID) {
-                      Female
-                    } @else {
-                      Male
-                    }
+                    {{ genderEnum[post.genderID] }}
                   </p>
 
                   <p>{{ post.dateAdded | date: 'short' }}</p>

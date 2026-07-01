@@ -11,7 +11,7 @@ export interface CommentDto {
   content: string;
   datePosted: Date;
   username: string;
-  imageData: SafeUrl | null;
+  photoURL: string;
 }
 
 export interface CreateCommentCommand {

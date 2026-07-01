@@ -31,10 +31,10 @@ namespace PawPal.API.Controllers.Comments
             return result;
         }
         [AllowAnonymous]
-        [HttpDelete]
-        public async Task<Unit> Delete(DeleteCommentCommand command, CancellationToken ct)
+        [HttpDelete("{id:int}")]
+        public async Task<Unit> Delete(int id, CancellationToken ct)
         {
-            var result = await sender.Send(command, ct);
+            var result = await sender.Send(new DeleteCommentCommand { CommentID = id}, ct);
             return result;
         }
     }

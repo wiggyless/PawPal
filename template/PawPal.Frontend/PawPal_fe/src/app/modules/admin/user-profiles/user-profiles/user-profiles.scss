@@ -19,6 +19,7 @@
   font-weight: 700;
   text-decoration: underline;
   text-decoration-thickness: 3px;
+  margin-bottom: 2.5rem;
 }
 .user {
   text-align: center;
@@ -76,7 +77,7 @@
   background-color: var(--card-background-color);
   width: 100%;
   position: relative;
-  height: 25%;
+  height: 80px;
   color: var(--card-text-color);
   border-radius: 0px 0px 20px 20px;
 }
@@ -191,4 +192,34 @@ mat-paginator {
 
 ::ng-deep .mat-mdc-paginator .mat-mdc-select-min-line {
   color: var(--paginator-color) !important;
+}
+.loading-container {
+  display: flex;
+  justify-content: center; /* Horizontal centering */
+  align-items: center; /* Vertical centering */
+  height: 100%;
+  flex-direction: column;
+  padding: 50px;
+}
+.loading-spinner-text {
+  color: var(--title-text-color);
+  margin-bottom: 20px;
+  font-size: 30px;
+  font-weight: 700;
+}
+.input-label {
+  color: var(--title-text-color);
+  font-size: 20px;
+  margin-left: 10px;
+}
+.search-div {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  width: 70%;
+}
+.search-wrapper button {
+  margin-left: 20px;
+  width: 120px;
+  height: 40px;
 }

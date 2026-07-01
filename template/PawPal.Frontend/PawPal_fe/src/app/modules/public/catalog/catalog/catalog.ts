@@ -8,7 +8,7 @@ import { GetPostQuery, ListAnimal } from '../../../../api-services/animal-posts/
 import { MatInput } from '@angular/material/input';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GenderService } from '../../../../api-services/gender/gender-service';
-import { ListGenderDto } from '../../../../api-services/gender/gender-model';
+import { GenderEnum, ListGenderDto } from '../../../../api-services/gender/gender-model';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { CantonsService } from '../../../../api-services/cantons/cantons-service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -93,6 +93,7 @@ export class CatalogComponent
   cantonID: number | undefined;
   imagesLoaded = signal(true);
   sanitizer = inject(DomSanitizer);
+  genderEnum = GenderEnum;
   constructor() {
     super();
     this.request = new GetPostQuery();
@@ -118,7 +119,6 @@ export class CatalogComponent
         this.animalCategories = response.categories;
         this.cantonsList = response.cantons;
         this.genderList = response.gender;
-        console.log(this.genderList);
         const state = history.state;
         const categoryName = this.activeRoute.snapshot.queryParamMap.get('categoryName');
         if (state != null && categoryName != null) {
@@ -142,6 +142,7 @@ export class CatalogComponent
     this.animalPosts = this.animalPostsService.listAnimalPosts(this.request).pipe(
       shareReplay(1),
       tap((res) => {
+        console.log(res.items);
         this.likedPosts
           .listLikedPosts({
             userId: this.currentUser.userId() as number,
@@ -150,6 +151,7 @@ export class CatalogComponent
           .subscribe((response) => {
             this.favoritePostList = response.postList!;
             this.imagesLoaded.set(true);
+            this.cd.detectChanges();
           });
         this.page = {
           pageSize: res.pageSize,
@@ -213,10 +215,6 @@ export class CatalogComponent
     this.router.navigate(['post'], {
       queryParams: {
         postID: post.postID,
-        animalID: post.animalID,
-        cityID: post.cityID,
-        userID: post.userID,
-        dateAdded: post.dateAdded,
       },
     });
   }

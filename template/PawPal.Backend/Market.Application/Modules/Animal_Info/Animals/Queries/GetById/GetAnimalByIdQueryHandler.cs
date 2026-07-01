@@ -12,6 +12,7 @@ namespace PawPal.Application.Modules.Animal_Info.Animals.Queries.GetById
         public async Task<GetAnimalByIdQueryDto> Handle(GetAnimalByIdQuery request, CancellationToken cancellationToken)
         {
             var animal = await context.Animals.
+                Include(x=>x.Category).
                 Where(a => a.Id == request.Id).
                 Select(x => new GetAnimalByIdQueryDto
                 {

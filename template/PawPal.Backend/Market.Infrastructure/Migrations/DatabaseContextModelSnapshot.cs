@@ -760,6 +760,43 @@ namespace PawPal.Infrastructure.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("PawPal.Domain.Entities.Identity.UserDisabledHistoryEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateWhenDisabled")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("UserDisabledHistory");
+                });
+
             modelBuilder.Entity("PawPal.Domain.Entities.Identity.UserEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -831,6 +868,9 @@ namespace PawPal.Infrastructure.Migrations
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isUserDisabled")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
@@ -848,16 +888,8 @@ namespace PawPal.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("Data")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -866,6 +898,9 @@ namespace PawPal.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotoURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -915,6 +950,78 @@ namespace PawPal.Infrastructure.Migrations
                     b.ToTable("UserToUserMessages");
                 });
 
+            modelBuilder.Entity("PawPal.Domain.Entities.Moderation.ReportProblemEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSent")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReportProblems");
+                });
+
+            modelBuilder.Entity("PawPal.Domain.Entities.Moderation.ReportedCommentsEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CommentID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommentReportedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateReported")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Reason")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentID");
+
+                    b.ToTable("ReportedComments");
+                });
+
             modelBuilder.Entity("PawPal.Domain.Entities.Moderation.ReportedPostsEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -924,6 +1031,9 @@ namespace PawPal.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSent")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -947,6 +1057,43 @@ namespace PawPal.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ReportedPosts");
+                });
+
+            modelBuilder.Entity("PawPal.Domain.Entities.Moderation.ReportedUserEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateSent")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ReportSentByUserID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReportUserEnum")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReportedUserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReportedUsers");
                 });
 
             modelBuilder.Entity("PawPal.Domain.Entities.News.NewsEntity", b =>
@@ -1465,6 +1612,17 @@ namespace PawPal.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PawPal.Domain.Entities.Identity.UserDisabledHistoryEntity", b =>
+                {
+                    b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PawPal.Domain.Entities.Identity.UserEntity", b =>
                 {
                     b.HasOne("PawPal.Domain.Entities.Places.CitiesEntity", "City")
@@ -1478,6 +1636,17 @@ namespace PawPal.Infrastructure.Migrations
                     b.Navigation("City");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("PawPal.Domain.Entities.Moderation.ReportedCommentsEntity", b =>
+                {
+                    b.HasOne("PawPal.Domain.Entities.Posts.CommentsEntity", "Comment")
+                        .WithMany()
+                        .HasForeignKey("CommentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
                 });
 
             modelBuilder.Entity("PawPal.Domain.Entities.Places.CitiesEntity", b =>

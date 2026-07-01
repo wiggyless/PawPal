@@ -17,6 +17,7 @@ import {
   CropDialogResult,
   UserProfileImageCropDialog,
 } from './user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
+import { environment } from '../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-user-profile-component',
@@ -71,7 +72,7 @@ export class UserProfileComponent implements OnInit {
   }
   //services
   isUpdate: boolean = false;
-  private imageChanged: boolean = false;
+  imageChanged = signal(false);
   currentUser: CurrentUserService;
   userDataService: UserService;
   dialog = inject(DialoguePopupService);
@@ -99,6 +100,7 @@ export class UserProfileComponent implements OnInit {
     cityID: 0,
     username: '',
     aboutMe: '',
+    photoURL: '',
   };
   userImage: UserImageCommand = {
     userID: 0,
@@ -115,6 +117,7 @@ export class UserProfileComponent implements OnInit {
       cityID: 0,
       username: '',
       aboutMe: '',
+      photoURL: '',
     };
     this.profileForm.reset();
   }
@@ -128,9 +131,9 @@ export class UserProfileComponent implements OnInit {
   });
 
   editing = signal(false);
-
+  env = environment.apiUrl;
   getUserData(): void {
-    this.userDataService.getUser(this.currentUser.userId()).subscribe((response) => {
+    this.userDataService.getUser(this.currentUser.userId() as number).subscribe((response) => {
       this.userData = response;
       this.initializeInputData();
     });
@@ -201,7 +204,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     forkJoin(requests).subscribe({
-      next: () => {
+      next: (res) => {
         this.userData.firstName = firstName;
         this.userData.lastName = lastName;
         this.userData.dateTime = date;
@@ -214,12 +217,6 @@ export class UserProfileComponent implements OnInit {
         }
         this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
 
-        if (imageChanged) {
-          this.isUpdate = true;
-          this.imageChanged = false;
-          this.originalImageUrl = this.imageUrl();
-          this.selectedImage = undefined;
-        }
         this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
       },
       error: (res) => {
@@ -254,28 +251,12 @@ export class UserProfileComponent implements OnInit {
   }
 
   hasImageChanges(): boolean {
-    return this.imageChanged && !!this.selectedImage;
+    return this.imageChanged() && !!this.selectedImage;
   }
 
   checkFormChanges(): boolean {
     return this.hasFormFieldChanges(this.originalCityId) || this.hasImageChanges();
   }
-  /*
-  editPhoto(event: any) {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      this.selectedImage = file;
-      this.imageChanged = true;
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.originalUrl = this.imageUrl()?.toString() ?? null;
-        this.imageUrl.set(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-    */
 
   editPhoto(event: any): void {
     const files = event.target.files;
@@ -298,14 +279,14 @@ export class UserProfileComponent implements OnInit {
         if (!result) return;
 
         this.selectedImage = result.croppedFile;
-        this.imageChanged = true;
+        this.imageChanged.set(true);
         this.originalUrl = this.imageUrl()?.toString() ?? null;
         this.imageUrl.set(result.croppedUrl);
       });
   }
   cancelSaving() {
     this.editing.set(false);
-    this.imageChanged = false;
+    this.imageChanged.set(false);
     this.selectedImage = undefined;
     this.profileForm.disable();
     this.imageUrl.set(this.originalImageUrl);

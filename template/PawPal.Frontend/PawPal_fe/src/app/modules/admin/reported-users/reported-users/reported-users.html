@@ -1,0 +1,93 @@
+<h1 class="my-post-title">REPORTED USERS</h1>
+<div class="search-div">
+  <div class="search-wrapper">
+    <div class="select-wrapper">
+      <label class="input-label">Username</label>
+      <mat-form-field>
+        <input matInput [(ngModel)]="username" class="search" />
+      </mat-form-field>
+    </div>
+    <div class="select-wrapper">
+      <label class="input-label">Date</label>
+      <mat-form-field class="date-form">
+        <mat-date-range-input [rangePicker]="picker" [formGroup]="datePicker" disabled>
+          <input
+            matInput
+            matStartDate
+            placeholder="Start date"
+            #fromInputMin
+            formControlName="start"
+          />
+          <input matInput matEndDate placeholder="End date" #fromInputMax formControlName="end" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker disabled="false"></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+    <button class="primarybtn" (click)="loadRequest()">SEARCH</button>
+  </div>
+</div>
+<div class="poslati-zahtjevi-container">
+  <div class="requests-list">
+    <!-- Request Card 1 - Processing -->
+    @if (imagesLoaded()) {
+      @if (requestsList?.items?.length == 0) {
+        <p class="loading-spinner-text">No requests found!</p>
+      }
+      @for (request of requestsList?.items; track request; let i = $index) {
+        <div class="request-card">
+          <div class="pet-image-holder">
+            <svg viewBox="0 0 24 24" width="250" height="250">
+              <path
+                class="userImg"
+                d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+              />
+            </svg>
+          </div>
+          <div class="request-info">
+            <h2 class="request-title">
+              POST REPORTED BY
+              {{ request.reportedByUsername }}
+            </h2>
+
+            <div class="request-details">
+              <div class="detail-item">
+                <p class="detail-text">Reason: {{ reasons[request.reason].label }}</p>
+              </div>
+
+              <div class="detail-item">
+                <p class="detail-text">Description: {{ request.description }}</p>
+              </div>
+
+              <div class="detail-item">
+                <p class="detail-text">Date of report: {{ request.dateSent | date: 'short' }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="status-section">
+            <div class="action-buttons">
+              <button class="primarybtn btn" (click)="routeToProfile(request)">MODERATE</button>
+              <button class="primarybtn btn" (click)="getDetails(request)">DETAILS</button>
+              <button class="secondarybtn btn" (click)="dismiss(request.reportID)">DISMISS</button>
+            </div>
+          </div>
+        </div>
+      }
+    } @else if (!imagesLoaded()) {
+      <div class="loading-container">
+        <br />
+        <p class="loading-spinner-text">Loading requests</p>
+        <mat-spinner></mat-spinner>
+      </div>
+    }
+    <mat-paginator
+      [length]="requestsList?.totalItems"
+      [pageSize]=""
+      [pageSizeOptions]="[4, 8, 16]"
+      aria-label="Select page"
+      (page)="handlePageEvent($event)"
+    >
+    </mat-paginator>
+  </div>
+</div>

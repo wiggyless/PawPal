@@ -18,8 +18,11 @@ export class CommentService {
     });
   }
   postComment(request?: CreateCommentCommand): Observable<number> {
-    console.log(request);
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.post<number>(`${this.apiUrl}/post`, request, { params });
+  }
+  deleteComment(commentID: number): Observable<number> {
+    const params = commentID ? buildHttpParams(commentID as any) : undefined;
+    return this.httpClient.delete<number>(`${this.apiUrl}/${commentID}`, { params });
   }
 }

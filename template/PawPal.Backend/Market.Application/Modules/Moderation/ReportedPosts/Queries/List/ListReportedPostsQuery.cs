@@ -8,5 +8,7 @@ namespace PawPal.Application.Modules.Moderation.ReportedPosts.Queries.List
 {
     public class ListReportedPostsQuery : BasePagedQuery<ListReportedPostsQueryDto>
     {
+        public DateTime? DateSentMin { get; set; }
+        public DateTime? DateSentMax { get; set; }
     }
 }

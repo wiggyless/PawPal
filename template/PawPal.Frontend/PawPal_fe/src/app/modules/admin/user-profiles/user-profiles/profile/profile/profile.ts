@@ -20,7 +20,11 @@ import {
   CropDialogResult,
 } from '../../../../../client/my-profile/user-profile-component/user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
 import { DialoguePopupService } from '../../../../../../api-services/dialogue-popup/dialogue-popup.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserDisabledService } from '../../../../../../api-services/users-disabled/users-disabled.service';
+import { ProfileDisableDialog } from './profile-disable-dialog/profile-disable-dialog/profile-disable-dialog';
+import { environment } from '../../../../../../../environments/environment.development';
+import { ReportUserService } from '../../../../../../api-services/moderation/reported-posts/reported-users/reported-users.service';
 
 @Component({
   selector: 'app-profile',
@@ -31,24 +35,25 @@ import { ActivatedRoute } from '@angular/router';
 export class Profile implements OnInit {
   //services
   isUpdate: boolean = false;
-  private imageChanged: boolean = false;
   currentUser = inject(CurrentUserService);
   userDataService = inject(UserService);
-  dialog = inject(DialoguePopupService);
+  dialog = inject(MatDialog);
   dialogRef = inject(MatDialog);
   cityService = inject(CitiesService);
   userImageService = inject(UserImageService);
   cd = inject(ChangeDetectorRef);
+  router = inject(ActivatedRoute);
+  userDisabledService = inject(UserDisabledService);
+  dialogPopUp = inject(DialoguePopupService);
+  userReportsService = inject(ReportUserService);
   cityList: any = [];
   city: string = '';
   selectedImage: File | undefined;
   objectUrl: string | null = null;
   private originalCityId: number = 0;
-  private sanitizer = inject(DomSanitizer);
   imageUrl = signal<SafeUrl | null>(null);
-  private originalImageUrl: SafeUrl | null = null;
   originalUrl: string | null = null;
-  router = inject(ActivatedRoute);
+
   userData: GetUserByIdDto = {
     id: 0,
     firstName: '',
@@ -60,11 +65,14 @@ export class Profile implements OnInit {
     cityID: 0,
     username: '',
     aboutMe: '',
+    photoURL: '',
   };
   userImage: UserImageCommand = {
     userID: 0,
   };
   private userID: number | undefined;
+  private repID: number | undefined;
+  route = inject(Router);
   profileForm = new FormGroup({
     firstName: new FormControl({ value: '', disabled: true }),
     lastName: new FormControl({ value: '', disabled: true }),
@@ -72,11 +80,14 @@ export class Profile implements OnInit {
     city: new FormControl<string | number>({ value: '', disabled: true }),
     aboutMe: new FormControl({ value: '', disabled: true }),
   });
+  env = environment.apiUrl;
   sub: Subscription | undefined;
   editing: boolean = false;
+  disabled: boolean | undefined;
   ngOnInit(): void {
     this.router.queryParams.subscribe((params) => {
       this.userID = params['userID'];
+      this.repID = params['repID'];
       this.getUserData();
     });
   }
@@ -88,24 +99,12 @@ export class Profile implements OnInit {
   }
   getUserData(): void {
     this.sub = forkJoin({
-      userData: this.userDataService.getUser(this.userID),
+      userData: this.userDataService.getUserDisabled(this.userID as number),
       cities: this.cityService.listCities(),
     }).subscribe({
       next: (response) => {
         this.userData = response.userData;
         this.cityList = response.cities;
-        this.userImageService.getUserImageByID(this.userID!).subscribe({
-          next: (res) => {
-            this.isUpdate = true;
-            this.imageUrl.set(res);
-            this.originalImageUrl = res;
-          },
-          error: () => {
-            this.isUpdate = false;
-            this.imageUrl.set(null);
-            this.originalImageUrl = null;
-          },
-        });
         this.initializeInputData();
       },
     });
@@ -126,5 +125,46 @@ export class Profile implements OnInit {
       console.log(res);
       this.cityList = res;
     });
+  }
+  disableAccount() {
+    this.dialogPopUp.warning(
+      'Confirm action',
+      'Are you sure you want to disable ' + this.userData.username + ' profile?',
+      'YES',
+      'NO',
+      () => {
+        this.dialog
+          .open(ProfileDisableDialog, {
+            data: {
+              userId: this.userData.id,
+            },
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            this.userReportsService.deleteUserReport(this.repID as number).subscribe((res) => {
+              this.route.navigate(['reported-users']);
+            });
+          });
+      },
+    );
+  }
+  activateAccount() {
+    this.dialogPopUp.warning(
+      'Confirm action',
+      'Are you sure you want to activate ' + this.userData.username + ' profile?',
+      'YES',
+      'NO',
+      () => {
+        this.userDisabledService.deleteUserDisable(this.userData.id).subscribe({
+          next: (res) => {
+            this.dialogPopUp.success('Success', 'User profile has been activated', 'OK');
+            this.route.navigate(['disabled-users']);
+          },
+          error: (res) => {
+            this.dialogPopUp.error('Error', 'An error has occured', 'OK');
+          },
+        });
+      },
+    );
   }
 }

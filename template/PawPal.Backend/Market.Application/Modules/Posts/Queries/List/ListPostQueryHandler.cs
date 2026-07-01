@@ -11,7 +11,12 @@ namespace PawPal.Application.Modules.Posts.Queries.List
     {
         public async Task<PageResult<ListPostQueryDto>> Handle(ListPostQuery request,CancellationToken cancellationToken)
         {
-            var posts = context.Posts.Include(x => x.Animal).Include(x => x.City).Include(x => x.Animal.Gender).AsNoTracking();
+            var posts = context.Posts.Include(x => x.Animal).Include(x => x.City).Include(x => x.Animal.Gender).Include(x=>x.User)
+                .Where(x=> !x.User.isUserDisabled).AsNoTracking();
+            if(request.UserID is not null)
+            {
+                posts = posts.Where(x => x.UserId == request.UserID);
+            }
             if (request.IsLiked is not null && (bool)request.IsLiked)
             {
                 var likedUserPosts = context.LikedUserPosts.Where(x => x.UserId == request.UserID).AsNoTracking().Select(x => x.PostId);
@@ -57,7 +62,7 @@ namespace PawPal.Application.Modules.Posts.Queries.List
                         .Where(img => img.PostId == x.Id)
                         .Select(img => img.MainImage)
                         .FirstOrDefault() ?? " "
-                });
+                }).OrderByDescending(x=>x.DateAdded);
 
             return await PageResult<ListPostQueryDto>.FromQueryableAsync(postListQuery, request.Paging, cancellationToken);
 

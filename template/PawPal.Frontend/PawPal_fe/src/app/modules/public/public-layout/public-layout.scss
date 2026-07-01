@@ -280,16 +280,17 @@
   left: 44%;
 }
 .catalog-container {
-  width: 90%;
+  width: 75%;
   height: 400px;
   background-color: var(--catalog-first-layer-color);
   margin: auto;
   border-radius: 20px;
   box-shadow: 5px 10px 10px #6e4d36;
 }
+
 .header-posts {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   column-gap: 80px;
   justify-content: center;
   flex-wrap: wrap;

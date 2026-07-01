@@ -1,12 +1,18 @@
-<div class="user-profile-buttons">
-  <button class="primarybtn">SEND WARNING</button>
-  <button class="secondarybtn">DISABLE ACCOUNT</button>
-</div>
+@if (userData.disabled) {
+  <div class="user-profile-buttons">
+    <button class="primarybtn" (click)="activateAccount()">ACTIVATE ACCOUNT</button>
+  </div>
+} @else {
+  <div class="user-profile-buttons">
+    <button class="primarybtn">SEND WARNING</button>
+    <button class="secondarybtn" (click)="disableAccount()">DISABLE ACCOUNT</button>
+  </div>
+}
 <div class="user-profile-details">
   <div class="user-profile-detials-header">
     <div class="user-profile-image">
-      @if (imageUrl()) {
-        <img [src]="imageUrl()" alt="User image" class="profile-preview" />
+      @if (userData.photoURL != '') {
+        <img [src]="env + userData.photoURL" alt="User image" class="profile-preview" />
       } @else {
         <svg viewBox="0 0 24 24" width="84" height="84">
           <path
@@ -81,12 +87,12 @@
       </div>
       <div class="user-profile-form-input-container" id="user-profile-form-input-aboutme-container">
         <label for="about-Me-Text" class="input-label">About me</label>
-        <input
+        <textarea
           class="user-profile-form-input"
           id="about-Me-Text"
           type="text"
           formControlName="aboutMe"
-        />
+        ></textarea>
       </div>
     </form>
   </div>

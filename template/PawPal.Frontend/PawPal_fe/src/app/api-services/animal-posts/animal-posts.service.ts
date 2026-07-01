@@ -22,7 +22,7 @@ export class AnimalPostService {
   httpClient = inject(HttpClient);
   private apiUrl = environment.apiUrl + '/Posts';
 
-  listAnimalPosts(request?: any): Observable<PageResult<ListAnimal>> {
+  listAnimalPosts(request?: GetPostQuery): Observable<PageResult<ListAnimal>> {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.get<PageResult<ListAnimal>>(this.apiUrl, { params });
   }

@@ -13,27 +13,27 @@ import { AnimalPostService } from '../../../api-services/animal-posts/animal-pos
   styleUrl: './dialogue-component.scss',
 })
 export class DialogueComponent implements OnInit {
-  userService= inject(CurrentUserService);
+  userService = inject(CurrentUserService);
   userActualService = inject(UserService);
   auth = inject(AuthApiService);
   router = inject(Router);
   dialog = inject(MatDialog);
   postService = inject(AnimalPostService);
 
-  postID : number = 0;
-  animalID : number = 0;
-  postDeletion : boolean = false;
-  profileDeletion : boolean = false;
-  
-   dialogRef = inject(MatDialogRef<DialogueComponent>);
+  postID: number = 0;
+  animalID: number = 0;
+  postDeletion: boolean = false;
+  profileDeletion: boolean = false;
+
+  dialogRef = inject(MatDialogRef<DialogueComponent>);
   data = inject<{
-    postDelete : boolean,
-    profileDelete:boolean,
-    postId:number;
+    postDelete: boolean;
+    profileDelete: boolean;
+    postId: number;
     animalId: number;
   }>(MAT_DIALOG_DATA);
 
-  userId : any;
+  userId: any;
   ngOnInit(): void {
     this.userId = this.userService.userId;
     this.postDeletion = this.data.postDelete;
@@ -42,28 +42,35 @@ export class DialogueComponent implements OnInit {
     this.animalID = this.data.animalId;
   }
   //OVA FUNKCIJA JE UNUTAR dialogue-component.ts koja kontroliše brisanje korisnika ili objava
-  onDeleteUser():void{ 
-    this.userActualService.deleteUser(this.userId).subscribe({ //zovemo naš servis, i šaljemo mu id usera koji je trenutno aktivan
+  onDeleteUser(): void {
+    this.userActualService.deleteUser(this.userId).subscribe({
+      //zovemo naš servis, i šaljemo mu id usera koji je trenutno aktivan
       //user.Id smo dobili korištenjem currentUser servisa
-      next: (res)=>{
+      next: (res) => {
         this.dialog.closeAll(); //zatvara se dijalog
         this.router.navigate(['/auth/logout']); //navigiramo korisnika na logout, kako bi se njegov token izbrisao iz lokalnog storage-a
       },
-      error:(res)=>{
-        console.log('Didnt work', res)
-      }
+      error: (res) => {
+        console.log('Didnt work', res);
+      },
     });
   }
-  onDeletePost():void{
- this.postService.deletePost(this.postID, this.animalID).subscribe({
-      next:(res) =>{
+  onDeletePost(): void {
+    this.postService.deletePost(this.postID, this.animalID).subscribe({
+      next: (res) => {
         console.log('WORKED', res);
         this.dialog.closeAll();
-        this.router.navigate(['/client']);
+        if (this.userService.roleid() == 3) {
+          this.router.navigate(['admin']);
+          this.dialogRef.close(true);
+        } else {
+          this.router.navigate(['/client']);
+          this.dialogRef.close(false);
+        }
       },
-         error:(res)=>{
+      error: (res) => {
         console.log('Didnt work', res);
-      }
-    })
+      },
+    });
   }
 }

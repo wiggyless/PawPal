@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
+using PawPal.Application.Modules.PostImages.GetById;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,24 +10,20 @@ using System.Text;
 using System.Threading.Tasks;
 namespace PawPal.Application.Modules.UserImages.Queries.GetById
 {
-    public class GetUserImageByIdQueryHandler(IAppDbContext context) : IRequestHandler<GetUserImageByIdQuery, IActionResult>
+    public class GetUserImageByIdQueryHandler(IAppDbContext context) : IRequestHandler<GetUserImageByIdQuery, GetUserImageByIdQueryDto>
     {
-        public async Task<IActionResult> Handle(GetUserImageByIdQuery query, CancellationToken cancellationToken)
+        public async Task<GetUserImageByIdQueryDto> Handle(GetUserImageByIdQuery query, CancellationToken cancellationToken)
         {
-            var userImg = await context.UserImage.Where(x => x.UserID == query.UserID).FirstOrDefaultAsync();
-            if (userImg == null) {
-                throw new PawPalNotFoundException("User image does not exist");
-            }
-            var usrImg =  new GetUserImageByIdQueryDto
+            var userimg = await context.UserImage.Where(x => x.UserID == query.UserID).FirstOrDefaultAsync(cancellationToken);
+            if (userimg is null)
+                throw new PawPalNotFoundException("PostImages not found");
+            var newUserImage = new GetUserImageByIdQueryDto
             {
-                FileBytes = userImg.Data,
-                ContentType = userImg.ContentType,
-                FileName = userImg.Name
+                Id = userimg.Id,
+                UserID = query.UserID,
+                PhotoURL = userimg.PhotoURL,
             };
-            return new FileContentResult(usrImg.FileBytes, usrImg.ContentType)
-            {
-                FileDownloadName = usrImg.FileName
-            };
+            return newUserImage;
         }
     }
 }

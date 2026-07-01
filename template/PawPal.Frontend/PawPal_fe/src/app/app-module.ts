@@ -9,6 +9,7 @@ import { authInterceptor } from '../app/core/interceptors/auth-interceptor.servi
 import { rateLimitInterceptor } from './core/interceptors/rate-limit-interceptor.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 @NgModule({
   declarations: [App],
   imports: [
@@ -21,6 +22,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
   providers: [
     provideNativeDateAdapter(),
     provideBrowserGlobalErrorListeners(),
+    provideAnimationsAsync(),
     provideHttpClient(
       withFetch(),
       withInterceptors([authInterceptor]),

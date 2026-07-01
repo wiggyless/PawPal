@@ -104,11 +104,7 @@
             </div>
           }
         </div>
-        <div
-          class="avatar-container"
-          (mouseenter)="menuOpened = true"
-          (mouseleave)="menuOpened = false"
-        >
+        <div class="avatar-container" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
           <div class="icon-circle">
             <svg
               fill="#C7B18C"
@@ -129,7 +125,7 @@
           </div>
           @if (menuOpened) {
             <div
-              class="avatar-menu"
+              class="avatar-menu-admin"
               (mouseenter)="menuOpened = true"
               (mouseleave)="menuOpened = false"
             >

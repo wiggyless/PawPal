@@ -12,13 +12,15 @@ namespace PawPal.Application.Modules.Posts.Queries.GetByID
         public async Task<GetPostByIdQueryDto> Handle(GetPostByIdQuery request,CancellationToken cancelationToken)
         {
             var post = await context.Posts.
-                Where(x => x.Id == request.Id).
+                Include(x=>x.Animal).
+                Include(x=>x.User).
+                Where(x => x.Id == request.Id && !x.User.isUserDisabled).
                 Select(x => new GetPostByIdQueryDto
                 {
                     PostID = x.Id,
                     UserID = x.UserId,
                     Name = x.Animal.Name,
-                    AnimalID = request.Id,
+                    AnimalID = x.AnimalID,
                     CategoryID = x.Animal.CategoryId,
                     Breed = x.Animal.Breed,
                     GenderID = x.Animal.GenderId,
