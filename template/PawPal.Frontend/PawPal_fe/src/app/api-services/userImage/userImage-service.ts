@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { buildHttpParams } from '../../core/models/build-http-params';
-import { UserImageCommand, UserImageDto, UserImageQuery } from './userImage-model';
+import { GetUserImageById, UserImageCommand, UserImageDto, UserImageQuery } from './userImage-model';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 @Injectable({
   providedIn: 'root',
@@ -18,14 +18,14 @@ export class UserImageService {
     if (this.imageCache.has(userID)) {
       return of(this.imageCache.get(userID)!);
     }
-
-    return this.httpClient.get(`${this.apiUrl}/${userID}`, { responseType: 'blob' }).pipe(
-      map((blob) => {
-        const url = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
-        this.imageCache.set(userID, url);
-        return url;
+      const params = userID ? buildHttpParams(userID as any) : undefined;
+        return this.httpClient
+          .get<GetUserImageById>(`${this.apiUrl}/${userID}`).pipe(
+      map((photo) => {
+        this.imageCache.set(userID, photo.photoURL);
+        return photo.photoURL;
       }),
-    );
+    )
   }
   createUserImage(userID: number, image: File): Observable<number> {
     const formData = new FormData();

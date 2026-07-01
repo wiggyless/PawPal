@@ -11,5 +11,7 @@ namespace PawPal.Application.Modules.Users.Queries.List
         public string? SearchFirstName { get; init; }
         public string? SearchLastName { get; init; }
         public string? SearchEmail { get; init; }
+        public bool? Disabled { get; set; }
+        public string? SearchUsername { get; set; }
     }
 }

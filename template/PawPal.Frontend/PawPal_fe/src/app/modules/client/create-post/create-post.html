@@ -24,7 +24,7 @@
           viewBox="0 0 50 50"
           fill="none"
         >
-          <path d="M25 35.4167V22.9167" stroke-width="3.75" stroke-linecap="round" />
+          <path d="M25 35.4167V22.9167" stroke-width="3.75" stroke-linecap="round" fill="#354024" />
           <path
             d="M24.9998 14.5833C26.1504 14.5833 27.0832 15.5161 27.0832 16.6667C27.0832 17.8173 26.1504 18.75 24.9998 18.75C23.8492 18.75 22.9165 17.8173 22.9165 16.6667C22.9165 15.5161 23.8492 14.5833 24.9998 14.5833Z"
             fill="#354024"
@@ -98,16 +98,15 @@
           width="50"
           height="50"
           viewBox="0 0 50 50"
-          fill="#889063"
         >
-          <path d="M25 35.4167V22.9167" stroke-width="3.75" stroke-linecap="round" />
+          <path d="M25 35.4167V22.9167" stroke-width="3.75" stroke-linecap="round" fill="#889063" />
           <path
             d="M24.9998 14.5833C26.1504 14.5833 27.0832 15.5161 27.0832 16.6667C27.0832 17.8173 26.1504 18.75 24.9998 18.75C23.8492 18.75 22.9165 17.8173 22.9165 16.6667C22.9165 15.5161 23.8492 14.5833 24.9998 14.5833Z"
             fill="#889063"
-            stroke="#889063"
           />
           <path
             d="M14.5834 6.95387C17.6477 5.18127 21.2055 4.16675 25.0001 4.16675C36.5059 4.16675 45.8334 13.4941 45.8334 25.0001C45.8334 36.5059 36.5059 45.8334 25.0001 45.8334C13.4941 45.8334 4.16675 36.5059 4.16675 25.0001C4.16675 21.2055 5.18127 17.6477 6.95387 14.5834"
+            fill="#354024"
             stroke-width="3.75"
             stroke-linecap="round"
           />
@@ -119,7 +118,7 @@
           width="50"
           height="50"
           viewBox="0 0 50 50"
-          fill="none"
+          fill="#889063"
         >
           <path
             fill-rule="evenodd"
@@ -348,9 +347,7 @@
             </form>
           </div>
           <div class="stepper-buttons">
-            <button matButton matStepperPrevious class="secondarybtn" (click)="changeStep()">
-              BACK
-            </button>
+            <button matButton matStepperPrevious class="secondarybtn">BACK</button>
             <button matButton matStepperNext class="primarybtn">NEXT</button>
           </div>
         </div>
@@ -477,7 +474,9 @@
             </form>
           </div>
           <div class="stepper-buttons">
-            <button mat-button matStepperPrevious class="secondarybtn">BACK</button>
+            <button mat-button matStepperPrevious class="secondarybtn" (click)="changeStep()">
+              BACK
+            </button>
             <button mat-button matStepperNext class="primarybtn">NEXT</button>
           </div>
         </div>
@@ -485,6 +484,7 @@
     }
 
     <!-- Fouth step final -->
+
     <mat-step [stepControl]="fourthFromGroup" class="mat-step-container">
       <div class="step-content">
         <div class="mat-step-final-container">
@@ -500,92 +500,141 @@
         </div>
       </div>
 
-      <div class="post-container">
-        <div class="post">
+      @if (secondStep()) {
+        <div class="post-container">
+          <div class="post">
+            <div class="carousel-container">
+              <div
+                class="carousel-track"
+                [ngStyle]="{
+                  transform: getTransformStyle(),
+                }"
+              >
+                @for (image of imageControls; track image; let i = $index) {
+                  <img [src]="image.value" class="carousel-image" />
+                }
+              </div>
+
+              <ng-container>
+                <button
+                  class="carousel-arrow left"
+                  (click)="prevImage(imageControls.length)"
+                  aria-label="Previous image"
+                >
+                  <mat-icon>chevron_left</mat-icon>
+                </button>
+                <button
+                  class="carousel-arrow right"
+                  (click)="nextImage(imageControls.length)"
+                  aria-label="Next image"
+                >
+                  <mat-icon>chevron_right</mat-icon>
+                </button>
+              </ng-container>
+            </div>
+            <!--
             <p-carousel [value]="imageControls" [numVisible]="1" [numScroll]="1" [circular]="true">
               <ng-template let-image pTemplate="img">
                 <img class="post-image" src="{{ image.value }}" />
               </ng-template>
             </p-carousel>
-
-
-          <div class="post-information-container">
-            <h2 class="pet-name">
-              <p>{{ fourthFromGroup.value.mainInfo?.name }}</p>
-            </h2>
-            <div class="post-information">
-              <div class="post-information-pet">
-                <div class="post-information-pet-info">
-                  <div class="post-information-pet-attributes">
-                    <p>Category:</p>
-                    <p>Race:</p>
-                    <p>Gender:</p>
-                    <p>Age:</p>
-                    <p>Vaccinated:</p>
-                    <p>Sprayed:</p>
-                    <p>Parasite free:</p>
-                    <p>Passport:</p>
-                    <p>Date added:</p>
-                    <p>City:</p>
+            -->
+            <div class="post-information-container">
+              <h2 class="pet-name">
+                <p>{{ fourthFromGroup.value.mainInfo?.name }}</p>
+              </h2>
+              <div class="post-information">
+                <div class="post-information-pet">
+                  <div class="post-information-pet-info">
+                    <div class="post-information-pet-attributes">
+                      <p>Category:</p>
+                      <p>Race:</p>
+                      <p>Gender:</p>
+                      <p>Age:</p>
+                      <p>Vaccinated:</p>
+                      <p>Sprayed:</p>
+                      <p>Parasite free:</p>
+                      <p>Passport:</p>
+                      <p>Date added:</p>
+                      <p>City:</p>
+                    </div>
+                    <div class="straight-border"></div>
+                    <div class="post-information-pet-attributes-values">
+                      <p>{{ selectedCategory.categoryName }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.breed }}</p>
+                      <p>{{ selectedGender }}</p>
+                      <p>{{ fourthFromGroup.value.mainInfo?.age }}</p>
+                      @if (!thridFormGroup.get('vaccineCheck')?.value) {
+                        <p><mat-icon>close</mat-icon></p>
+                      } @else {
+                        <p><mat-icon>check</mat-icon></p>
+                      }
+                      @if (!thridFormGroup.get('parasiteCheck')?.value) {
+                        <p><mat-icon>close</mat-icon></p>
+                      } @else {
+                        <p><mat-icon>check</mat-icon></p>
+                      }
+                      @if (!thridFormGroup.get('sterCheck')?.value) {
+                        <p><mat-icon>close</mat-icon></p>
+                      } @else {
+                        <p><mat-icon>check</mat-icon></p>
+                      }
+                      <p>
+                        {{
+                          fourthFromGroup.value.mainInfo?.passportCheck
+                            ? fourthFromGroup.value.mainInfo?.passportCtrl
+                            : 'None'
+                        }}
+                      </p>
+                      <p>{{ currentDate }}</p>
+                      <p>{{ userData.city }}</p>
+                    </div>
                   </div>
-                  <div class="straight-border"></div>
-                  <div class="post-information-pet-attributes-values">
-                    <p>{{ selectedCategory.categoryName }}</p>
-                    <p>{{ fourthFromGroup.value.mainInfo?.breed }}</p>
-                    <p>{{ selectedGender }}</p>
-                    <p>{{ fourthFromGroup.value.mainInfo?.age }}</p>
-                    @if (!thridFormGroup.get('vaccineCheck')?.value) {
-                      <p><mat-icon>close</mat-icon></p>
+                  <div class="post-information-pet-add-info">
+                    <p class="post-information-pet-add-info-label">Additional information</p>
+                    <div class="post-information-pet-add-info-text">
+                      <p>Allergies: {{ thridFormGroup.get('allergyCtrl')?.value }}</p>
+                      <p>Disabilities: {{ thridFormGroup.get('disCtrl')?.value }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="post-information-user-container">
+                  <div class="post-information-user">
+                    @if (userData.photoURL != '') {
+                      <img class="post-information-user-logo" [src]="env + userData.photoURL" />
                     } @else {
-                      <p><mat-icon>check</mat-icon></p>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="220"
+                        height="220"
+                        viewBox="0 0 110 110"
+                        fill="none"
+                        style="cursor: pointer"
+                      >
+                        <rect width="100" height="100" rx="50" fill="#191408" />
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M65.0006 40C65.0006 48.2843 58.2849 55 50.0006 55C41.7163 55 35.0006 48.2843 35.0006 40C35.0006 31.7157 41.7163 25 50.0006 25C58.2849 25 65.0006 31.7157 65.0006 40ZM60.0006 40C60.0006 45.5228 55.5235 50 50.0006 50C44.4778 50 40.0006 45.5228 40.0006 40C40.0006 34.4772 44.4778 30 50.0006 30C55.5235 30 60.0006 34.4772 60.0006 40Z"
+                          fill="#C7B18C"
+                        />
+                        <path
+                          d="M50.0006 62.5C33.8147 62.5 20.0238 72.071 14.7705 85.4801C16.0502 86.7509 17.3984 87.9529 18.8088 89.0801C22.7207 76.7692 34.9924 67.5 50.0006 67.5C65.0088 67.5 77.2806 76.7693 81.1924 89.0802C82.6029 87.9529 83.951 86.7509 85.2307 85.4802C79.9775 72.071 66.1866 62.5 50.0006 62.5Z"
+                          fill="#C7B18C"
+                        />
+                      </svg>
                     }
-                    @if (!thridFormGroup.get('parasiteCheck')?.value) {
-                      <p><mat-icon>close</mat-icon></p>
-                    } @else {
-                      <p><mat-icon>check</mat-icon></p>
-                    }
-                    @if (!thridFormGroup.get('sterCheck')?.value) {
-                      <p><mat-icon>close</mat-icon></p>
-                    } @else {
-                      <p><mat-icon>check</mat-icon></p>
-                    }
-                    <p>
-                      {{
-                        fourthFromGroup.value.mainInfo?.passportCheck
-                          ? fourthFromGroup.value.mainInfo?.passportCtrl
-                          : 'None'
-                      }}
+                    <p class="post-information-user-username">
+                      {{ userData.firstName }} {{ userData.lastName }}
                     </p>
-                    <p>{{ currentDate }}</p>
-                    <p>{{ userData.city }}</p>
+                    <div class="post-information-user-border"></div>
                   </div>
-                </div>
-                <div class="post-information-pet-add-info">
-                  <p class="post-information-pet-add-info-label">Additional information</p>
-                  <div class="post-information-pet-add-info-text">
-                    <p>Allergies: {{ thridFormGroup.get('allergyCtrl')?.value }}</p>
-                    <p>Disabilities: {{ thridFormGroup.get('disCtrl')?.value }}</p>
-                  </div>
-                </div>
-              </div>
-              <div class="post-information-user-container">
-                <div class="post-information-user">
-                  <img class="post-information-user-logo" [src]="imageUrl()" />
-                  <p class="post-information-user-username">
-                    {{ userData.firstName }} {{ userData.lastName }}
-                  </p>
-                  <p class="post-information-user-activity">Last time active:</p>
-                  <div class="post-information-user-border"></div>
-                </div>
-                <div class="post-information-user-report">
-                  <p>Inappropriate content?</p>
-                  <button class="secondarybtn">REPORT</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      }
     </mat-step>
   </mat-stepper>
   @if (isUploadingImages) {

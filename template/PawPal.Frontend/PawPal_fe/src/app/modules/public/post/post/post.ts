@@ -1,6 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  OnDestroy,
   OnInit,
   ViewEncapsulation,
   inject,
@@ -16,13 +17,16 @@ import { UserService } from '../../../../api-services/users/users-service';
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
 import { environment } from '../../../../../environments/environment';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, Subscription } from 'rxjs';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogueComponent } from '../../../client/dialogue-component/dialogue-component';
 import { UserImageService } from '../../../../api-services/userImage/userImage-service';
 import { SafeUrl } from '@angular/platform-browser';
 import { ReportPostComponent } from '../../../client/report-post-component/report-post-component';
+import { ReportUserComponent } from '../../../client/report-user-component/report-user-component/report-user-component';
+import { GetUserByIdDto } from '../../../../api-services/users/users-model';
+import { ReportCommentComponent } from '../../../client/report-comment-component/report-comment-component/report-comment-component';
 
 @Component({
   selector: 'app-post',
@@ -31,7 +35,7 @@ import { ReportPostComponent } from '../../../client/report-post-component/repor
   styleUrl: './post.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class PostComponent implements OnInit {
+export class PostComponent implements OnInit, OnDestroy {
   animalId: number = 0;
   cityId: number = 0;
   userId: number = 0;
@@ -49,8 +53,9 @@ export class PostComponent implements OnInit {
   postService = inject(AnimalPostService);
   cd = inject(ChangeDetectorRef);
   dialog = inject(MatDialog);
-  userImages = inject(UserImageService);
-
+  postSub: Subscription | undefined;
+  animalSub: Subscription | undefined;
+  togetherSub: Subscription | undefined;
   animalHealth: GetAnimalsHealthByIdDto = {
     animalHealthHistoryId: 0,
     animalId: 0,
@@ -70,12 +75,8 @@ export class PostComponent implements OnInit {
     age: 0,
     hasPapers: false,
   };
-
-  user = {
-    firstName: '',
-    lastName: '',
-    dateTime: '',
-  };
+  router = inject(Router);
+  user: GetUserByIdDto | undefined;
 
   city: GetCityByIdDto = {
     id: 0,
@@ -83,7 +84,7 @@ export class PostComponent implements OnInit {
   };
 
   postImage: any;
-  dateAdded: string = '';
+  dateAdded: Date = new Date();
   imagesList: Observable<string[]> | undefined;
   env = environment;
   objectUrl: string | null = null;
@@ -94,40 +95,43 @@ export class PostComponent implements OnInit {
     window.scrollTo(0, 0);
     this.route.queryParams.subscribe((params) => {
       this.postId = params['postID'];
-      this.animalId = params['animalID'];
-      this.cityId = params['cityID'];
-      this.userId = params['userID'];
-      this.dateAdded = params['dateAdded'];
     });
 
     this.imagesList = this.postImageService.getImagePost(this.postId);
-    forkJoin({
-      animal: this.animalService.getAnimalById(this.animalId as number),
-      health: this.animalHealthService.getAnimalHealthHistoryById(this.animalId),
-      cities: this.cityService.getCityById(this.cityId),
-      users: this.userService.getUser(this.userId),
-      userImage: this.userImages.getUserImageByID(this.userId),
-    }).subscribe({
-      next: (response) => {
-        this.imageUrl.set(response.userImage);
-        let sourceKeys = Object.keys(response.animal);
-        sourceKeys.forEach((key) => {
-          if (key in this.animal) {
-            (this.animal as any)[key] = (response.animal as any)[key];
-          }
+    this.postSub = this.postService.getPostById(this.postId).subscribe((res) => {
+      this.dateAdded = res.dateAdded;
+      this.animalId = res.animalID;
+      this.animalSub = this.animalService.getAnimalById(res.animalID).subscribe((resA) => {
+        this.togetherSub = forkJoin({
+          health: this.animalHealthService.getAnimalHealthHistoryById(resA.id),
+          cities: this.cityService.getCityById(res.cityID),
+          users: this.userService.getUser(res.userID),
+        }).subscribe({
+          next: (response) => {
+            let sourceKeys = Object.keys(resA);
+            sourceKeys.forEach((key) => {
+              if (key in this.animal) {
+                (this.animal as any)[key] = (resA as any)[key];
+              }
+            });
+            this.animalHealth = response.health;
+            this.city = response.cities;
+            this.user = response.users;
+            this.isImagesLoaded.set(true);
+          },
         });
-        this.animalHealth = response.health;
-        this.city = response.cities;
-        this.user = response.users;
-        this.isImagesLoaded.set(true);
-      },
+      });
     });
   }
-
+  ngOnDestroy(): void {
+    this.animalSub?.unsubscribe();
+    this.postSub?.unsubscribe();
+    this.togetherSub?.unsubscribe();
+  }
   keepOrder = (a: any, b: any) => 0;
 
   routeEditPost(): void {
-    this.routeNext.navigate(['/client/my-profile/create-post'], {
+    this.routeNext.navigate(['/client/create-post'], {
       queryParams: {
         postID: this.postId,
         update: true,
@@ -186,10 +190,21 @@ export class PostComponent implements OnInit {
       });
     }
   }
-}
-  openReportDialog(): void{
+  openReportDialog(): void {
     this.dialog.open(ReportPostComponent, {
-  data: { postId: this.postId, userId: this.currentUser.userId() }
-});
+      data: { postId: this.postId, userId: this.currentUser.userId() },
+    });
+  }
+  openReportUserDialog(): void {
+    this.dialog.open(ReportUserComponent, {
+      data: { reportedUserID: this.user?.id, reportSentByID: this.currentUser.userId() },
+    });
+  }
+  routeToProfile(id: number): void {
+    this.router.navigate(['profile'], {
+      queryParams: {
+        userID: id,
+      },
+    });
   }
 }

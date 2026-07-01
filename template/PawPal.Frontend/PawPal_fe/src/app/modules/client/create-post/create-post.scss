@@ -5,7 +5,7 @@ body {
   min-height: 100vh;
   background-image: linear-gradient(var(--background-color), var(--background-color-second));
   padding: 2rem 1rem;
-
+  height: 100%;
   @media (min-width: 768px) {
     padding: 3rem 2rem;
   }
@@ -486,7 +486,7 @@ input[type='number'] {
 
 .create-stepper {
   max-width: 1400px;
-  height: 100vh;
+  height: 100%;
   margin: 0 auto;
   ::ng-deep {
     // Stepper header customization
@@ -740,4 +740,78 @@ textarea {
     border-radius: 4px;
     height: 6px;
   }
+}
+
+.carousel-container {
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 25px;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 64px;
+  z-index: 10;
+  transition: background 0.2s;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #c7b18c;
+  border: 2px solid #6b4423;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  pointer-events: all;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  mat-icon {
+    color: rgb(62, 47, 28);
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: rgb(62, 47, 28);
+    transform: translateY(-50%) scale(1.1); // Combine both transforms
+
+    mat-icon {
+      color: rgb(243, 233, 219);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.carousel-arrow:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.carousel-arrow.left {
+  left: 10px;
+}
+
+.carousel-arrow.right {
+  right: 10px;
 }

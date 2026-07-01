@@ -11,8 +11,8 @@ namespace PawPal.Application.Modules.UserImages.Queries.GetById
 {
     public class GetUserImageByIdQueryDto
     {
-        public byte[] FileBytes { get; set; } = [];
-        public string ContentType { get; set; } = string.Empty;
-        public string FileName { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public int UserID { get; set; }
+        public string PhotoURL { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace PawPal.Application.Modules.Users.Queries.GetByEmail
             var email = request.Email;
 
             var user = context.Users
-                .Where(u => u.Email == email)
+                .Where(u => u.Email == email && !u.isUserDisabled)
                 .Select(u => new GetUserByEmailQueryDto
                 {
                     FirstName = u.FirstName,

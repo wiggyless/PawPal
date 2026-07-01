@@ -61,6 +61,7 @@ namespace PawPal.Application.Modules.Users.Commands.Create
             };
             context.Users.Add(newUser);
             await context.SaveChangesAsync(cancellationToken);
+            /*
             var confirmUrl = $"http://localhost:4200/auth/confirm-email?token={confirmationToken}";
             await emailService.SendEmailAsync(
                 userEmail,
@@ -68,7 +69,7 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 $"<p>Hi {userName},</p><p>Click <a href='{confirmUrl}'>here</a> to confirm your account.</p>"
             );
 
-
+            */
             return newUser.Id;
         }
     }

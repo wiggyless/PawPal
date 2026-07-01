@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using PawPal.Application.Modules.Animal_Info.Animals.Commands.Delete;
+using PawPal.Application.Modules.Disabilities.GetById;
 using PawPal.Application.Modules.Users.Commands.Create;
 using PawPal.Application.Modules.Users.Commands.Delete;
 using PawPal.Application.Modules.Users.Commands.ResendConfirmationEmail;
@@ -7,6 +8,7 @@ using PawPal.Application.Modules.Users.Commands.Update;
 using PawPal.Application.Modules.Users.Commands.UpdatePassword;
 using PawPal.Application.Modules.Users.Queries.GetByEmail;
 using PawPal.Application.Modules.Users.Queries.GetById;
+using PawPal.Application.Modules.Users.Queries.GetByIdDisabled;
 using PawPal.Application.Modules.Users.Queries.GetByUsername;
 using PawPal.Application.Modules.Users.Queries.List;
 
@@ -29,6 +31,12 @@ namespace PawPal.API.Controllers.Places
         public async Task<GetUserByIdQueryDto> GetById(int id, CancellationToken ct)
         {
             var user = await sender.Send(new GetUserByIdQuery { Id = id }, ct);
+            return user;
+        }
+        [HttpGet("{id:int}/disabled")]
+        public async Task<GetByIdDisabledQueryDto> GetByIdDisabled(int id, CancellationToken ct)
+        {
+            var user = await sender.Send(new GetByIdDisabledQuery { Id = id }, ct);
             return user;
         }
         [AllowAnonymous]

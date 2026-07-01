@@ -8,6 +8,6 @@ namespace PawPal.Application.Modules.Moderation.ReportedPosts.Commands.Delete
 {
     public class DeleteReportedPostCommand : IRequest<Unit>
     {
-        public int PostID { get; set; }
+        public int Id { get; set; }
     }
 }

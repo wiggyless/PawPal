@@ -8,6 +8,7 @@ import {
   AppNotification,
 } from '../../../../core/services/notifications/notification.service';
 import { DatePipe } from '@angular/common';
+import { Subject, Subscription, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -30,7 +31,8 @@ export class NavbarComponent {
   cd = inject(ChangeDetectorRef);
   notificationsOpen = false;
   bannerDismissed = false;
-
+  private mouseLeave$ = new Subject<void>();
+  private subscription: Subscription;
   enableNotifications() {
     console.log('enableNotifications clicked');
     this.notificationService.requestPermissionAndRegister();
@@ -60,11 +62,28 @@ export class NavbarComponent {
     this.tipsMenuOpen = false;
     this.aboutUsMenuOpen = false;
   }
+  constructor() {
+    this.subscription = this.mouseLeave$.pipe(debounceTime(100)).subscribe(() => {
+      this.menuOpened = false;
+    });
+  }
+
+  onMouseEnter(): void {
+    this.subscription.unsubscribe();
+    this.menuOpened = true;
+    this.subscription = this.mouseLeave$.pipe(debounceTime(100)).subscribe(() => {
+      this.menuOpened = false;
+    });
+  }
+
+  onMouseLeave(): void {
+    this.mouseLeave$.next();
+  }
   toggleTheme(): void {
     this.dynamicThemeService.toggleTheme();
   }
 
- toggleNotifications(): void {
+  toggleNotifications(): void {
     this.notificationsOpen = !this.notificationsOpen;
     if (this.notificationsOpen) {
       this.notificationService.markAllAsRead();

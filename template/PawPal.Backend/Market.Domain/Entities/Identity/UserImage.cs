@@ -10,8 +10,7 @@ namespace PawPal.Domain.Entities.Identity
     public class UserImage : BaseEntity
     {
         public int UserID { get; set; }
-        public string Name { get; set; }
-        public byte[] Data { get; set; }
-        public string ContentType { get; set; }
+        public string? Name { get; set; }
+        public string PhotoURL { get; set; }
     }
 }

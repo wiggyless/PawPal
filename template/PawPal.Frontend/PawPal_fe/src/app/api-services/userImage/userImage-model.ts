@@ -10,3 +10,8 @@ export interface UserImageCommand {
   userID: number;
   imageData?: FormData;
 }
+export interface GetUserImageById {
+  id: number;
+  userID: number;
+  photoURL: string;
+}

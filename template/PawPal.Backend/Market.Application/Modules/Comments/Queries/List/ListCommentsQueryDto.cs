@@ -13,5 +13,6 @@ namespace PawPal.Application.Modules.Comments.Queries.List
         public string Content { get; set; }
         public DateTime DatePosted { get; set; }
         public string Username { get; set; }
+        public string PhotoURL { get; set; }
     }
 }

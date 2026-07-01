@@ -65,6 +65,7 @@ export class MyFavorites
     this.animalPostList = this.animalPostsService.listAnimalPosts({
       userID: this.currentUser.userId() as number,
       isLiked: true,
+      paging: this.request.paging,
     });
     this.animalPostList.subscribe((res) => {
       this.imagesLoaded.set(true);

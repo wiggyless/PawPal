@@ -9,6 +9,7 @@ namespace PawPal.Application.Modules.Comments.Commands.Create
         {
             var user = context.Users.Where(x => x.Id == command.UserID).AsNoTracking().FirstOrDefault();
             var post = context.Posts.Where(x => x.Id == command.PostID).AsNoTracking().FirstOrDefault();
+            var userImage = context.UserImage.AsNoTracking().FirstOrDefault(x => x.UserID == command.UserID);
             if(user is null)
             {
                 throw new PawPalNotFoundException("User not found");
@@ -42,8 +43,8 @@ namespace PawPal.Application.Modules.Comments.Commands.Create
                 UserID = newComment.UserId,
                 DatePosted = newComment.DatePosted,
                 PostID = newComment.PostId,
-                Username = user.Username
-               
+                Username = user.Username,
+                PhotoURL = userImage is null ? "" : userImage.PhotoURL
             };
             await _hubService.SendCommentNotification(commentDto);
             return newComment.Id;

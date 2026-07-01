@@ -1,15 +1,19 @@
 <div class="user-profile-details">
   <div class="user-profile-detials-header">
     <div class="user-profile-image">
-      @if (imageUrl()) {
+      @if (imageChanged()) {
         <img [src]="imageUrl()" alt="User image" class="profile-preview" />
       } @else {
-        <svg viewBox="0 0 24 24" width="84" height="84">
-          <path
-            class="userImg"
-            d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
-          />
-        </svg>
+        @if (userData.photoURL != '') {
+          <img [src]="env + userData.photoURL" alt="User image" class="profile-preview" />
+        } @else {
+          <svg viewBox="0 0 24 24" width="84" height="84">
+            <path
+              class="userImg"
+              d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+            />
+          </svg>
+        }
       }
       @if (editing()) {
         <div class="user-image-input">

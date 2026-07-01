@@ -1,0 +1,47 @@
+.full-width {
+  width: 100%;
+
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    height: auto !important;
+  }
+
+  ::ng-deep .mat-mdc-form-field-infix {
+    width: auto;
+  }
+}
+::ng-deep .mat-mdc-dialog-surface {
+  height: 50vh;
+}
+.dialog-content {
+  height: 400px;
+}
+.success-msg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #388e3c;
+  font-size: 14px;
+  padding: 8px 0;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.error-msg {
+  font-size: 13px;
+  color: #c62828;
+  margin-top: 4px;
+}
+
+mat-dialog-content {
+  min-width: 420px;
+  padding-top: 12px !important;
+}
+
+mat-dialog-actions {
+  gap: 8px;
+  padding-bottom: 16px !important;
+}

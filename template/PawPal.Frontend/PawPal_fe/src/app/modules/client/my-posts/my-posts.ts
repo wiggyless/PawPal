@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { PageResult } from '../../../core/models/paging/page-result';
 import { BaseListPagedComponent } from '../../../core/components/base-classes/base-list-paged-component';
 import { PageEvent } from '@angular/material/paginator';
+import { GenderEnum } from '../../../api-services/gender/gender-model';
 
 @Component({
   selector: 'app-my-posts',
@@ -25,6 +26,7 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
   animalPostList: Observable<PageResult<ListAnimalPostsByUserIdDto>> | undefined;
   envLink = environment;
   isLoaded = false;
+  gender = GenderEnum;
   route = inject(Router);
   constructor(crr: CurrentUserService) {
     super();
@@ -72,10 +74,6 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
     this.route.navigate(['/post'], {
       queryParams: {
         postID: post.postId,
-        animalID: post.animalID,
-        cityID: post.cityID,
-        userID: post.userId,
-        dateAdded: post.dateAdded,
       },
     });
   }

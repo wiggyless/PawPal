@@ -1,0 +1,87 @@
+<h1 class="my-post-title">REPORTED POSTS</h1>
+<div class="search-div">
+  <div class="search-wrapper">
+    <div class="select-wrapper">
+      <label class="input-label">Date</label>
+      <mat-form-field class="date-form">
+        <mat-date-range-input [rangePicker]="picker" [formGroup]="datePicker" disabled>
+          <input
+            matInput
+            matStartDate
+            placeholder="Start date"
+            #fromInputMin
+            formControlName="start"
+          />
+          <input matInput matEndDate placeholder="End date" #fromInputMax formControlName="end" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker disabled="false"></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+    <button class="primarybtn" (click)="loadRequest()">SEARCH</button>
+  </div>
+</div>
+<div class="poslati-zahtjevi-container">
+  <div class="requests-list">
+    <!-- Request Card 1 - Processing -->
+    @if (imagesLoaded()) {
+      @if (requestsList?.items?.length == 0) {
+        <p class="loading-spinner-text">No reports found!</p>
+      }
+      @for (request of requestsList?.items; track request; let i = $index) {
+        <div class="request-card">
+          <div class="pet-image-holder">
+            <svg xmlns="http://www.w3.org/2000/svg" width="250" height="250" viewBox="0 0 168 168">
+              <path
+                d="M35 147C31.15 147 27.8542 145.629 25.1125 142.888C22.3708 140.146 21 136.85 21 133V35C21 31.15 22.3708 27.8542 25.1125 25.1125C27.8542 22.3708 31.15 21 35 21H133C136.85 21 140.146 22.3708 142.888 25.1125C145.629 27.8542 147 31.15 147 35V133C147 136.85 145.629 140.146 142.888 142.888C140.146 145.629 136.85 147 133 147H35ZM42 119H126L99.75 84L78.75 112L63 91L42 119Z"
+                fill="#1D1B20"
+              />
+            </svg>
+          </div>
+          <div class="request-info">
+            <h2 class="request-title">
+              POST REPORTED BY
+              {{ request.username }}
+            </h2>
+
+            <div class="request-details">
+              <div class="detail-item">
+                <p class="detail-text">Reason: {{ reasons[request.reason].label }}</p>
+              </div>
+
+              <div class="detail-item">
+                <p class="detail-text">Description: {{ request.description }}</p>
+              </div>
+
+              <div class="detail-item">
+                <p class="detail-text">Date of report: {{ request.dateSent | date: 'short' }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="status-section">
+            <div class="action-buttons">
+              <button class="primarybtn btn" (click)="routeToPost(request.postID)">MODERATE</button>
+              <button class="primarybtn btn" (click)="getDetails(request)">DETAILS</button>
+              <button class="secondarybtn btn" (click)="dismiss(request.id)">DISMISS</button>
+            </div>
+          </div>
+        </div>
+      }
+    } @else if (!imagesLoaded()) {
+      <div class="loading-container">
+        <br />
+        <p class="loading-spinner-text">Loading requests</p>
+        <mat-spinner></mat-spinner>
+      </div>
+    }
+    <mat-paginator
+      [length]="requestsList?.totalItems"
+      [pageSize]=""
+      [pageSizeOptions]="[4, 8, 16]"
+      aria-label="Select page"
+      (page)="handlePageEvent($event)"
+    >
+    </mat-paginator>
+  </div>
+</div>

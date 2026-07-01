@@ -36,15 +36,16 @@ export class UserService {
     const params = query ? buildHttpParams(query as any) : undefined;
     return this.http.get<PageResult<GetUserList>>(this.apiUrl, { params });
   }
-  getUser(request?: any): Observable<GetUserByIdDto> {
-    const params = request ? buildHttpParams(request as any) : undefined;
-    return this.http.get<GetUserByIdDto>(`${this.apiUrl}/${request}`);
+  getUser(id: number): Observable<GetUserByIdDto> {
+    return this.http.get<GetUserByIdDto>(`${this.apiUrl}/${id}`);
   }
   updateUser(id: number, payload: UpdateUserCommand): Observable<void> {
     const params = payload ? buildHttpParams(payload as any) : undefined;
     return this.http.put<void>(`${this.apiUrl}/${id}`, payload);
   }
-
+  getUserDisabled(id: number): Observable<GetUserByIdDto> {
+    return this.http.get<GetUserByIdDto>(`${this.apiUrl}/${id}/disabled`);
+  }
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

@@ -8,12 +8,6 @@ using PawPal.Application.Modules.PostImages.Commands.Update;
 using PawPal.Application.Modules.PostImages.GetById;
 using PawPal.Application.Modules.PostImages.GetByIdFile;
 using PawPal.Application.Modules.PostImages.ListMainImages;
-using PawPal.Application.Modules.Posts.Commands.Create;
-using PawPal.Application.Modules.Posts.Commands.Delete;
-using PawPal.Application.Modules.Posts.Commands.Update;
-using PawPal.Application.Modules.Posts.Queries.GetByID;
-using System.Threading;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace PawPal.API.Controllers.Posts
 {
@@ -29,19 +23,21 @@ namespace PawPal.API.Controllers.Posts
             int id = await sender.Send(command, cancellationToken);
             var subFolder = "posts";
             string root = env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-           
             string storeFileDirectory = Path.Combine(root, subFolder, "Post_" + command.PostId);
+
             if (!Directory.Exists(storeFileDirectory))
-            {
+            { 
                 Directory.CreateDirectory(storeFileDirectory);
             }
             foreach (var file in command.PostImages)
+
             {
                 string safeFileName = Path.GetFileName(file.FileName);
                 string route = Path.Combine(storeFileDirectory, safeFileName);
                 using (var ms = new MemoryStream())
                 {
                     using (var stream = new FileStream(route, FileMode.Create))
+
                     {
                         await file.CopyToAsync(stream, cancellationToken);
                     }
@@ -142,6 +138,14 @@ namespace PawPal.API.Controllers.Posts
         public async Task Delete(int id,List<string> postImages, CancellationToken ct)
         {
             await sender.Send(new DeletePostImageCommand { PostId = id}, ct);
+            var subFolder = "posts";
+            string root = env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            string storeFileDirectory = Path.Combine(root, subFolder, "Post_" + id);
+            if (Directory.Exists(storeFileDirectory))
+            {
+                Directory.Delete(storeFileDirectory, true);
+            }
+            return;
         }
     }
 }

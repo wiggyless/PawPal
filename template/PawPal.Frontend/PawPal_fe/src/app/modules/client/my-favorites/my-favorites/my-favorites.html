@@ -4,7 +4,7 @@
     @if (imagesLoaded()) {
       @if (animalPostList | async; as posts) {
         @if (posts.items.length == 0) {
-          <p>No favorite posts!</p>
+          <p class="loading-spinner-text">No posts found!</p>
         }
         @for (post of posts.items; track post) {
           <div class="post" (click)="routeToPost(post)">
@@ -13,7 +13,6 @@
             </div>
             <div class="post-info">
               <p class="post-info-name">{{ post.name }}</p>
-              <p class="post-info-views">0 views</p>
             </div>
           </div>
         }

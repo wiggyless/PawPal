@@ -14,5 +14,6 @@ namespace PawPal.Domain.Common
         public string Content { get; set; }
         public DateTime DatePosted { get; set; }
         public string Username { get; set;  }
+        public string PhotoURL { get; set; }
     }
 }

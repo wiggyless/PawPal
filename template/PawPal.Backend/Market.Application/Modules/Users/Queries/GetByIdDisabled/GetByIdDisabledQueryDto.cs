@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PawPal.Application.Modules.Users.Queries.GetByIdDisabled
+{
+    public class GetByIdDisabledQueryDto
+    {
+        public int Id { get; set; }
+        public required string? FirstName { get; set; }
+        public required string? LastName { get; set; }
+        public required string? Email { get; set; }
+        public required DateTime? DateTime { get; set; }
+        public required string? City { get; set; }
+        public int? CityID { get; set; }
+        public required string? CantonAbbrevation { get; set; }
+        public required string? Username { get; set; }
+        public required string? AboutMe { get; set; }
+        public string? PhotoURL { get; set; }
+        public bool? Disabled { get; set; }
+    }
+}
