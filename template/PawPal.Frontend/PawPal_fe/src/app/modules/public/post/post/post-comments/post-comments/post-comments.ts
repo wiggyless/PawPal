@@ -23,6 +23,9 @@ import { UserImageService } from '../../../../../../api-services/userImage/userI
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { environment } from '../../../../../../../environments/environment.development';
+import { MatDialog } from '@angular/material/dialog';
+import { ReportCommentComponent } from '../../../../../client/report-comment-component/report-comment-component/report-comment-component';
 
 @Component({
   selector: 'app-post-comments',
@@ -54,9 +57,9 @@ export class PostComments implements OnInit, OnDestroy {
       pageSize: 10,
     },
   };
-
+  env = environment.apiUrl;
   counter: number = 0;
-
+  dialog = inject(MatDialog);
   constructor(private signalRService: SignalRService) {}
 
   ngOnInit(): void {
@@ -67,11 +70,9 @@ export class PostComments implements OnInit, OnDestroy {
       if (newComment && newComment.postID == this.postId) {
         this.userImgService.getUserImageByID(newComment.userID).subscribe({
           next: (safeUrl) => {
-            newComment.imageData = safeUrl;
             this.prependSignalRComment(newComment);
           },
           error: () => {
-            newComment.imageData = '';
             this.prependSignalRComment(newComment);
           },
         });
@@ -84,9 +85,6 @@ export class PostComments implements OnInit, OnDestroy {
   }
 
   loadComments() {
-    if (this.isLoadingMore) return; // Guard entry
-    this.isLoadingMore = true;
-
     this.commentsService.getComments(this.request).subscribe({
       next: (incomingData) => {
         const existingItems = this.commentsList?.items || [];
@@ -96,23 +94,7 @@ export class PostComments implements OnInit, OnDestroy {
           ...incomingData,
           items: [...existingItems, ...newItems],
         };
-        this.hasLoaded.set(false);
-        this.isLoadingMore = false;
-        this.commentsLoaded.emit();
-        if (this.commentsList.items.length == 0) return;
-        this.counter = 0;
-        newItems.forEach((element) => {
-          this.userImgService.getUserImageByID(element.userID).subscribe({
-            next: (safeUrl) => {
-              element.imageData = safeUrl;
-              this.handleImageCounter(newItems.length);
-            },
-            error: () => {
-              element.imageData = '';
-              this.handleImageCounter(newItems.length);
-            },
-          });
-        });
+        this.hasLoaded.set(true);
       },
       error: () => {
         this.isLoadingMore = false;
@@ -132,6 +114,7 @@ export class PostComments implements OnInit, OnDestroy {
   }
 
   prependSignalRComment(newComment: CommentDto) {
+    console.log(newComment);
     this.commentsList = {
       ...this.commentsList,
       totalItems: (this.commentsList.totalItems || 0) + 1,
@@ -183,5 +166,17 @@ export class PostComments implements OnInit, OnDestroy {
       totalItems: 0,
       totalPages: 0,
     };
+  }
+  openReportCommentDialog(commentID: number): void {
+    this.dialog.open(ReportCommentComponent, {
+      data: { commentId: commentID },
+    });
+  }
+  routeToProfile(id: number): void {
+    this.router.navigate(['profile'], {
+      queryParams: {
+        userID: id,
+      },
+    });
   }
 }

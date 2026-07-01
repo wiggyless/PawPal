@@ -49,5 +49,9 @@ public interface IAppDbContext
     DbSet<ConversationEntity> Conversations { get; }
     DbSet<MessageEntity> Messages { get; }
     DbSet<ReportedPostsEntity> ReportedPosts { get; }
+    DbSet<ReportedUserEntity> ReportedUsers { get; }
+    DbSet<ReportedCommentsEntity> ReportedComments { get; } 
+    DbSet<UserDisabledHistoryEntity> UserDisabledHistory { get; }
+    DbSet<ReportProblemEntity> ReportProblems { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

@@ -28,21 +28,20 @@ export class AdminLayout {
   private trackRouteChanges(): void {
     this.router.events
       .pipe(
-        // Filter out intermediate states (like NavigationStart, ResolveStart)
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        // Automatically unsubscribes when the component or service is destroyed
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((event: NavigationEnd) => {
-        // Access the completed URL
-        console.log('URL successfully changed to:', event.urlAfterRedirects);
+        var index = event.urlAfterRedirects.indexOf('/', 1);
+        var length = event.urlAfterRedirects.length;
         this.url.set(
           event.urlAfterRedirects.slice(
-            event.urlAfterRedirects.indexOf('/', 1),
-            event.urlAfterRedirects.length,
+            index,
+            event.urlAfterRedirects.indexOf('?', index) == -1
+              ? length
+              : event.urlAfterRedirects.indexOf('?', index),
           ),
         );
-        // Execute your custom logic here (e.g., analytics, resetting scroll position)
       });
   }
 }

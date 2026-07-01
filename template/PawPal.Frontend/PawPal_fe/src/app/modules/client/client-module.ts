@@ -8,7 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MyPosts } from './my-posts/my-posts';
 import { UserProfileSideNavbar } from './user-profile-side-navbar/user-profile-side-navbar/user-profile-side-navbar';
 import { MatListModule } from '@angular/material/list';
-import { AsyncPipe, DatePipe, KeyValuePipe } from '@angular/common';
+import { AsyncPipe, CommonModule, DatePipe, KeyValuePipe } from '@angular/common';
 import { CreatePost } from './create-post/create-post';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -43,6 +43,8 @@ import { SlicePipe, UpperCasePipe } from '@angular/common';
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { MatSelect } from '@angular/material/select';
 import { ReportPostComponent } from './report-post-component/report-post-component';
+import { ReportUserComponent } from './report-user-component/report-user-component/report-user-component';
+import { ReportCommentComponent } from './report-comment-component/report-comment-component/report-comment-component';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,9 @@ import { ReportPostComponent } from './report-post-component/report-post-compone
     UserProfileImageCropDialog,
     SecurityQuestionsDialog,
     Messaging,
-    ReportPostComponent
+    ReportPostComponent,
+    ReportUserComponent,
+    ReportCommentComponent,
   ],
   imports: [
     ClientRoutingModule,
@@ -94,11 +98,9 @@ import { ReportPostComponent } from './report-post-component/report-post-compone
     UpperCasePipe,
     ImageCropperComponent,
     MatSelect,
-
+    CommonModule,
   ],
-  exports: [
-    ReportPostComponent, 
-  ],
+  exports: [ReportPostComponent],
   providers: [provideNativeDateAdapter(), MatDialog],
 })
 export class ClientModule {}

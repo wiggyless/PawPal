@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PublicLayout } from './public-layout/public-layout';
 import { CatalogComponent } from './catalog/catalog/catalog';
 import { PostComponent } from './post/post/post';
+import { Profile } from './profile/profile/profile';
 const routes: Routes = [
   {
     path: '',
@@ -15,6 +16,10 @@ const routes: Routes = [
   {
     path: 'post',
     component: PostComponent,
+  },
+  {
+    path: 'profile',
+    component: Profile,
   },
 ];
 

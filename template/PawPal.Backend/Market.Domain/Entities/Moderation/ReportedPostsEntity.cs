@@ -13,6 +13,7 @@ namespace PawPal.Domain.Entities.Moderation
         public string? Description { get; set; }
         public int PostID { get; set; }
         public int UserID { get; set; }
+        public DateTime DateSent { get; set; }
          //user who is reporting the post
     }
 }

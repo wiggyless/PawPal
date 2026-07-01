@@ -14,9 +14,9 @@ using PawPal.Infrastructure.BackgroundServices;
 using PawPal.Infrastructure.Common;
 using PawPal.Infrastructure.Signal;
 using Serilog;
+
 using System.Security.Cryptography;
 using System.Threading.RateLimiting;
-
 public partial class Program
 {
     private static async Task Main(string[] args)
@@ -90,6 +90,8 @@ public partial class Program
                            .WithExposedHeaders("Content-Disposition");
                 });
             });
+
+
 
             builder.Services.AddRateLimiter(options =>
             {

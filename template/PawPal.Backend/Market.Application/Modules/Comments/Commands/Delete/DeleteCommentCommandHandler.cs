@@ -15,7 +15,7 @@ namespace PawPal.Application.Modules.Comments.Commands.Delete
                 throw new PawPalConflictException("User is not permitted to do this action");
             }
             var comment = context.Comments.Where(x=>x.Id == command.CommentID).FirstOrDefault();
-            if (comment.UserId != appCurrentUser.UserId || appCurrentUser.RoleId != 3) {
+            if (comment.UserId != appCurrentUser.UserId && appCurrentUser.RoleId != 3) {
                 throw new PawPalConflictException("User is not permitted to do this action");
             }
             if (comment == null) {

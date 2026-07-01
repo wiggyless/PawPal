@@ -5,8 +5,7 @@ import { PublicRoutingModule } from './shared-routing-module';
 import { NavbarComponent } from './components/navbar/navbar';
 import { RouterOutlet } from '@angular/router';
 @NgModule({
-  declarations: [
-  ],
+  declarations: [],
   imports: [
     CommonModule,
     ReactiveFormsModule,

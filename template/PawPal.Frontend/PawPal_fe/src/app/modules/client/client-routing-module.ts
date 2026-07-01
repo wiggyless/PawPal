@@ -28,11 +28,11 @@ const routes: Routes = [
     ],
   },
   {
-    path: 'messages', 
+    path: 'messages',
     component: Messaging,
   },
-   { path: 'create-post', component: CreatePost },
-   {path: 'adoption', component:Adoption}
+  { path: 'create-post', component: CreatePost },
+  { path: 'adoption', component: Adoption },
 ];
 
 @NgModule({

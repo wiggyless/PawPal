@@ -1,3 +1,4 @@
+import { SafeUrl } from '@angular/platform-browser';
 import { BasePagedQuery } from '../../core/models/paging/base-paged-query';
 
 export interface CreateUserCommand {
@@ -23,6 +24,8 @@ export interface GetUserByIdDto {
   cantonAbbrevation: string;
   username: string;
   aboutMe?: string;
+  photoURL: string;
+  disabled?: boolean;
 }
 export interface GetUserList {
   id: number;
@@ -30,11 +33,14 @@ export interface GetUserList {
   lastName: string;
   username: string;
   email: string;
+  photoURL: SafeUrl | null;
 }
 export class GetUserQuery extends BasePagedQuery {
   searchFirstName?: string;
   searchLastName?: string;
   searchEmail?: string;
+  searchUsername?: string;
+  disabled?: boolean;
 }
 export interface UpdateUserCommand {
   firstName: string;

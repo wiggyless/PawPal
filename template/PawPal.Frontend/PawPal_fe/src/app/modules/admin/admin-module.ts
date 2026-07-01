@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Pipe } from '@angular/core';
 import { AdminRoutingModule } from './admin-routing-module';
 import { AdminLayout } from './admin-layout/admin-layout/admin-layout';
 import { AdminSidenavbar } from './admin-sidenavbar/admin-sidenavbar/admin-sidenavbar';
@@ -29,8 +29,28 @@ import { DateAdapter } from '@angular/material/core';
 import { UserProfiles } from './user-profiles/user-profiles/user-profiles';
 import { Profile } from './user-profiles/user-profiles/profile/profile/profile';
 import { SettingsComponent } from '../client/settings/settings-component';
+import { ReportedUsers } from './reported-users/reported-users/reported-users';
+import { ReportedPosts } from './reported-posts/reported-posts/reported-posts';
+import { ReportedComments } from './reported-comments/reported-comments/reported-comments';
+import { ReportedCommentDialog } from './reported-comments/reported-comments/reported-comment-dialog/reported-comment-dialog/reported-comment-dialog';
+import { ProfileDisableDialog } from './user-profiles/user-profiles/profile/profile/profile-disable-dialog/profile-disable-dialog/profile-disable-dialog';
+import { DisabledUsers } from './disabled-users/disabled-users/disabled-users';
+import { ReportedProblems } from './reported-problems/reported-problems/reported-problems';
 @NgModule({
-  declarations: [AdminLayout, AdminSidenavbar, AdminProfile, UserProfiles, Profile],
+  declarations: [
+    AdminLayout,
+    AdminSidenavbar,
+    AdminProfile,
+    UserProfiles,
+    Profile,
+    ReportedUsers,
+    ReportedPosts,
+    ReportedComments,
+    ReportedCommentDialog,
+    ProfileDisableDialog,
+    DisabledUsers,
+    ReportedProblems,
+  ],
   imports: [
     AdminRoutingModule,
     NavbarComponent,

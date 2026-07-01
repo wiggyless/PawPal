@@ -26,12 +26,12 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { FooterComponent } from '../shared/components/footer/footer-component';
 import { PostComments } from './post/post/post-comments/post-comments/post-comments';
 import { PageResult } from '../../core/models/paging/page-result';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { ClientModule } from '../client/client-module';
+import { Profile } from './profile/profile/profile';
 
 @NgModule({
-  declarations: [PublicLayout, CatalogComponent, PostComponent, PostComments],
+  declarations: [PublicLayout, CatalogComponent, PostComponent, PostComments, Profile],
   imports: [
     NavbarComponent,
     PublicRoutingModule,
@@ -60,7 +60,7 @@ import { ClientModule } from '../client/client-module';
     FooterComponent,
     ScrollingModule,
     CommonModule,
-    ClientModule
+    ClientModule,
   ],
 })
 export class PublicModule {}

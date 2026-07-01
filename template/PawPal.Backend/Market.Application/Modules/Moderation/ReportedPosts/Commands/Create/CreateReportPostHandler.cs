@@ -3,7 +3,7 @@ using PawPal.Domain.Entities.Moderation;
 
 namespace PawPal.Application.Modules.Moderation.ReportedPosts.Commands.Create
 {
-    public sealed class CreateReportPostHandler(IAppDbContext context) :
+    public sealed class CreateReportPostHandler(IAppDbContext context,IAppCurrentUser currentUser) :
         IRequestHandler<CreateReportPostCommand, int>
     {
         public async Task<int> Handle(CreateReportPostCommand request, CancellationToken cancellationToken)
@@ -11,7 +11,10 @@ namespace PawPal.Application.Modules.Moderation.ReportedPosts.Commands.Create
             var user = await context.Users.FirstOrDefaultAsync(x => x.Id == request.UserID,cancellationToken);
             if (user is null)
                 throw new PawPalNotFoundException("User does not exist.");
-
+            if (!currentUser.IsAuthenticated)
+            {
+                throw new PawPalConflictException("User is not allowed to do this action");
+            }
             var post = await context.Posts.FirstOrDefaultAsync(x => x.Id == request.PostID, cancellationToken);
             if (post is null)
                 throw new PawPalNotFoundException("Post does not exist.");
@@ -21,7 +24,8 @@ namespace PawPal.Application.Modules.Moderation.ReportedPosts.Commands.Create
                 PostID = request.PostID,
                 UserID = request.UserID,
                 Reason = request.Reason,
-                Description = request.Description
+                Description = request.Description,
+                DateSent = DateTime.UtcNow,
             };
 
             context.ReportedPosts.Add(reportedPost);

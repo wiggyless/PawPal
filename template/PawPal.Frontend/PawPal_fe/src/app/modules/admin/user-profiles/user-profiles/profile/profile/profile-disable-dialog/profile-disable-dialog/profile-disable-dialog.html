@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>Disable user</h2>
+
+<mat-dialog-content>
+  @if (submitted) {
+    <p class="success-msg">
+      <mat-icon>check_circle</mat-icon>
+      Your report has been submitted. Thank you for keeping PawPal safe.
+    </p>
+  } @else {
+    <form [formGroup]="form" id="report-form" novalidate>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Reason</mat-label>
+        <mat-select formControlName="reason">
+          @for (r of reasons; track r.value) {
+            <mat-option [value]="r.value">{{ r.label }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('reason')?.hasError('required') && form.get('reason')?.touched) {
+          <mat-error>Please select a reason.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Additional details</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          placeholder="Describe the issue in more detail..."
+          style="resize: none"
+          cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="4"
+          cdkAutosizeMaxRows="8"
+        ></textarea>
+      </mat-form-field>
+
+      @if (errorMessage) {
+        <p class="error-msg">{{ errorMessage }}</p>
+      }
+    </form>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  @if (submitted) {
+    <button class="primarybtn" (click)="onDone()">Done</button>
+  } @else {
+    <button class="secondarybtn" mat-stroked-button (click)="onCancel()">Cancel</button>
+    <button
+      mat-flat-button
+      color="warn"
+      [disabled]="form.invalid || isSubmitting"
+      (click)="onSubmit()"
+      class="primarybtn"
+    >
+      @if (isSubmitting) {
+        <mat-spinner diameter="18"></mat-spinner>
+      } @else {
+        Submit
+      }
+    </button>
+  }
+</mat-dialog-actions>

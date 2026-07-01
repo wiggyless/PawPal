@@ -47,24 +47,27 @@ export class ReportPostComponent implements OnInit {
     this.isSubmitting = true;
     this.errorMessage = null;
 
-    this.service.createReport({
-      Reason: this.form.value.reason,
-      Description: this.form.value.description?.trim() || undefined,
-      PostID: this.data.postId,
-      UserID: this.data.userId,
-    }).subscribe({
-      next: (res) => {
-         console.log('next fired', res);
-        this.isSubmitting = false;
-        this.submitted = true;
-        this.cd.detectChanges();
-      },
-      error: (err) => {
-         console.log('err fired', err);
-        this.isSubmitting = false;
-        this.errorMessage = 'Something went wrong. Please try again.';
-      },
-    });
+    this.service
+      .createReport({
+        reason: this.form.value.reason,
+        description: this.form.value.description?.trim() || undefined,
+        postID: this.data.postId,
+        userID: this.data.userId,
+        dateSent: new Date(),
+      })
+      .subscribe({
+        next: (res) => {
+          console.log('next fired', res);
+          this.isSubmitting = false;
+          this.submitted = true;
+          this.cd.detectChanges();
+        },
+        error: (err) => {
+          console.log('err fired', err);
+          this.isSubmitting = false;
+          this.errorMessage = 'Something went wrong. Please try again.';
+        },
+      });
   }
 
   onDone(): void {

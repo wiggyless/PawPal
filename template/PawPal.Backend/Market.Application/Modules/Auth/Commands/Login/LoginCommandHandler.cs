@@ -13,9 +13,17 @@ public sealed class LoginCommandHandler(
         var email = request.Email.Trim().ToLowerInvariant();
 
         var user = await ctx.Users
-            .FirstOrDefaultAsync(x => x.Email.ToLower() == email && x.IsEnabled && !x.IsDeleted, ct)
-            ?? throw new PawPalNotFoundException("User does not exist.");
-
+            .FirstOrDefaultAsync(x => x.Email.ToLower() == email && x.IsEnabled, ct);
+        var users =  ctx.Users.Where(x => x.Email.ToLower() == email);
+        if(user is null)
+        {
+            throw new PawPalNotFoundException("User does not exist.");
+        }
+        if (user.isUserDisabled)
+        {
+            throw new PawPalConflictException("User is disabled. Please contact support for more information");
+        }
+        
         var verify = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
         if (verify == PasswordVerificationResult.Failed)
             throw new PawPalConflictException("Wrong credentials.");

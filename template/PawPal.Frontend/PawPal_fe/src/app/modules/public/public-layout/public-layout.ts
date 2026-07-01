@@ -13,7 +13,7 @@ import { CantonsService } from '../../../api-services/cantons/cantons-service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
 import { ListAnimalCategoriesQueryDto } from '../../../api-services/animal-categories/animal-categories.model';
-import { ListGenderDto } from '../../../api-services/gender/gender-model';
+import { GenderEnum, ListGenderDto } from '../../../api-services/gender/gender-model';
 @Component({
   selector: 'app-public-layout',
   standalone: false,
@@ -38,6 +38,7 @@ export class PublicLayout implements OnInit, OnDestroy {
   genderListForDisplay: PageResult<ListGenderDto> | undefined;
   cd = inject(ChangeDetectorRef);
   sanitizer = inject(DomSanitizer);
+  genderEnum = GenderEnum;
   pagingObject = {
     paging: {
       page: 1,
@@ -70,10 +71,6 @@ export class PublicLayout implements OnInit, OnDestroy {
     this.router.navigate(['post'], {
       queryParams: {
         postID: post.postID,
-        animalID: post.animalID,
-        cityID: post.cityID,
-        userID: post.userID,
-        dateAdded: post.dateAdded,
       },
     });
   }

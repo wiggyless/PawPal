@@ -11,11 +11,20 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
     {
         public async Task<GetUserByIdQueryDto> Handle(GetUserByIdQuery request,CancellationToken cancellationToken)
         {
-
+            var userImage = await context.UserImage.FirstOrDefaultAsync(x => x.UserID == request.Id, cancellationToken);
+            if(userImage is null)
+            {
+                userImage = new UserImage
+                {
+                    Id = 0,
+                    UserID = request.Id,
+                    PhotoURL = "",
+                };
+            }
             var user = await context.Users.
                 Include(x =>x.City).
                 Include(x=>x.City.Canton).
-                Where(a => a.Id == request.Id).
+                Where(a => a.Id == request.Id && !a.isUserDisabled).
                 Select(x => new GetUserByIdQueryDto
                 {
      
@@ -28,7 +37,8 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
                     CantonAbbrevation = x.City.Canton.Abbreviation,
                     CityID = x.CityId,
                     Username = x.Username,
-                    AboutMe = x.AboutMe
+                    AboutMe = x.AboutMe,
+                    PhotoURL =userImage.PhotoURL,
                 }).FirstOrDefaultAsync(cancellationToken);
             if (user == null) throw new PawPalNotFoundException($"User with Id {request.Id} does not exist");
             return user;

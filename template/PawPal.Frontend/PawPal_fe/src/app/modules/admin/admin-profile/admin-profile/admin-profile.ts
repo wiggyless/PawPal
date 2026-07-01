@@ -17,6 +17,7 @@ import {
   CropDialogResult,
 } from '../../../client/my-profile/user-profile-component/user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
 import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
+import { environment } from '../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-admin-profile',
@@ -48,12 +49,10 @@ export class AdminProfile implements OnInit {
             next: (res) => {
               this.isUpdate = true;
               this.imageUrl.set(res);
-              this.originalImageUrl = res;
             },
             error: () => {
               this.isUpdate = false;
               this.imageUrl.set(null);
-              this.originalImageUrl = null;
             },
           });
           this.initializeInputData();
@@ -71,7 +70,7 @@ export class AdminProfile implements OnInit {
   }
   //services
   isUpdate: boolean = false;
-  private imageChanged: boolean = false;
+  imageChanged = signal(false);
   currentUser: CurrentUserService;
   userDataService: UserService;
   dialog = inject(DialoguePopupService);
@@ -86,8 +85,6 @@ export class AdminProfile implements OnInit {
   private originalCityId: number = 0;
   private sanitizer = inject(DomSanitizer);
   imageUrl = signal<SafeUrl | null>(null);
-  private originalImageUrl: SafeUrl | null = null;
-  originalUrl: string | null = null;
   userData: GetUserByIdDto = {
     id: 0,
     firstName: '',
@@ -99,6 +96,7 @@ export class AdminProfile implements OnInit {
     cityID: 0,
     username: '',
     aboutMe: '',
+    photoURL: '',
   };
   userImage: UserImageCommand = {
     userID: 0,
@@ -115,6 +113,7 @@ export class AdminProfile implements OnInit {
       cityID: 0,
       username: '',
       aboutMe: '',
+      photoURL: '',
     };
     this.profileForm.reset();
   }
@@ -126,11 +125,11 @@ export class AdminProfile implements OnInit {
     aboutMe: new FormControl({ value: '', disabled: true }),
     username: new FormControl({ value: '', disabled: true }),
   });
-
+  env = environment.apiUrl;
   editing = signal(false);
 
   getUserData(): void {
-    this.userDataService.getUser(this.currentUser.userId()).subscribe((response) => {
+    this.userDataService.getUser(this.currentUser.userId() as number).subscribe((response) => {
       this.userData = response;
       this.initializeInputData();
     });
@@ -190,12 +189,11 @@ export class AdminProfile implements OnInit {
       const payload: UpdateUserCommand = {
         firstName: firstName,
         lastName: lastName,
-        profilePictureURL: this.originalUrl ?? '',
+        profilePictureURL: (this.imageUrl() as string) ?? '',
         date: date,
         cityId: cityId,
         aboutMe: aboutMe,
       };
-      console.log(payload);
       requests.userPostData = this.userDataService.updateUser(this.userData.id, payload);
     }
     if (imageChanged) {
@@ -220,8 +218,7 @@ export class AdminProfile implements OnInit {
         this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
         if (imageChanged) {
           this.isUpdate = true;
-          this.imageChanged = false;
-          this.originalImageUrl = this.imageUrl();
+          this.imageChanged.set(false);
           this.selectedImage = undefined;
         }
         this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
@@ -258,29 +255,12 @@ export class AdminProfile implements OnInit {
   }
 
   hasImageChanges(): boolean {
-    return this.imageChanged && !!this.selectedImage;
+    return this.imageChanged() && !!this.selectedImage;
   }
 
   checkFormChanges(): boolean {
     return this.hasFormFieldChanges(this.originalCityId) || this.hasImageChanges();
   }
-  /*
-  editPhoto(event: any) {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      this.selectedImage = file;
-      this.imageChanged = true;
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.originalUrl = this.imageUrl()?.toString() ?? null;
-        this.imageUrl.set(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-    */
-
   editPhoto(event: any): void {
     const files = event.target.files;
     if (!files || files.length === 0) return;
@@ -302,17 +282,15 @@ export class AdminProfile implements OnInit {
         if (!result) return;
 
         this.selectedImage = result.croppedFile;
-        this.imageChanged = true;
-        this.originalUrl = this.imageUrl()?.toString() ?? null;
+        this.imageChanged.set(true);
         this.imageUrl.set(result.croppedUrl);
       });
   }
   cancelSaving() {
     this.editing.set(false);
-    this.imageChanged = false;
+    this.imageChanged.set(false);
     this.selectedImage = undefined;
     this.profileForm.disable();
-    this.imageUrl.set(this.originalImageUrl);
     this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
     this.profileForm.get('aboutMe')?.setValue(this.userData.aboutMe ?? '', { emitEvent: false });
   }
