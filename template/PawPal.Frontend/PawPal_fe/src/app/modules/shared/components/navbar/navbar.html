@@ -16,34 +16,6 @@
       <div class="navcontent">
         <a routerLink="/catalog" routerLinkActive="active"> ANIMAL CATALOG </a>
         <div class="nav-dropdown">
-          <a (mouseenter)="tipsMenuOpen = true" (mouseleave)="tipsMenuOpen = false"> TIPS </a>
-          @if (tipsMenuOpen) {
-            <div
-              class="dropdown-menu"
-              (mouseenter)="tipsMenuOpen = true"
-              (mouseleave)="tipsMenuOpen = false"
-            >
-              <div class="menu-item">FAQ</div>
-              <div class="menu-item">CATEGORIES</div>
-            </div>
-          }
-        </div>
-        <div class="nav-dropdown">
-          <a (mouseenter)="aboutUsMenuOpen = true" (mouseleave)="aboutUsMenuOpen = false">
-            ABOUT US
-          </a>
-          @if (aboutUsMenuOpen) {
-            <div
-              class="dropdown-menu"
-              (mouseenter)="aboutUsMenuOpen = true"
-              (mouseleave)="aboutUsMenuOpen = false"
-            >
-              <div class="menu-item">WHO ARE WE</div>
-              <div class="menu-item">CONTACT</div>
-            </div>
-          }
-        </div>
-        <div class="nav-dropdown">
           <a (mouseenter)="newsMenuOpen = true" (mouseleave)="newsMenuOpen = false"> NEWS </a>
           @if (newsMenuOpen) {
             <div
@@ -63,34 +35,6 @@
       <div class="logo" routerLink="/"></div>
       <div class="navcontent">
         <a routerLink="/catalog" routerLinkActive="active"> ANIMAL CATALOG </a>
-        <div class="nav-dropdown">
-          <a (mouseenter)="tipsMenuOpen = true" (mouseleave)="tipsMenuOpen = false"> TIPS </a>
-          @if (tipsMenuOpen) {
-            <div
-              class="dropdown-menu"
-              (mouseenter)="tipsMenuOpen = true"
-              (mouseleave)="tipsMenuOpen = false"
-            >
-              <div class="menu-item">FAQ</div>
-              <div class="menu-item">CATEGORIES</div>
-            </div>
-          }
-        </div>
-        <div class="nav-dropdown">
-          <a (mouseenter)="aboutUsMenuOpen = true" (mouseleave)="aboutUsMenuOpen = false">
-            ABOUT US
-          </a>
-          @if (aboutUsMenuOpen) {
-            <div
-              class="dropdown-menu"
-              (mouseenter)="aboutUsMenuOpen = true"
-              (mouseleave)="aboutUsMenuOpen = false"
-            >
-              <div class="menu-item">WHO ARE WE</div>
-              <div class="menu-item">CONTACT</div>
-            </div>
-          }
-        </div>
         <div class="nav-dropdown">
           <a (mouseenter)="newsMenuOpen = true" (mouseleave)="newsMenuOpen = false"> NEWS </a>
           @if (newsMenuOpen) {
@@ -140,34 +84,6 @@
       <div class="logo" routerLink="/"></div>
       <div class="navcontent">
         <a routerLink="/catalog" routerLinkActive="active"> ANIMAL CATALOG </a>
-        <div class="nav-dropdown">
-          <a (mouseenter)="tipsMenuOpen = true" (mouseleave)="tipsMenuOpen = false"> TIPS </a>
-          @if (tipsMenuOpen) {
-            <div
-              class="dropdown-menu"
-              (mouseenter)="tipsMenuOpen = true"
-              (mouseleave)="tipsMenuOpen = false"
-            >
-              <div class="menu-item">FAQ</div>
-              <div class="menu-item">CATEGORIES</div>
-            </div>
-          }
-        </div>
-        <div class="nav-dropdown">
-          <a (mouseenter)="aboutUsMenuOpen = true" (mouseleave)="aboutUsMenuOpen = false">
-            ABOUT US
-          </a>
-          @if (aboutUsMenuOpen) {
-            <div
-              class="dropdown-menu"
-              (mouseenter)="aboutUsMenuOpen = true"
-              (mouseleave)="aboutUsMenuOpen = false"
-            >
-              <div class="menu-item">WHO ARE WE?</div>
-              <div class="menu-item">CONTACT</div>
-            </div>
-          }
-        </div>
         <div class="nav-dropdown">
           <a (mouseenter)="newsMenuOpen = true" (mouseleave)="newsMenuOpen = false"> NEWS </a>
           @if (newsMenuOpen) {
@@ -228,7 +144,6 @@
           </div>
 
           <div class="icon-circle notification-bell" (click)="toggleNotifications()">
-            <!-- badge -->
             @if (notificationService.unreadCount() > 0) {
               <span class="notif-badge">{{ notificationService.unreadCount() }}</span>
             }

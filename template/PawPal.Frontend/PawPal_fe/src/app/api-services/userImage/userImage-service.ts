@@ -27,16 +27,17 @@ export class UserImageService {
       }),
     )
   }
-  createUserImage(userID: number, image: File): Observable<number> {
-    const formData = new FormData();
-    formData.append('userID', userID.toString());
-    formData.append('image', image, image.name);
-    return this.httpClient.post<number>(this.apiUrl, formData);
-  }
-  updateUserImage(userID: number, image: File): Observable<number> {
-    const formData = new FormData();
-    formData.append('userID', userID.toString());
-    formData.append('image', image, image.name);
-    return this.httpClient.put<number>(this.apiUrl, formData);
-  }
+createUserImage(userID: number, image: File): Observable<number> {
+  const formData = new FormData();
+  formData.append('userID', userID.toString());
+  formData.append('Image', image, image.name);
+  return this.httpClient.post<number>(this.apiUrl, formData);
+}
+
+updateUserImage(userID: number, image: File): Observable<number> {
+  const formData = new FormData();
+  formData.append('userID', userID.toString());
+  formData.append('Image', image, image.name);
+  return this.httpClient.put<number>(this.apiUrl, formData);
+}
 }

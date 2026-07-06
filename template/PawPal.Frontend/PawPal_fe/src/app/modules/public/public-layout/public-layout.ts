@@ -14,6 +14,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
 import { ListAnimalCategoriesQueryDto } from '../../../api-services/animal-categories/animal-categories.model';
 import { GenderEnum, ListGenderDto } from '../../../api-services/gender/gender-model';
+
 @Component({
   selector: 'app-public-layout',
   standalone: false,

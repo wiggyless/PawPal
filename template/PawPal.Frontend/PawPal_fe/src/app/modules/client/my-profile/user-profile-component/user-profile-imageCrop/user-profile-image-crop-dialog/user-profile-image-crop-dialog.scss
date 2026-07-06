@@ -32,3 +32,7 @@
   display: flex;
   flex-direction: row;
 }
+
+::ng-deep .mat-mdc-dialog-surface{
+  background-color: var(--background-color);
+}

@@ -42,3 +42,7 @@ mat-dialog-actions {
   gap: 8px;
   padding-bottom: 16px !important;
 }
+
+::ng-deep .mat-mdc-dialog-surface{
+  background-color: var(--background-color);
+}
