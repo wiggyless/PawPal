@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Report Post</h2>
+<h2 mat-dialog-title style="color: var(--card-text-color);">Report Post</h2>
 
 <mat-dialog-content>
   @if (submitted) {
@@ -43,9 +43,9 @@
 
 <mat-dialog-actions align="end">
   @if (submitted) {
-    <button class="primarybtn" (click)="onDone()">Done</button>
+    <button class="primarybtn" (click)="onDone()">DONE</button>
   } @else {
-    <button class="secondarybtn" mat-stroked-button (click)="onCancel()">Cancel</button>
+    <button class="secondarybtn" mat-stroked-button (click)="onCancel()">CANCEL</button>
     <button
       mat-flat-button
       color="warn"
@@ -56,7 +56,7 @@
       @if (isSubmitting) {
         <mat-spinner diameter="18"></mat-spinner>
       } @else {
-        Submit
+        SUBMIT
       }
     </button>
   }

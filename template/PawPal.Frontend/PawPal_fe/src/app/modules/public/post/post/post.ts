@@ -19,14 +19,13 @@ import { environment } from '../../../../../environments/environment';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogueComponent } from '../../../client/dialogue-component/dialogue-component';
-import { UserImageService } from '../../../../api-services/userImage/userImage-service';
 import { SafeUrl } from '@angular/platform-browser';
 import { ReportPostComponent } from '../../../client/report-post-component/report-post-component';
 import { ReportUserComponent } from '../../../client/report-user-component/report-user-component/report-user-component';
 import { GetUserByIdDto } from '../../../../api-services/users/users-model';
-import { ReportCommentComponent } from '../../../client/report-comment-component/report-comment-component/report-comment-component';
+import { DialoguePopupComponent } from '../../../shared/components/dialogue-popup/dialogue-popup.component';
 
 @Component({
   selector: 'app-post',
@@ -52,7 +51,8 @@ export class PostComponent implements OnInit, OnDestroy {
   postImageService = inject(PostImagesService);
   postService = inject(AnimalPostService);
   cd = inject(ChangeDetectorRef);
-  dialog = inject(MatDialog);
+  dialog = inject(DialoguePopupComponent);
+  reportDialog = inject(MatDialog); 
   postSub: Subscription | undefined;
   animalSub: Subscription | undefined;
   togetherSub: Subscription | undefined;
@@ -142,16 +142,22 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   deletePost() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      postDelete: true,
-      profileDelete: false,
-      postId: this.postId,
-      animalId: this.animalId,
-    };
-    this.dialog.open(DialogueComponent, dialogConfig);
+    this.dialog.service.warning(
+      'Delete Post',
+      'Are you sure you want to delete this post?',
+      'Yes, delete it',
+      'Cancel',
+      () => {
+        this.postService.deletePost(this.postId, this.animalId).subscribe({
+          next: () => {
+            this.dialog.service.success('Post Deleted', 'The post has been deleted successfully.');
+            this.routeNext.navigate(['/catalog']);
+          }
+        });
+      }
+    );
   }
-
+  
   routeAdopt(): void {
     if (this.currentUser.getDefaultRoute() == '/login') {
       this.routeNext.navigate(['/auth/login']);
@@ -185,18 +191,18 @@ export class PostComponent implements OnInit, OnDestroy {
     } else {
       this.routeNext.navigate(['/client/messages'], {
         queryParams: {
-          recipientId: this.userId,
+          recipientId: this.user?.id,
         },
       });
     }
   }
   openReportDialog(): void {
-    this.dialog.open(ReportPostComponent, {
+    this.reportDialog.open(ReportPostComponent, {
       data: { postId: this.postId, userId: this.currentUser.userId() },
     });
   }
   openReportUserDialog(): void {
-    this.dialog.open(ReportUserComponent, {
+    this.reportDialog.open(ReportUserComponent, {
       data: { reportedUserID: this.user?.id, reportSentByID: this.currentUser.userId() },
     });
   }

@@ -78,14 +78,12 @@ namespace PawPal.API.Controllers.UserImage
 
         [AllowAnonymous]
         [HttpPut]
-        public async Task Update(UpdatePostImageCommand command, CancellationToken cancellationToken)
+        public async Task Update([FromForm] UpdateUserImageCommand command, CancellationToken cancellationToken)
         {
-
-
             await sender.Send(command, cancellationToken);
             var subFolder = "users";
             string root = env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-            string storeFileDirectory = Path.Combine(root, subFolder, "User_" + command.PostId);
+            string storeFileDirectory = Path.Combine(root, subFolder, "User_" + command.UserID);
             if (!Directory.Exists(storeFileDirectory))
             {
                 Directory.CreateDirectory(storeFileDirectory);
@@ -94,22 +92,13 @@ namespace PawPal.API.Controllers.UserImage
             {
                 System.IO.File.Delete(file);
             }
-            foreach (var file in command.PostImages)
+
+            string safeFileName = Path.GetFileName(command.Image.FileName);
+            string route = Path.Combine(storeFileDirectory, safeFileName);
+            using (var stream = new FileStream(route, FileMode.Create))
             {
-                string safeFileName = Path.GetFileName(file.FileName);
-                string route = Path.Combine(storeFileDirectory, safeFileName);
-
-                using (var ms = new MemoryStream())
-                {
-                    using (var stream = new FileStream(route, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream, cancellationToken);
-                    }
-                }
-                var fileLocation = Path.Combine(subFolder, file.FileName).Replace("\\", "/");
+                await command.Image.CopyToAsync(stream, cancellationToken);
             }
-
-
         }
     }
 }
