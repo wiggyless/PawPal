@@ -24,6 +24,7 @@ body {
 .mat-grid-tile {
   background-color: lightblue;
 }
+
 input[type='file']::file-selector-button {
   display: flex;
   flex-direction: column;
@@ -53,10 +54,10 @@ input[type='file']::content {
   flex: 0 0 calc(20% - 8px);
   width: 100%;
   height: 120px;
-  border: 1px solid #47331a;
+  border: 1px solid var(--create-post-image-holder-border);
   flex: 0 0 calc(15% - 8px);
   border-radius: 15px;
-  box-shadow: 5px 10px 5px inset #987b66;
+  box-shadow: 5px 10px 5px inset var(--create-post-image-holder-shadow);
 }
 
 .mat-step-image-container {
@@ -111,11 +112,7 @@ input::-webkit-inner-spin-button {
   left: 100px;
   position: relative;
 }
-// Second stepper css
-/* Firefox */
-input[type='number'] {
-  -moz-appearance: textfield;
-}
+
 .second-step-image-holder {
   width: 400px;
   height: 400px;
@@ -402,7 +399,7 @@ input[type='number'] {
 ::ng-deep .mat-step-label {
   color: #51432d;
   font-size: 14px;
-  margin-top: 0px; /* Push label below the circle */
+  margin-top: 0px;
 }
 
 ::ng-deep .mat-step-header {
@@ -424,8 +421,12 @@ input[type='number'] {
 .input-label {
   font-weight: bolder;
   font-size: 16px;
-  color: #473619;
+  color: var(--create-post-main-container-text);
   margin-left: 10px;
+}
+
+::ng-deep .mat-mdc-form-field-error{
+  color:var(--create-post-main-container-error-text);
 }
 
 .form-field-format {
@@ -489,7 +490,6 @@ input[type='number'] {
   height: 100%;
   margin: 0 auto;
   ::ng-deep {
-    // Stepper header customization
     .mat-step-header {
       padding: 1.5rem 1rem;
       pointer-events: none;
@@ -513,13 +513,16 @@ input[type='number'] {
       }
 
       .mat-step-label {
-        color: #473619;
+        color: var(--create-post-main-container-text);
         font-size: 20px;
         font-weight: 300;
         font-style: italic;
         margin-top: 1rem;
       }
 
+      .mat-step-optional{
+        color:var(--create-post-main-container-text);
+      }
       .mat-step-label-selected {
         font-weight: 700;
         font-style: normal;
@@ -534,8 +537,8 @@ input[type='number'] {
       z-index: 2;
     }
     .mat-horizontal-content-container {
-      background-color: #51432d;
-      box-shadow: 0 10px 16px 2px #51432d;
+      background-color: var(--create-post-main-container-border);
+      box-shadow: 0 10px 16px 2px var(--create-post-main-container-shadow);
       padding: 10px;
       padding-top: 20px;
       padding-bottom: 20px;
@@ -552,10 +555,9 @@ input[type='number'] {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: var(--card-background-color);
+  background: var(--create-post-main-container-colour);
   z-index: 1;
   padding: 50px;
-  border: 2px solid #e5d7c4;
   border-radius: 30px;
 }
 :host ::ng-deep .mat-stepper-horizontal {
@@ -649,7 +651,8 @@ input[type='number'] {
   text-align: center;
   border: 1px dashed #000;
   border-radius: 20px;
-  background: #e5d7c4;
+  background: var(--create-post-input-image);
+  color: var(--create-post-main-container-text);
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -662,7 +665,7 @@ input[type='number'] {
 .image-input-text-warning {
   bottom: 38%;
   position: absolute;
-  color: rgba(0, 0, 0, 0.5);
+  color: var(--create-post-stepper-color-secondary);
   font-family: Inter;
   font-size: 15px;
   font-style: normal;
