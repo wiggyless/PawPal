@@ -10,7 +10,7 @@ namespace PawPal.Application.Modules.LikedUserPosts.Commands.Delete
     {
         public async Task<Unit> Handle(DeleteLikedUserPostCommand command,CancellationToken cancellationToken)
         {
-            if(user is null)
+            if(!user.IsAuthenticated)
             {
                 throw new PawPalConflictException("User is not allowed to do this");
             }
@@ -20,6 +20,7 @@ namespace PawPal.Application.Modules.LikedUserPosts.Commands.Delete
             {
                 throw new PawPalNotFoundException("Does not exist");
             }
+            likedUserList.IsDeleted = true;
             context.LikedUserPosts.Remove(likedUserList);
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;

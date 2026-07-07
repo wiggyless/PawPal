@@ -161,4 +161,14 @@
       </div>
     }
   </div>
+  @if (imagesLoaded()) {
+    <mat-paginator
+      [length]="requestsList!.totalItems"
+      [pageSize]="requestsList!.pageSize"
+      [pageSizeOptions]="[4, 8, 16, 32]"
+      aria-label="Select page"
+      (page)="handlePageEvent($event)"
+    >
+    </mat-paginator>
+  }
 </div>
