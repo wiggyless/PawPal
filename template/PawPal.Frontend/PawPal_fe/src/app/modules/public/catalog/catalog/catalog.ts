@@ -242,6 +242,7 @@ export class CatalogComponent
             console.log('Unliked');
           });
       } else {
+        console.log(index);
         this.favoritePostList.push(index);
         this.likedPosts
           .addLikedPosts({ userID: this.currentUser.userId() as number, postID: index })

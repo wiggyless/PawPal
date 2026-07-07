@@ -16,6 +16,7 @@ import { GetMainImagePostBlobClass } from '../../../../api-services/animal-post-
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
 import { MyRequestsDialog } from '../../my-requests/my-requests-dialog/my-requests-dialog/my-requests-dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-my-requests',
@@ -88,5 +89,10 @@ export class RequestHistory implements OnInit, OnDestroy {
   }
   getPostImage(imagePath: string) {
     return this.sanitizer.bypassSecurityTrustUrl(this.envLink.apiUrl + imagePath);
+  }
+  handlePageEvent(event: PageEvent) {
+    this.requestQuery.paging.page = event.pageIndex + 1;
+    this.requestQuery.paging.pageSize = event.pageSize;
+    this.loadRequest();
   }
 }

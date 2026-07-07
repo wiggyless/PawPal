@@ -13,10 +13,6 @@ namespace PawPal.Application.Modules.Posts.Queries.List
         {
             var posts = context.Posts.Include(x => x.Animal).Include(x => x.City).Include(x => x.Animal.Gender).Include(x=>x.User)
                 .Where(x=> !x.User.isUserDisabled).AsNoTracking();
-            if(request.UserID is not null)
-            {
-                posts = posts.Where(x => x.UserId == request.UserID);
-            }
             if (request.IsLiked is not null && (bool)request.IsLiked)
             {
                 var likedUserPosts = context.LikedUserPosts.Where(x => x.UserId == request.UserID).AsNoTracking().Select(x => x.PostId);

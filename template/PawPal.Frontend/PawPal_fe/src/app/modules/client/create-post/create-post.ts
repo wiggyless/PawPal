@@ -48,7 +48,7 @@ import { base64ToBlobUrl } from '../../shared/utils/image-utils';
 import { HttpEventType } from '@angular/common/http';
 import imageCompression from 'browser-image-compression';
 import { PageResult } from '../../../core/models/paging/page-result';
-import { ListGenderDto } from '../../../api-services/gender/gender-model';
+import { GenderEnum, ListGenderDto } from '../../../api-services/gender/gender-model';
 import { UserImageService } from '../../../api-services/userImage/userImage-service';
 import { SafeUrl } from '@angular/platform-browser';
 import { DialoguePopupService } from '../../../api-services/dialogue-popup/dialogue-popup.service';
@@ -170,6 +170,7 @@ export class CreatePost implements OnInit {
   imgFileList: Array<File> = [];
   hasLoaded = signal(false);
   imageUrl = signal<SafeUrl | null>(null);
+  genderEnum = GenderEnum;
   currentImageIndex = 0;
   // --- Lifecycle ---
   ngOnInit(): void {
@@ -204,12 +205,12 @@ export class CreatePost implements OnInit {
   }
 
   private applyCommonLookups(results: {
-    genders: any;
-    categories: any;
-    breeds: any;
+    genders: PageResult<ListGenderDto>;
+    categories: PageResult<ListAnimalCategoriesQueryDto>;
+    breeds: PageResult<ListAnimalBreedQueryDto>;
     user: GetUserByIdDto;
-    allergies: any;
-    disabilities: any;
+    allergies: PageResult<ListAllergyQueryDto>;
+    disabilities: PageResult<ListDisabilitiesQueryDto>;
   }): void {
     this.genderList = results.genders;
     this.categoryList = results.categories;
@@ -409,7 +410,7 @@ export class CreatePost implements OnInit {
       };
 
       const updateAnimal = this.fourthFromGroup.value.mainInfo as UpdateAnimalDto;
-      updateAnimal.gender = this.selectedGender;
+      updateAnimal.gender = this.genderEnum[this.secondFormGroup!.value.genderID as number];
       updateAnimal.category = this.selectedCategory.categoryName;
 
       const newPostIamge: AddNewPostImages = {
