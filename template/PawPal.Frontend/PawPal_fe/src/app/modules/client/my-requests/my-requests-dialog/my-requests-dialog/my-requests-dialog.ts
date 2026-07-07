@@ -9,6 +9,7 @@ import { AnimalRequestService } from '../../../../../api-services/animals-adopti
 import { UpdateRequestByID } from '../../../../../api-services/animals-adoption/animals-adoption-model';
 import { CurrentUserService } from '../../../../../core/services/auth/current-user.service';
 import { GetUserByIdDto } from '../../../../../api-services/users/users-model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-requests-dialog',
@@ -19,6 +20,7 @@ import { GetUserByIdDto } from '../../../../../api-services/users/users-model';
 
 export class MyRequestsDialog implements OnInit, OnDestroy {
   dialogReg = inject(MatDialogRef);
+  routeNext = inject(Router);
   dialogData = inject(MAT_DIALOG_DATA);
   postAPI = inject(AnimalPostService);
   userAPI = inject(UserService);
@@ -61,41 +63,62 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
     this.mySubscription?.unsubscribe();
     this.updateSubcription?.unsubscribe();
   }
-  loadReq() {
-    this.mySubscription = forkJoin({
-      // will have to change this - temp solution
-      post: this.postAPI.getPostById(this.postID),
-      request: this.reqAPI.getAnimalRequirementsById(this.reqID),
-    }).subscribe({
-      next: (reponse) => {
-        this.reqData = reponse.request;
-        this.fullAddress = `${this.reqData.address}, Floor ${this.reqData.floorNumber}`;
-        console.log(this.reqData);
-        this.isLoaded = true;
-        this.userAPI.getUser(reponse.post.userID).subscribe((reponse) => {
-          this.user = reponse;
-          this.isLoaded = true;
-          this.cd.detectChanges();
-        });
-      },
-    });
-  }
+ loadReq() {
+  this.mySubscription = forkJoin({
+    post: this.postAPI.getPostById(this.postID),
+    request: this.reqAPI.getAnimalRequirementsById(this.reqID),
+    adoptionRequest: this.requestService.getAnimalRequestById(this.requestID),
+  }).subscribe({
+    next: (reponse) => {
+      this.reqData = reponse.request;
+      this.fullAddress = `${this.reqData.address}, Floor ${this.reqData.floorNumber}`;
+      console.log(this.reqData);
+      this.isLoaded = true;
 
-  // will have to change this later
+      // Use the requester's userId, not the post owner's userID
+      this.userAPI.getUser(reponse.adoptionRequest.userId).subscribe((userResponse) => {
+        this.user = userResponse;
+        this.isLoaded = true;
+        this.cd.detectChanges();
+      });
+    },
+  });
+}
+
 
   closeDialog() {
     this.dialogReg.close();
   }
-  rejectRequest() {
-    this.updateRequest.requestID = this.requestID;
-    this.updateRequest.status = 'Rejected';
-    this.updateSubcription = this.requestService
-      .updateRequest(this.updateRequest)
-      .subscribe((response) => {
-        this.dialogReg.close();
-      });
-  }
-  approveRequest() {
-    throw new Error('Method not implemented.');
-  }
+ rejectRequest() {
+  this.updateRequest.requestID = this.requestID;
+  this.updateRequest.status = 'Denied';
+  this.updateSubcription = this.requestService
+    .updateRequest(this.updateRequest)
+    .subscribe(() => {
+      this.dialogReg.close(true);
+    });
 }
+ approveRequest() {
+  this.updateRequest.requestID = this.requestID;
+  this.updateRequest.status = 'Accepted';
+  this.updateSubcription = this.requestService
+    .updateRequest(this.updateRequest)
+    .subscribe(() => {
+      this.dialogReg.close(true); 
+    });
+}
+ routeMessage(): void {
+  this.dialogReg.close();
+    if (this.currentUser.getDefaultRoute() == '/login') {
+      this.routeNext.navigate(['login']);
+    } else {
+      this.routeNext.navigate(['/client/messages'], {
+        queryParams: {
+          recipientId: this.user?.id,
+        },
+      });
+    }
+  }
+
+}
+

@@ -9,6 +9,7 @@ import { CreateAdoptionRequirement } from '../../../../api-services/animals-requ
 import { CreateAdoptionRequest } from '../../../../api-services/animals-adoption/animals-adoption-model';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 
 @Component({
   selector: 'app-adoption',
@@ -17,7 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './adoption.scss',
 })
 export class Adoption implements OnInit {
-  dialog = inject(MatDialog);
+  dialog = inject(DialoguePopupService);
   location = inject(Location);
   requestService = inject(AnimalRequestService);
   requirementService = inject(AnimalRequirementService);
@@ -117,7 +118,7 @@ export class Adoption implements OnInit {
       },
     });
     if (isCheckReady) {
-      this.dialog.open(AdoptionDialog);
+      this.dialog.success('Request Sent', 'Your adoption request has been sent successfully. Please wait for further updates.', 'OK');
     }
   }
   get yard() {

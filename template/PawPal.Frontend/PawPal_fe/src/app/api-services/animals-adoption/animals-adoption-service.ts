@@ -66,8 +66,7 @@ export class AnimalRequestService {
     });
   }
 
-  updateRequest(request: UpdateRequestByID): Observable<number> {
-    const params = request ? buildHttpParams(request as any) : undefined;
-    return this.httpClient.put<number>(`${this.apiUrl}/${request.requestID}`, request, { params });
-  }
+  updateRequest(request: UpdateRequestByID): Observable<void> {
+  return this.httpClient.put<void>(`${this.apiUrl}/${request.requestID}/status`, request);
+}
 }

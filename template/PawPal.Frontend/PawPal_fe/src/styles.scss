@@ -112,21 +112,20 @@ body {
   --create-post-stepper-color: #c7b18c;
   --create-post-stepper-color-secondary: #765d48;
   --create-post-stepper-color-text: #c7b18c;
-
   --create-post-main-container-colour: #e1c99f;
   --create-post-main-container-border: #3e2e1f;
   --create-post-input-image: #e5d7c4;
   --create-post-main-container-shadow: #51432d;
-
-
   --create-post-main-container-text: #483c28;
   --create-post-main-container-error-text: #aa1b16;
-
   --create-post-image-holder-shadow: #987b66;
 --create-post-image-holder-border:#937652;
-
   --create-post-dropdown-color: #2e2218;
   --create-post-dropdown-color-text: #2e2218;
+
+  --adoption-request-card-background-color: #c7b18c;
+  --adoption-request-card-text-color: #473619;
+
 
 }
 
@@ -192,21 +191,21 @@ body.dark-theme {
   --create-post-stepper-color: #c7b18c;
   --create-post-stepper-color-secondary: #9b7e6d;
   --create-post-stepper-color-text: #c7b18c;
-
   --create-post-main-container-colour: #564030;
   --create-post-main-container-border: #1a140e;
   --create-post-input-image: #3e2e1f;
   --create-post-main-container-shadow: #1a140e;
-
   --create-post-image-holder-shadow: #392a1f;
   --create-post-image-holder-border: #2f241a;
-
-
   --create-post-main-container-text: rgb(213, 171, 137);
   --create-post-main-container-error-text: #ff6753;
-
   --create-post-dropdown-color: #2e2218;
   --create-post-dropdown-color-text: #2e2218;
+
+  
+  --adoption-request-card-background-color: #392a1f;
+  --adoption-request-card-text-color: #c7b18c;
+
 
 }
 .mat-mdc-form-field {

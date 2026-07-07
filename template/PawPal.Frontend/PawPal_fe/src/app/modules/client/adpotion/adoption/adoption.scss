@@ -3,12 +3,8 @@
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(187, 116, 34, 0.2) 100%), #e5d7c4;
   padding: 2rem 1rem;
 
-  @media (min-width: 768px) {
-    padding: 3rem 2rem;
-  }
 }
 
-// icons
 ::ng-deep .mat-step-header .mat-step-icon-selected,
 ::ng-deep .mat-step-header.mat-step-header-selected .mat-step-icon {
   background-color: #354024 !important;
@@ -549,7 +545,6 @@
   margin: 0;
 }
 
-// ovo je za zadnji ovaj slazem se button
 .agreement-checkbox {
   display: flex;
   justify-content: center;
@@ -568,82 +563,13 @@
   min-width: 200px;
 }
 
-// Responsive adjustments
-@media (max-width: 1023px) {
-  .step-content {
-    padding: 1.5rem;
-  }
+::ng-deep .number-field input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
 
-  .form-row {
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 767px) {
-  .stepper-container {
-    padding: 1rem 0.5rem;
-  }
-
-  .adoption-stepper {
-    ::ng-deep {
-      .mat-step-header {
-        padding: 1rem 0.5rem;
-
-        .mat-step-icon {
-          width: 70px;
-          height: 70px;
-        }
-      }
-
-      .mat-horizontal-stepper-header-container {
-        gap: 1rem;
-      }
-
-      .mat-stepper-horizontal-line {
-        min-width: 50px;
-        top: 35px;
-      }
-    }
-  }
-
-  .step-label {
-    .step-icon {
-      width: 35px;
-      height: 35px;
-    }
-
-    span {
-      font-size: 14px;
-      max-width: 100px;
-    }
-  }
-
-  .field-label {
-    font-size: 16px;
-  }
-
-  .declaration-box {
-    padding: 1.5rem 1rem;
-  }
-
-  .declaration-text,
-  .warning-text {
-    font-size: 16px;
-  }
-}
-
-mat-error{
-  margin-top: -20px;
-  padding: 5px;
-}
-
-.drugi-error{
-  margin-top: 0px;
-}
-
-.checkbox-container{
-  padding-top:30px;
-  .checkbox-field{
-    padding-top:50px;
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 }

@@ -3,17 +3,6 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family:
-    'Inter',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
-  background: #e5d7c4;
-  padding: 2rem;
-}
-
 .poslati-zahtjevi-container {
   width: 100%;
 
@@ -40,12 +29,11 @@ body {
   grid-template-columns: auto 1fr auto;
   gap: 1.5rem;
   padding: 1.5rem;
-  background: #c7b18c;
-  border: 1.5px solid #473619;
+  background: var(--adoption-request-card-background-color);
   border-radius: 30px;
   box-shadow: 0 8px 5.6px rgba(0, 0, 0, 0.25);
   align-items: center;
-  width: 100%;
+  width: 130vh;
 }
 
 .pet-image {
@@ -78,7 +66,7 @@ body {
 }
 
 .request-title {
-  color: #473619;
+  color: var(--adoption-request-card-text-color);
   font-size: 30px;
   font-weight: 700;
 }
@@ -109,7 +97,7 @@ body {
 }
 
 .detail-text {
-  color: #473619;
+  color: var(--adoption-request-card-text-color);
   font-size: 22px;
   font-weight: 400;
 }
@@ -130,11 +118,11 @@ body {
   top: 0;
   bottom: 0;
   width: 1px;
-  background: #473619;
+  background: var(--adoption-request-card-text-color);
 }
 
 .status-label {
-  color: #473619;
+  color: var(--adoption-request-card-text-color);
   font-size: 25px;
   font-weight: 700;
   text-decoration: underline;
