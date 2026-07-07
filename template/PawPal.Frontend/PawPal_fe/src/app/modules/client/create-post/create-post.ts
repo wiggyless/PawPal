@@ -43,7 +43,6 @@ import {
   DisabilitiesDto,
   ListDisabilitiesQueryDto,
 } from '../../../api-services/disabilities/disability-model';
-import { MatDialog } from '@angular/material/dialog';
 import { CreatePostDialog } from './create-post-dialog/create-post-dialog/create-post-dialog';
 import { base64ToBlobUrl } from '../../shared/utils/image-utils';
 import { HttpEventType } from '@angular/common/http';
@@ -52,6 +51,7 @@ import { PageResult } from '../../../core/models/paging/page-result';
 import { ListGenderDto } from '../../../api-services/gender/gender-model';
 import { UserImageService } from '../../../api-services/userImage/userImage-service';
 import { SafeUrl } from '@angular/platform-browser';
+import { DialoguePopupService } from '../../../api-services/dialogue-popup/dialogue-popup.service';
 
 @Component({
   selector: 'app-create-post',
@@ -76,7 +76,7 @@ export class CreatePost implements OnInit {
   postImages = inject(PostImagesService);
   nextRoute = inject(Router);
   cd = inject(ChangeDetectorRef);
-  dialog = inject(MatDialog);
+  dialog = inject(DialoguePopupService);
   allergyService = inject(AllergyService);
   disabilityService = inject(DisabilityService);
   healthHistory = inject(AnimalsHealthService);
@@ -493,7 +493,7 @@ export class CreatePost implements OnInit {
             setTimeout(() => {
               this.isUploadingImages = false;
               this.cd.detectChanges();
-              this.dialog.open(CreatePostDialog);
+              this.dialog.success('Post Created', 'Your post has been created successfully. You can now view it on the catalog!', 'OK');
               this.nextRoute.navigate(['']);
             }, 1500);
           }
