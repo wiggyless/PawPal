@@ -5,9 +5,7 @@
   <div class="container">
     @if (isLoaded) {
       <div class="main-layout">
-        <!-- Left Column -->
         <div class="left-column">
-          <!-- Tip prebivališta -->
           <div class="form-group">
             <div class="section-title">
               <svg viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,7 +17,7 @@
                   stroke-linejoin="round"
                 />
               </svg>
-              Type of resience
+              Type of residence
             </div>
             <input
               type="text"
@@ -29,7 +27,6 @@
             />
           </div>
 
-          <!-- Adresa (broj sprata) -->
           <div class="form-group">
             <div class="section-title">
               <svg viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +48,6 @@
             />
           </div>
 
-          <!-- Broj ukućana / Tip ljubimca -->
           <div class="dual-input-container">
             <div>
               <label style="color: #d4c4ae">Residents number</label>
@@ -195,7 +191,6 @@
             </div>
           </div>
 
-          <!-- Alergije -->
           <div class="checkbox-item">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -224,7 +219,6 @@
             </div>
           </div>
 
-          <!-- Spremni za agresivnost -->
           <div class="checkbox-item">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -238,7 +232,7 @@
                 fill="#C7B18C"
               />
             </svg>
-            Ready to handle aggressiveness:
+            Ready for aggressiveness:
             <div class="checkbox-container">
               <input
                 type="checkbox"
@@ -249,7 +243,6 @@
             </div>
           </div>
 
-          <!-- Spremni za nekompatibilnost -->
           <div class="checkbox-item">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -266,7 +259,7 @@
                 stroke-linejoin="round"
               />
             </svg>
-            Ready in case of incompatibility:
+            Ready for incompatibility:
             <div class="checkbox-container">
               <input
                 type="checkbox"
@@ -278,9 +271,7 @@
           </div>
         </div>
 
-        <!-- Middle Column -->
         <div class="middle-column">
-          <!-- Dostupnost ukućana -->
           <div class="form-group">
             <div class="section-title">
               <svg viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -302,7 +293,6 @@
             />
           </div>
 
-          <!-- Period boravka u prebivalištu -->
           <div class="form-group">
             <div class="section-title">
               <svg viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -324,7 +314,6 @@
             />
           </div>
 
-          <!-- Finansijsko ulaganje -->
           <div class="form-group">
             <div class="section-title">
               <svg
@@ -367,7 +356,6 @@
 
           <div class="bottom-border-holder"></div>
 
-          <!-- Detalji o prebivalištu -->
           <div class="form-group">
             <div class="section-title">
               <svg
@@ -433,8 +421,7 @@
                 </svg>
               </div>
               <div class="username">{{ user?.username }}</div>
-              <div class="last-active">Last time active: {{ user?.dateTime | date: 'short' }}</div>
-              <button class="send-message-btn">SEND A MESSAGE</button>
+              <button class="send-message-btn" (click)="routeMessage()">SEND A MESSAGE</button>
               <div class="bottom-border-holder"></div>
               <div class="status-section">
                 <div class="status-label">STATUS:</div>

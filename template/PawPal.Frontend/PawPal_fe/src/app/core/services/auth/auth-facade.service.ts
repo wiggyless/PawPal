@@ -1,6 +1,6 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, tap, catchError, map } from 'rxjs';
+import { Observable, of, tap, catchError, map, switchMap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { NotificationService } from '../notifications/notification.service';
 import { AuthApiService } from '../../../api-services/auth/auth-api.service';
@@ -46,16 +46,20 @@ export class AuthFacadeService {
     );
   }
 
-  logout(): Observable<void> {
-    const refreshToken = this.storage.getRefreshToken();
+ logout(): Observable<void> {
+  const refreshToken = this.storage.getRefreshToken();
 
-    this.clearUserState();
-    if (!refreshToken) {
-      return of(void 0);
-    }
-    const payload: LogoutCommand = { refreshToken };
-    return this.api.logout(payload).pipe(catchError(() => of(void 0)));
-  }
+  return this.notificationService.clearToken().pipe(
+    switchMap(() => {
+      this.clearUserState();
+      if (!refreshToken) {
+        return of(void 0);
+      }
+      const payload: LogoutCommand = { refreshToken };
+      return this.api.logout(payload).pipe(catchError(() => of(void 0)));
+    }),
+  );
+}
 
   refresh(payload: RefreshTokenCommand): Observable<RefreshTokenCommandDto> {
     return this.api.refresh(payload).pipe(

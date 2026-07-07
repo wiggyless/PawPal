@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { computed, Injectable, signal, inject, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
+import { Observable, of, catchError } from 'rxjs'; 
 
 export interface AppNotification {
   id: string;
@@ -57,6 +58,15 @@ export class NotificationService {
       error: (err) => console.error('Failed to register token', err),
     });
   }
+
+  clearToken(): Observable<void> {
+  return this.http.post<void>(`${this.apiUrl}/clear-token`, {}).pipe(
+    catchError((err) => {
+      console.error('Failed to clear FCM token', err);
+      return of(void 0);
+    }),
+  );
+}
 
   async requestPermissionAndRegister() {
     const permission = await Notification.requestPermission();
