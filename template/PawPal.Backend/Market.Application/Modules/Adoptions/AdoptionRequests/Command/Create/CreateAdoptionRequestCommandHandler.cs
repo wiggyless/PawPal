@@ -15,7 +15,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create
             var req = await context.AdoptionRequirements.Where(x => x.Id == request.RequirementID).FirstOrDefaultAsync(cancellationToken);
 
             if (user is null) throw new PawPalNotFoundException("User does not exist");
-            if (currentUser.IsAuthenticated)
+            if (!currentUser.IsAuthenticated)
             {
                 throw new PawPalConflictException("User is not authenticated to do this action");
             }

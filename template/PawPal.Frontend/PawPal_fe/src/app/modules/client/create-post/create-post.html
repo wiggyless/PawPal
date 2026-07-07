@@ -494,9 +494,11 @@
         </div>
         <div class="stepper-buttons-final">
           <button mat-button matStepperPrevious class="secondarybtn">BACK</button>
-          <button mat-button (click)="isUpdate ? updatePost() : addPost()" class="primarybtn">
-            POST
-          </button>
+          @if (isUpdate) {
+            <button mat-button (click)="updatePost()" class="primarybtn">UPDATE</button>
+          } @else {
+            <button mat-button (click)="addPost()" class="primarybtn">POST</button>
+          }
         </div>
       </div>
 
@@ -562,7 +564,7 @@
                     <div class="post-information-pet-attributes-values">
                       <p>{{ selectedCategory.categoryName }}</p>
                       <p>{{ fourthFromGroup.value.mainInfo?.breed }}</p>
-                      <p>{{ selectedGender }}</p>
+                      <p>{{ genderEnum[secondFormGroup.value.genderID ?? 0] }}</p>
                       <p>{{ fourthFromGroup.value.mainInfo?.age }}</p>
                       @if (!thridFormGroup.get('vaccineCheck')?.value) {
                         <p><mat-icon>close</mat-icon></p>
