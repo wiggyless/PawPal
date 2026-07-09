@@ -27,10 +27,7 @@ public sealed class LoginCommandHandler(
         var verify = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
         if (verify == PasswordVerificationResult.Failed)
             throw new PawPalConflictException("Wrong credentials.");
-        /*
-        if (!user.IsEmailConfirmed)
-            throw new PawPalConflictException("Please verify your e-mail address before logging in.");
-        */
+       
         var tokens = jwt.IssueTokens(user);
 
         ctx.RefreshTokens.Add(new RefreshTokenEntity

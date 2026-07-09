@@ -199,7 +199,7 @@
 
 .carousel-container {
   position: relative;
-  width: 90%;
+  width: 60%;
   margin: 0 auto;
   overflow: hidden;
   border-radius: 25px;
@@ -225,7 +225,6 @@
   transform: translateY(-50%);
   font-size: 64px;
   z-index: 10;
-  transition: background 0.2s;
   width: 50px;
   height: 50px;
   border-radius: 50%;

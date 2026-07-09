@@ -37,26 +37,20 @@ export class NotificationService {
 
   async checkPermission() {
     const permission = Notification.permission;
-    console.log('checkPermission called, state:', permission);
     this.permissionState.set(permission);
 
-    // already granted - register token silently
     if (permission === 'granted') {
       await this.registerToken();
       this.listenForeground();
     }
   }
 
-  // extract token registration into its own method
   private async registerToken() {
     const token = await getToken(this.messaging, {
       vapidKey:
         'BGeG2YJ7c5X-SuyD9LkB36cssHI1FEflumZcdaBo8sfz0ATutIqzTMU2RzREPnWs2w0zoCTDR_g9S2EExadeLNM',
     });
-    this.http.post(`${this.apiUrl}/register-token`, { token }).subscribe({
-      next: () => console.log('FCM token registered'),
-      error: (err) => console.error('Failed to register token', err),
-    });
+    this.http.post(`${this.apiUrl}/register-token`, { token }).subscribe();
   }
 
   clearToken(): Observable<void> {
@@ -83,34 +77,27 @@ export class NotificationService {
   private foregroundListening = false;
 
   listenForeground() {
-    if (this.foregroundListening) return; // prevent duplicate listeners
+    if (this.foregroundListening) return; 
     this.foregroundListening = true;
-    console.log('listenForeground registered');
 
-    // FCM foreground messages
     onMessage(this.messaging, (payload) => {
-      console.log('Foreground message received', payload);
       this.zone.run(() => {
         this.addNotification(payload);
       });
     });
 
-    // Service worker messages (background click / background notification)
     navigator.serviceWorker.addEventListener('message', (event) => {
-      // CRITICAL FIX: Wrap this inside zone execution
       this.zone.run(() => {
         if (event.data?.type === 'NOTIFICATION_CLICK') {
           this.router.navigate([event.data.redirectUrl]);
         }
         if (event.data?.type === 'BACKGROUND_NOTIFICATION') {
-          console.log('App received notification from SW:', event.data.payload);
           this.addNotification(event.data.payload);
         }
       });
     });
   }
 
-  // Extract into a helper to avoid duplication
   private addNotification(payload: any) {
     const notification: AppNotification = {
       id: crypto.randomUUID(),

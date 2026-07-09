@@ -1,6 +1,7 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import {
   AbstractControl,
+  AsyncValidatorFn,
   FormBuilder,
   FormControl,
   ValidationErrors,
@@ -11,14 +12,13 @@ import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { UserService } from '../../../../api-services/users/users-service';
 import { CreateUserCommand } from '../../../../api-services/users/users-model';
 import { Router } from '@angular/router';
-import { catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, first, map, Observable, of, switchMap } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { UserImageService } from '../../../../api-services/userImage/userImage-service';
 import {
   CropDialogResult,
   UserProfileImageCropDialog,
 } from '../../../client/my-profile/user-profile-component/user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
-import { DialogRef } from '@angular/cdk/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { SafeUrl } from '@angular/platform-browser';
 
@@ -31,6 +31,37 @@ export const passwordMatchValidator: ValidatorFn = (
     ? { passwordMismatch: true }
     : null;
 };
+
+export function usernameTakenValidator(userService: UserService): AsyncValidatorFn {
+  return (control: AbstractControl): Observable<ValidationErrors | null> => {
+    const value = control.value?.toString().trim();
+    if (!value) return of(null);
+
+    return of(value).pipe(
+      debounceTime(600),
+      distinctUntilChanged(),
+      switchMap((username) => userService.getByUsername(username)),
+      map((res) => (res != null ? { usernameTaken: true } : null)),
+      catchError(() => of(null)),
+      first(),
+    );
+  };
+}
+export function emailTakenValidator(userService: UserService): AsyncValidatorFn {
+  return (control: AbstractControl): Observable<ValidationErrors | null> => {
+    const value = control.value?.toString().trim();
+    if (!value) return of(null);
+
+    return of(value).pipe(
+      debounceTime(600),
+      distinctUntilChanged(),
+      switchMap((email) => userService.getByEmail(email)),
+      map((res) => (res != null ? { emailTaken: true } : null)),
+      catchError(() => of(null)),
+      first(),
+    );
+  };
+}
 
 @Component({
   selector: 'app-register-component',
@@ -49,53 +80,53 @@ export const passwordMatchValidator: ValidatorFn = (
     ]),
   ],
 })
+
 export class RegisterComponent implements OnInit {
   private _formBuilder = inject(FormBuilder);
   private cityService = inject(CitiesService);
   private userService = inject(UserService);
   private router = inject(Router);
   private userImageService = inject(UserImageService);
+
   cityList: any = [];
   cityId: number = 0;
   dateOfBirth: Date = new Date();
   showPassword = false;
   showRepeatPassword = false;
   dateControl = new FormControl(new Date());
-  usernameAvailable = false;
-  emailAvailable = false;
   dialogRef = inject(MatDialog);
+
   basicInfo = this._formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     cityId: ['', Validators.required],
     dateOfBirth: ['', Validators.required],
   });
+
   imageChanged = signal(false);
+
   accountInfo = this._formBuilder.group(
     {
-      username: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      username: [
+        '',
+        [Validators.required],
+        [usernameTakenValidator(this.userService)],
+      ],
+      email: [
+        '',
+        [Validators.required, Validators.email],
+        [emailTakenValidator(this.userService)],
+      ],
       password: ['', [Validators.required, Validators.minLength(8)]],
       repeatPassword: ['', Validators.required],
     },
     { validators: passwordMatchValidator },
   );
+
   profileImagePreview: string | null = null;
   selectedProfileImage: File | undefined;
   imageUrl = signal<SafeUrl | null>(null);
-  /*
-onProfileImageSelected(event: any) {
-  const file = event.target.files?.[0];
-  if (file) {
-    this.selectedProfileImage = file;
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.profileImagePreview = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-  }
-}
-  */
+
   onProfileImageSelected(event: any): void {
     const files = event.target.files;
     if (!files || files.length === 0) return;
@@ -121,58 +152,16 @@ onProfileImageSelected(event: any) {
         this.imageUrl.set(result.croppedUrl);
       });
   }
+
   additionalInfo = this._formBuilder.group({
     aboutMe: ['', [Validators.maxLength(500), Validators.required]],
     favouriteAnimal: [''],
   });
+
   ngOnInit(): void {
     this.loadCities();
-    this.accountInfo
-      .get('username')
-      ?.valueChanges.pipe(
-        catchError(() => of(null)),
-        debounceTime(600),
-        distinctUntilChanged(),
-        switchMap((username) => this.userService.getByUsername(username?.toString() || '')),
-      )
-      .subscribe({
-        next: (res) => {
-          if (res != null) {
-            this.accountInfo.get('username')?.setErrors({ usernameTaken: true });
-            this.usernameAvailable = false;
-          } else {
-            this.accountInfo.get('username')?.setErrors(null);
-            this.usernameAvailable = true;
-          }
-        },
-        error: (err) => {
-          console.error('Error checking username availability:', err);
-        },
-      });
-    if (this.accountInfo.get('email') == null) return;
-    this.accountInfo
-      .get('email')
-      ?.valueChanges.pipe(
-        catchError(() => of(null)),
-        debounceTime(600),
-        distinctUntilChanged(),
-        switchMap((email) => this.userService.getByEmail(email?.toString() || '')),
-      )
-      .subscribe({
-        next: (res) => {
-          if (res != null) {
-            this.accountInfo.get('email')?.setErrors({ emailTaken: true });
-            this.emailAvailable = false;
-          } else {
-            this.accountInfo.get('email')?.setErrors(null);
-            this.emailAvailable = true;
-          }
-        },
-        error: (err) => {
-          console.error('Error checking email availability:', err);
-        },
-      });
   }
+
   loadCities(): void {
     this.cityService.listCities().subscribe((res) => {
       this.cityList = res;
@@ -187,8 +176,34 @@ onProfileImageSelected(event: any) {
     this.showRepeatPassword = !this.showRepeatPassword;
   }
 
+ get usernameControl(): AbstractControl | null {
+  return this.accountInfo.get('username');
+}
+
+  get emailControl() {
+    return this.accountInfo.get('email');
+  }
+
+  get usernamePending(): boolean {
+    return this.usernameControl?.pending ?? false;
+  }
+
+  get emailPending(): boolean {
+    return this.emailControl?.pending ?? false;
+  }
+
   onSubmit() {
-    if (this.accountInfo.invalid || this.basicInfo.invalid || this.additionalInfo.invalid) return;
+    if (
+      this.accountInfo.invalid ||
+      this.accountInfo.pending ||
+      this.basicInfo.invalid ||
+      this.additionalInfo.invalid
+    ) {
+      this.accountInfo.markAllAsTouched();
+      this.basicInfo.markAllAsTouched();
+      this.additionalInfo.markAllAsTouched();
+      return;
+    }
 
     const payload: CreateUserCommand = {
       firstName: this.basicInfo.value.firstName ?? '',
