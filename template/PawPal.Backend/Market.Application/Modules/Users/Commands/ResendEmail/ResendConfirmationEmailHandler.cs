@@ -1,13 +1,16 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using PawPal.Application.Abstractions;
+using PawPal.Application.Options;
 using PawPal.Domain.Entities.Identity;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace PawPal.Application.Modules.Users.Commands.ResendConfirmationEmail;
 
 public sealed class ResendConfirmationEmailCommandHandler(
     IAppDbContext context,
-    IEmailService emailService)
+    IEmailService emailService,
+    IOptions<AppUrlsOptions> appUrls)
     : IRequestHandler<ResendConfirmationEmailCommand, ResendConfirmationEmailDto>
 {
     public async Task<ResendConfirmationEmailDto> Handle(
@@ -30,7 +33,7 @@ public sealed class ResendConfirmationEmailCommandHandler(
 
         await context.SaveChangesAsync(cancellationToken);
 
-        var confirmUrl = $"http://localhost:4200/auth/confirm-email?token={newToken}";
+        var confirmUrl = $"{appUrls.Value.ClientBaseUrl}/auth/confirm-email?token={newToken}";
         await emailService.SendEmailAsync(
             user.Email!,
             "Confirm your email",

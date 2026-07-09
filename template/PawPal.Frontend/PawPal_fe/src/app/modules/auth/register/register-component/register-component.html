@@ -123,9 +123,12 @@
               <mat-error *ngIf="accountInfo.get('username')?.hasError('usernameTaken')"
                 >Username is already taken!</mat-error
               >
-              <mat-hint @fadeSlide class="success-hint" *ngIf="this.usernameAvailable"
-                >Username is available!</mat-hint
-              >
+              <mat-hint
+  @fadeSlide
+  class="success-hint"
+  *ngIf="usernameControl?.value && !usernamePending && !usernameControl?.hasError('usernameTaken')"
+  >Username is available!</mat-hint
+>
             </mat-form-field>
           </div>
 

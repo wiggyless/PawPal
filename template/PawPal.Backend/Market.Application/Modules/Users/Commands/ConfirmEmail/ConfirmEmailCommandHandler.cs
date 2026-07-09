@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PawPal.Application.Modules.Users.Commands.ConfirmEmail
+﻿namespace PawPal.Application.Modules.Users.Commands.ConfirmEmail
 {
     public sealed class ConfirmEmailCommandHandler(IAppDbContext context)
     : IRequestHandler<ConfirmEmailCommand, ConfirmEmailCommandDto>
@@ -19,7 +13,7 @@ namespace PawPal.Application.Modules.Users.Commands.ConfirmEmail
                 throw new PawPalConflictException("Confirmation token has expired. Please request a new one.");
 
             user.IsEmailConfirmed = true;
-            user.EmailConfirmationToken = null; //one-time use
+            user.EmailConfirmationToken = null; 
             user.EmailConfirmationTokenExpiresAt = null;
 
             await context.SaveChangesAsync(cancellationToken);
@@ -32,3 +26,5 @@ namespace PawPal.Application.Modules.Users.Commands.ConfirmEmail
         }
     }
 }
+
+

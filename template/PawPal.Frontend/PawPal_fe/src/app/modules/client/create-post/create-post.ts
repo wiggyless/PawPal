@@ -442,7 +442,7 @@ export class CreatePost implements OnInit {
     };
 
     const newAnimalHealthHistory: AddAnimalHealthHistory = {
-      animalId: 0, // filled in once addAnimal() returns the new id
+      animalId: 0,
       parasiteFree: this.thridFormGroup.get('parasiteCheck')!.value as boolean,
       vaccinated: this.thridFormGroup.get('vaccineCheck')!.value as boolean,
       spayedOrNeutered: this.thridFormGroup.get('sterCheck')!.value as boolean,

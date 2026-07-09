@@ -33,7 +33,6 @@ body {
   padding: 0px;
   box-sizing: border-box;
 }
-// second color is used for linear gradient but i dont know what to put
 :host {
   display: flex;
   flex-direction: column;
@@ -292,14 +291,11 @@ body.dark-theme {
   width: 100%;
 }
 .blurred-dialog-backdrop {
-  // Removes the background completely
   --mdc-dialog-container-color: transparent;
 
-  // Removes the default drop shadow elevation
   box-shadow: none !important;
 }
 
-// Alternative selector target if the variable does not override it fully
 .transparent-dialog-panel .mdc-dialog__surface {
   background: transparent !important;
   box-shadow: none !important;
@@ -307,14 +303,4 @@ body.dark-theme {
 .mdc-text-field--filled {
   background-color: var(--box-color) !important;
 }
-// Place this inside your GLOBAL styles.scss, NOT your component's scss file.
-// Overlay — darkens the entire background
-.toast-container {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1500;
-}
+
