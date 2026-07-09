@@ -9,15 +9,14 @@ import { AuthFacadeService } from "../../../core/services/auth/auth-facade.servi
   styleUrl: './confirm-email.scss'
 })
 
-
 export class ConfirmEmailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private auth = inject(AuthFacadeService);
   public router = inject(Router);
 
   status: 'loading' | 'success' | 'error' | 'expired' = 'loading';
-email: string | null = null;
-resendSuccess: boolean = false;
+  email: string | null = null;
+  resendSuccess: boolean = false;
   ngOnInit(): void {
     const token = this.route.snapshot.queryParamMap.get('token');
 

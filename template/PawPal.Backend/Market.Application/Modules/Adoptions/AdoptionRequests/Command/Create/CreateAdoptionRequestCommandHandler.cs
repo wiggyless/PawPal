@@ -5,7 +5,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create
 {
     public sealed class CreateAdoptionRequestCommandHandler(
         IAppDbContext context,
-        FirebaseNotificationService firebaseNotificationService,IAppCurrentUser currentUser)
+        IFirebaseNotificationService firebaseNotificationService,IAppCurrentUser currentUser)
         : IRequestHandler<CreateAdoptionRequestCommand, int>
     {
         public async Task<int> Handle(CreateAdoptionRequestCommand request, CancellationToken cancellationToken)
@@ -47,15 +47,15 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create
             var postOwner = await context.Users
                 .Where(x => x.Id == post.UserId)
                 .FirstOrDefaultAsync(cancellationToken);
-            if (postOwner?.FcmToken is not null)
-            {
-                await firebaseNotificationService.SendAsync(
-                    postOwner.FcmToken,
-                    "New Adoption Request",
-                    $"{user.Username} wants to adopt your animal!",
-                    $"/client/my-profile/my-requests"
-                );
-            }
+             if (postOwner?.FcmToken is not null)
+             {
+                 await firebaseNotificationService.SendAsync(
+                     postOwner.FcmToken,
+                     "New Adoption Request",
+                     $"{user.Username} wants to adopt your animal!",
+                     $"/client/my-profile/my-requests"
+                 );
+             }
             return newRequest.Id;
         }
     }

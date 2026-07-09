@@ -8,6 +8,7 @@ using PawPal.API;
 using PawPal.API.Middleware;
 using PawPal.Application;
 using PawPal.Application.Abstractions;
+using PawPal.Application.Options;
 using PawPal.Application.Services;
 using PawPal.Infrastructure;
 using PawPal.Infrastructure.BackgroundServices;
@@ -51,6 +52,9 @@ public partial class Program
                 .AddInfrastructure(builder.Configuration, builder.Environment)
                 .AddApplication()
                 .AddSignalR();
+            builder.Services.Configure<AppUrlsOptions>(
+                    builder.Configuration.GetSection(AppUrlsOptions.SectionName));
+
             builder.Services.AddScoped<ICommentHubService, CommentHubService>();
             builder.Services.AddScoped<IMessageHubService, MessageHubService>();
             builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
@@ -119,9 +123,6 @@ public partial class Program
                 });
             });
 
-
-            var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
-
             builder.Services.AddTransient<IEmailService, EmailService>();
             builder.Services.AddHostedService<ExpiredTokenCleanupService>();
 
@@ -129,7 +130,7 @@ public partial class Program
             {
                 Credential = GoogleCredential.FromFile("firebase-service-account.json")
             });
-            builder.Services.AddSingleton<FirebaseNotificationService>();
+            builder.Services.AddSingleton<IFirebaseNotificationService, FirebaseNotificationService>();
 
             var app = builder.Build();
 

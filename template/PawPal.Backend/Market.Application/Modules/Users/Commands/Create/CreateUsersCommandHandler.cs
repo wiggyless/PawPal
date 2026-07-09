@@ -1,14 +1,17 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using PawPal.Application.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
 
 namespace PawPal.Application.Modules.Users.Commands.Create
 {
     public sealed class CreateUsersCommandHandler(IAppDbContext context,
-             IEmailService emailService)
+             IEmailService emailService,
+             IOptions<AppUrlsOptions> appUrls)
         : IRequestHandler<CreateUserCommand, int>
     {
         public async Task<int> Handle(CreateUserCommand request,
@@ -54,22 +57,21 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 CityId = request.City,
                 IsEnabled = true,
                 EmailConfirmationToken = confirmationToken,
-                EmailConfirmationTokenExpiresAt = DateTime.UtcNow.AddSeconds(45),
+                EmailConfirmationTokenExpiresAt = DateTime.UtcNow.AddHours(24),
                 IsEmailConfirmed = false,
                 Username = request.Username, 
                 AboutMe = request.AboutMe
             };
             context.Users.Add(newUser);
             await context.SaveChangesAsync(cancellationToken);
-            /*
-            var confirmUrl = $"http://localhost:4200/auth/confirm-email?token={confirmationToken}";
+
+            var confirmUrl = $"{appUrls.Value.ClientBaseUrl}/auth/confirm-email?token={confirmationToken}";
             await emailService.SendEmailAsync(
-                userEmail,
+                newUser.Email!,
                 "Confirm your email",
-                $"<p>Hi {userName},</p><p>Click <a href='{confirmUrl}'>here</a> to confirm your account.</p>"
+                $"<p>Hi {newUser.FirstName},</p><p>Click <a href='{confirmUrl}'>here</a> to confirm your account.</p>"
             );
 
-            */
             return newUser.Id;
         }
     }

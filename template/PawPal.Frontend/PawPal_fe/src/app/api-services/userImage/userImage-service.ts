@@ -14,19 +14,22 @@ export class UserImageService {
   private imageCache = new Map<number, SafeUrl>();
   private sanitizer = inject(DomSanitizer);
 
-  getUserImageByID(userID: number): Observable<SafeUrl> {
-    if (this.imageCache.has(userID)) {
-      return of(this.imageCache.get(userID)!);
-    }
-      const params = userID ? buildHttpParams(userID as any) : undefined;
-        return this.httpClient
-          .get<GetUserImageById>(`${this.apiUrl}/${userID}`).pipe(
-      map((photo) => {
-        this.imageCache.set(userID, photo.photoURL);
-        return photo.photoURL;
-      }),
-    )
+ getUserImageByID(userID: number): Observable<SafeUrl> {
+  if (this.imageCache.has(userID)) {
+    return of(this.imageCache.get(userID)!);
   }
+
+  return this.httpClient.get<GetUserImageById>(`${this.apiUrl}/${userID}`).pipe(
+    map((photo) => {
+      const fullUrl = photo.photoURL.startsWith('http')
+        ? photo.photoURL
+        : `${environment.apiUrl}${photo.photoURL}`;
+      const safeUrl = this.sanitizer.bypassSecurityTrustUrl(fullUrl);
+      this.imageCache.set(userID, safeUrl);
+      return safeUrl;
+    }),
+  );
+}
 createUserImage(userID: number, image: File): Observable<number> {
   const formData = new FormData();
   formData.append('userID', userID.toString());
