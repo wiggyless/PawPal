@@ -19,8 +19,7 @@ import { environment } from '../../../../../environments/environment';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
-import {MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DialogueComponent } from '../../../client/dialogue-component/dialogue-component';
+import { MatDialog } from '@angular/material/dialog';
 import { SafeUrl } from '@angular/platform-browser';
 import { ReportPostComponent } from '../../../client/report-post-component/report-post-component';
 import { ReportUserComponent } from '../../../client/report-user-component/report-user-component/report-user-component';
@@ -52,7 +51,7 @@ export class PostComponent implements OnInit, OnDestroy {
   postService = inject(AnimalPostService);
   cd = inject(ChangeDetectorRef);
   dialog = inject(DialoguePopupComponent);
-  reportDialog = inject(MatDialog); 
+  reportDialog = inject(MatDialog);
   postSub: Subscription | undefined;
   animalSub: Subscription | undefined;
   togetherSub: Subscription | undefined;
@@ -73,7 +72,7 @@ export class PostComponent implements OnInit, OnDestroy {
     breed: '',
     gender: '',
     age: 0,
-    hasPapers: false,
+    has_Papers: false,
   };
   router = inject(Router);
   user: GetUserByIdDto | undefined;
@@ -103,7 +102,7 @@ export class PostComponent implements OnInit, OnDestroy {
       this.animalId = res.animalID;
       this.animalSub = this.animalService.getAnimalById(res.animalID).subscribe((resA) => {
         this.togetherSub = forkJoin({
-          health: this.animalHealthService.getAnimalHealthHistoryById(resA.id),
+          health: this.animalHealthService.getAnimalHealthHistoryById(this.animalId),
           cities: this.cityService.getCityById(res.cityID),
           users: this.userService.getUser(res.userID),
         }).subscribe({
@@ -152,12 +151,12 @@ export class PostComponent implements OnInit, OnDestroy {
           next: () => {
             this.dialog.service.success('Post Deleted', 'The post has been deleted successfully.');
             this.routeNext.navigate(['/catalog']);
-          }
+          },
         });
-      }
+      },
     );
   }
-  
+
   routeAdopt(): void {
     if (this.currentUser.getDefaultRoute() == '/login') {
       this.routeNext.navigate(['/auth/login']);

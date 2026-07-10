@@ -1,24 +1,14 @@
 import { ChangeDetectorRef, Component, effect, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { forkJoin, Subscriber, Subscription } from 'rxjs';
+import { SafeUrl } from '@angular/platform-browser';
+import { forkJoin, Subscription } from 'rxjs';
 import { CitiesService } from '../../../../../../api-services/cities/cities.service';
-import {
-  UserImageQuery,
-  UserImageCommand,
-} from '../../../../../../api-services/userImage/userImage-model';
+import { UserImageCommand } from '../../../../../../api-services/userImage/userImage-model';
 import { UserImageService } from '../../../../../../api-services/userImage/userImage-service';
-import {
-  GetUserByIdDto,
-  UpdateUserCommand,
-} from '../../../../../../api-services/users/users-model';
+import { GetUserByIdDto } from '../../../../../../api-services/users/users-model';
 import { UserService } from '../../../../../../api-services/users/users-service';
 import { CurrentUserService } from '../../../../../../core/services/auth/current-user.service';
-import {
-  UserProfileImageCropDialog,
-  CropDialogResult,
-} from '../../../../../client/my-profile/user-profile-component/user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
 import { DialoguePopupService } from '../../../../../../api-services/dialogue-popup/dialogue-popup.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserDisabledService } from '../../../../../../api-services/users-disabled/users-disabled.service';
@@ -84,6 +74,7 @@ export class Profile implements OnInit {
   sub: Subscription | undefined;
   editing: boolean = false;
   disabled: boolean | undefined;
+  loaded = signal(false);
   ngOnInit(): void {
     this.router.queryParams.subscribe((params) => {
       this.userID = params['userID'];
@@ -99,12 +90,13 @@ export class Profile implements OnInit {
   }
   getUserData(): void {
     this.sub = forkJoin({
-      userData: this.userDataService.getUserDisabled(this.userID as number),
+      userData: this.userDataService.getUser(this.userID as number),
       cities: this.cityService.listCities(),
     }).subscribe({
       next: (response) => {
         this.userData = response.userData;
         this.cityList = response.cities;
+        this.loaded.set(true);
         this.initializeInputData();
       },
     });

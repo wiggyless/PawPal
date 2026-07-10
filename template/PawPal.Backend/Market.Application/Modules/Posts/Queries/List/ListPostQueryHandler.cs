@@ -5,43 +5,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace PawPal.Application.Modules.Posts.Queries.List
 {
-    public sealed class ListPostQueryHandler(IAppDbContext context) : IRequestHandler<ListPostQuery,PageResult<ListPostQueryDto>>
+    public sealed class ListPostQueryHandler(IAppDbContext context) : IRequestHandler<ListPostQuery, PageResult<ListPostQueryDto>>
     {
-        public async Task<PageResult<ListPostQueryDto>> Handle(ListPostQuery request,CancellationToken cancellationToken)
+        public async Task<PageResult<ListPostQueryDto>> Handle(ListPostQuery request, CancellationToken cancellationToken)
         {
-            var posts = context.Posts.Include(x => x.Animal).Include(x => x.City).Include(x => x.Animal.Gender).Include(x=>x.User)
-                .Where(x=> !x.User.isUserDisabled).AsNoTracking();
-            if (request.IsLiked is not null && (bool)request.IsLiked)
+            var posts = context.Posts.Include(x => x.Animal).Include(x => x.City).Include(x => x.Animal.Gender).Include(x => x.User)
+               .Where(x => !x.User.isUserDisabled).AsNoTracking();
+
+            if (request.IsLiked == true)
             {
-                var likedUserPosts = context.LikedUserPosts.Where(x => x.UserId == request.UserID).AsNoTracking().Select(x => x.PostId);
-                var hashSet = new HashSet<int>(likedUserPosts);
-                posts = posts.Where(x => likedUserPosts.Contains(x.Id));
+                var likedPostIds = context.LikedUserPosts
+                    .Where(x => x.UserId == request.UserID)
+                    .Select(x => x.PostId);
+
+                posts = posts.Where(x => likedPostIds.Contains(x.Id));
             }
             else
             {
-                if (request.SearchCantonId != null)
+                if (request.SearchCantonId is not null)
                     posts = posts.Where(x => x.City.CantonId == request.SearchCantonId);
+
                 if (!string.IsNullOrWhiteSpace(request.SearchCityName))
                     posts = posts.Where(x => x.City.Name.ToLower().Contains(request.SearchCityName.ToLower()));
-                if (!string.IsNullOrWhiteSpace(request.SearchCategoryName))
-                    posts = posts.Where(x => x.Animal.Category.CategoryName.ToLower().Contains(request.SearchCategoryName.ToLower()));
-                if (!string.IsNullOrWhiteSpace(request.SearchGender))
-                    posts = posts.Where(x => x.Animal.Gender.GenderName.ToLower() == request.SearchGender.ToLower());
+
                 if (!string.IsNullOrWhiteSpace(request.SearchBreed))
                     posts = posts.Where(x => x.Animal.Breed.ToLower().Contains(request.SearchBreed.ToLower()));
-                if (request.SearchDateAddedMax != null && request.SearchDateAddedMin != null)
+
+                if (!string.IsNullOrWhiteSpace(request.SearchCategoryName))
+                    posts = posts.Where(x => x.Animal.Category.CategoryName.ToLower().Contains(request.SearchCategoryName.ToLower()));
+
+                if (!string.IsNullOrWhiteSpace(request.SearchGender))
+                    posts = posts.Where(x => x.Animal.Gender.GenderName.ToLower() == request.SearchGender.ToLower());
+
+                if (request.SearchDateAddedMin is not null && request.SearchDateAddedMax is not null)
                     posts = posts.Where(x => x.DateAdded >= request.SearchDateAddedMin && x.DateAdded <= request.SearchDateAddedMax);
             }
-            var filteredPostIds = posts.Select(p => p.Id);
 
-            var imageUrlList = context.PostImages
-                .Where(img => filteredPostIds.Contains(img.PostId))
-                .AsQueryable()
-                .AsNoTracking();
             var postListQuery = posts
-                .OrderBy(x => x.Animal.Category.CategoryName)
+                .OrderByDescending(x => x.DateAdded)
+                .ThenBy(x => x.Animal.Category.CategoryName)
                 .Select(x => new ListPostQueryDto
                 {
                     PostID = x.Id,
@@ -57,11 +62,10 @@ namespace PawPal.Application.Modules.Posts.Queries.List
                     MainImage = context.PostImages
                         .Where(img => img.PostId == x.Id)
                         .Select(img => img.MainImage)
-                        .FirstOrDefault() ?? " "
-                }).OrderByDescending(x=>x.DateAdded);
+                        .FirstOrDefault() ?? string.Empty
+                });
 
             return await PageResult<ListPostQueryDto>.FromQueryableAsync(postListQuery, request.Paging, cancellationToken);
-
         }
     }
 }

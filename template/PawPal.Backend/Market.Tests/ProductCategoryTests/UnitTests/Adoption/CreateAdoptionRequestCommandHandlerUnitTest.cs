@@ -19,7 +19,7 @@ public class CreateAdoptionRequestCommandHandlerTests
         var options = new DbContextOptionsBuilder<DatabaseContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
-        _context = new DatabaseContext(options);
+        _context = new DatabaseContext(options,TimeProvider.System);
 
         _notificationMock = new Mock<FirebaseNotificationService>();
         _currentUserMock = new Mock<IAppCurrentUser>();

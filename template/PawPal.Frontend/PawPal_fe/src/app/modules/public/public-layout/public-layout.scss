@@ -173,7 +173,6 @@
 .header {
   width: 100%;
   height: 550px;
-  background-image: url('../public-layout/images/header-photo.webp');
   background-size: cover;
   background-position-y: -100px;
   top: 75px;
@@ -281,22 +280,33 @@
 }
 .catalog-container {
   width: 75%;
-  height: 400px;
+  /* Changed to min-height so it can grow if there are many cards, 
+     but starts at 400px */
+  min-height: 400px;
   background-color: var(--catalog-first-layer-color);
   margin: auto;
   border-radius: 20px;
   box-shadow: 5px 10px 10px #6e4d36;
+  /* Added to ensure children respect the container's boundaries */
+  display: flex;
+  flex-direction: column;
 }
 
 .header-posts {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  column-gap: 80px;
+  /* auto-fit is usually better than auto-fill for stretching items to take up all space */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+  /* Reduced gaps slightly so cards have room to scale down to 250px on smaller screens */
+  gap: 30px;
+
   justify-content: center;
-  flex-wrap: wrap;
   border-radius: 10px;
-  padding: 50px;
-  padding-bottom: 100px;
+  padding: 40px;
+}
+
+.header-posts > * {
+  width: 80%;
 }
 .header-posts-unloaded {
   display: flex;

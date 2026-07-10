@@ -68,14 +68,7 @@ export class PostComments implements OnInit, OnDestroy {
 
     this.signalRSubscription = this.signalRService.commentReceived$.subscribe((newComment) => {
       if (newComment && newComment.postID == this.postId) {
-        this.userImgService.getUserImageByID(newComment.userID).subscribe({
-          next: (safeUrl) => {
-            this.prependSignalRComment(newComment);
-          },
-          error: () => {
-            this.prependSignalRComment(newComment);
-          },
-        });
+        this.prependSignalRComment(newComment);
       }
     });
   }
@@ -100,17 +93,6 @@ export class PostComments implements OnInit, OnDestroy {
         this.isLoadingMore = false;
       },
     });
-  }
-
-  handleImageCounter(batchTotal: number) {
-    this.counter++;
-    if (this.counter >= batchTotal) {
-      this.hasLoaded.set(true);
-      this.isLoadingMore = false;
-      this.counter = 0;
-      this.commentsLoaded.emit();
-      this.cd.detectChanges();
-    }
   }
 
   prependSignalRComment(newComment: CommentDto) {

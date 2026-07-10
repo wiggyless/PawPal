@@ -4,6 +4,7 @@ using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.FileProviders;
 using PawPal.API;
 using PawPal.API.Middleware;
 using PawPal.Application;
@@ -54,7 +55,7 @@ public partial class Program
             builder.Services.AddScoped<ICommentHubService, CommentHubService>();
             builder.Services.AddScoped<IMessageHubService, MessageHubService>();
             builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
-
+            builder.Services.AddValidatorsFromAssemblyContaining<Program>();
             builder.Services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
             {
              
@@ -163,13 +164,17 @@ public partial class Program
             });
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
                 {
                     ctx.Context.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:4200";
                     ctx.Context.Response.Headers["Access-Control-Allow-Credentials"] = "true";
-                }
+                },
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(builder.Environment.ContentRootPath, "wwwroot/Static")),
+                RequestPath = "/StaticImages"
             });
 
             app.UseAuthentication();

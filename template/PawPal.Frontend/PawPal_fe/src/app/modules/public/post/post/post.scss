@@ -248,7 +248,7 @@
 
   &:hover:not(:disabled) {
     background-color: rgb(62, 47, 28);
-    transform: translateY(-50%) scale(1.1); 
+    transform: translateY(-50%) scale(1.1);
 
     mat-icon {
       color: rgb(243, 233, 219);
@@ -291,4 +291,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.info-text-wrapper {
+  display: flex;
+  flex-direction: row;
+  column-gap: 5px;
 }
