@@ -24,7 +24,7 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
             var user = await context.Users.
                 Include(x =>x.City).
                 Include(x=>x.City.Canton).
-                Where(a => a.Id == request.Id && !a.isUserDisabled).
+                Where(a => a.Id == request.Id && (currUser.RoleId == 3 ? true : !a.isUserDisabled)).
                 Select(x => new GetUserByIdQueryDto
                 {
      
@@ -39,8 +39,9 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
                     Username = x.Username,
                     AboutMe = x.AboutMe,
                     PhotoURL =userImage.PhotoURL,
+                    Disabled = x.isUserDisabled,
                 }).FirstOrDefaultAsync(cancellationToken);
-            if (user == null) throw new PawPalNotFoundException($"User with Id {request.Id} does not exist");
+            if (user == null) throw new PawPalNotFoundException($"User with Id {request.Id} is either disabled or deleted");
             return user;
         }
     }

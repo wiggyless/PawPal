@@ -14,6 +14,8 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Up
         public async Task<Unit> Handle(UpdateAnimalHealthHistoryCommand request, CancellationToken cancellationToken)
         {
             var healthHistory = await context.AnimalHealthHistories.FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
+            var animalAllergies = await context.AnimalsAllergies.Where(x => x.AnimalHealthHistoryId == healthHistory.Id).ToListAsync(cancellationToken);
+            var animalDisabilities = await context.AnimalsDisabilities.Where(x => x.AnimalHealthHistoryId == healthHistory.Id).ToListAsync(cancellationToken);
             if (healthHistory == null)
                 throw new PawPalNotFoundException($"Animal health history with Id {request.Id} does not exist!");
 
@@ -28,73 +30,55 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Up
             healthHistory.SpayedOrNeutered = request.SpayedOrNeutered;
             healthHistory.DietaryRestrictions = request.DietaryRestrictions;
 
-            var allergies = new List<AllergiesEntity>();
-            var disabilities = new List<DisabilitiesEntity>();
+            var allergies = new List<int>();
+            var disabilities = new List<int>();
 
             //validacija da li je korisnik unio ispravne alergije i poremecaje
+                
+            if(request.Allergies.Count != 0)
+            {
                 foreach (var a in request.Allergies)
                 {
-                    var allergy = await context.Allergies.Where(x =>
-                    x.Name.ToLower().Contains(a.AllergyName.ToLower())).FirstOrDefaultAsync(cancellationToken);
+
+                    var allergy =  context.Allergies.AsNoTracking().FirstOrDefault(x =>
+                    x.Name.ToLower() == a.AllergyName.ToLower());
                     if (allergy == null)
                         throw new PawPalNotFoundException($"This allergy does not exist in our database!");
-                    allergies.Add(allergy);
+                    allergies.Add(allergy.Id);
                 }
-            
-            foreach(var d in request.Disabilities)
-            {
-                var disability = await context.Disabilities.Where(x =>
-               x.Name.ToLower().Contains(d.DisabilityName.ToLower())).FirstOrDefaultAsync(cancellationToken);
-                if (disability == null)
-                    throw new PawPalNotFoundException($"This disability does not exist in our database!");
-                disabilities.Add(disability);
             }
-
-            //brisanje starih pohranjenih alergija i poremecaja iz baze, jer ako dodamo nove a ne izbrisemo stare
-            //onda ce nam se i stari pokazivati
-            if (request.Allergies.Count >= 0)
+            if(request.Disabilities.Count != 0)
             {
-                var animalAllergies = await context.AnimalsAllergies.Where(x => x.AnimalHealthHistoryId == healthHistory.Id).ToListAsync(cancellationToken);
-                foreach (var aa in animalAllergies)
-                    aa.IsDeleted = true;
-                await context.SaveChangesAsync(cancellationToken);
-            }
-
-            if (request.Disabilities.Count >= 0)
-            {
-                var animalDisabilities = await context.AnimalsDisabilities.Where(x => x.AnimalHealthHistoryId == healthHistory.Id).ToListAsync(cancellationToken);
-                foreach (var ad in animalDisabilities)
-                    ad.IsDeleted = true;
-                await context.SaveChangesAsync(cancellationToken);
-            }
-
-            //dodavanje novih
-            foreach (var a in allergies)
-            {
-                var newAnimalAllergy = new AllergiesAnimalHealthHistory
+                foreach (var d in request.Disabilities)
                 {
-                    AllergyId = a.Id,
-                    Allergy = a,
-                    AnimalHealthHistoryId = healthHistory.Id,
-                    AnimalHealthHistory = healthHistory
-                };
-                context.AnimalsAllergies.Add(newAnimalAllergy);
+                    var disability =  context.Disabilities.AsNoTracking().FirstOrDefault(x =>
+                    x.Name.ToLower() == d.DisabilityName.ToLower());
+                    if (disability == null)
+                        throw new PawPalNotFoundException($"This disability does not exist in our database!");
+                    disabilities.Add(disability.Id);
+                }
             }
+            var toRemoveAllergies = animalAllergies.Where(x => !allergies.Contains(x.Id));
+            var toRemoveDisablities = animalDisabilities.Where(x => !disabilities.Contains(x.Id));
+            var toBeAddedAllergies = allergies.Where(x => !animalAllergies.Select(y => y.Id).Contains(x));
+            var toBeAddedDisabilities = disabilities.Where(x => !animalDisabilities.Select(y => y.Id).Contains(x));
 
-            await context.SaveChangesAsync(cancellationToken);
-
-            foreach (var d in disabilities)
+            foreach(var rmv in toRemoveAllergies)
             {
-                var newAnimalDisability = new DisabilitiesAnimalHealthHistory
-                {
-                    DisabilityId = d.Id,
-                    Disability = d,
-                    AnimalHealthHistoryId = healthHistory.Id,
-                    AnimalHealthHistory = healthHistory
-                };
-                context.AnimalsDisabilities.Add(newAnimalDisability);
+                context.AnimalsAllergies.Remove(rmv);
             }
-
+            foreach (var dib in toRemoveDisablities)
+            {
+                context.AnimalsDisabilities.Remove(dib);
+            }
+            foreach (var all in toBeAddedAllergies)
+            {
+                context.AnimalsAllergies.Add(new AllergiesAnimalHealthHistory { AllergyId = all, AnimalHealthHistoryId = healthHistory.Id });
+            }
+            foreach (var dib in toBeAddedDisabilities)
+            {
+                context.AnimalsDisabilities.Add(new DisabilitiesAnimalHealthHistory { DisabilityId = dib,AnimalHealthHistoryId = healthHistory.Id });
+            }
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
 

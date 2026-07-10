@@ -62,7 +62,9 @@
                 <div class="post-information-pet-info">
                   <div class="post-information-pet-attributes">
                     @for (ani of animal | keyvalue: keepOrder; track ani.key) {
-                      <p>{{ ani.key.charAt(0).toUpperCase() + ani.key.slice(1) }}:</p>
+                      <p>
+                        {{ ani.key.charAt(0).toUpperCase() + ani.key.slice(1).replace('_', ' ') }}:
+                      </p>
                     }
                     <p>Vaccinated:</p>
                     <p>Sprayed:</p>
@@ -73,7 +75,13 @@
                   <div class="straight-border"></div>
                   <div class="post-information-pet-attributes-values">
                     @for (ani of animal | keyvalue: keepOrder; track ani.key) {
-                      <p>{{ ani.value }}</p>
+                      @if (ani.value.toString() == 'false') {
+                        <p><mat-icon>close</mat-icon></p>
+                      } @else if (ani.value.toString() == 'true') {
+                        <p><mat-icon>check</mat-icon></p>
+                      } @else {
+                        <p>{{ ani.value }}</p>
+                      }
                     }
                     @if (!animalHealth.vaccinated) {
                       <p><mat-icon>close</mat-icon></p>
@@ -97,8 +105,18 @@
                 <div class="post-information-pet-add-info">
                   <p class="post-information-pet-add-info-label">Additional information</p>
                   <div class="post-information-pet-add-info-text">
-                    <p>Allergies: {{ animalHealth.animalAllergies }}</p>
-                    <p>Disabilities: {{ animalHealth.animalDisabilities }}</p>
+                    <div class="info-text-wrapper">
+                      <p style="font-weight: bold">Allergies:</p>
+                      @for (all of animalHealth.animalAllergies; track all) {
+                        <p>{{ all.allergyName + ', ' }}</p>
+                      }
+                    </div>
+                    <div class="info-text-wrapper">
+                      <p style="font-weight: bold">Disabilities:</p>
+                      @for (all of animalHealth.animalDisabilities; track all) {
+                        <p>{{ all.disabilityName + ', ' }}</p>
+                      }
+                    </div>
                   </div>
                 </div>
               </div>

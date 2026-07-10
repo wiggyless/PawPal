@@ -41,7 +41,7 @@ export class ReportedComments implements OnInit, OnDestroy {
   request: GetUserReportQuery = {
     paging: {
       page: 1,
-      pageSize: 10,
+      pageSize: 4,
     },
   };
   datePicker = new FormGroup({

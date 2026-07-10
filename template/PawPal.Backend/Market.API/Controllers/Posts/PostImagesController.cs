@@ -14,37 +14,60 @@ namespace PawPal.API.Controllers.Posts
 
     [ApiController]
     [Route("[controller]")]
-    public class PostImagesController(ISender sender, IWebHostEnvironment env,IAppDbContext context) : ControllerBase
+    public class PostImagesController(ISender sender, IWebHostEnvironment env, IAppDbContext context) : ControllerBase
     {
-        [AllowAnonymous]
+        private static readonly HashSet<string> AllowedExtensions = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ".jpg", ".jpeg", ".png", ".webp"
+    };
+        private const long MaxFileSizeBytes = 10 * 1024 * 1024; // 10 MB per file
+
         [HttpPost]
-        public async Task<int> CreatePost([FromForm]CreatePostImageCommand command, CancellationToken cancellationToken)
+        public async Task<ActionResult<int>> CreatePost([FromForm] CreatePostImageCommand command, CancellationToken cancellationToken)
         {
+            foreach (var file in command.PostImages)
+            {
+                var ext = Path.GetExtension(file.FileName);
+                if (!AllowedExtensions.Contains(ext))
+                {
+                    return BadRequest($"File type '{ext}' is not allowed.");
+                }
+                if (file.Length > MaxFileSizeBytes)
+                {
+                    return BadRequest($"File '{file.FileName}' exceeds the {MaxFileSizeBytes / 1024 / 1024}MB limit.");
+                }
+            }
+
             int id = await sender.Send(command, cancellationToken);
+
             var subFolder = "posts";
             string root = env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
             string storeFileDirectory = Path.Combine(root, subFolder, "Post_" + command.PostId);
 
             if (!Directory.Exists(storeFileDirectory))
-            { 
+            {
                 Directory.CreateDirectory(storeFileDirectory);
             }
-            foreach (var file in command.PostImages)
 
+            var savedRelativePaths = new List<string>();
+
+            foreach (var file in command.PostImages)
             {
                 string safeFileName = Path.GetFileName(file.FileName);
-                string route = Path.Combine(storeFileDirectory, safeFileName);
-                using (var ms = new MemoryStream())
-                {
-                    using (var stream = new FileStream(route, FileMode.Create))
+                string fullPath = Path.Combine(storeFileDirectory, safeFileName);
 
-                    {
-                        await file.CopyToAsync(stream, cancellationToken);
-                    }
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream, cancellationToken);
                 }
-                var fileLocation = Path.Combine(subFolder, file.FileName).Replace("\\", "/");
+
+                string relativePath = Path.Combine(subFolder, "Post_" + command.PostId, safeFileName)
+                    .Replace("\\", "/");
+                savedRelativePaths.Add(relativePath);
             }
-            return id;
+
+
+            return Ok(id);
         }
         [AllowAnonymous]
         [HttpGet("{id:int}")]

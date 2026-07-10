@@ -639,11 +639,14 @@
       }
     </mat-step>
   </mat-stepper>
-  @if (isUploadingImages) {
+  @if (isUploadingImages()) {
     <div class="upload-overlay-backdrop">
       <div class="progress-card">
-        <p class="upload-status-text">Uploading animal photos...</p>
-
+        @if (!isFinalizing()) {
+          <p class="upload-status-text">Uploading animal photos...</p>
+        } @else {
+          <p class="upload-status-text">Finalizing...</p>
+        }
         <div class="percentage-display">{{ uploadProgress }}%</div>
 
         <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>

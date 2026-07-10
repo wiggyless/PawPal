@@ -5,7 +5,7 @@
   </head>
   <body class="main-page-layout">
     <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
-    <div class="header">
+    <div class="header" [style.background-image]="`url(${myBackgroundImage})`">
       <p>NEED A NEW MEMBER OF YOUR FAMILY?</p>
       <span
         >Connect with animal lovers across Bosnia and Herzegovina with our services and adopt an
@@ -19,7 +19,6 @@
               class="sel"
               placeholder="Select an animal category"
               [(ngModel)]="selectedCategory"
-              (valueChange)="showCategory()"
             >
               @for (cat of animalCategories?.items; track cat) {
                 <mat-option [value]="cat.categoryName">{{ cat.categoryName }}</mat-option>

@@ -26,10 +26,7 @@ import { AnimalPostService } from '../../../api-services/animal-posts/animal-pos
 import { ListAnimalBreedQueryDto } from '../../../api-services/animal-breed/animal-breed.model';
 import { AllergyService } from '../../../api-services/allergies/allergy-service';
 import { DisabilityService } from '../../../api-services/disabilities/disability-service';
-import {
-  AnimalCategoryByIdQueryDto,
-  ListAnimalCategoriesQueryDto,
-} from '../../../api-services/animal-categories/animal-categories.model';
+import { ListAnimalCategoriesQueryDto } from '../../../api-services/animal-categories/animal-categories.model';
 import {
   AddAnimalHealthHistory,
   UpdateHealthHistory,
@@ -43,7 +40,6 @@ import {
   DisabilitiesDto,
   ListDisabilitiesQueryDto,
 } from '../../../api-services/disabilities/disability-model';
-import { CreatePostDialog } from './create-post-dialog/create-post-dialog/create-post-dialog';
 import { base64ToBlobUrl } from '../../shared/utils/image-utils';
 import { HttpEventType } from '@angular/common/http';
 import imageCompression from 'browser-image-compression';
@@ -111,6 +107,7 @@ export class CreatePost implements OnInit {
     mainInfo: this.secondFormGroup,
     healthInfo: this.thridFormGroup,
   });
+  isFinalizing = signal(false);
 
   get imagesL() {
     return this.firstFormGroup.get('firstCtrl') as FormArray;
@@ -144,12 +141,11 @@ export class CreatePost implements OnInit {
   selectedMainImage: string = '';
 
   // --- Misc UI state ---
-  isDateRequired: boolean = true;
   currentDate: string = new Date().toLocaleDateString();
   secondStep = signal(false);
   newImage = true;
   isDragging = false;
-  isUploadingImages = false;
+  isUploadingImages = signal(false);
   uploadProgress = 0;
   env = environment.apiUrl;
 
@@ -248,14 +244,15 @@ export class CreatePost implements OnInit {
         this.applyCommonLookups(results);
         this.secondFormGroup.patchValue(results.posts);
         this.thridFormGroup.patchValue({
-          allergyCtrl: results.health.animalAllergies,
+          allergyCtrl: results.health.animalAllergies.map((x) => x.allergyName),
           allergyCheck: !!results.health.animalAllergies.toString(),
-          disCtrl: results.health.animalDisabilities,
+          disCtrl: results.health.animalDisabilities.map((x) => x.disabilityName),
           disCheck: !!results.health.animalDisabilities.toString(),
           vaccineCheck: results.health.vaccinated,
           parasiteCheck: results.health.parasiteFree,
           sterCheck: results.health.spayedOrNeutered,
         });
+        this.setGender();
         this.getBreedSelect();
         this.loadBlob(results.images);
       },
@@ -263,7 +260,6 @@ export class CreatePost implements OnInit {
     });
   }
 
-  // --- Image handling ---
   async showImages(event: any): Promise<void> {
     const files = event.target.files;
     const compressionOptions = {
@@ -317,9 +313,7 @@ export class CreatePost implements OnInit {
       this.selectedMainImageIndex = null;
       this.selectedMainImage = '';
     }
-    if (!this.isUpdate) {
-      this.imgFileList.splice(index, 1);
-    }
+    this.imgFileList.splice(index, 1);
     this.imageControls.splice(index, 1);
     this.firstFormGroup.updateValueAndValidity();
   }
@@ -408,7 +402,6 @@ export class CreatePost implements OnInit {
           (disability) => new DisabilitiesDto(disability),
         ),
       };
-
       const updateAnimal = this.fourthFromGroup.value.mainInfo as UpdateAnimalDto;
       updateAnimal.gender = this.genderEnum[this.secondFormGroup!.value.genderID as number];
       updateAnimal.category = this.selectedCategory.categoryName;
@@ -417,7 +410,7 @@ export class CreatePost implements OnInit {
         postId: this.routePostID,
         postImages: this.imgFileList,
       };
-
+      console.log(newPostIamge);
       forkJoin({
         animals: this.animalService.updateAnimal(updateAnimal, this.routeAnimalID),
         health: this.healthHistory.updateAnimalHealthHistory(updateHealth, healthHistoryID),
@@ -474,10 +467,10 @@ export class CreatePost implements OnInit {
         }),
         switchMap(() => this.postService.addPost(newPost)),
         switchMap((postResponse) => {
-          this.isUploadingImages = true;
+          this.isUploadingImages.set(true);
+          this.isFinalizing.set(false);
           this.uploadProgress = 0;
           this.cd.detectChanges();
-
           newPostIamge.postId = postResponse.id;
           return this.postImages.createPostImages(newPostIamge);
         }),
@@ -485,22 +478,31 @@ export class CreatePost implements OnInit {
       .subscribe({
         next: (event: any) => {
           if (event.type === HttpEventType.UploadProgress && event.total) {
-            this.uploadProgress = Math.round((100 * event.loaded) / event.total);
+            if (this.uploadProgress >= 100) {
+              this.isUploadingImages.set(false);
+              this.isFinalizing.set(true);
+            }
             this.cd.detectChanges();
           } else if (event.type === HttpEventType.Response) {
             this.uploadProgress = 100;
+            this.isFinalizing.set(false);
             this.cd.detectChanges();
-
             setTimeout(() => {
-              this.isUploadingImages = false;
+              this.isUploadingImages.set(false);
+              this.isFinalizing.set(false);
               this.cd.detectChanges();
-              this.dialog.success('Post Created', 'Your post has been created successfully. You can now view it on the catalog!', 'OK');
+              this.dialog.success(
+                'Post Created',
+                'Your post has been created successfully. You can now view it on the catalog!',
+                'OK',
+              );
               this.nextRoute.navigate(['']);
             }, 1500);
           }
         },
         error: (err) => {
-          this.isUploadingImages = false;
+          this.isUploadingImages.set(false);
+          this.isFinalizing.set(false);
           console.error('Something went wrong while creating the post:', err);
         },
       });
