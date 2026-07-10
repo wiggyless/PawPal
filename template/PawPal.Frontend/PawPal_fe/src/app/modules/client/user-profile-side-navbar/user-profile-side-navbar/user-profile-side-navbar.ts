@@ -27,7 +27,6 @@ export class UserProfileSideNavbar implements OnInit {
   destroyRef = inject(DestroyRef);
   url = signal('');
   ngOnInit(): void {
-    console.log('SEL ITEM ->>>> ' + this.selItem);
     this.url.set(this.selItem as string);
     this.trackRouteChanges();
   }

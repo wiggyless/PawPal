@@ -31,4 +31,8 @@
     <ProjectReference Include="..\Market.Shared\PawPal.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Static\" />
+  </ItemGroup>
+
 </Project>

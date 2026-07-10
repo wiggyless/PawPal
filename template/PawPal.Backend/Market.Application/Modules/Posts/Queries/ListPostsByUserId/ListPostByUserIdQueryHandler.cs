@@ -16,10 +16,10 @@ namespace PawPal.Application.Modules.Posts.Queries.ListPostsByUserId
             postList = postList.Where(x=>x.UserId == request.UserId);
             var finalList = postList.OrderBy(x => x.AnimalID).Select(x => new ListPostByUserIdQueryDto
             {
-                AnimalName = x.Animal.Name,
-                UserId = x.UserId,
-                PostId = x.Id,
-                FirstImage = (postImagesList.FirstOrDefault(y => y.PostId == x.Id).MainImage == null)?"": 
+                Name = x.Animal.Name,
+                UserID = x.UserId,
+                PostID = x.Id,
+                MainImage = (postImagesList.FirstOrDefault(y => y.PostId == x.Id).MainImage == null)?"": 
                 postImagesList.FirstOrDefault(y => y.PostId == x.Id).MainImage,
                 AnimalID = x.AnimalID,
                 CityID = x.CityId,

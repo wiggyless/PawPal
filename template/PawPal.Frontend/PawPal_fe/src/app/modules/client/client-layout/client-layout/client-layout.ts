@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
-import { Router, NavigationEnd, Event } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
