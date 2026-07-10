@@ -51,7 +51,7 @@ export class Messaging implements OnInit, OnDestroy, AfterViewChecked {
     private messagingService: MessagingService,
     private signalRService: SignalRService,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadConversations();
@@ -122,25 +122,28 @@ export class Messaging implements OnInit, OnDestroy, AfterViewChecked {
         }
         let counter = 0;
         convos.forEach((convo) => {
+          const checkDone = () => {
+            counter++;
+            if (counter >= convos.length) {
+              this.conversations = convos;
+              if (this.selectedConversation) {
+                const updated = convos.find(
+                  (c) => c.conversationId === this.selectedConversation!.conversationId,
+                );
+                if (updated) this.selectedConversation = updated;
+              }
+              this.cd.detectChanges();
+            }
+          };
           this.userImgService.getUserImageByID(convo.otherUserId).subscribe({
             next: (safeUrl) => {
               convo.imageData = safeUrl;
+              checkDone();
             },
-            error: () => {
+            error: (err) => {
+              console.error('Image load failed for user', convo.otherUserId, err);
               convo.imageData = '';
-            },
-            complete: () => {
-              counter++;
-              if (counter >= convos.length) {
-                this.conversations = convos;
-                if (this.selectedConversation) {
-                  const updated = convos.find(
-                    (c) => c.conversationId === this.selectedConversation!.conversationId,
-                  );
-                  if (updated) this.selectedConversation = updated;
-                }
-                this.cd.detectChanges();
-              }
+              checkDone();
             },
           });
         });
@@ -227,7 +230,7 @@ export class Messaging implements OnInit, OnDestroy, AfterViewChecked {
     try {
       this.messagesContainer.nativeElement.scrollTop =
         this.messagesContainer.nativeElement.scrollHeight;
-    } catch {}
+    } catch { }
   }
 
   ngOnDestroy() {

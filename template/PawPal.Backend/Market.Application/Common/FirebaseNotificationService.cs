@@ -4,9 +4,9 @@ using FcmNotification = FirebaseAdmin.Messaging.Notification;
 
 namespace PawPal.Application.Services;
 
-public class FirebaseNotificationService
+public class FirebaseNotificationService : IFirebaseNotificationService
 {
-    public async Task SendAsync(string fcmToken, string title, string body, string redirectUrl)
+    public async Task SendAsync(string fcmToken, string title, string body, string redirectUrl) 
     {
         var message = new FcmMessage
         {

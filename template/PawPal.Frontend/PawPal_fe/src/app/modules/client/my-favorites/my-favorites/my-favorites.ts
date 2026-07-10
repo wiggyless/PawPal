@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/c
 import { BaseListPagedComponent } from '../../../../core/components/base-classes/base-list-paged-component';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { Observable, Subscription, tap } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { ListAnimal, GetPostQuery } from '../../../../api-services/animal-posts/animal-posts.model';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
@@ -22,7 +22,6 @@ export class MyFavorites
   implements OnInit
 {
   animalPostsService = inject(AnimalPostService);
-  //favoritesService = inject(LikedPostsService);
   animalPostList: Observable<PageResult<ListAnimal>> | undefined;
   currentUser = inject(CurrentUserService);
   postImages = inject(PostImagesService);
@@ -35,9 +34,6 @@ export class MyFavorites
     this.request = new GetPostQuery();
     this.request.paging.pageSize = 4;
   }
-  //likedPostQuery: GetLikedPostListQuery = {
-  //}
-  //listPostRange: ListPostsByRange|undefined;
   isLoaded = false;
   protected override loadPagedData(): void {}
 
@@ -49,7 +45,7 @@ export class MyFavorites
     totalPages: 0,
     pageSizeOption: [4, 8],
   };
-  //images Var
+
   catalogImages: GetMainImagePostBlobClass[] = [];
   tempList: number[] = [];
   imagesLoaded = signal(false);
@@ -90,49 +86,4 @@ export class MyFavorites
   getPostImage(imagePath: string) {
     return this.sanitizer.bypassSecurityTrustUrl(this.envLink.apiUrl + imagePath);
   }
-  // images Shit RAAAAAAAAAAAAAAAAAH
-  /*
-
-  loadPostImages(idList: ListAnimal[]): void {
-    idList.forEach((element) => {
-      this.tempList.push(element.postID);
-    });
-    this.postImages.getMainImagePostBlob(this.tempList).subscribe((response) => {
-      this.setImages(response);
-    });
-  }
-  setImages(blobList: GetMainImagePostBlob[]): void {
-    blobList.forEach((x) => {
-      if (x.mainImage != '') {
-        const byteCharacters = atob(x.mainImage);
-        const byteNumbers = new Array(byteCharacters.length);
-
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-        let mimeType = 'image/png';
-        if (byteArray.length > 4) {
-          const header = byteArray.slice(0, 4);
-          let headerHex = '';
-          for (let i = 0; i < header.length; i++) {
-            headerHex += header[i].toString(16).toUpperCase();
-          }
-          if (headerHex.startsWith('89504E47')) {
-            mimeType = 'image/png';
-          } else if (headerHex.startsWith('FFD8FF')) {
-            mimeType = 'image/jpeg';
-          }
-        }
-        const blob = new Blob([byteArray], { type: mimeType });
-
-        const imageUrl = URL.createObjectURL(blob);
-        this.catalogImages.push(new GetMainImagePostBlobClass(x.postID, imageUrl));
-      }
-    });
-    this.imagesLoaded = true;
-    this.cd.detectChanges();
-  }
-    */
 }

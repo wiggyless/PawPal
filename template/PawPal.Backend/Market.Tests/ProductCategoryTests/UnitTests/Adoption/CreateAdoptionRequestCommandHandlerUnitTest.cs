@@ -10,7 +10,7 @@ using PawPal.Domain.Entities.Posts;
 public class CreateAdoptionRequestCommandHandlerTests
 {
     private readonly DatabaseContext _context;
-    private readonly Mock<FirebaseNotificationService> _notificationMock;
+    private readonly Mock<IFirebaseNotificationService> _notificationMock;
     private readonly Mock<IAppCurrentUser> _currentUserMock;
     private readonly CreateAdoptionRequestCommandHandler _sut;
 
@@ -19,9 +19,9 @@ public class CreateAdoptionRequestCommandHandlerTests
         var options = new DbContextOptionsBuilder<DatabaseContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
-        _context = new DatabaseContext(options,TimeProvider.System);
+        _context = new DatabaseContext(options, TimeProvider.System);
 
-        _notificationMock = new Mock<FirebaseNotificationService>();
+        _notificationMock = new Mock<IFirebaseNotificationService>();
         _currentUserMock = new Mock<IAppCurrentUser>();
 
         _sut = new CreateAdoptionRequestCommandHandler(
@@ -37,7 +37,15 @@ public class CreateAdoptionRequestCommandHandlerTests
         var post = new PostsEntity { Id = 10, UserId = owner.Id, AnimalID = 1, Status = "Available", DateAdded = DateTime.Now };
         _context.Posts.Add(post);
 
-        var req = new AdoptionRequirementEntity { Id = 100, HouseType = "Apartment" , PeopleAva="Always"};
+        var req = new AdoptionRequirementEntity
+        {
+            Id = 100,
+            HouseType = "Apartment",
+            PeopleAva = "Always",
+            Address = "123 Test St",
+            HouseDetials = "2 bedroom apartment",
+            PlanedStay = "Long term"
+        };
         _context.AdoptionRequirements.Add(req);
 
         await _context.SaveChangesAsync();

@@ -4,7 +4,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.UpdateSt
 
 public sealed class UpdateAdoptionStatusCommandHandler(
     IAppDbContext context,
-    FirebaseNotificationService firebaseNotificationService,
+    IFirebaseNotificationService firebaseNotificationService,
     IEmailService emailService)
     : IRequestHandler<UpdateAdoptionStatusCommand>
 {

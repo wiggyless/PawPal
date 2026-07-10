@@ -55,6 +55,7 @@ export class PostComponent implements OnInit, OnDestroy {
   postSub: Subscription | undefined;
   animalSub: Subscription | undefined;
   togetherSub: Subscription | undefined;
+  
   animalHealth: GetAnimalsHealthByIdDto = {
     animalHealthHistoryId: 0,
     animalId: 0,

@@ -238,18 +238,13 @@ export class CatalogComponent
         this.deleteFavoritePostList.push(index);
         this.likedPosts
           .deletePost({ userId: this.currentUser.userId() as number, postId: index })
-          .subscribe((response) => {
-            console.log('Unliked');
-          });
+          .subscribe();
       } else {
         console.log(index);
         this.favoritePostList.push(index);
         this.likedPosts
           .addLikedPosts({ userID: this.currentUser.userId() as number, postID: index })
-          .subscribe((response) => {
-            console.log('LIKED POST');
-            console.log(response);
-          });
+          .subscribe();
       }
     }
   }
