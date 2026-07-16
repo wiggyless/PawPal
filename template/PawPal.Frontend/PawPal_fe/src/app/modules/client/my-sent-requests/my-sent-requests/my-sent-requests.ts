@@ -17,6 +17,7 @@ import { PostImagesService } from '../../../../api-services/animal-post-images/a
 import { MySentRequestDialog } from '../my-sent-request-dialog/my-sent-request-dialog/my-sent-request-dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PageEvent } from '@angular/material/paginator';
+import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 
 @Component({
   selector: 'app-my-requests',
@@ -32,6 +33,7 @@ export class MySentRequests implements OnInit, OnDestroy {
   animalApi = inject(AnimalService);
   postImages = inject(PostImagesService);
   dialog = inject(MatDialog);
+  dialogConfirm = inject(DialoguePopupService);
   sanitizer = inject(DomSanitizer);
 
   cantonsList: any = [];
@@ -101,4 +103,11 @@ export class MySentRequests implements OnInit, OnDestroy {
     this.requestQuery.paging.pageSize = event.pageSize;
     this.loadRequest();
   }
+
+
+  deleteRequest(request: GetAdoptionRequestList) {
+    this.dialogConfirm.warning("Delete your request?", "Are you sure you want to delete this request? This action cannot be undone.", "Delete", "Cancel", () => {
+    this.myRequestApi.deleteRequest(request.requestId).subscribe();
+  });
+}
 }

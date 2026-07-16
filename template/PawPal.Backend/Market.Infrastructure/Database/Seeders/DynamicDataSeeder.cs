@@ -349,7 +349,6 @@ public static class DynamicDataSeeder
     private static async Task SeedCitiesAsync(DatabaseContext ct)
     {
         if (await ct.Cities.AnyAsync()) return;
-        //ovo je dodani kako ne bi hardkodirali vrijednosti i time sprjecavamo eventualne errore u buducnosti
         var usk = await ct.Cantons.Where(x => x.FullName == "Unsko-Sanski").FirstOrDefaultAsync();
         var hnk = await ct.Cantons.Where(x => x.FullName == "Hercegovačko-neretvanski kanton").FirstOrDefaultAsync();
         var zdk = await ct.Cantons.Where(x => x.FullName == "Zeničko-dobojski kanton").FirstOrDefaultAsync();
