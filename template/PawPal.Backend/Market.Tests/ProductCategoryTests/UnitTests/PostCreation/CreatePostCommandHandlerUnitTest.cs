@@ -34,7 +34,7 @@ public class CreatePostCommandHandlerUnitTest
 
     private async Task<AnimalEntity> SeedAnimalAsync(int id = 1)
     {
-        var animal = new AnimalEntity { Id = id /* + any other required fields */ };
+        var animal = new AnimalEntity { Id = id  };
         _context.Animals.Add(animal);
         await _context.SaveChangesAsync();
         return animal;
@@ -49,7 +49,6 @@ public class CreatePostCommandHandlerUnitTest
     [Fact]
     public async Task Handle_ShouldCreatePost_WhenRequestIsValid()
     {
-        // Arrange
         var user = await SeedUserAsync();
         var animal = await SeedAnimalAsync();
         SetupAuthorizedUser();
@@ -60,10 +59,9 @@ public class CreatePostCommandHandlerUnitTest
             AnimalID = animal.Id
         };
 
-        // Act
+  
         var result = await _sut.Handle(command, CancellationToken.None);
 
-        // Assert
         Assert.True(result > 0);
         var saved = await _context.Posts.FirstOrDefaultAsync(p => p.Id == result);
         Assert.NotNull(saved);
@@ -93,7 +91,7 @@ public class CreatePostCommandHandlerUnitTest
         var user = await SeedUserAsync();
         var animal = await SeedAnimalAsync();
 
-        _currentUserMock.SetupGet(x => x.RoleId).Returns(1); // not the required role
+        _currentUserMock.SetupGet(x => x.RoleId).Returns(1);
         _currentUserMock.SetupGet(x => x.IsAuthenticated).Returns(true);
 
         var command = new CreatePostCommand { UserId = user.Id, AnimalID = animal.Id };
@@ -104,9 +102,6 @@ public class CreatePostCommandHandlerUnitTest
     [Fact]
     public async Task Handle_ShouldThrowNullReference_WhenAnimalDoesNotExist()
     {
-        // NOTE: this documents CURRENT buggy behavior.
-        // Once you move the null-check above the health-history query,
-        // change this to expect PawPalNotFoundException instead.
         var user = await SeedUserAsync();
         SetupAuthorizedUser();
 
@@ -137,7 +132,7 @@ public class CreatePostCommandHandlerUnitTest
         var user = await SeedUserAsync();
         var animal = await SeedAnimalAsync();
 
-        var health = new AnimalHealthHistoryEntity { AnimalId = animal.Id /* + other required fields */ };
+        var health = new AnimalHealthHistoryEntity { AnimalId = animal.Id, Vaccinated = false, ParasiteFree = true,SpayedOrNeutered = false, DietaryRestrictions = "none" };
         _context.AnimalHealthHistories.Add(health);
         await _context.SaveChangesAsync();
 
