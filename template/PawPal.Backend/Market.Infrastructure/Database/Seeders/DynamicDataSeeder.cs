@@ -1,18 +1,23 @@
 ﻿using Market.Infrastructure.Database;
+using MediatR;
 using Microsoft.AspNetCore.Connections.Features;
+using Microsoft.AspNetCore.Hosting;
 using PawPal.Application.Abstractions;
+using PawPal.Application.Modules.PostImages.Commands.Create;
 using PawPal.Domain.Entities.Animal_Info;
 using PawPal.Domain.Entities.Animal_Info.ManyToMany;
 using PawPal.Domain.Entities.Identity;
 using PawPal.Domain.Entities.Places;
-
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using MediatR;
+using PawPal.Domain.Entities.Posts;
 namespace PawPal.Infrastructure.Database.Seeders;
 
 public static class DynamicDataSeeder
 {
-    public static async Task SeedAsync(DatabaseContext context)
+    public static async Task SeedAsync(DatabaseContext context, ISender sender, IWebHostEnvironment env)
     {
-        // Osiguraj da baza postoji (bez migracija)
         await context.Database.EnsureCreatedAsync();
 
         await SeedCantonsAsync(context);
@@ -21,11 +26,13 @@ public static class DynamicDataSeeder
         await SeedUsersAsync(context);
         await SeedAnimalCategoriesAsync(context);
         await SeedGendersAsync(context);
-        await SeedAnimalsAsync(context);
         await SeedBreedsAsync(context);
         await SeedAllergiesAsync(context);
         await SeedDisabilitiesAsync(context);
+        await SeedAnimalsAsync(context, sender, env);
         await SeedAnimalHealthHistoriesAsync(context);
+
+
     }
     private static async Task SeedUsersAsync(DatabaseContext context)
     {
@@ -109,76 +116,7 @@ public static class DynamicDataSeeder
         context.Genders.AddRange(male, female);
         await context.SaveChangesAsync();
     }
-    private static async Task SeedAnimalsAsync(DatabaseContext context)
-    {
-        if (await context.Animals.AnyAsync())
-            return;
-
-        var femaleGender = await context.Genders.Where(x => x.GenderName.ToLower() == "female").FirstOrDefaultAsync();
-        var maleGender = await context.Genders.Where(x => x.GenderName.ToLower() == "male").FirstOrDefaultAsync();
-
-
-
-        var cat = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "cat").FirstOrDefaultAsync();
-        var dog = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "dog").FirstOrDefaultAsync();
-        var rabbit = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "rabbit").FirstOrDefaultAsync();
-        var fish = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "fish").FirstOrDefaultAsync();
-        var bird = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "bird").FirstOrDefaultAsync();
-
-        if (femaleGender != null && maleGender != null)
-        {
-            var krompir = new AnimalEntity
-            {
-                Name = "Krompir",
-                Breed = "British Shorthair",
-                Age = 2,
-                GenderId = femaleGender.Id,
-                ChildFriendly = true,
-                HasPapers = false,
-                CategoryId = cat.Id,
-            };
-
-            var kiki = new AnimalEntity
-            {
-                Name = "Kiki",
-                Breed = "German Shepherd",
-                Age = 1,
-                GenderId = femaleGender.Id,
-                ChildFriendly = false,
-                HasPapers = false,
-                CategoryId = dog.Id,
-            };
-
-            var loona = new AnimalEntity
-            {
-                Name = "Loona",
-                Breed = "Budgie",
-                Age = 1,
-                GenderId = femaleGender.Id,
-                ChildFriendly = true,
-                HasPapers = false,
-                CategoryId = bird.Id
-            };
-
-            var evilbnuy = new AnimalEntity
-            {
-                Name = "World Eater",
-                Breed = "Dwarf Rabbit",
-                Age = 5,
-                GenderId = maleGender.Id,
-                ChildFriendly = false,
-                HasPapers = true,
-                CategoryId = rabbit.Id
-            };
-            context.Animals.AddRange(krompir, kiki, loona, evilbnuy);
-        }
-        
-
-        await context.SaveChangesAsync();
-
-        Console.WriteLine("✅ Dynamic seed: Animals added.");
-
-    }
+  
     private static async Task SeedAllergiesAsync(DatabaseContext context)
     {
         if (await context.Allergies.AnyAsync())
@@ -244,6 +182,9 @@ public static class DynamicDataSeeder
             return;
 
         var krompir = await context.Animals.Where(x => x.Name.ToLower().Contains("krompir")).FirstOrDefaultAsync();
+        var allergies = context.Allergies.AsNoTracking().ToList();
+        var disabilites = context.Disabilities.AsNoTracking().ToList();
+        var random = new Random();
         var krompirHealth = new AnimalHealthHistoryEntity
         {
             AnimalId = krompir.Id,
@@ -259,7 +200,7 @@ public static class DynamicDataSeeder
         var animalAllergy = new AllergiesAnimalHealthHistory
         {
             AnimalHealthHistoryId = krompirHealth.Id,
-            AllergyId = 1
+            AllergyId = allergies[random.Next(allergies.Count)].Id,
         };
         context.AnimalsAllergies.Add(animalAllergy);
         await context.SaveChangesAsync();
@@ -282,11 +223,53 @@ public static class DynamicDataSeeder
         {
             AnimalHealthHistoryId = kikiHealth.Id,
             AnimalHealthHistory = kikiHealth,
-            DisabilityId = 3
+            DisabilityId = disabilites[random.Next(disabilites.Count)].Id,
         };
         context.AnimalsDisabilities.Add(animalDisability);
         await context.SaveChangesAsync();
 
+        var loona = await context.Animals.Where(x => x.Name.ToLower().Contains("loona")).FirstOrDefaultAsync();
+        var loonaHealth = new AnimalHealthHistoryEntity
+        {
+            AnimalId = loona.Id,
+            Animal = loona,
+            ParasiteFree = true,
+            Vaccinated = false,
+            DietaryRestrictions = "None",
+            SpayedOrNeutered = false
+        };
+        context.AnimalHealthHistories.Add(loonaHealth);
+        await context.SaveChangesAsync();
+        var animalAllergyLoona = new AllergiesAnimalHealthHistory
+        {
+            AnimalHealthHistoryId = krompirHealth.Id,
+            AllergyId = allergies[random.Next(allergies.Count)].Id,
+        };
+        context.AnimalsAllergies.Add(animalAllergyLoona);
+        await context.SaveChangesAsync();
+
+        var wrld = await context.Animals.Where(x => x.Name.ToLower() == "world eater".ToLower()).FirstOrDefaultAsync();
+
+        var wrldHealth = new AnimalHealthHistoryEntity
+        {
+            AnimalId = wrld.Id,
+            Animal = wrld,
+            ParasiteFree = true,
+            Vaccinated = true,
+            DietaryRestrictions = "Do not feed too much, she is fat",
+            SpayedOrNeutered = true
+        };
+        context.AnimalHealthHistories.Add(wrldHealth);
+        await context.SaveChangesAsync();
+
+        var animalDisabilityWrld = new DisabilitiesAnimalHealthHistory
+        {
+            AnimalHealthHistoryId = wrldHealth.Id,
+            AnimalHealthHistory = wrldHealth,
+            DisabilityId = disabilites[random.Next(disabilites.Count)].Id,
+        };
+        context.AnimalsDisabilities.Add(animalDisabilityWrld);
+        await context.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: Animal Health Histories added.");
 
 
@@ -294,11 +277,13 @@ public static class DynamicDataSeeder
 
     private static async Task SeedBreedsAsync(DatabaseContext context)
     {
-        //ONLY ADDING FOR CATS AND DOGS
         if (await context.Breeds.AnyAsync())
             return;
-        var cat = await context.AnimalCategories.Where(x =>  x.CategoryName.ToLower().Equals("cat")).FirstOrDefaultAsync();
-        var dog = await context.AnimalCategories.Where(x =>  x.CategoryName.ToLower().Equals("dog")).FirstOrDefaultAsync();
+        var cat = await context.AnimalCategories.Where(x => x.CategoryName.ToLower().Equals("cat")).FirstOrDefaultAsync();
+        var dog = await context.AnimalCategories.Where(x => x.CategoryName.ToLower().Equals("dog")).FirstOrDefaultAsync();
+        var rabbit = await context.AnimalCategories.Where(x => x.CategoryName.ToLower().Equals("rabbit")).FirstOrDefaultAsync();
+        var fish = await context.AnimalCategories.Where(x => x.CategoryName.ToLower().Equals("fish")).FirstOrDefaultAsync();
+        var bird = await context.AnimalCategories.Where(x => x.CategoryName.ToLower().Equals("bird")).FirstOrDefaultAsync();
 
         var british = new BreedEntity
         {
@@ -306,50 +291,85 @@ public static class DynamicDataSeeder
             CategoryID = cat.Id,
             Name = "British Shorthair"
         };
-
         var bengal = new BreedEntity
         {
             Category = cat,
             CategoryID = cat.Id,
             Name = "Bengal"
         };
-
         var siamese = new BreedEntity
         {
             Category = cat,
             CategoryID = cat.Id,
             Name = "Siamese"
         };
-
         var german = new BreedEntity
         {
             Category = dog,
             CategoryID = dog.Id,
             Name = "German Shepherd"
         };
-
         var bulldog = new BreedEntity
         {
             Category = dog,
             CategoryID = dog.Id,
             Name = "French Bulldog"
         };
-
         var dalmatian = new BreedEntity
         {
             Category = dog,
             CategoryID = dog.Id,
             Name = "Dalmatian"
         };
+        var hollandLop = new BreedEntity
+        {
+            Category = rabbit,
+            CategoryID = rabbit.Id,
+            Name = "Holland Lop"
+        };
+        var netherlandDwarf = new BreedEntity
+        {
+            Category = rabbit,
+            CategoryID = rabbit.Id,
+            Name = "Netherland Dwarf"
+        };
+        var goldfish = new BreedEntity
+        {
+            Category = fish,
+            CategoryID = fish.Id,
+            Name = "Goldfish"
+        };
+        var betta = new BreedEntity
+        {
+            Category = fish,
+            CategoryID = fish.Id,
+            Name = "Betta"
+        };
+        var budgerigar = new BreedEntity
+        {
+            Category = bird,
+            CategoryID = bird.Id,
+            Name = "Budgerigar"
+        };
+        var cockatiel = new BreedEntity
+        {
+            Category = bird,
+            CategoryID = bird.Id,
+            Name = "Cockatiel"
+        };
 
-        context.Breeds.AddRange(british, bengal, siamese, german, bulldog, dalmatian);
+        context.Breeds.AddRange(
+            british, bengal, siamese,
+            german, bulldog, dalmatian,
+            hollandLop, netherlandDwarf,
+            goldfish, betta,
+            budgerigar, cockatiel
+        );
         await context.SaveChangesAsync();
-
     }
     private static async Task SeedCitiesAsync(DatabaseContext ct)
     {
         if (await ct.Cities.AnyAsync()) return;
-        //ovo je dodani kako ne bi hardkodirali vrijednosti i time sprjecavamo eventualne errore u buducnosti
         var usk = await ct.Cantons.Where(x => x.FullName == "Unsko-Sanski").FirstOrDefaultAsync();
         var hnk = await ct.Cantons.Where(x => x.FullName == "Hercegovačko-neretvanski kanton").FirstOrDefaultAsync();
         var zdk = await ct.Cantons.Where(x => x.FullName == "Zeničko-dobojski kanton").FirstOrDefaultAsync();
@@ -444,4 +464,141 @@ public static class DynamicDataSeeder
         ct.AddRange(basicUser, verifiedUser, admin);
         await ct.SaveChangesAsync();
     }
+    private static IFormFile CreateFormFile(string filePath)
+    {
+        var bytes = File.ReadAllBytes(filePath);
+        var stream = new MemoryStream(bytes);
+        var fileName = Path.GetFileName(filePath);
+
+        return new FormFile(stream, 0, bytes.Length, "PostImages", fileName)
+        {
+            Headers = new HeaderDictionary(),
+            ContentType = "image/" + Path.GetExtension(fileName).TrimStart('.').ToLower()
+        };
+    }
+    private static async Task SeedAnimalsAsync(DatabaseContext context, ISender sender,
+     IWebHostEnvironment env)
+    {
+        if (await context.Animals.AnyAsync())
+            return;
+
+        var femaleGender = await context.Genders.Where(x => x.GenderName.ToLower() == "female").FirstOrDefaultAsync();
+        var maleGender = await context.Genders.Where(x => x.GenderName.ToLower() == "male").FirstOrDefaultAsync();
+        var cat = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "cat").FirstOrDefaultAsync();
+        var dog = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "dog").FirstOrDefaultAsync();
+        var rabbit = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "rabbit").FirstOrDefaultAsync();
+        var fish = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "fish").FirstOrDefaultAsync();
+        var bird = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "bird").FirstOrDefaultAsync();
+        var users = context.Users.AsNoTracking().Where(x=>x.RoleId != 3).ToList();
+        var cities = context.Cities.AsNoTracking().ToList();
+
+        if (femaleGender != null && maleGender != null)
+        {
+            var krompir = new AnimalEntity
+            {
+                Name = "Krompir",
+                Breed = "British Shorthair",
+                Age = 2,
+                GenderId = femaleGender.Id,
+                ChildFriendly = true,
+                HasPapers = false,
+                CategoryId = cat.Id,
+            };
+
+            var kiki = new AnimalEntity
+            {
+                Name = "Kiki",
+                Breed = "German Shepherd",
+                Age = 1,
+                GenderId = femaleGender.Id,
+                ChildFriendly = false,
+                HasPapers = false,
+                CategoryId = dog.Id,
+            };
+
+            var loona = new AnimalEntity
+            {
+                Name = "Loona",
+                Breed = "Budgerigar",
+                Age = 1,
+                GenderId = femaleGender.Id,
+                ChildFriendly = true,
+                HasPapers = false,
+                CategoryId = bird.Id
+            };
+
+            var evilbnuy = new AnimalEntity
+            {
+                Name = "World Eater",
+                Breed = "Holland Lop",
+                Age = 5,
+                GenderId = maleGender.Id,
+                ChildFriendly = false,
+                HasPapers = true,
+                CategoryId = rabbit.Id
+            };
+            context.Animals.AddRange(krompir, kiki, loona, evilbnuy);
+        }
+
+
+        await context.SaveChangesAsync();
+        await SeedAnimalHealthHistoriesAsync(context);
+        var health = context.AnimalHealthHistories.AsNoTracking().ToList();
+        var animals = context.Animals.AsNoTracking();
+        Random random = new Random();
+        foreach (var an in animals)
+        {
+            var post = new PostsEntity
+            {
+                Status = "active",
+                DateAdded = DateTime.UtcNow,
+                UserId = users[random.Next(users.Count)].Id,
+                CityId = cities[random.Next(cities.Count)].Id,
+                AnimalID = an.Id,
+                AnimalHistoryId = health.FirstOrDefault(x => x.AnimalId == an.Id).Id,
+            };
+            context.Posts.Add(post);
+        }
+
+        await context.SaveChangesAsync();
+        var posts = context.Posts.AsNoTracking().ToList();
+        foreach(var post in posts)
+        {
+            var animal = context.Animals.FirstOrDefault(x => x.Id == post.AnimalID);
+            var seedImagesFolder = Path.Combine(env.WebRootPath, "SeedData", animal?.CategoryId.ToString() is null 
+                ? "1" : animal.CategoryId.ToString());
+            var filePaths = Directory.GetFiles(seedImagesFolder);
+
+            var formFiles = filePaths.Select(CreateFormFile).ToList();
+
+            var formFileCollection = new FormFileCollection();
+            formFileCollection.AddRange(formFiles);
+
+            var command = new CreatePostImageCommand
+            {
+                PostId = post.Id,
+                PostImages = formFileCollection
+            };
+
+            int id = await sender.Send(command);
+
+            var subFolder = "posts";
+            string root = env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            string storeFileDirectory = Path.Combine(root, subFolder, "Post_" + command.PostId);
+
+            if (!Directory.Exists(storeFileDirectory))
+                Directory.CreateDirectory(storeFileDirectory);
+
+            foreach (var file in command.PostImages)
+            {
+                string safeFileName = Path.GetFileName(file.FileName);
+                string fullPath = Path.Combine(storeFileDirectory, safeFileName);
+
+                using var stream = new FileStream(fullPath, FileMode.Create);
+                await file.CopyToAsync(stream);
+            }
+        }
+        Console.WriteLine("✅ Dynamic seed: Animals added.");
+    }
+
 }
