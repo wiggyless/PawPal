@@ -6,10 +6,10 @@
         @for (post of posts.items; track post) {
           <div class="post" (click)="loadPost(post)">
             <div class="post-image">
-              <img [src]="post.firstImage == '' ? '' : envLink.apiUrl + post.firstImage" />
+              <img [src]="post.mainImage == '' ? '' : envLink.apiUrl + post.mainImage" />
             </div>
             <div class="post-info">
-              <p class="post-info-name">{{ post.animalName }}</p>
+              <p class="post-info-name">{{ post.name }}</p>
             </div>
           </div>
         }

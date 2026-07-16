@@ -8,10 +8,19 @@ export interface GetAnimalsHealthByIdDto {
   vaccinated: boolean;
   spayedOrNeutered: boolean;
   dietaryRestrictions: string;
-  animalAllergies: Array<string>;
-  animalDisabilities: Array<string>;
+  animalAllergies: Array<GetAllergyFromAnimalDto>;
+  animalDisabilities: Array<GetDisabilityFromAnimalDto>;
 }
 
+export interface GetAllergyFromAnimalDto {
+  allergyName: string;
+  allergyDescription: string;
+}
+
+export interface GetDisabilityFromAnimalDto {
+  disabilityName: string;
+  disabilityDescription: string;
+}
 export interface AddAnimalHealthHistory {
   animalId: number;
   parasiteFree: boolean;

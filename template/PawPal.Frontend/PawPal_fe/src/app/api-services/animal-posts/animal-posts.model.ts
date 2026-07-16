@@ -12,17 +12,8 @@ export class GetPostQuery extends BasePagedQuery {
   isLiked?: boolean;
   isRequest?: boolean;
 }
-
-export interface ListAnimalPostsByUserIdDto {
-  postId: number;
-  firstImage: string;
-  userId: string;
-  animalName: string;
-  breed: string;
-  gender: string;
-  cityID: number;
-  animalID: number;
-  dateAdded: Date;
+export class GetListPostQueryByUserID extends BasePagedQuery {
+  userID?: number;
 }
 
 export interface AnimalPostByIdQuery {

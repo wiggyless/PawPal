@@ -8,10 +8,10 @@ namespace PawPal.Application.Modules.Posts.Queries.ListPostsByUserId
 {
     public class ListPostByUserIdQueryDto
     {
-        public int UserId { get;set; }
-        public int PostId { get; set; } 
-        public string FirstImage { get; set; }  
-        public string AnimalName { get; set;}
+        public int UserID { get;set; }
+        public int PostID { get; set; } 
+        public string MainImage { get; set; }  
+        public string Name { get; set;}
         public int AnimalID { get; set; }
         public int? CityID { get; set; }
 
