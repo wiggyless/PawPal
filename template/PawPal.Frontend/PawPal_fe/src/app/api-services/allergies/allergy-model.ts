@@ -4,8 +4,8 @@ export interface ListAllergyQueryDto {
 }
 
 export class AllergyQueryDto {
-  name: string = '';
+  allergyName: string = '';
   constructor(allName: string) {
-    this.name = allName;
+    this.allergyName = allName;
   }
 }

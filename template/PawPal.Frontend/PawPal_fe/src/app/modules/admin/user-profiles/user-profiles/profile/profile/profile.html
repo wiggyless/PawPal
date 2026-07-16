@@ -1,12 +1,14 @@
-@if (userData.disabled) {
-  <div class="user-profile-buttons">
-    <button class="primarybtn" (click)="activateAccount()">ACTIVATE ACCOUNT</button>
-  </div>
-} @else {
-  <div class="user-profile-buttons">
-    <button class="primarybtn">SEND WARNING</button>
-    <button class="secondarybtn" (click)="disableAccount()">DISABLE ACCOUNT</button>
-  </div>
+@if (loaded()) {
+  @if (userData.disabled) {
+    <div class="user-profile-buttons">
+      <button class="primarybtn" (click)="activateAccount()">ACTIVATE ACCOUNT</button>
+    </div>
+  } @else {
+    <div class="user-profile-buttons">
+      <button class="primarybtn">SEND WARNING</button>
+      <button class="secondarybtn" (click)="disableAccount()">DISABLE ACCOUNT</button>
+    </div>
+  }
 }
 <div class="user-profile-details">
   <div class="user-profile-detials-header">

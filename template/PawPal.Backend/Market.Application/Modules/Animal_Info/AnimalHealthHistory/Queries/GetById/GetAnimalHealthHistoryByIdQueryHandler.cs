@@ -12,15 +12,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Queries.Get
     {
         public async Task<GetAnimalHealthHistoryByIdQueryDto> Handle(GetAnimalHealthHistoryByIdQuery request, CancellationToken cancellationToken)
         {
-            var listOfAllergies = await context.AnimalsAllergies.
-                Where(x => x.AnimalHealthHistoryId == request.Id)
-                .Select(x => x.Allergy).ToListAsync();
 
-            var listOfDisabilities = await context.AnimalsDisabilities.
-                Where(x=> x.AnimalHealthHistoryId == request.Id)
-                .Select(x=> x.Disability).ToListAsync();
-
-            // changed this to AnimalId, cuz there is no reason to search a healthhistory alone, an animal is needed 
             var healthHistory = await context.AnimalHealthHistories.
                 Where(x => x.AnimalId== request.Id)
                 .Select(x => new GetAnimalHealthHistoryByIdQueryDto
@@ -34,9 +26,16 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Queries.Get
                     ParasiteFree = x.ParasiteFree,
                     DietaryRestrictions = x.DietaryRestrictions
                 }).FirstOrDefaultAsync(cancellationToken);
-
             if (healthHistory == null) throw new PawPalNotFoundException($"Animal Health History wit Id {request.Id} does not exist!");
 
+            var listOfAllergies = await context.AnimalsAllergies.
+            Where(x => x.AnimalHealthHistoryId == healthHistory.AnimalHealthHistoryId)
+            .Select(x => x.Allergy).ToListAsync();
+
+            var listOfDisabilities = await context.AnimalsDisabilities.
+                Where(x => x.AnimalHealthHistoryId == healthHistory.AnimalHealthHistoryId)
+                .Select(x => x.Disability).ToListAsync();
+            
             foreach (var a in listOfAllergies)
             {
                 var allergy = new GetAllergyFromAnimalDto

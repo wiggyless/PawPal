@@ -9,8 +9,8 @@ export interface ListDisabilitiesQueryDto {
   name: string;
 }
 export class DisabilitiesDto {
-  name: string = '';
+  disabilityName: string = '';
   constructor(disName: string) {
-    this.name = disName;
+    this.disabilityName = disName;
   }
 }

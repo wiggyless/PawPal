@@ -1,4 +1,6 @@
 ﻿using Market.Infrastructure.Database;
+using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PawPal.Infrastructure.Database.Seeders;
@@ -15,11 +17,13 @@ public static class DatabaseInitializer
     {
         await using var scope = services.CreateAsyncScope();
         var ctx = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+        var sender = scope.ServiceProvider.GetRequiredService<ISender>();
+        var envr = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
 
         if (env.IsTest())
         {
             await ctx.Database.EnsureCreatedAsync();
-            await DynamicDataSeeder.SeedAsync(ctx);
+            await DynamicDataSeeder.SeedAsync(ctx,sender, envr);
             return;
         }
 
@@ -28,7 +32,7 @@ public static class DatabaseInitializer
 
         if (env.IsDevelopment())
         {
-            await DynamicDataSeeder.SeedAsync(ctx);
+            await DynamicDataSeeder.SeedAsync(ctx,sender, envr);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace PawPal.Application.Modules.Moderation.ReportedUsers.Queries.List
         public async Task<PageResult<ListUserReportsQueryDto>> Handle(ListUserReportsQuery request, CancellationToken cancellationToken)
         {
             var q = context.ReportedUsers.AsNoTracking();
-            var user = context.Users.AsNoTracking().AsQueryable();
+            var user = context.Users.Where(x=>!x.isUserDisabled).AsNoTracking().AsQueryable();
             if (request.DateSentMin is not null && request.DateSentMax is not null)
             {
                 q = q.Where(x => x.DateSent >= request.DateSentMin && x.DateSent <= request.DateSentMax);

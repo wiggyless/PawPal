@@ -13,17 +13,19 @@ namespace PawPal.Application.Modules.Posts.Commands.Create
     {
         public async Task<int> Handle(CreatePostCommand request,CancellationToken cancellationToken)
         {
-            var user = await context.Users.Where(x => x.Id == request.UserId).FirstOrDefaultAsync(cancellationToken);
-            var animal = await context.Animals.Where(x => x.Id == request.AnimalID).FirstOrDefaultAsync(cancellationToken);
-            var health = await context.AnimalHealthHistories.Where(x => x.AnimalId == animal.Id).FirstOrDefaultAsync(cancellationToken);
-            if(currentUser.RoleId!=2 && currentUser.IsAuthenticated)
+            if (currentUser.RoleId != 2 || !currentUser.IsAuthenticated)
             {
                 throw new Exception("User is not verified to make this action");
             }
-            if(animal == null)
+            var user = await context.Users.Where(x => x.Id == request.UserId).FirstOrDefaultAsync(cancellationToken);
+            var animal = await context.Animals.Where(x => x.Id == request.AnimalID).FirstOrDefaultAsync(cancellationToken);
+            if (animal == null)
             {
                 throw new PawPalNotFoundException("Animal does not exist inside the database");
             }
+            var health = await context.AnimalHealthHistories.Where(x => x.AnimalId == animal.Id).FirstOrDefaultAsync(cancellationToken);
+
+
             var newPost = new PostsEntity
             {
                 UserId = user.Id,

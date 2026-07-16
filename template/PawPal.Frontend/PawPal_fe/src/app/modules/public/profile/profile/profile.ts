@@ -106,14 +106,15 @@ export class Profile implements OnInit {
     });
   }
   loadPosts() {
-    console.log(this.userData.id);
-    this.postService.listAnimalPosts({ userID: this.userData.id, paging: this.paging }).subscribe({
-      next: (res) => {
-        this.initializeInputData();
-        this.postList = res;
-        this.isLoaded.set(true);
-      },
-    });
+    this.postService
+      .listAnimalPostsByUserId({ userID: this.userData.id, paging: this.paging })
+      .subscribe({
+        next: (res) => {
+          this.initializeInputData();
+          this.postList = res;
+          this.isLoaded.set(true);
+        },
+      });
   }
   initializeInputData(): void {
     this.originalCityId = this.userData.cityID;
@@ -128,7 +129,6 @@ export class Profile implements OnInit {
 
   loadCities() {
     this.cityService.listCities().subscribe((res) => {
-      console.log(res);
       this.cityList = res;
     });
   }

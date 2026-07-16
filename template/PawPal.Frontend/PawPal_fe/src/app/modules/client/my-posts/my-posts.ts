@@ -1,11 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CurrentUserService } from '../../../core/services/auth/current-user.service';
 import { AnimalPostService } from '../../../api-services/animal-posts/animal-posts.service';
-import {
-  GetPostQuery,
-  ListAnimal,
-  ListAnimalPostsByUserIdDto,
-} from '../../../api-services/animal-posts/animal-posts.model';
+import { GetPostQuery, ListAnimal } from '../../../api-services/animal-posts/animal-posts.model';
 import { environment } from '../../../../environments/environment';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
@@ -23,7 +19,7 @@ import { GenderEnum } from '../../../api-services/gender/gender-model';
 export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> implements OnInit {
   currentUser: any;
   animalPostsService = inject(AnimalPostService);
-  animalPostList: Observable<PageResult<ListAnimalPostsByUserIdDto>> | undefined;
+  animalPostList: Observable<PageResult<ListAnimal>> | undefined;
   envLink = environment;
   isLoaded = false;
   gender = GenderEnum;
@@ -69,11 +65,10 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
       }),
     );
   }
-  loadPost(post: ListAnimalPostsByUserIdDto): void {
-    console.log('post:', post);
+  loadPost(post: ListAnimal): void {
     this.route.navigate(['/post'], {
       queryParams: {
-        postID: post.postId,
+        postID: post.postID,
       },
     });
   }

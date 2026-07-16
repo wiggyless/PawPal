@@ -48,7 +48,6 @@ export class PostImagesService {
     const params = request ? buildHttpParams(request as any) : undefined;
     const formData = new FormData();
     formData.append('postId', request.postId.toString());
-    console.log(request.postImages);
     request.postImages.forEach((x) => {
       formData.append('postImages', x, x.name);
     });

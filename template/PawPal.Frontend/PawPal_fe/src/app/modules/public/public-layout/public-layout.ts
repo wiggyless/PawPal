@@ -5,8 +5,6 @@ import { AnimalPostService } from '../../../api-services/animal-posts/animal-pos
 import { forkJoin, Subscription } from 'rxjs';
 import { PageResult } from '../../../core/models/paging/page-result';
 import { ListAnimal } from '../../../api-services/animal-posts/animal-posts.model';
-import { GetMainImagePostBlobClass } from '../../../api-services/animal-post-images/animal-post-images-model';
-import { PostImagesService } from '../../../api-services/animal-post-images/animal-post-images-service';
 import { GenderService } from '../../../api-services/gender/gender-service';
 import { Router } from '@angular/router';
 import { CantonsService } from '../../../api-services/cantons/cantons-service';
@@ -32,9 +30,7 @@ export class PublicLayout implements OnInit, OnDestroy {
   animalCategories: PageResult<ListAnimalCategoriesQueryDto> | undefined;
   selectedCategory: ListAnimalCategoriesQueryDto | undefined;
   selectedCanton: number = 0;
-  tempList: number[] = [];
   mySubcribe: Subscription | undefined;
-  postImages = inject(PostImagesService);
   router = inject(Router);
   genderListForDisplay: PageResult<ListGenderDto> | undefined;
   cd = inject(ChangeDetectorRef);
@@ -46,8 +42,8 @@ export class PublicLayout implements OnInit, OnDestroy {
       pageSize: 4,
     },
   };
-  catalogImages: GetMainImagePostBlobClass[] = [];
   env = environment;
+  public myBackgroundImage: string = `${this.env.apiUrl}/StaticImages/header-photo.webp`;
   imagesLoaded = signal(false);
   ngOnInit(): void {
     this.mySubcribe = forkJoin({
@@ -74,9 +70,6 @@ export class PublicLayout implements OnInit, OnDestroy {
         postID: post.postID,
       },
     });
-  }
-  showCategory() {
-    console.log(this.selectedCategory);
   }
   searchCatalog() {
     this.router.navigate(['/catalog'], {

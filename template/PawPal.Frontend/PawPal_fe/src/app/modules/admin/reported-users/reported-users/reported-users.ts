@@ -43,7 +43,7 @@ export class ReportedUsers implements OnInit, OnDestroy {
   request: GetUserReportQuery = {
     paging: {
       page: 1,
-      pageSize: 10,
+      pageSize: 4,
     },
   };
   username = '';

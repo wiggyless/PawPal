@@ -15,7 +15,7 @@ import { Adoption } from './adpotion/adoption/adoption';
 const routes: Routes = [
   {
     path: '',
-    component: ClientLayout, // this should contain <router-outlet>
+    component: ClientLayout,
     children: [
       { path: 'myPosts', component: MyPosts },
       { path: 'my-profile', component: UserProfileComponent },
@@ -23,7 +23,7 @@ const routes: Routes = [
       { path: 'my-sent-requests', component: MySentRequests },
       { path: 'my-requests-dialog', component: MyRequestsDialog },
       { path: 'request-history', component: RequestHistory },
-      { path: 'my-favorties', component: MyFavorites }, // fixed typo
+      { path: 'my-favorties', component: MyFavorites },
       { path: 'settings', component: SettingsComponent },
     ],
   },

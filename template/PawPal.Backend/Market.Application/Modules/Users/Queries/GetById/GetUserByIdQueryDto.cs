@@ -19,5 +19,6 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
         public required string? Username { get; set; }
         public required string? AboutMe { get; set; }
         public string? PhotoURL { get; set; }
+        public bool Disabled { get; set; }
     }
 }
