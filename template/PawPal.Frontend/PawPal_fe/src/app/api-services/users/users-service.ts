@@ -11,6 +11,7 @@ import {
   GetUserQuery,
   UpdateUserCommand,
   UpdateUserPassword,
+  RequestEmailChangeCommand,
 } from './users-model';
 import { buildHttpParams } from '../../core/models/build-http-params';
 import { PageResult } from '../../core/models/paging/page-result';
@@ -51,5 +52,8 @@ export class UserService {
   }
   updatePassword(request: UpdateUserPassword): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/passwordRecovery`, request);
+  }
+  requestEmailChange(id: number, request: RequestEmailChangeCommand): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${id}/request-email-change`, request);
   }
 }

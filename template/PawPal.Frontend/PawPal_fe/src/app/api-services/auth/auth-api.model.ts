@@ -70,3 +70,11 @@ export interface ConfirmEmailCommandDto {
 export interface ResendConfirmationEmailCommand {
   email: string;
 }
+
+/**
+ * Response for GET /Auth/confirm-email-change
+ * Corresponds to: ConfirmEmailChangeCommandDto.cs
+ */
+export interface ConfirmEmailChangeCommandDto {
+  message: string;
+}

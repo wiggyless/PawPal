@@ -3,6 +3,7 @@ using PawPal.Application.Modules.Animal_Info.Animals.Commands.Delete;
 using PawPal.Application.Modules.Disabilities.GetById;
 using PawPal.Application.Modules.Users.Commands.Create;
 using PawPal.Application.Modules.Users.Commands.Delete;
+using PawPal.Application.Modules.Users.Commands.RequestEmailChange;
 using PawPal.Application.Modules.Users.Commands.ResendConfirmationEmail;
 using PawPal.Application.Modules.Users.Commands.Update;
 using PawPal.Application.Modules.Users.Commands.UpdatePassword;
@@ -87,6 +88,15 @@ namespace PawPal.API.Controllers.Places
                 return Ok(user);
             }
             return BadRequest("Provide either username or email.");
+        }
+
+        [Authorize]
+        [HttpPost("{id:int}/request-email-change")]
+        public async Task<IActionResult> RequestEmailChange(int id, [FromBody] RequestEmailChangeCommand command, CancellationToken ct)
+        {
+            command.UserId = id;
+            await sender.Send(command, ct);
+            return Ok();
         }
 
         [AllowAnonymous]

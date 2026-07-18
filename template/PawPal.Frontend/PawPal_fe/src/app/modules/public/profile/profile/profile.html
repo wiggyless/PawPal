@@ -116,7 +116,7 @@
       </div>
       <mat-paginator
         [length]="postList?.totalItems"
-        [pageSize]=""
+        [pageSize]="paging.pageSize"
         [pageSizeOptions]="[4, 8, 16, 32]"
         aria-label="Select page"
         (page)="handlePageEvent($event)"

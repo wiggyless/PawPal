@@ -5,11 +5,9 @@ import { ListAnimalBreedQueryDto } from '../../../../api-services/animal-breed/a
 import { ListAnimalCategoriesQueryDto } from '../../../../api-services/animal-categories/animal-categories.model';
 import { AnimalPostService } from '../../../../api-services/animal-posts/animal-posts.service';
 import { GetPostQuery, ListAnimal } from '../../../../api-services/animal-posts/animal-posts.model';
-import { MatInput } from '@angular/material/input';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GenderService } from '../../../../api-services/gender/gender-service';
 import { GenderEnum, ListGenderDto } from '../../../../api-services/gender/gender-model';
-import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { CantonsService } from '../../../../api-services/cantons/cantons-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
@@ -39,7 +37,6 @@ export class CatalogComponent
   animalCatService = inject(AnimalCategoriesService);
   animalBreedService = inject(AnimalBreedService);
   animalPostsService = inject(AnimalPostService);
-  citiesService = inject(CitiesService);
   genderService = inject(GenderService);
   cantonsService = inject(CantonsService);
   router = inject(Router);
@@ -88,7 +85,6 @@ export class CatalogComponent
   deleteFavoritePostList: number[] = [];
   // random values
   env = environment;
-  fromInputMax: MatInput = new MatInput();
   tempList: number[] = [];
   cantonID: number | undefined;
   imagesLoaded = signal(true);
@@ -176,7 +172,6 @@ export class CatalogComponent
         this.cd.detectChanges();
       });
   }
-  getCitiesSelect(): void {}
   compareDates(postDate: Date) {
     var postTime = new Date(postDate);
     var chosenTimeMin =

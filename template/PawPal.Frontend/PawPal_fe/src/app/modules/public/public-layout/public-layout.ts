@@ -8,6 +8,7 @@ import { ListAnimal } from '../../../api-services/animal-posts/animal-posts.mode
 import { GenderService } from '../../../api-services/gender/gender-service';
 import { Router } from '@angular/router';
 import { CantonsService } from '../../../api-services/cantons/cantons-service';
+import { ListCantonsDto } from '../../../api-services/cantons/cantons-model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
 import { ListAnimalCategoriesQueryDto } from '../../../api-services/animal-categories/animal-categories.model';
@@ -26,9 +27,9 @@ export class PublicLayout implements OnInit, OnDestroy {
   postService = inject(AnimalPostService);
   genderService = inject(GenderService);
   postList: PageResult<ListAnimal> | undefined;
-  cantons: any = [];
+  cantons: PageResult<ListCantonsDto> | undefined;
   animalCategories: PageResult<ListAnimalCategoriesQueryDto> | undefined;
-  selectedCategory: ListAnimalCategoriesQueryDto | undefined;
+  selectedCategory: string | undefined;
   selectedCanton: number = 0;
   mySubcribe: Subscription | undefined;
   router = inject(Router);

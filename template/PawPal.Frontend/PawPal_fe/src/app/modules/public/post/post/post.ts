@@ -74,7 +74,7 @@ export class PostComponent implements OnInit, OnDestroy {
     breed: '',
     gender: '',
     age: 0,
-    has_Papers: false,
+    hasPapers: false,
   };
   router = inject(Router);
   user: GetUserByIdDto | undefined;
