@@ -52,40 +52,67 @@
             (click)="toggleChangePasswordForm()"
             [class.active]="showChangePasswordForm"
           >
-            {{ showChangePasswordForm ? 'CANCEL' : 'CHANGE PASSWORD' }}
+            {{ showChangePasswordForm() ? 'CANCEL' : 'CHANGE PASSWORD' }}
           </button>
 
-          @if (showChangePasswordForm) {
-            <div class="form-section">
-              <div class="form-group">
-                <label>Current Password</label>
-                <input
-                  type="password"
-                  class="form-input"
-                  [(ngModel)]="currentPassword"
-                  placeholder="Enter your current password"
-                />
+          @if (showChangePasswordForm()) {
+            <form class="login-inputs" [formGroup]="passwordFormGroup">
+              <div class="form-section">
+                <div class="form-group">
+                  <label>Current Password</label>
+                  <input
+                    type="password"
+                    class="form-input"
+                    formControlName="currentPassword"
+                    placeholder="Enter your current password"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>New Password</label>
+                  <div class="input-button-wrapper">
+                    <input
+                      required
+                      [type]="showPassword() ? `text` : `password`"
+                      class="form-input"
+                      formControlName="password"
+                      placeholder="Enter your new password (min 8 characters)"
+                    />
+                    <button
+                      matSuffix
+                      mat-icon-button
+                      type="button"
+                      (click)="togglePassword()"
+                      class="eye-btn"
+                    >
+                      <mat-icon>{{ showPassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Confirm Password</label>
+                  <div class="input-button-wrapper">
+                    <input
+                      matInput
+                      required
+                      [type]="showPassword() ? `text` : `password`"
+                      class="form-input"
+                      formControlName="confirmPassword"
+                      placeholder="Confirm your new password"
+                    />
+                    <button
+                      matSuffix
+                      mat-icon-button
+                      type="button"
+                      (click)="togglePassword()"
+                      class="eye-btn"
+                    >
+                      <mat-icon>{{ showPassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                <button class="primarybtn" (click)="savePassword()">UPDATE PASSWORD</button>
               </div>
-              <div class="form-group">
-                <label>New Password</label>
-                <input
-                  type="password"
-                  class="form-input"
-                  [(ngModel)]="newPassword"
-                  placeholder="Enter your new password (min 8 characters)"
-                />
-              </div>
-              <div class="form-group">
-                <label>Confirm Password</label>
-                <input
-                  type="password"
-                  class="form-input"
-                  [(ngModel)]="confirmPassword"
-                  placeholder="Confirm your new password"
-                />
-              </div>
-              <button class="primarybtn" (click)="savePassword()">UPDATE PASSWORD</button>
-            </div>
+            </form>
           }
         </div>
       </div>
@@ -102,7 +129,11 @@
               <strong>Password recovery with security questions</strong>
               <p class="option-description">Add an extra layer of security to your account</p>
             </div>
-            <button class="secondarybtn" (click)="enableSecurityQuestions()">ENABLE</button>
+            @if (isSecurityEnabled()) {
+              <button class="secondarybtn" (click)="enableSecurityQuestions()">UPDATE</button>
+            } @else {
+              <button class="secondarybtn" (click)="enableSecurityQuestions()">ENABLE</button>
+            }
           </div>
         </div>
       </div>
@@ -116,13 +147,12 @@
         <div class="section-body">
           <div class="notification-option">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="isDarkTheme" (change)="toggleTheme()"/>
+              <input type="checkbox" [(ngModel)]="isDarkTheme" (change)="toggleTheme()" />
               <span>Dark Theme</span>
             </label>
           </div>
         </div>
       </div>
-
     </div>
     <div class="settings-section danger-section" style="margin-top: 50px">
       <div class="section-header danger-header">

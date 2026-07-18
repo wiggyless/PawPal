@@ -14,7 +14,6 @@ namespace PawPal.API.Controllers.Comments
     public class CommentsController(ISender sender) : ControllerBase
     {
 
-        [AllowAnonymous]
         [HttpPost("post")]
         public async Task<ActionResult<int>> CreateComment
            (CreateCommentCommand command, CancellationToken ct)
@@ -30,7 +29,6 @@ namespace PawPal.API.Controllers.Comments
             var result = await sender.Send(query, ct);
             return result;
         }
-        [AllowAnonymous]
         [HttpDelete("{id:int}")]
         public async Task<Unit> Delete(int id, CancellationToken ct)
         {

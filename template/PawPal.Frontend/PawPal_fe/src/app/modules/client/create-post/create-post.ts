@@ -440,8 +440,8 @@ export class CreatePost implements OnInit {
       parasiteFree: this.thridFormGroup.get('parasiteCheck')!.value as boolean,
       vaccinated: this.thridFormGroup.get('vaccineCheck')!.value as boolean,
       spayedOrNeutered: this.thridFormGroup.get('sterCheck')!.value as boolean,
-      animalAllergies: this.thridFormGroup.get('allergyCtrl')!.value as string[],
-      animalDisabilities: this.thridFormGroup.get('disCtrl')!.value as string[],
+      allergies: this.thridFormGroup.get('allergyCtrl')!.value as string[],
+      disabilities: this.thridFormGroup.get('disCtrl')!.value as string[],
       dietaryRestrictions: '',
     };
 
