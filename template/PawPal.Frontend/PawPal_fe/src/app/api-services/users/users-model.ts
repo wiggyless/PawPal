@@ -72,3 +72,7 @@ export interface UpdateUserPassword {
   email: string;
   newPassword: string;
 }
+
+export interface RequestEmailChangeCommand {
+  newEmail: string;
+}

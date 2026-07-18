@@ -1,37 +1,69 @@
+
+
+Responsive Design with Angular Material - 5 bodova
+
+Angular Animations for Smooth Transitions - 3 boda
+
+fix design of reporting dialogues
+fix admin dropdown
+
+
 <!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
-    rel="stylesheet" />
-  <title>PawPal</title>
-</head>
-
-<body>
-  <div class="post-container">
-    <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
-    @if (isImagesLoaded()) {
-    <div class="post">
-      @if (currentUser.roleid() == 3) {
-      <div class="post-buttons">
-        <button class="primarybtn" style="width: 100%">SEND WARNING</button>
-        <button class="secondarybtn" style="width: 100%" (click)="deletePost()">
-          REMOVE POST
-        </button>
-      </div>
-      }
-      @if (imagesList | async; as images) {
-      <div class="carousel-container">
-        <div class="carousel-track" [ngStyle]="{
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+      rel="stylesheet"
+    />
+    <title>PawPal</title>
+  </head>
+  <body>
+    <div class="post-container">
+      <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
+      @if (isImagesLoaded()) {
+        <div class="post">
+          @if (currentUser.roleid() == 3) {
+            <div class="post-buttons">
+              <button class="primarybtn" style="width: 100%">SEND WARNING</button>
+              <button class="secondarybtn" style="width: 100%" (click)="deletePost()">
+                REMOVE POST
+              </button>
+            </div>
+          }
+          @if (imagesList | async; as images) {
+            <div class="carousel-container">
+              <div
+                class="carousel-track"
+                [ngStyle]="{
                   transform: getTransformStyle(),
-                }">
-          @for (image of images; track image; let i = $index) {
-          <img src="{{ env.apiUrl + image }}" class="carousel-image" />
+                }"
+              >
+                @for (image of images; track image; let i = $index) {
+                  <img src="{{ env.apiUrl + image }}" class="carousel-image" />
+                }
+              </div>
+
+              <ng-container>
+                <button
+                  class="carousel-arrow left"
+                  (click)="prevImage(images.length)"
+                  aria-label="Previous image"
+                >
+                  <mat-icon>chevron_left</mat-icon>
+                </button>
+                <button
+                  class="carousel-arrow right"
+                  (click)="nextImage(images.length)"
+                  aria-label="Next image"
+                >
+                  <mat-icon>chevron_right</mat-icon>
+                </button>
+              </ng-container>
+            </div>
           }
           <div class="post-information-container">
             <h2 class="pet-name">{{ animal.name }}</h2>
@@ -45,7 +77,7 @@
                       </p>
                     }
                     <p>Vaccinated:</p>
-                    <p>Spayed:</p>
+                    <p>Sprayed:</p>
                     <p>Parasite free:</p>
                     <p>Date added:</p>
                     <p>City:</p>
@@ -98,75 +130,83 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="post-information-user-container">
-            <div class="post-information-user">
-              <div class="post-information-user-logo">
-                @if (user?.photoURL != '') {
-                <img [src]="env.apiUrl + user?.photoURL" alt="User image" class="profile-preview"
-                  style="cursor: pointer" (click)="routeToProfile(user!.id)" />
-                } @else {
-                <svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 110 110" fill="none"
-                  style="cursor: pointer" (click)="routeToProfile(user!.id)">
-                  <rect width="100" height="100" rx="50" fill="#191408" />
-                  <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M65.0006 40C65.0006 48.2843 58.2849 55 50.0006 55C41.7163 55 35.0006 48.2843 35.0006 40C35.0006 31.7157 41.7163 25 50.0006 25C58.2849 25 65.0006 31.7157 65.0006 40ZM60.0006 40C60.0006 45.5228 55.5235 50 50.0006 50C44.4778 50 40.0006 45.5228 40.0006 40C40.0006 34.4772 44.4778 30 50.0006 30C55.5235 30 60.0006 34.4772 60.0006 40Z"
-                    fill="#C7B18C" />
-                  <path
-                    d="M50.0006 62.5C33.8147 62.5 20.0238 72.071 14.7705 85.4801C16.0502 86.7509 17.3984 87.9529 18.8088 89.0801C22.7207 76.7692 34.9924 67.5 50.0006 67.5C65.0088 67.5 77.2806 76.7693 81.1924 89.0802C82.6029 87.9529 83.951 86.7509 85.2307 85.4802C79.9775 72.071 66.1866 62.5 50.0006 62.5Z"
-                    fill="#C7B18C" />
-                </svg>
-                }
+              <div class="post-information-user-container">
+                <div class="post-information-user">
+                  <div class="post-information-user-logo">
+                    @if (user?.photoURL != '') {
+                      <img
+                        [src]="env.apiUrl + user?.photoURL"
+                        alt="User image"
+                        class="profile-preview"
+                        style="cursor: pointer"
+                        (click)="routeToProfile(user!.id)"
+                      />
+                    } @else {
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="220"
+                        height="220"
+                        viewBox="0 0 110 110"
+                        fill="none"
+                        style="cursor: pointer"
+                        (click)="routeToProfile(user!.id)"
+                      >
+                        <rect width="100" height="100" rx="50" fill="#191408" />
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M65.0006 40C65.0006 48.2843 58.2849 55 50.0006 55C41.7163 55 35.0006 48.2843 35.0006 40C35.0006 31.7157 41.7163 25 50.0006 25C58.2849 25 65.0006 31.7157 65.0006 40ZM60.0006 40C60.0006 45.5228 55.5235 50 50.0006 50C44.4778 50 40.0006 45.5228 40.0006 40C40.0006 34.4772 44.4778 30 50.0006 30C55.5235 30 60.0006 34.4772 60.0006 40Z"
+                          fill="#C7B18C"
+                        />
+                        <path
+                          d="M50.0006 62.5C33.8147 62.5 20.0238 72.071 14.7705 85.4801C16.0502 86.7509 17.3984 87.9529 18.8088 89.0801C22.7207 76.7692 34.9924 67.5 50.0006 67.5C65.0088 67.5 77.2806 76.7693 81.1924 89.0802C82.6029 87.9529 83.951 86.7509 85.2307 85.4802C79.9775 72.071 66.1866 62.5 50.0006 62.5Z"
+                          fill="#C7B18C"
+                        />
+                      </svg>
+                    }
+                  </div>
+                  <p class="post-information-user-username">
+                    {{ user?.firstName }} {{ user?.lastName }}
+                  </p>
+                  <div class="post-information-user-border"></div>
+                  <div class="post-information-user-buttons">
+                    @if (currentUser.userId() == user?.id) {
+                      <button class="primarybtn" (click)="routeEditPost()">EDIT</button>
+                      <button class="secondarybtn" (click)="deletePost()">DELETE</button>
+                    } @else {
+                      <button class="primarybtn" (click)="routeAdopt()">ADOPT</button>
+                      <button class="primarybtn" (click)="routeMessage()">SEND MESSAGE</button>
+                      <button class="secondarybtn" (click)="openReportUserDialog()">
+                        REPORT USER
+                      </button>
+                    }
+                  </div>
+                </div>
+                <div class="post-information-user-report">
+                  <p>Inappropriate content?</p>
+                  <button class="secondarybtn" (click)="openReportDialog()">REPORT</button>
+                </div>
               </div>
-              <p class="post-information-user-username">
-                {{ user?.firstName }} {{ user?.lastName }}
-              </p>
-              <div class="post-information-user-border"></div>
-              <div class="post-information-user-buttons">
-                @if (currentUser.userId() == user?.id) {
-                <button class="primarybtn" (click)="routeEditPost()">EDIT</button>
-                <button class="secondarybtn" (click)="deletePost()">DELETE</button>
-                } @else {
-                <button class="primarybtn" (click)="routeAdopt()">ADOPT</button>
-                <button class="primarybtn" (click)="routeMessage()">SEND MESSAGE</button>
-                <button class="secondarybtn" (click)="openReportUserDialog()">
-                  REPORT USER
-                </button>
-                }
-              </div>
-            </div>
-            <div class="post-information-user-report">
-              <p>Inappropriate content?</p>
-              <button class="secondarybtn" (click)="openReportDialog()">REPORT</button>
             </div>
           </div>
         </div>
-        @if (images.length > 1) {
-        <button class="carousel-arrow left" aria-label="Previous image" (click)="prevImage(images.length)">
-          <mat-icon>chevron_left</mat-icon>
-        </button>
-        <button class="carousel-arrow right" aria-label="Next image" (click)="nextImage(images.length)">
-          <mat-icon>chevron_right</mat-icon>
-        </button>
-        }
-      </div>
-    }
+      } @else {
+        <div class="loading-container">
+          <br />
+          <p class="loading-spinner-text">Loading requests</p>
+          <mat-spinner></mat-spinner>
+        </div>
+      }
+      @if (isImagesLoaded()) {
+        <app-post-comments
+          [postId]="postId"
+          class="post-comments"
+          (commentsLoaded)="onCommentsLoaded()"
+        ></app-post-comments>
+      }
     </div>
-    } @else {
-    <div class="loading-container">
-      <br />
-      <p class="loading-spinner-text">Loading requests</p>
-      <mat-spinner></mat-spinner>
-    </div>
-    }
-    @if (isImagesLoaded()) {
-    <app-post-comments [postId]="postId" class="post-comments"
-      (commentsLoaded)="onCommentsLoaded()"></app-post-comments>
-    }
-  </div>
 
-  <app-footer></app-footer>
-</body>
-
+    <app-footer></app-footer>
+  </body>
 </html>
+

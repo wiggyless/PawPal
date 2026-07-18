@@ -25,6 +25,9 @@ public sealed class UserEntity : BaseEntity
     public string? EmailConfirmationToken { get; set; }
     public DateTime? EmailConfirmationTokenExpiresAt { get; set; }
     public bool IsEmailConfirmed { get; set; }
+    public string? PendingEmail { get; set; }
+    public string? EmailChangeToken { get; set; }
+    public DateTime? EmailChangeTokenExpiresAt { get; set; }
     public string? FcmToken { get; set; }
     public string? AboutMe { get; set; }    
     public bool isUserDisabled { get; set; }

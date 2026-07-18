@@ -21,13 +21,12 @@ export class SettingsComponent implements OnInit {
   
   userEmail: string = '';
   showChangeEmailForm: boolean = false;
-  showChangePasswordForm: boolean = false;
   newEmail: string = '';
-  currentPassword: string = '';
-  newPassword: string = '';
-  confirmPassword: string = '';
+  isSendingEmailChange: boolean = false;
+  emailChangeRequested: boolean = false;
+  pendingEmail: string = '';
   isDarkTheme: boolean = false;
-  
+
 
 
   ngOnInit(): void {
@@ -43,44 +42,37 @@ export class SettingsComponent implements OnInit {
 
   toggleChangeEmailForm(): void {
     this.showChangeEmailForm = !this.showChangeEmailForm;
+    this.emailChangeRequested = false;
+    this.pendingEmail = '';
     if (!this.showChangeEmailForm) {
       this.newEmail = '';
     }
   }
 
-  toggleChangePasswordForm(): void {
-    this.showChangePasswordForm = !this.showChangePasswordForm;
-    if (!this.showChangePasswordForm) {
-      this.currentPassword = '';
-      this.newPassword = '';
-      this.confirmPassword = '';
-    }
-  }
-
   saveEmail(): void {
-    if (this.newEmail && this.newEmail !== this.userEmail) {
-      this.userEmail = this.newEmail;
-      this.showChangeEmailForm = false;
-      this.newEmail = '';
-    }
-  }
-
-  savePassword(): void {
-    if (this.newPassword !== this.confirmPassword) {
-      alert('Passwords do not match');
+    const newEmail = this.newEmail?.trim();
+    if (!newEmail || newEmail === this.userEmail || this.isSendingEmailChange) {
       return;
     }
 
-    if (this.newPassword.length < 8) {
-      alert('Password must be at least 8 characters');
-      return;
-    }
-
-    this.showChangePasswordForm = false;
-    this.currentPassword = '';
-    this.newPassword = '';
-    this.confirmPassword = '';
-    alert('Password updated successfully');
+    this.isSendingEmailChange = true;
+    this.userService
+      .requestEmailChange(this.currentUser.userId() as number, { newEmail })
+      .subscribe({
+        next: () => {
+          this.isSendingEmailChange = false;
+          this.pendingEmail = newEmail;
+          this.emailChangeRequested = true;
+          this.newEmail = '';
+        },
+        error: (err) => {
+          this.isSendingEmailChange = false;
+          this.dialogPopUp.error(
+            'Could not send verification email',
+            err?.error?.message ?? 'Something went wrong. Please try again.',
+          );
+        },
+      });
   }
 
   openDeleteProfileDialog(): void {

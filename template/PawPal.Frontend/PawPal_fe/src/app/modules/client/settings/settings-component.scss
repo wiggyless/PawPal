@@ -53,6 +53,10 @@ $divider-color: #e5d7c4;
   grid-template-columns: auto auto;
 }
 
+.email-section {
+  grid-column: 1 / -1;
+}
+
 .settings-section {
   background-color: var(--settings-section-colour);
     border-bottom: 3px solid var(--settings-section-border);

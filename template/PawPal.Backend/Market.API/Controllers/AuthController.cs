@@ -4,6 +4,7 @@ using PawPal.Application.Modules.Auth.Commands.Login;
 using PawPal.Application.Modules.Auth.Commands.Logout;
 using PawPal.Application.Modules.Auth.Commands.Refresh;
 using PawPal.Application.Modules.Users.Commands.ConfirmEmail;
+using PawPal.Application.Modules.Users.Commands.ConfirmEmailChange;
 using System.Text.Json.Serialization;
 
 [ApiController]
@@ -53,6 +54,14 @@ public sealed class AuthController(IMediator mediator, IConfiguration configurat
     public async Task<IActionResult> ConfirmEmail([FromQuery] string token, CancellationToken ct)
     {
         var result = await mediator.Send(new ConfirmEmailCommand { Token = token }, ct);
+        return Ok(result);
+    }
+
+    [HttpGet("confirm-email-change")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ConfirmEmailChange([FromQuery] string token, CancellationToken ct)
+    {
+        var result = await mediator.Send(new ConfirmEmailChangeCommand { Token = token }, ct);
         return Ok(result);
     }
 

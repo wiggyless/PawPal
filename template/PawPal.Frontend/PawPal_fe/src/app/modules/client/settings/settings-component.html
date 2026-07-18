@@ -6,7 +6,7 @@
     </div>
     <div class="settings-content">
       <!-- Email Section -->
-      <div class="settings-section">
+      <div class="settings-section email-section">
         <div class="section-header">
           <mat-icon>email</mat-icon>
           <div class="section-title">Email Address</div>
@@ -15,77 +15,43 @@
           <p class="current-value">
             Current E-mail: <span class="highlight">{{ this.userEmail }}</span>
           </p>
-          <button
-            class="action-btn secondarybtn"
-            (click)="toggleChangeEmailForm()"
-            [class.active]="showChangeEmailForm"
-          >
-            {{ showChangeEmailForm ? 'CANCEL' : 'CHANGE E-MAIL' }}
-          </button>
-          @if (showChangeEmailForm) {
-            <div class="form-section">
-              <div class="form-group">
-                <label>New Email Address</label>
-                <input
-                  type="email"
-                  class="form-input"
-                  [(ngModel)]="newEmail"
-                  placeholder="Enter your new email"
-                />
+          @if (emailChangeRequested) {
+            <p class="current-value">
+              A verification email was sent to
+              <span class="highlight">{{ pendingEmail }}</span>. Click the link inside it to
+              finish changing your email — you'll be asked to log back in afterwards.
+            </p>
+            <button class="action-btn secondarybtn" (click)="toggleChangeEmailForm()">
+              CANCEL
+            </button>
+          } @else {
+            <button
+              class="action-btn secondarybtn"
+              (click)="toggleChangeEmailForm()"
+              [class.active]="showChangeEmailForm"
+            >
+              {{ showChangeEmailForm ? 'CANCEL' : 'CHANGE E-MAIL' }}
+            </button>
+            @if (showChangeEmailForm) {
+              <div class="form-section">
+                <div class="form-group">
+                  <label>New Email Address</label>
+                  <input
+                    type="email"
+                    class="form-input"
+                    [(ngModel)]="newEmail"
+                    placeholder="Enter your new email"
+                  />
+                </div>
+                <button
+                  class="primarybtn"
+                  [disabled]="isSendingEmailChange"
+                  (click)="saveEmail()"
+                >
+                  {{ isSendingEmailChange ? 'SENDING...' : 'SEND VERIFICATION EMAIL' }}
+                </button>
               </div>
-              <button class="primarybtn" (click)="saveEmail()">SAVE E-MAIL</button>
-            </div>
-          }
-        </div>
-      </div>
-
-      <!-- Password Section -->
-      <div class="settings-section">
-        <div class="section-header">
-          <mat-icon>lock</mat-icon>
-          <div class="section-title">Password</div>
-        </div>
-        <div class="section-body">
-          <p class="current-value">Keep your password secure and unique</p>
-          <button
-            class="action-btn secondarybtn"
-            (click)="toggleChangePasswordForm()"
-            [class.active]="showChangePasswordForm"
-          >
-            {{ showChangePasswordForm ? 'CANCEL' : 'CHANGE PASSWORD' }}
-          </button>
-
-          @if (showChangePasswordForm) {
-            <div class="form-section">
-              <div class="form-group">
-                <label>Current Password</label>
-                <input
-                  type="password"
-                  class="form-input"
-                  [(ngModel)]="currentPassword"
-                  placeholder="Enter your current password"
-                />
-              </div>
-              <div class="form-group">
-                <label>New Password</label>
-                <input
-                  type="password"
-                  class="form-input"
-                  [(ngModel)]="newPassword"
-                  placeholder="Enter your new password (min 8 characters)"
-                />
-              </div>
-              <div class="form-group">
-                <label>Confirm Password</label>
-                <input
-                  type="password"
-                  class="form-input"
-                  [(ngModel)]="confirmPassword"
-                  placeholder="Confirm your new password"
-                />
-              </div>
-              <button class="primarybtn" (click)="savePassword()">UPDATE PASSWORD</button>
-            </div>
+            }
           }
         </div>
       </div>
