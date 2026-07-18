@@ -1,16 +1,11 @@
 ﻿using Market.Infrastructure.Database;
 using MediatR;
-using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.Hosting;
-using PawPal.Application.Abstractions;
 using PawPal.Application.Modules.PostImages.Commands.Create;
 using PawPal.Domain.Entities.Animal_Info;
 using PawPal.Domain.Entities.Animal_Info.ManyToMany;
-using PawPal.Domain.Entities.Identity;
 using PawPal.Domain.Entities.Places;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using MediatR;
 using PawPal.Domain.Entities.Posts;
 namespace PawPal.Infrastructure.Database.Seeders;
 

@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Subscriber, Subscription } from 'rxjs';
-import { environment } from '../../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment';
 import { CitiesService } from '../../../../api-services/cities/cities.service';
 import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 import { ReportUserService } from '../../../../api-services/moderation/reported-posts/reported-users/reported-users.service';

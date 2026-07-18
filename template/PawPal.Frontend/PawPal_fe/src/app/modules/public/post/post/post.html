@@ -45,7 +45,7 @@
                       </p>
                     }
                     <p>Vaccinated:</p>
-                    <p>Sprayed:</p>
+                    <p>Spayed:</p>
                     <p>Parasite free:</p>
                     <p>Date added:</p>
                     <p>City:</p>
@@ -98,43 +98,6 @@
                   </div>
                 </div>
               </div>
-              <div class="straight-border"></div>
-              <div class="post-information-pet-attributes-values">
-                @for (ani of animal | keyvalue: keepOrder; track ani.key) {
-                @if (ani.key !== 'hasPapers') {
-                <p>{{ ani.value }}</p>
-                }
-                }
-                @if (!animal.hasPapers) {
-                <p><mat-icon>close</mat-icon></p>
-                } @else {
-                <p><mat-icon>check</mat-icon></p>
-                }
-                @if (!animalHealth.vaccinated) {
-                <p><mat-icon>close</mat-icon></p>
-                } @else {
-                <p><mat-icon>check</mat-icon></p>
-                }
-                @if (!animalHealth.spayedOrNeutered) {
-                <p><mat-icon>close</mat-icon></p>
-                } @else {
-                <p><mat-icon>check</mat-icon></p>
-                }
-                @if (!animalHealth.parasiteFree) {
-                <p><mat-icon>close</mat-icon></p>
-                } @else {
-                <p><mat-icon>check</mat-icon></p>
-                }
-                <p>{{ dateAdded | date: 'short' }}</p>
-                <p>{{ city.name }}</p>
-              </div>
-            </div>
-            <div class="post-information-pet-add-info">
-              <p class="post-information-pet-add-info-label">Additional information</p>
-              <div class="post-information-pet-add-info-text">
-                <p>Allergies: {{ animalHealth.animalAllergies }}</p>
-                <p>Disabilities: {{ animalHealth.animalDisabilities }}</p>
-              </div>
             </div>
           </div>
           <div class="post-information-user-container">
@@ -179,7 +142,16 @@
             </div>
           </div>
         </div>
+        @if (images.length > 1) {
+        <button class="carousel-arrow left" aria-label="Previous image" (click)="prevImage(images.length)">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button class="carousel-arrow right" aria-label="Next image" (click)="nextImage(images.length)">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+        }
       </div>
+    }
     </div>
     } @else {
     <div class="loading-container">
