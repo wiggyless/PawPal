@@ -52,7 +52,7 @@ export class Adoption implements OnInit {
     comment: new FormControl(''),
     iAmReady: new FormControl(false, Validators.requiredTrue),
   });
-
+  router = inject(Router);
   postID: number = 0;
   requirementIDFromRes: number = 0;
   ngOnInit(): void {
@@ -106,10 +106,10 @@ export class Adoption implements OnInit {
         };
         this.requestService.addRequest(payload).subscribe({
           next: (res) => {
-            console.log('Request made successfully ', res);
+            this.router.navigate(['']);
           },
           error: (err) => {
-            console.log('ERROR => ', err);
+            this.dialog.success('Error', err, 'OK');
           },
         });
       },
@@ -118,7 +118,11 @@ export class Adoption implements OnInit {
       },
     });
     if (isCheckReady) {
-      this.dialog.success('Request Sent', 'Your adoption request has been sent successfully. Please wait for further updates.', 'OK');
+      this.dialog.success(
+        'Request Sent',
+        'Your adoption request has been sent successfully. Please wait for further updates.',
+        'OK',
+      );
     }
   }
   get yard() {

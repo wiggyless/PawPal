@@ -1,22 +1,19 @@
-﻿using System;
+﻿using PawPal.Application.Modules.Security.Answers.Commands.Create;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PawPal.Application.Modules.Security.Answers.Commands.Create
+namespace PawPal.Application.Modules.Security.Answers.Commands.Update
 {
-    public sealed class CreateAnswerValidator : AbstractValidator<CreateAnswerCommand>
+    public sealed class UpdateAnswerValidator : AbstractValidator<UpdateAnswerCommand>
     {
-        public CreateAnswerValidator()
+        public UpdateAnswerValidator()
         {
             RuleFor(x => x.Answers)
                 .Must(x => x.Count == 3)
                 .WithMessage("You must provide exactly 3 security answers.");
-
-            RuleForEach(x => x.Answers)
-                .OverrideIndexer((x, collection, element, index) => $".Question_{index + 1}")
-                .SetValidator(new StringValidator());
         }
     }
 
@@ -25,11 +22,11 @@ namespace PawPal.Application.Modules.Security.Answers.Commands.Create
         public StringValidator()
         {
             RuleFor(model => model.Value)
-                .NotEmpty()
-                .WithMessage("Answer cannot be empty.\n")
                 .Length(8, 30)
                 .WithMessage("\nYour answer must be between 8 and 30 characters long. You entered {TotalLength} characters.\n")
-                .OverridePropertyName(string.Empty);
+                .OverridePropertyName(string.Empty)
+                .Unless(model=>string.IsNullOrEmpty(model.Value));
+
         }
     }
 }
