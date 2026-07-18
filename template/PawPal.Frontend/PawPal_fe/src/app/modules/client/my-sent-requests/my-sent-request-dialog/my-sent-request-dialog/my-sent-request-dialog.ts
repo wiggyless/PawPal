@@ -61,7 +61,6 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
   }
   loadReq() {
     this.mySubscription = forkJoin({
-      // will have to change this - temp solution
       post: this.postAPI.getPostById(this.postID),
       request: this.reqAPI.getAnimalRequirementsById(this.reqID),
     }).subscribe({
@@ -78,8 +77,6 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
       },
     });
   }
-
-  // will have to change this later
 
   closeDialog() {
     this.dialogReg.close();

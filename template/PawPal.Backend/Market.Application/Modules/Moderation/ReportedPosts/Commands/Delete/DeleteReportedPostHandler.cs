@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 namespace PawPal.Application.Modules.Moderation.ReportedPosts.Commands.Delete
 {
     public class DeleteReportedPostHandler(IAppDbContext context, IAppCurrentUser currentUser) :
-        IRequestHandler<DeleteProblemReportCommand, Unit>
+        IRequestHandler<DeleteReportedPostCommand, Unit>
     {
-        public async Task<Unit> Handle(DeleteProblemReportCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteReportedPostCommand request, CancellationToken cancellationToken)
         {
             if (currentUser.RoleId != 3 || !currentUser.IsAuthenticated)
                 throw new PawPalConflictException("You're not authorized for this actioN!");
 
             var reportedPost = await context.ReportedPosts.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (reportedPost is null)
-                throw new PawPalConflictException("Post does not exist!");
-
+            {
+                throw new PawPalConflictException("Reported post does not exist!");
+            }
             reportedPost.IsDeleted = true;
             await context.SaveChangesAsync(cancellationToken);
 

@@ -71,6 +71,8 @@ export interface GetByEmailQueryDto {
 export interface UpdateUserPassword {
   email: string;
   newPassword: string;
+  passwordRecovery: boolean;
+  currentPassword?: string;
 }
 
 export interface RequestEmailChangeCommand {

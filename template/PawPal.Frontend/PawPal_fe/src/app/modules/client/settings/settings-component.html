@@ -68,7 +68,11 @@
               <strong>Password recovery with security questions</strong>
               <p class="option-description">Add an extra layer of security to your account</p>
             </div>
-            <button class="secondarybtn" (click)="enableSecurityQuestions()">ENABLE</button>
+            @if (isSecurityEnabled()) {
+              <button class="secondarybtn" (click)="enableSecurityQuestions()">UPDATE</button>
+            } @else {
+              <button class="secondarybtn" (click)="enableSecurityQuestions()">ENABLE</button>
+            }
           </div>
         </div>
       </div>
@@ -82,13 +86,12 @@
         <div class="section-body">
           <div class="notification-option">
             <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="isDarkTheme" (change)="toggleTheme()"/>
+              <input type="checkbox" [(ngModel)]="isDarkTheme" (change)="toggleTheme()" />
               <span>Dark Theme</span>
             </label>
           </div>
         </div>
       </div>
-
     </div>
     <div class="settings-section danger-section" style="margin-top: 50px">
       <div class="section-header danger-header">
