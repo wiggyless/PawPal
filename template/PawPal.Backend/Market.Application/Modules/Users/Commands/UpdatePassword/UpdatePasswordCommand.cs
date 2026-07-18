@@ -12,5 +12,7 @@ namespace PawPal.Application.Modules.Users.Commands.UpdatePassword
         public string Email { get; set; }
         [MinLength(8)]
         public string NewPassword { get; set; }
+        public bool PasswordRecovery { get; set; }
+        public string? CurrentPassword { get; set; }
     }
 }

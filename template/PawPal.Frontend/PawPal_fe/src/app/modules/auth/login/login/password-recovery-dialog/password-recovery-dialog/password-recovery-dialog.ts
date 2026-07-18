@@ -16,6 +16,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, take, takeUntil } from 'rxjs';
 import { UserService } from '../../../../../../api-services/users/users-service';
 import { MatStepper } from '@angular/material/stepper';
+import { DialoguePopupService } from '../../../../../../api-services/dialogue-popup/dialogue-popup.service';
 @Component({
   selector: 'app-password-recovery-dialog',
   standalone: false,
@@ -52,8 +53,9 @@ export class PasswordRecoveryDialog {
   lastEmail = '';
   answerCorrect: IsAnswerTrue | undefined;
   securityQuestionList = signal<GetSecurityQuestionDTO[]>([]);
-  showPassword = false;
+  showPassword = signal(false);
   private destroyRef = new Subject<void>();
+  dialogPopUp = inject(DialoguePopupService);
   ngOnInit(): void {}
   ngOnDestroy(): void {
     this.destroyRef.next();
@@ -95,52 +97,74 @@ export class PasswordRecoveryDialog {
     this.dialogRef.close();
   }
   checkAnswers(stepper: MatStepper) {
-    const answersRecord: Record<number, string> = {
-      [this.Question('first')]: this.Answer('first') as string,
-      [this.Question('second')]: this.Answer('second') as string,
-      [this.Question('third')]: this.Answer('third') as string,
-    };
-    this.answerService
-      .checkSecurityAnswer({
-        answers: answersRecord,
-        email: this.emailFormGroup.get('email')!.value as string,
-      })
-      .pipe(take(1))
-      .subscribe({
-        next: (response) => {
-          if (response.isTrueAnswer) {
-            this.answerCorrect = response;
-            stepper.selected!.completed = true;
-            console.log(response.isTrueAnswer);
-            this.cd.detectChanges();
-            stepper.next();
-          }
-        },
-        error: (response) => {
-          console.log('WRONG ANSWER');
-        },
-      });
-  }
-  updatePassword() {
-    if (this.currentUserService.email() != null && this.passwordFormGroup.valid) {
-      this.userService
-        .updatePassword({
+    if (this.securityFormGroup.valid) {
+      const answersRecord: Record<number, string> = {
+        [this.Question('first')]: this.Answer('first') as string,
+        [this.Question('second')]: this.Answer('second') as string,
+        [this.Question('third')]: this.Answer('third') as string,
+      };
+      this.answerService
+        .checkSecurityAnswer({
+          answers: answersRecord,
           email: this.emailFormGroup.get('email')!.value as string,
-          newPassword: this.passwordFormGroup.get('password')!.value as string,
         })
         .pipe(take(1))
         .subscribe({
-          next: (res) => {
-            console.log('Password saved');
-            this.dialogRef.close();
+          next: (response) => {
+            if (response.isTrueAnswer) {
+              this.answerCorrect = response;
+              stepper.selected!.completed = true;
+              this.cd.detectChanges();
+              stepper.next();
+            } else {
+              this.dialogPopUp.error('Error', 'Wrong answers, please try again!', 'OK');
+            }
           },
-          error: (res) => {
-            console.log('THRE WAS AN ERROR');
+          error: (response) => {
+            this.dialogPopUp.error('Error', 'Wrong answers', 'OK');
           },
         });
     }
   }
+  updatePassword() {
+    if (this.passwordFormGroup.valid) {
+      if (
+        this.passwordFormGroup.get('password')?.value ==
+        this.passwordFormGroup.get('secondPassword')?.value
+      ) {
+        this.userService
+          .updatePassword({
+            email: this.emailFormGroup.get('email')!.value as string,
+            newPassword: this.passwordFormGroup.get('password')!.value as string,
+            passwordRecovery: true,
+          })
+          .pipe(take(1))
+          .subscribe({
+            next: (res) => {
+              this.dialogPopUp.success('Success', 'Password has been sucessfully reset', 'OK');
+              this.dialogRef.close();
+            },
+            error: (res) => {
+              this.dialogPopUp.success('Error', res?.error.message, 'OK');
+            },
+          });
+      } else {
+        this.dialogPopUp.error('Error', 'Passwords are not the same', 'OK');
+      }
+    } else {
+      console.log(
+        this.passwordFormGroup.get('password')?.value +
+          ' ' +
+          this.passwordFormGroup.get('secondPassword')?.value,
+      );
+      this.dialogPopUp.success(
+        'Error',
+        'Please check if the passwords fields are correctly filled',
+        'OK',
+      );
+    }
+  }
   togglePassword(): void {
-    this.showPassword = !this.showPassword;
+    this.showPassword.set(!this.showPassword());
   }
 }

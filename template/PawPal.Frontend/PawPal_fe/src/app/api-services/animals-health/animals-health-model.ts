@@ -27,8 +27,8 @@ export interface AddAnimalHealthHistory {
   vaccinated: boolean;
   spayedOrNeutered: boolean;
   dietaryRestrictions: string;
-  animalAllergies: Array<string>;
-  animalDisabilities: Array<string>;
+  allergies: Array<string>;
+  disabilities: Array<string>;
 }
 
 export interface UpdateHealthHistory {

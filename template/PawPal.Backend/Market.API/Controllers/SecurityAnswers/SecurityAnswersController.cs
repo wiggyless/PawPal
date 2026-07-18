@@ -12,7 +12,6 @@ namespace PawPal.API.Controllers.SecurityAnswers
     [Route("[controller]")]
     public class SecurityAnswersController(ISender sender) : ControllerBase
     {
-        [AllowAnonymous]
         [HttpPost]
 
         public async Task<ActionResult<int>> CreateAnswer(CreateAnswerCommand command, CancellationToken cancellationToken)
@@ -20,7 +19,6 @@ namespace PawPal.API.Controllers.SecurityAnswers
             int id = await sender.Send(command, cancellationToken);
             return id;
         }
-
 
         [AllowAnonymous]
         [HttpGet]
@@ -30,13 +28,11 @@ namespace PawPal.API.Controllers.SecurityAnswers
             return answer;
         }
 
-        [HttpPut("{id:int}")]
-        public async Task Update(UpdateAnswerCommand upc, int id, CancellationToken ct)
+        [HttpPut]
+        public async Task Update(UpdateAnswerCommand upc, CancellationToken ct)
         {
-            upc.Id = id;
             await sender.Send(upc, ct);
         }
-        [AllowAnonymous]
         [HttpDelete("{id:int}")]
         public async Task Delete(DeleteAnswerCommand deletePost, CancellationToken ct)
         {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Users.Commands.UpdatePassword
 {
-    public sealed class UpdatePasswordCommandHandler(IAppDbContext context,IAppCurrentUser currentUser) : IRequestHandler<UpdatePasswordCommand, Unit>
+    public sealed class UpdatePasswordCommandHandler(IAppDbContext context,IAppCurrentUser currentUser,IPasswordHasher<UserEntity> hash) : IRequestHandler<UpdatePasswordCommand, Unit>
     {
         public async Task<Unit> Handle(UpdatePasswordCommand request, CancellationToken cancellationToken)
         {
@@ -16,9 +16,15 @@ namespace PawPal.Application.Modules.Users.Commands.UpdatePassword
             {
                 throw new PawPalNotFoundException($"User with Email {request.Email} does not exist!");
             }
-            if(currentUser.Email != request.Email)
+            if (!request.PasswordRecovery)
             {
-                throw new PawPalConflictException("User is not allowed to do this action");
+                if (currentUser.Email != request.Email)
+                {
+                    throw new PawPalConflictException("User is not allowed to do this action");
+                }
+                var verify = hash.VerifyHashedPassword(user, user.PasswordHash, request.CurrentPassword);
+                if (verify == PasswordVerificationResult.Failed)
+                    throw new PawPalConflictException("Incorrect password");
             }
             var password = request.NewPassword?.Trim();
             if (string.IsNullOrWhiteSpace(password)) {

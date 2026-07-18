@@ -8,6 +8,6 @@ namespace PawPal.Application.Modules.Security.Answers.Query.GetByQuestionAndEmai
 {
     public class GetAnswerQueryDto
     {
-        public bool isTrueAnswer { get; set; }
+        public bool isTrueAnswer { get; set; } = false;
     }
 }

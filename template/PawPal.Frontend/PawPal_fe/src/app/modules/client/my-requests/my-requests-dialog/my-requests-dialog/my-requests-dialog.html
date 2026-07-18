@@ -65,7 +65,6 @@
           </div>
           <div class="bottom-border-holder"></div>
 
-          <!-- Dvorište -->
           <div class="checkbox-item">
             <svg class="iconBox" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -87,7 +86,6 @@
             </div>
           </div>
 
-          <!-- Djeca prisutna -->
           <div class="checkbox-item">
             <svg
               class="iconBox"
@@ -112,8 +110,6 @@
               />
             </div>
           </div>
-
-          <!-- Starije osobe prisutne -->
           <div class="checkbox-item">
             <svg
               class="iconBox"
@@ -141,7 +137,6 @@
             </div>
           </div>
 
-          <!-- Drugi ljubimci -->
           <div class="checkbox-item">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -168,7 +163,6 @@
             </div>
           </div>
 
-          <!-- Poklon -->
           <div class="checkbox-item">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -382,7 +376,6 @@
             ></textarea>
           </div>
 
-          <!-- Dodatni komentari -->
           <div class="form-group">
             <div class="section-title">
               <svg viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -401,25 +394,30 @@
           </div>
         </div>
 
-        <!-- Right Column (Profile) -->
         <div class="right-column">
           <div class="profile-section">
             @if (!isAnotherUser) {
-              <div class="avatar">
-                <svg viewBox="0 0 182 182" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="182" height="182" rx="91" fill="#191408" />
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M118.301 72.8C118.301 87.8774 106.078 100.1 91.0011 100.1C75.9237 100.1 63.7011 87.8774 63.7011 72.8C63.7011 57.7226 75.9237 45.5 91.0011 45.5C106.078 45.5 118.301 57.7226 118.301 72.8ZM109.201 72.8C109.201 82.8516 101.053 91 91.0011 91C80.9495 91 72.8011 82.8516 72.8011 72.8C72.8011 62.7484 80.9495 54.6 91.0011 54.6C101.053 54.6 109.201 62.7484 109.201 72.8Z"
-                    fill="#C7B18C"
-                  />
-                  <path
-                    d="M91.0011 113.75C61.5427 113.75 36.4433 131.169 26.8823 155.574C29.2114 157.887 31.665 160.074 34.2321 162.126C41.3516 139.72 63.6862 122.85 91.0011 122.85C118.316 122.85 140.651 139.72 147.77 162.126C150.337 160.074 152.791 157.887 155.12 155.574C145.559 131.169 120.46 113.75 91.0011 113.75Z"
-                    fill="#C7B18C"
-                  />
-                </svg>
-              </div>
+              @if (user?.photoURL != '') {
+                <div class="avatar">
+                  <img [src]="user?.photoURL" />
+                </div>
+              } @else {
+                <div class="avatar">
+                  <svg viewBox="0 0 182 182" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="182" height="182" rx="91" fill="#191408" />
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M118.301 72.8C118.301 87.8774 106.078 100.1 91.0011 100.1C75.9237 100.1 63.7011 87.8774 63.7011 72.8C63.7011 57.7226 75.9237 45.5 91.0011 45.5C106.078 45.5 118.301 57.7226 118.301 72.8ZM109.201 72.8C109.201 82.8516 101.053 91 91.0011 91C80.9495 91 72.8011 82.8516 72.8011 72.8C72.8011 62.7484 80.9495 54.6 91.0011 54.6C101.053 54.6 109.201 62.7484 109.201 72.8Z"
+                      fill="#C7B18C"
+                    />
+                    <path
+                      d="M91.0011 113.75C61.5427 113.75 36.4433 131.169 26.8823 155.574C29.2114 157.887 31.665 160.074 34.2321 162.126C41.3516 139.72 63.6862 122.85 91.0011 122.85C118.316 122.85 140.651 139.72 147.77 162.126C150.337 160.074 152.791 157.887 155.12 155.574C145.559 131.169 120.46 113.75 91.0011 113.75Z"
+                      fill="#C7B18C"
+                    />
+                  </svg>
+                </div>
+              }
               <div class="username">{{ user?.username }}</div>
               <button class="send-message-btn" (click)="routeMessage()">SEND A MESSAGE</button>
               <div class="bottom-border-holder"></div>

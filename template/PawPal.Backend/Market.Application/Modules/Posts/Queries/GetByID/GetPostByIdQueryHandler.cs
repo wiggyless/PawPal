@@ -28,7 +28,10 @@ namespace PawPal.Application.Modules.Posts.Queries.GetByID
                     Age = x.Animal.Age,
                     DateAdded = x.DateAdded,
                 }).FirstOrDefaultAsync(cancelationToken);
-            if (post == null) throw new PawPalNotFoundException("Post not found");
+            if (post == null)
+            {
+                throw new PawPalNotFoundException("Post is either disabled or does not exist");
+            }
             return post;
         }
     }

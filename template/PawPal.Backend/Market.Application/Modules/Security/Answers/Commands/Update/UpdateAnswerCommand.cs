@@ -8,8 +8,7 @@ namespace PawPal.Application.Modules.Security.Answers.Commands.Update
 {
     public class UpdateAnswerCommand : IRequest<Unit>
     {
-        public int Id { get; set; } 
-        public int QuestionID { get; set; }
-        public string Answer { get; set; }
+        public Dictionary<int, string> Answers { get; set; } = new Dictionary<int, string>();
+        public string Email { get; set; }
     }
 }

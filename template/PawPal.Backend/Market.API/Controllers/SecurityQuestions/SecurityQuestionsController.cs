@@ -19,7 +19,6 @@ namespace PawPal.API.Controllers.SecurityQuestions
     [Route("[controller]")]
     public class SecurityQuestionsController(ISender sender) : ControllerBase
     {
-        [AllowAnonymous]
         [HttpPost]
 
         public async Task<ActionResult<int>> CreateQuestion(CreateQuestionCommand command, CancellationToken cancellationToken)
@@ -28,8 +27,6 @@ namespace PawPal.API.Controllers.SecurityQuestions
             return id;
         }
 
-
-        [AllowAnonymous]
         [HttpGet]
         public async Task<PageResult<ListQuestionsQueryDto>> List([FromQuery] ListQuestionsQuery query, CancellationToken token)
         {

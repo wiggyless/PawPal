@@ -20,4 +20,8 @@ export class SecurityAnswerService {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.get<IsAnswerTrue>(this.apiUrl, { params });
   }
+  updateSecurityAnswers(request: GetAndPostAnswerDTO): Observable<any> {
+    const params = request ? buildHttpParams(request as any) : undefined;
+    return this.httpClient.put<number>(this.apiUrl, request, { params });
+  }
 }

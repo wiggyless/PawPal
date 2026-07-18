@@ -14,18 +14,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Cr
         public required bool SpayedOrNeutered { get; set; } = false; //default value
         public required bool ParasiteFree { get; set; } = false; //default value
         public string? DietaryRestrictions { get; set; } = string.Empty;  //default value
-        public List<AnimalAllergiesCommand> Allergies { get; set; } = new List<AnimalAllergiesCommand>();
-        public List<AnimalDisabilitiesCommand> Disabilities { get; set; } = new List<AnimalDisabilitiesCommand>();
-    }
-
-    public class AnimalAllergiesCommand
-    {
-        public string? AllergyName { get; set; }
-    }
-
-
-    public class AnimalDisabilitiesCommand
-    {
-        public string? DisabilityName { get; set; }
+        public List<string> Allergies { get; set; } = new List<string>();
+        public List<string> Disabilities { get; set; } = new List<string>();
     }
 }

@@ -118,14 +118,12 @@ body {
   --create-post-main-container-text: #483c28;
   --create-post-main-container-error-text: #aa1b16;
   --create-post-image-holder-shadow: #987b66;
---create-post-image-holder-border:#937652;
+  --create-post-image-holder-border: #937652;
   --create-post-dropdown-color: #2e2218;
   --create-post-dropdown-color-text: #2e2218;
 
   --adoption-request-card-background-color: #c7b18c;
   --adoption-request-card-text-color: #473619;
-
-
 }
 
 body.dark-theme {
@@ -201,12 +199,10 @@ body.dark-theme {
   --create-post-dropdown-color: #2e2218;
   --create-post-dropdown-color-text: #2e2218;
 
-  
   --adoption-request-card-background-color: #392a1f;
   --adoption-request-card-text-color: #c7b18c;
-
-
 }
+
 .mat-mdc-form-field {
   border-radius: 100px;
   height: 75px;
@@ -303,4 +299,3 @@ body.dark-theme {
 .mdc-text-field--filled {
   background-color: var(--box-color) !important;
 }
-

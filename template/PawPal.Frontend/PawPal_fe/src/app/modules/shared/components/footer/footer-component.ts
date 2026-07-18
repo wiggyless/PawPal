@@ -4,6 +4,7 @@ import { Subscriber, Subscription } from 'rxjs';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { FormsModule } from '@angular/forms';
 import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -17,6 +18,7 @@ export class FooterComponent implements OnInit {
   sub: Subscription | undefined;
   currentUserService = inject(CurrentUserService);
   dialogPopUp = inject(DialoguePopupService);
+  router = inject(Router);
   description: string = '';
   ngOnInit(): void {}
   clearText(): void {
@@ -27,6 +29,9 @@ export class FooterComponent implements OnInit {
     }
   }
   sendReport(): void {
+    if (!this.currentUserService.isAuthenticated()) {
+      this.router.navigate(['login']);
+    }
     this.sub = this.reportedProblemService
       .createProblemReport({
         description: this.description,
