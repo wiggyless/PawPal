@@ -25,6 +25,7 @@ import { ReportPostComponent } from '../../../client/report-post-component/repor
 import { ReportUserComponent } from '../../../client/report-user-component/report-user-component/report-user-component';
 import { GetUserByIdDto } from '../../../../api-services/users/users-model';
 import { DialoguePopupComponent } from '../../../shared/components/dialogue-popup/dialogue-popup.component';
+import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 
 @Component({
   selector: 'app-post',
@@ -55,7 +56,7 @@ export class PostComponent implements OnInit, OnDestroy {
   postSub: Subscription | undefined;
   animalSub: Subscription | undefined;
   togetherSub: Subscription | undefined;
-  
+  dialogPopUP = inject(DialoguePopupService);
   animalHealth: GetAnimalsHealthByIdDto = {
     animalHealthHistoryId: 0,
     animalId: 0,
@@ -98,30 +99,36 @@ export class PostComponent implements OnInit, OnDestroy {
     });
 
     this.imagesList = this.postImageService.getImagePost(this.postId);
-    this.postSub = this.postService.getPostById(this.postId).subscribe((res) => {
-      this.dateAdded = res.dateAdded;
-      this.animalId = res.animalID;
-      this.animalSub = this.animalService.getAnimalById(res.animalID).subscribe((resA) => {
-        this.togetherSub = forkJoin({
-          health: this.animalHealthService.getAnimalHealthHistoryById(this.animalId),
-          cities: this.cityService.getCityById(res.cityID),
-          users: this.userService.getUser(res.userID),
-        }).subscribe({
-          next: (response) => {
-            let sourceKeys = Object.keys(resA);
-            sourceKeys.forEach((key) => {
-              if (key in this.animal) {
-                (this.animal as any)[key] = (resA as any)[key];
-              }
-            });
-            this.animalHealth = response.health;
-            this.city = response.cities;
-            this.user = response.users;
-            this.isImagesLoaded.set(true);
-          },
+    this.postSub = this.postService.getPostById(this.postId).subscribe({
+      next: (res) => {
+        this.dateAdded = res.dateAdded;
+        this.animalId = res.animalID;
+        this.animalSub = this.animalService.getAnimalById(res.animalID).subscribe((resA) => {
+          this.togetherSub = forkJoin({
+            health: this.animalHealthService.getAnimalHealthHistoryById(this.animalId),
+            cities: this.cityService.getCityById(res.cityID),
+            users: this.userService.getUser(res.userID),
+          }).subscribe({
+            next: (response) => {
+              let sourceKeys = Object.keys(resA);
+              sourceKeys.forEach((key) => {
+                if (key in this.animal) {
+                  (this.animal as any)[key] = (resA as any)[key];
+                }
+              });
+              this.animalHealth = response.health;
+              this.city = response.cities;
+              this.user = response.users;
+              this.isImagesLoaded.set(true);
+            },
+          });
         });
-      });
+      },
+      error: (res) => {
+        this.dialogPopUP.error('Error', res, 'OK');
+      },
     });
+    this.postSub = this.postService.getPostById(this.postId).subscribe((res) => {});
   }
   ngOnDestroy(): void {
     this.animalSub?.unsubscribe();

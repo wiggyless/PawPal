@@ -38,21 +38,24 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Cr
 
             if (request.Allergies.Count() > 0)
             {
-                foreach (var allergyByUser in request.Allergies) //poslana lista alergija od usera
+                foreach (var allergyByUser in request.Allergies) 
                 {
-                    var allergy = await context.Allergies.Where(x =>
-                    x.Name.ToLower().Contains(allergyByUser.AllergyName.ToLower())).FirstOrDefaultAsync(cancellationToken);
-                    if (allergy == null)
-                        throw new PawPalNotFoundException($"This allergy does not exist in our database!");
-
-                    var animalAllergies = new AllergiesAnimalHealthHistory
+                    if(allergyByUser != "")
                     {
-                        AllergyId = allergy.Id,
-                        Allergy = allergy,
-                        AnimalHealthHistoryId = healthHistory.Id,
-                        AnimalHealthHistory = healthHistory
-                    };
-                    context.AnimalsAllergies.Add(animalAllergies);
+                        var allergy = await context.Allergies.Where(x =>
+                    x.Name.ToLower() == allergyByUser.ToLower()).FirstOrDefaultAsync(cancellationToken);
+                        if (allergy == null)
+                            throw new PawPalNotFoundException($"This allergy does not exist in our database!");
+
+                        var animalAllergies = new AllergiesAnimalHealthHistory
+                        {
+                            AllergyId = allergy.Id,
+                            Allergy = allergy,
+                            AnimalHealthHistoryId = healthHistory.Id,
+                            AnimalHealthHistory = healthHistory
+                        };
+                        context.AnimalsAllergies.Add(animalAllergies);
+                    }
                 }
             await context.SaveChangesAsync(cancellationToken);
             }
@@ -61,19 +64,23 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Cr
             {
                 foreach (var disabilityByUser in request.Disabilities) //poslana lista disabilities od usera
                 {
-                    var disability = await context.Disabilities.Where(x =>
-                    x.Name.ToLower().Contains(disabilityByUser.DisabilityName.ToLower())).FirstOrDefaultAsync(cancellationToken);
-                    if (disability == null)
-                        throw new PawPalNotFoundException($"This disability does not exist in our database!");
-
-                    var animalDisabilities = new DisabilitiesAnimalHealthHistory
+                    if(disabilityByUser != "")
                     {
-                        DisabilityId = disability.Id,
-                        Disability = disability,
-                        AnimalHealthHistoryId = healthHistory.Id,
-                        AnimalHealthHistory = healthHistory
-                    };
-                    context.AnimalsDisabilities.Add(animalDisabilities);
+                        var disability = await context.Disabilities.Where(x =>
+                        x.Name.ToLower() == disabilityByUser.ToLower()).FirstOrDefaultAsync(cancellationToken);
+                        if (disability == null)
+                            throw new PawPalNotFoundException($"This disability does not exist in our database!");
+
+                        var animalDisabilities = new DisabilitiesAnimalHealthHistory
+                        {
+                            DisabilityId = disability.Id,
+                            Disability = disability,
+                            AnimalHealthHistoryId = healthHistory.Id,
+                            AnimalHealthHistory = healthHistory
+                        };
+                        context.AnimalsDisabilities.Add(animalDisabilities);
+                    }
+
                 }
             await context.SaveChangesAsync(cancellationToken);
             }

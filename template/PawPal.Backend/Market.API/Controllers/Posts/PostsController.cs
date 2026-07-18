@@ -17,7 +17,6 @@ namespace PawPal.API.Controllers.Posts
     [Route("[controller]")]
     public class PostsController(ISender sender) : ControllerBase
     {
-        [AllowAnonymous]
         [HttpPost]
 
         public async Task<ActionResult<int>> CreatePost(CreatePostCommand command, CancellationToken cancellationToken)
@@ -42,7 +41,6 @@ namespace PawPal.API.Controllers.Posts
             return list;
         }
 
-        [AllowAnonymous]
         [HttpGet("likedPost")]
 
         public async Task<PageResult<ListPostByRangeQueryDto>> GetPostListLiked([FromQuery] ListPostByRangeQuery query, CancellationToken cancellationToken)
@@ -64,7 +62,6 @@ namespace PawPal.API.Controllers.Posts
             upc.Id = id;
             await sender.Send(upc, ct);
         }
-        [AllowAnonymous]
         [HttpDelete("{id:int}")]
         public async Task Delete(DeletePostCommand deletePost, CancellationToken ct)
         {

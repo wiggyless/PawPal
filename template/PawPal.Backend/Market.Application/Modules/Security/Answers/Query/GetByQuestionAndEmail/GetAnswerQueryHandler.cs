@@ -21,6 +21,10 @@ namespace PawPal.Application.Modules.Security.Answers.Query.GetByQuestionAndEmai
             if (question.Count() != query.Answers.Keys.Count) {
                 throw new PawPalNotFoundException("Question does not exist");
             }
+            if(query.Answers.Where(x=>string.IsNullOrWhiteSpace(x.Value)).Count() > 0 )
+            {
+                throw new PawPalConflictException("Answer cannot be an empty string");
+            }
             Dictionary<int,string> hashStringList = [];
 
             hashStringList = query.Answers.Select(x => new KeyValuePair<int,string>(x.Key, ConvertToHash(x.Value))).ToDictionary();
@@ -43,7 +47,7 @@ namespace PawPal.Application.Modules.Security.Answers.Query.GetByQuestionAndEmai
                 isTrueAnswer = hashStringList.OrderBy(k => k.Key)
                                 .Zip(answerDict.OrderBy(k => k.Key))
                                 .All(pair => CryptographicOperations.FixedTimeEquals(
-                                 Encoding.UTF8.GetBytes(pair.First.Value),
+                                Encoding.UTF8.GetBytes(pair.First.Value),
                                 Encoding.UTF8.GetBytes(pair.Second.Value)
                                 ))
             };
