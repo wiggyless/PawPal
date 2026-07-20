@@ -29,10 +29,10 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Cr
             context.AnimalHealthHistories.Add(healthHistory);
             await context.SaveChangesAsync(cancellationToken);
 
-            //za svaku alergiju/disability mora se pohraniti po jedan zapis u medjutabelu
-            //ako u jednom AnimalHealthHistory-u postoji vise alergija, onda se za svaku alergiju
-            //sprema zapis, sto znaci ako jedna zivotinja ima alergiju na polen i neku vrstu biljke
-            //onda bi izgledalo ovako:
+            // One record must be stored in the junction table per allergy/disability.
+            // If an AnimalHealthHistory has multiple allergies, one record is stored per
+            // allergy, so an animal allergic to both pollen and a certain plant would look
+            // like this:
             // AnimalHealthHistory_ID : 231 | Allergy : Pollen, Allergy_ID : 1
             // AnimalHealthHistory_ID : 231 | Allergy : Some_Plant, Allergy_ID : 2
 
@@ -62,7 +62,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Cr
 
             if (request.Disabilities.Count() > 0)
             {
-                foreach (var disabilityByUser in request.Disabilities) //poslana lista disabilities od usera
+                foreach (var disabilityByUser in request.Disabilities) // list of disabilities sent by the user
                 {
                     if(disabilityByUser != "")
                     {

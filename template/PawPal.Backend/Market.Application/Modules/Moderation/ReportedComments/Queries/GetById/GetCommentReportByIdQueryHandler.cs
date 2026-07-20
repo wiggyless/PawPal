@@ -7,14 +7,18 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Moderation.ReportedComments.Queries.GetById
 {
-    public class GetCommentReportByIdQueryHandler(IAppDbContext context) : IRequestHandler<GetCommentReportByIdQuery, GetCommentReportByIdQueryDto>
+    public class GetCommentReportByIdQueryHandler(IAppDbContext context, IAppCurrentUser currentUser) : IRequestHandler<GetCommentReportByIdQuery, GetCommentReportByIdQueryDto>
     {
         public async Task<GetCommentReportByIdQueryDto> Handle(GetCommentReportByIdQuery request, CancellationToken cancellationToken)
         {
-            var q = await context.ReportedComments.FirstOrDefaultAsync(x => request.Id == request.Id, cancellationToken);
+            var q = await context.ReportedComments.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (q is null)
             {
                 throw new PawPalConflictException("User report does not exist");
+            }
+            if (currentUser.UserId != q.CommentReportedBy && currentUser.RoleId != 3)
+            {
+                throw new PawPalConflictException("User is not allowed to do this action");
             }
             var user = context.Users.AsNoTracking().FirstOrDefault(x => x.Id == q.CommentReportedBy);
             var comment = context.Comments.AsNoTracking().Include(x=>x.User).FirstOrDefault(x => x.Id == q.CommentID);

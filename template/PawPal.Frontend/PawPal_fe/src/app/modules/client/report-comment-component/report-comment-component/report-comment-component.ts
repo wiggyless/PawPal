@@ -47,9 +47,7 @@ export class ReportCommentComponent implements OnInit {
     if (this.form.invalid || this.isSubmitting) return;
     if (!this.currentUser.isAuthenticated()) {
       this.route.navigate(['login']);
-    }
-    if (this.currentUser.getDefaultRoute() == '/login') {
-      this.route.navigate(['login']);
+      return;
     }
     this.isSubmitting = true;
     this.errorMessage = null;
@@ -64,13 +62,11 @@ export class ReportCommentComponent implements OnInit {
       })
       .subscribe({
         next: (res) => {
-          console.log('next fired', res);
           this.isSubmitting = false;
           this.submitted = true;
           this.cd.detectChanges();
         },
         error: (err) => {
-          console.log('err fired', err);
           this.isSubmitting = false;
           this.errorMessage = 'Something went wrong. Please try again.';
         },

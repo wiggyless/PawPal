@@ -1,10 +1,4 @@
 ﻿using PawPal.Domain.Entities.Animal_Info;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace PawPal.Application.Modules.Animal_Info.Animals.Commands.Create
 {
     public class CreateAnimalCommandHandler(IAppDbContext context)

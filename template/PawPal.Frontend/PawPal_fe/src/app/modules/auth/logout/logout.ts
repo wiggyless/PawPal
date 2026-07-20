@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.service';
+import { AuthFacadeService } from '../../../../app/core/services/auth/auth-facade.service';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-logout',

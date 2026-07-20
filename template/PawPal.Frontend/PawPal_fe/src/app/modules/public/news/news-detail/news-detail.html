@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PawPal</title>
+  </head>
+  <body>
+    <div class="news-detail-container">
+      <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
+
+      @if (isLoaded() && news) {
+        <div class="news-detail">
+          <button class="secondarybtn back-btn" (click)="goBack()">← Back to News</button>
+          <img [src]="getImageUrl(news.photoURL)" class="news-detail-image" alt="{{ news.title }}" />
+          <div class="news-detail-body">
+            <h1>{{ news.title }}</h1>
+            <span class="news-detail-date">{{ news.publishedAt | date: 'longDate' }}</span>
+            <p class="news-detail-content">{{ news.content }}</p>
+          </div>
+        </div>
+      } @else {
+        <div class="news-detail-loading">
+          <mat-spinner></mat-spinner>
+        </div>
+      }
+    </div>
+    <app-footer></app-footer>
+  </body>
+</html>

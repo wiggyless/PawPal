@@ -70,7 +70,6 @@ export class MySentRequests implements OnInit, OnDestroy {
         if (this.requestsList.items.length == 0) {
           this.listEmpty.set(true);
         }
-        console.log(this.requestsList);
         this.cantonsList = response.cantons;
         this.imagesLoaded.set(true);
       },

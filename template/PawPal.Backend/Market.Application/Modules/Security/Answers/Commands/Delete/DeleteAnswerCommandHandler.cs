@@ -12,14 +12,14 @@ namespace PawPal.Application.Modules.Security.Answers.Commands.Update
     {
         public async Task<Unit> Handle(DeleteAnswerCommand command, CancellationToken cancellationToken)
         {
-            if (user is null)
-            {
-                throw new PawPalConflictException("User cannot do this action");
-            }
             var answer = await context.SecurityAnswers.FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
             if (answer == null)
             {
                 throw new PawPalNotFoundException("Question does not exist");
+            }
+            if (user.Email != answer.Email && user.RoleId != 3)
+            {
+                throw new PawPalConflictException("User cannot do this action");
             }
             context.SecurityAnswers.Remove(answer);
             await context.SaveChangesAsync(cancellationToken);

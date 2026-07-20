@@ -89,7 +89,7 @@ export class SecurityQuestionsDialog implements OnInit {
       if (this.matDialogData.isEnabled) {
         this.answerService.updateSecurityAnswers(anwserDTO).subscribe({
           next: (res) => {
-            this.dialogPopUp.error('Success', 'Your answers have been updated', 'OK');
+            this.dialogPopUp.success('Success', 'Your answers have been updated', 'OK');
             this.dialogRef.close();
           },
           error: (res) => {
@@ -99,7 +99,7 @@ export class SecurityQuestionsDialog implements OnInit {
       } else {
         this.answerService.createSecurityAnswer(anwserDTO).subscribe({
           next: (res) => {
-            this.dialogPopUp.error('Success', 'Your answers have been saved', 'OK');
+            this.dialogPopUp.success('Success', 'Your answers have been saved', 'OK');
             this.dialogRef.close();
           },
           error: (res) => {

@@ -7,14 +7,14 @@ public class DeleteProductCategoryCommandHandler(IAppDbContext context, IAppCurr
 {
     public async Task<Unit> Handle(DeleteProductCategoryCommand request, CancellationToken cancellationToken)
     {
-        if (appCurrentUser.UserId is null)
-            throw new MarketBusinessRuleException("123", "Korisnik nije autentifikovan.");
+        if (appCurrentUser.RoleId != 3)
+            throw new MarketBusinessRuleException("123", "Only administrators can delete categories.");
 
         var category = await context.ProductCategories
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         if (category is null)
-            throw new PawPalNotFoundException("Kategorija nije pronađena.");
+            throw new PawPalNotFoundException("Category not found.");
 
         category.IsDeleted = true; // Soft delete
         await context.SaveChangesAsync(cancellationToken);

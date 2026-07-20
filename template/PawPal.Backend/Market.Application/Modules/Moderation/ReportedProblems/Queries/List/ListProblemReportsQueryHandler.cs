@@ -7,13 +7,30 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Moderation.ReportedProblems.Queries.List
 {
-    public class ListProblemReportsQueryHandler(IAppDbContext context)
+    public class ListProblemReportsQueryHandler(IAppDbContext context, IAppCurrentUser currentUser)
         : IRequestHandler<ListProblemReportsQuery, PageResult<ListProblemReportsQueryDto>>
     {
         public async Task<PageResult<ListProblemReportsQueryDto>> Handle(ListProblemReportsQuery request, CancellationToken cancellationToken)
         {
+            if (currentUser.RoleId != 3)
+            {
+                throw new PawPalConflictException("User is not allowed to do this action");
+            }
+
             var q = context.ReportProblems.AsNoTracking();
-            var user = context.Users.AsNoTracking();
+            var user = context.Users.AsNoTracking().AsQueryable();
+            if (request.DateMin is not null)
+            {
+                q = q.Where(x => x.DateSent >= request.DateMin);
+            }
+            if (request.DateMax is not null)
+            {
+                q = q.Where(x => x.DateSent <= request.DateMax);
+            }
+            if (!string.IsNullOrWhiteSpace(request.Username))
+            {
+                user = user.Where(x => x.Username.ToLower().Contains(request.Username.ToLower()));
+            }
             var result = q
            .GroupJoin(
            user,

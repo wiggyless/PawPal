@@ -4,8 +4,6 @@ namespace PawPal.Application.Modules.Places.Cities.Queries.GetById
     public class GetCityByIdQueryHandler(IAppDbContext context) : 
         IRequestHandler<GetCityByIdQuery,GetCityByIdQueryDto>
     {
-        
-        // The way is lit, the path is clear, we require only the strenght to follow it
         public async Task<GetCityByIdQueryDto> Handle(GetCityByIdQuery request,CancellationToken toke)
         {
             var category = await context.Cities.

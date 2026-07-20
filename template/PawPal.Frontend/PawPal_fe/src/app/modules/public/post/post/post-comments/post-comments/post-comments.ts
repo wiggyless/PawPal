@@ -100,7 +100,6 @@ export class PostComments implements OnInit, OnDestroy {
   }
 
   prependSignalRComment(newComment: CommentDto) {
-    console.log(newComment);
     this.commentsList = {
       ...this.commentsList,
       totalItems: (this.commentsList.totalItems || 0) + 1,

@@ -9,11 +9,16 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Moderation.ReportedUsers.Queries.List
 {
-    public class ListUserReportsQueryHandler(IAppDbContext context)
+    public class ListUserReportsQueryHandler(IAppDbContext context, IAppCurrentUser currentUser)
         : IRequestHandler<ListUserReportsQuery, PageResult<ListUserReportsQueryDto>>
     {
         public async Task<PageResult<ListUserReportsQueryDto>> Handle(ListUserReportsQuery request, CancellationToken cancellationToken)
         {
+            if (currentUser.RoleId != 3)
+            {
+                throw new PawPalConflictException("User is not allowed to do this action");
+            }
+
             var q = context.ReportedUsers.AsNoTracking();
             var user = context.Users.Where(x=>!x.isUserDisabled).AsNoTracking().AsQueryable();
             if (request.DateSentMin is not null && request.DateSentMax is not null)

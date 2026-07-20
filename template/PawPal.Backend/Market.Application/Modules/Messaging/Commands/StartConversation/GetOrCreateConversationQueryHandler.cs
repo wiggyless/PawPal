@@ -12,7 +12,6 @@ public sealed class GetOrCreateConversationQueryHandler(IAppDbContext context) :
         var conversation = await context.Conversations
     .FirstOrDefaultAsync(c => c.User1Id == u1 && c.User2Id == u2, cancellationToken);
 
-        Console.WriteLine($"GetOrCreate - u1: {u1}, u2: {u2}, conversation found: {conversation?.Id}");
         if (conversation is null)
         {
             conversation = new ConversationEntity { User1Id = u1, User2Id = u2 };

@@ -89,7 +89,6 @@ export class SettingsComponent implements OnInit {
     ) {
       this.dialogPopUp.error('Error', 'Passwords do not match', 'OK');
     } else if (this.passwordFormGroup.valid) {
-      console.log(this.passwordFormGroup.get('currentPassword')?.value as string);
       this.userService
         .updatePassword({
           email: this.currentUser.email() as string,

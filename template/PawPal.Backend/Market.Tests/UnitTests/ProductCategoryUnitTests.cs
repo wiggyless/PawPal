@@ -1,6 +1,7 @@
+using PawPal.Application.Abstractions;
 using PawPal.Application.Modules.Catalog.ProductCategories.Commands.Create;
 
-namespace PawPal.Tests.ProductCategoryTests.UnitTests;
+namespace PawPal.Tests.UnitTests;
 
 public class ProductCategoryUnitTests
 {
@@ -20,7 +21,9 @@ public class ProductCategoryUnitTests
     {
         // Arrange
         using var context = GetInMemoryDbContext(); // dispose
-        var handler = new CreateProductCategoryCommandHandler(context);
+        var currentUserMock = new Moq.Mock<IAppCurrentUser>();
+        currentUserMock.Setup(x => x.RoleId).Returns(3);
+        var handler = new CreateProductCategoryCommandHandler(context, currentUserMock.Object);
         var command = new CreateProductCategoryCommand { Name = "Test Category" };
 
         // Act

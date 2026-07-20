@@ -13,7 +13,7 @@ namespace PawPal.Application.Modules.Posts.Commands.Delete
             var post = await context.Posts.Include(x=>x.Animal).FirstOrDefaultAsync(x => x.Id == request.Id,cancellationToken);
             var postImage = await context.PostImages.FirstOrDefaultAsync(x => x.PostId == request.Id, cancellationToken);
             if (post== null) throw new PawPalNotFoundException($"Post with Id {request.Id} does not exist!");
-            if (!currentUser.IsAuthenticated && post.UserId != currentUser.UserId)
+            if (post.UserId != currentUser.UserId && currentUser.RoleId != 3)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }
