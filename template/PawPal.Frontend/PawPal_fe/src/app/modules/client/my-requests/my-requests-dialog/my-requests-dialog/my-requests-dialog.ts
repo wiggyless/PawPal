@@ -72,7 +72,6 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
     next: (reponse) => {
       this.reqData = reponse.request;
       this.fullAddress = `${this.reqData.address}, Floor ${this.reqData.floorNumber}`;
-      console.log(this.reqData);
       this.isLoaded = true;
 
       // Use the requester's userId, not the post owner's userID

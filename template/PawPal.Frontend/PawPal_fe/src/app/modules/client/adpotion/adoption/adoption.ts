@@ -62,10 +62,15 @@ export class Adoption implements OnInit {
         this.postID = params['postID'];
       });
     }
-    console.log(this.postID);
   }
 
   sendRequest() {
+    if (this.step1FormGroup.invalid || this.step2FormGroup.invalid || this.step3FormGroup.invalid) {
+      this.step1FormGroup.markAllAsTouched();
+      this.step2FormGroup.markAllAsTouched();
+      this.step3FormGroup.markAllAsTouched();
+      return;
+    }
     let isCheckReady = this.step3FormGroup.value.iAmReady;
     const payload: CreateAdoptionRequirement = {
       houseType: this.step1FormGroup.controls['houseType'].value as string,
@@ -93,10 +98,8 @@ export class Adoption implements OnInit {
     };
     this.requirementService.addRequirements(payload).subscribe({
       next: (res) => {
-        console.log('Requirements made successfully: ', res);
         this.requirementIDFromRes = res;
 
-        console.log(this.requirementIDFromRes);
         const payload: CreateAdoptionRequest = {
           status: 'SENT',
           dateSend: new Date(),
@@ -114,7 +117,6 @@ export class Adoption implements OnInit {
         });
       },
       error: (err) => {
-        console.log('ERROR => ', err);
       },
     });
     if (isCheckReady) {

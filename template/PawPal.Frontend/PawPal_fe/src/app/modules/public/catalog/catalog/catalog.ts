@@ -138,7 +138,6 @@ export class CatalogComponent
     this.animalPosts = this.animalPostsService.listAnimalPosts(this.request).pipe(
       shareReplay(1),
       tap((res) => {
-        console.log(res.items);
         this.likedPosts
           .listLikedPosts({
             userId: this.currentUser.userId() as number,
@@ -196,7 +195,6 @@ export class CatalogComponent
       start: null,
       end: null,
     });
-    console.log(this.getValue('selectedBreed'));
     this.mapRequest();
     this.loadPosts();
   }
@@ -235,7 +233,6 @@ export class CatalogComponent
           .deletePost({ userId: this.currentUser.userId() as number, postId: index })
           .subscribe();
       } else {
-        console.log(index);
         this.favoritePostList.push(index);
         this.likedPosts
           .addLikedPosts({ userID: this.currentUser.userId() as number, postID: index })
@@ -254,6 +251,5 @@ export class CatalogComponent
       searchCantonId: this.getValue('selectedCanton')?.id,
       paging: this.request.paging,
     };
-    console.log(this.request);
   }
 }

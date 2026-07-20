@@ -68,6 +68,32 @@
       </div>
       <button class="primarybtn" routerLink="/catalog">TAKE ME THERE!</button>
     </div>
+    <div class="news-latest-container">
+      <p class="news-latest-container-title">Latest News</p>
+      <div class="news-feature-container">
+        @if (newsLoaded()) {
+          @if (latestNews) {
+            <div class="news-feature" (click)="routeToNews(latestNews)">
+              <img [src]="getNewsImageUrl(latestNews.photoURL)" class="news-feature-image" />
+              <div class="news-feature-detail">
+                <h3>{{ latestNews.title }}</h3>
+                <p>{{ getNewsPreview(latestNews.content) }}</p>
+                <span class="news-feature-date">{{ latestNews.publishedAt | date: 'longDate' }}</span>
+              </div>
+            </div>
+          } @else {
+            <div class="loading-container">
+              <p class="loading-spinner-text">No news has been published yet.</p>
+            </div>
+          }
+        } @else {
+          <div class="loading-container">
+            <mat-spinner></mat-spinner>
+          </div>
+        }
+      </div>
+      <button class="primarybtn" routerLink="/news">TAKE ME THERE!</button>
+    </div>
     <app-footer></app-footer>
   </body>
 </html>

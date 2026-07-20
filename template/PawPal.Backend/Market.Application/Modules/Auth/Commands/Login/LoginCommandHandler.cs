@@ -1,7 +1,4 @@
-﻿using PawPal.Application.Abstractions;
-using PawPal.Application.Modules.Auth.Commands.Login;
-using PawPal.Domain.Entities.Identity;
-
+﻿using PawPal.Application.Modules.Auth.Commands.Login;
 public sealed class LoginCommandHandler(
     IAppDbContext ctx,
     IJwtTokenService jwt,
@@ -14,7 +11,6 @@ public sealed class LoginCommandHandler(
 
         var user = await ctx.Users
             .FirstOrDefaultAsync(x => x.Email.ToLower() == email && x.IsEnabled, ct);
-        var users =  ctx.Users.Where(x => x.Email.ToLower() == email);
         if(user is null)
         {
             throw new PawPalNotFoundException("User does not exist.");

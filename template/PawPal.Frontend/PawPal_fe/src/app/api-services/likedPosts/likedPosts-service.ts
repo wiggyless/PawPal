@@ -20,7 +20,6 @@ export class LikedPostsService {
 
   listLikedPosts(request: GetLikedPostListQuery): Observable<GetLikedPostList> {
     const params = request ? buildHttpParams(request as any) : undefined;
-    console.log(params?.toString());
     return this.httpClient.get<GetLikedPostList>(this.apiUrl, { params });
   }
   addLikedPosts(request: LikePost): Observable<number> {

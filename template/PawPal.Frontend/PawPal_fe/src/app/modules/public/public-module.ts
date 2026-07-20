@@ -30,9 +30,22 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ClientModule } from '../client/client-module';
 import { Profile } from './profile/profile/profile';
 import { DialoguePopupComponent } from '../shared/components/dialogue-popup/dialogue-popup.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { NewsListComponent } from './news/news-list/news-list';
+import { NewsDetailComponent } from './news/news-detail/news-detail';
+import { AddNewsDialog } from './news/add-news-dialog/add-news-dialog';
 
 @NgModule({
-  declarations: [PublicLayout, CatalogComponent, PostComponent, PostComments, Profile],
+  declarations: [
+    PublicLayout,
+    CatalogComponent,
+    PostComponent,
+    PostComments,
+    Profile,
+    NewsListComponent,
+    NewsDetailComponent,
+    AddNewsDialog,
+  ],
   imports: [
     NavbarComponent,
     PublicRoutingModule,
@@ -62,6 +75,7 @@ import { DialoguePopupComponent } from '../shared/components/dialogue-popup/dial
     ScrollingModule,
     CommonModule,
     ClientModule,
+    MatDialogModule,
   ],
   providers: [
     DialoguePopupComponent],

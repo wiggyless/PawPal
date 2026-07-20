@@ -49,13 +49,10 @@ export class ProfileDisableDialog implements OnInit {
     if (this.form.invalid || this.isSubmitting) return;
     if (!this.currentUser.isAuthenticated()) {
       this.route.navigate(['login']);
-    }
-    if (this.currentUser.getDefaultRoute() == '/login') {
-      this.route.navigate(['login']);
+      return;
     }
     this.isSubmitting = true;
     this.errorMessage = null;
-    console.log(this.form.value.reason as string);
     this.service
       .createUserDisable({
         reason: this.reasons[this.form.value.reason].label,
@@ -65,17 +62,13 @@ export class ProfileDisableDialog implements OnInit {
       })
       .subscribe({
         next: (res) => {
-          console.log('next fired', res);
           this.isSubmitting = false;
           this.submitted = true;
-          //this.dialogPopUp.info('Success', 'User profile has been successfuly disabled', 'OK');
           this.cd.detectChanges();
         },
         error: (err) => {
-          console.log('err fired', err);
           this.isSubmitting = false;
           this.errorMessage = 'Something went wrong. Please try again.';
-          //this.dialogPopUp.info('Error', this.errorMessage, 'OK');
         },
       });
   }

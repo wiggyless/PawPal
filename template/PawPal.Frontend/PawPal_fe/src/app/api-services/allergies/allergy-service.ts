@@ -18,6 +18,6 @@ export class AllergyService {
   }
   getAnimalArrergieByUserID(request?: any): Observable<ListAllergyQueryDto> {
     const params = request ? buildHttpParams(request as any) : undefined;
-    return this.httpClient.get<ListAllergyQueryDto>(`${this.apiUrl}'/'${request}`, { params });
+    return this.httpClient.get<ListAllergyQueryDto>(`${this.apiUrl}/${request}`, { params });
   }
 }
