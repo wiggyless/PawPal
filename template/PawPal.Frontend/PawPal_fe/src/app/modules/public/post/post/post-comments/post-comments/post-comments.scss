@@ -116,23 +116,19 @@ mat-paginator {
   padding-bottom: 10px;
 }
 
-// Main paginator text
 .mat-mdc-paginator {
   color: var(--text-color) !important;
 }
 
-// Navigation icons
 .mat-mdc-paginator .mat-mdc-icon-button {
   color: var(--text-color) !important;
 }
 
-// Dropdown select text and arrow
 .mat-mdc-paginator .mat-mdc-select-value,
 .mat-mdc-paginator .mat-mdc-select-arrow {
   color: var(--text-color) !important;
 }
 
-// Dropdown border (the underline/outline)
 ::ng-deep .mat-mdc-paginator .mat-mdc-form-field {
   color: var(--text-color) !important;
 }
@@ -141,7 +137,6 @@ mat-paginator {
   background-color: transparent !important;
 }
 
-// Target the select trigger border
 ::ng-deep
   .mat-mdc-paginator
   .mat-mdc-form-field
@@ -160,32 +155,26 @@ mat-paginator {
   border-color: var(--text-color) !important;
 }
 
-// For filled variant
 ::ng-deep .mat-mdc-paginator .mat-mdc-form-field .mdc-line-ripple {
   background-color: var(--text-color) !important;
 }
 
-// Page size label
 ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-page-size-label {
   color: var(--text-color) !important;
 }
 
-// Range label (e.g., "1 - 10 of 100")
 ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-range-label {
   color: var(--text-color) !important;
 }
 
-// Add this to target the SVG icons inside the buttons
 ::ng-deep .mat-mdc-paginator .mat-mdc-icon-button svg {
   fill: var(--text-color) !important;
 }
 
-// Also target the mat-icon if it's being used
 ::ng-deep .mat-mdc-paginator .mat-mdc-icon-button mat-icon {
   color: var(--text-color) !important;
 }
 
-// Target the paginator icons more specifically
 ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-navigation-previous,
 ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-navigation-next,
 ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-navigation-first,
@@ -193,34 +182,29 @@ mat-paginator {
   color: var(--text-color) !important;
 }
 
-// Ensure the button itself has white color
 ::ng-deep .mat-mdc-paginator .mat-mdc-icon-button {
   color: var(--text-color) !important;
   --mat-icon-button-state-layer-color: var(--text-color) !important;
   --mdc-icon-button-icon-color: var(--text-color) !important;
 }
 
-// Target the selected value text in the dropdown
 ::ng-deep .mat-mdc-paginator .mat-mdc-select-value-text {
   color: var(--text-color) !important;
 }
 
-// Target the select input itself
 ::ng-deep .mat-mdc-paginator .mat-mdc-select {
   color: var(--text-color) !important;
 }
 
-// Target the trigger text
 ::ng-deep .mat-mdc-paginator .mat-mdc-select-trigger {
   color: var(--text-color) !important;
 }
 
-// Additional targeting for the min-line
 ::ng-deep .mat-mdc-paginator .mat-mdc-select-min-line {
   color: var(--text-color) !important;
 }
 .viewport {
-  height: 600px; /* Crucial: Viewport must have an explicit height */
+  height: 600px;
   width: 100%;
   border: 2px solid var(--card-text-color);
   border-radius: 25px;

@@ -1,4 +1,3 @@
-// src/app/core/guards/auth.guard.ts
 import { inject } from '@angular/core';
 import { CanActivateFn, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { CurrentUserService } from '../services/auth/current-user.service';

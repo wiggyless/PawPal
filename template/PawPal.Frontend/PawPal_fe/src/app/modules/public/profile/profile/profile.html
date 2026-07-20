@@ -2,7 +2,9 @@
 <div class="content">
   <div class="content-center">
     <div class="user-profile-buttons">
-      <button class="primarybtn" (click)="reportProfile()">REPORT PROFILE</button>
+      @if (currentUser.userId() != this.userID) {
+        <button class="primarybtn" (click)="reportProfile()">REPORT PROFILE</button>
+      }
     </div>
     <div class="user-profile-details">
       <div class="user-profile-detials-header">

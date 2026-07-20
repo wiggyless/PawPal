@@ -116,8 +116,7 @@ export class Adoption implements OnInit {
           },
         });
       },
-      error: (err) => {
-      },
+      error: (err) => {},
     });
     if (isCheckReady) {
       this.dialog.success(
