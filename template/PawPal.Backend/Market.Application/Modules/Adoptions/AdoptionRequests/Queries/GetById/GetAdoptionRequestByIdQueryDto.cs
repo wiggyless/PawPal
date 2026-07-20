@@ -10,7 +10,8 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.GetById
     public class GetAdoptionRequestByIdQueryDto
     {
         public int Id { get; set; }
-        public string Status { get; set; }  
+        public string Status { get; set; } 
+        public int AnimalID { get; set; }
         public DateTime DateSent { get; set; }  
         public int UserId { get; set; } 
         public int PostId { get; set; }
