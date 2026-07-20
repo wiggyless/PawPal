@@ -38,11 +38,11 @@ export class Adoption implements OnInit {
   step2FormGroup = new FormGroup({
     pastExp: new FormControl(false),
     yourExp: new FormControl({ value: '', disabled: true }),
-    petInHouse: new FormControl(''),
+    petInHouse: new FormControl('', [Validators.required]),
     familyAvail: new FormControl('', [Validators.required]),
     gift: new FormControl(false),
     placeToLive: new FormControl('', [Validators.required]),
-    financialSupport: new FormControl(0),
+    financialSupport: new FormControl(0, [Validators.required]),
     allergies: new FormControl(false),
     angerIssues: new FormControl(false),
     readyToBack: new FormControl(false),
@@ -95,6 +95,8 @@ export class Adoption implements OnInit {
 
       houseDetials: this.step3FormGroup.controls['placeDesc'].value as string,
       finalComment: this.step3FormGroup.controls['comment'].value as string,
+      userID: this.currentUserService.userId() as number,
+      postID: this.postID,
     };
     this.requirementService.addRequirements(payload).subscribe({
       next: (res) => {
@@ -109,22 +111,24 @@ export class Adoption implements OnInit {
         };
         this.requestService.addRequest(payload).subscribe({
           next: (res) => {
+            this.dialog.success(
+              'Request Sent',
+              'Your adoption request has been sent successfully. Please wait for further updates.',
+              'OK',
+            );
             this.router.navigate(['']);
           },
           error: (err) => {
-            this.dialog.success('Error', err, 'OK');
+            this.dialog.error('Error', err?.error.message, 'OK');
+            this.router.navigate(['']);
           },
         });
       },
-      error: (err) => {},
+      error: (err) => {
+        this.dialog.error('Error', err?.error.message, 'OK');
+        this.router.navigate(['']);
+      },
     });
-    if (isCheckReady) {
-      this.dialog.success(
-        'Request Sent',
-        'Your adoption request has been sent successfully. Please wait for further updates.',
-        'OK',
-      );
-    }
   }
   get yard() {
     return this.step1FormGroup.value.yardAvail;

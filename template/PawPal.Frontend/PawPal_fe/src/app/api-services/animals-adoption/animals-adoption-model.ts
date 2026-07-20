@@ -18,6 +18,7 @@ export interface GetAdoptionRequestList {
   status: string;
   dateSent: Date;
   postID: number;
+  animalID: number;
   requirementId: number;
   gender: string;
   name: string;
@@ -30,6 +31,7 @@ export interface GetAdoptionRequestById {
   requestId: number;
   status: string;
   dateSent: Date;
+  animalID: number;
   userId: number;
   postId: number;
   requirementId: number;

@@ -8,6 +8,7 @@ import { UserService } from '../../../../../api-services/users/users-service';
 import { GetUserByIdDto } from '../../../../../api-services/users/users-model';
 import { AnimalRequestService } from '../../../../../api-services/animals-adoption/animals-adoption-service';
 import { UpdateRequestByID } from '../../../../../api-services/animals-adoption/animals-adoption-model';
+import { environment } from '../../../../../../environments/environment';
 @Component({
   selector: 'app-my-requests-dialog',
   standalone: false,
@@ -34,7 +35,7 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
   reqData: GetAdoptionRequirementsById | undefined;
   user: GetUserByIdDto | undefined;
   fullAddress: string = '';
-
+  env = environment.apiUrl;
   cd = inject(ChangeDetectorRef);
 
   updateRequest: UpdateRequestByID = {

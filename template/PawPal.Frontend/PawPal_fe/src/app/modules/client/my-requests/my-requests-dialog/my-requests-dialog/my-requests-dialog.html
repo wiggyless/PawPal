@@ -399,7 +399,7 @@
             @if (!isAnotherUser) {
               @if (user?.photoURL != '') {
                 <div class="avatar">
-                  <img [src]="user?.photoURL" />
+                  <img [src]="env + user?.photoURL" />
                 </div>
               } @else {
                 <div class="avatar">

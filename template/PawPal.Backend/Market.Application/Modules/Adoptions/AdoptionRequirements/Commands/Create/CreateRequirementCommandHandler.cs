@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MediatR;
+using PawPal.Domain.Entities.Adoptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PawPal.Domain.Entities.Adoptions;
 namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Create
 {
     public sealed class CreateRequirementCommandHandler(IAppDbContext context) : IRequestHandler<CreateRequirementCommand,int>
@@ -11,6 +12,14 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Cre
         public async Task<int> Handle(CreateRequirementCommand command,CancellationToken cancellationToken)
         {
             if (command.PeopleCount < 0) throw new PawPalConflictException("Invalid number of people");
+            var existing = await context.AdoptionRequests
+                .Where(x => x.PostId == command.PostID && x.UserId == command.UserID && x.Status == "Pending")
+                .FirstOrDefaultAsync(cancellationToken);
+            if (existing is not null)
+                throw new PawPalConflictException("You already have a pending request for this post");
+
+
+
             var newRequirement = new AdoptionRequirementEntity
             {
                 HouseType = command.HouseType,

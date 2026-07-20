@@ -21,6 +21,8 @@ export interface CreateAdoptionRequirement {
   takeBack: boolean;
   houseDetials: string;
   finalComment: string;
+  userID: number;
+  postID: number;
 }
 
 export interface GetAdoptionRequirementQuery extends BasePagedQuery {
