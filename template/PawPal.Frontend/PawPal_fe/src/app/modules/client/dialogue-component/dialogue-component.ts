@@ -52,7 +52,6 @@ export class DialogueComponent implements OnInit {
       error: (res) => {
         this.dialog.closeAll();
       },
-      error: (res) => {},
     });
   }
   onDeletePost(): void {

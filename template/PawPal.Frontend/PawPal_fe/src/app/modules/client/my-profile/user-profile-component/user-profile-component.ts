@@ -43,9 +43,9 @@ export class UserProfileComponent implements OnInit {
         cities: this.cityService.listCities(),
       }).subscribe({
         next: (response) => {
-          this.userData = response.userData;
+          this.userData.set(response.userData);
           this.cityList = response.cities;
-          this.userImageService.getUserImageByID(this.userData.id).subscribe({
+          this.userImageService.getUserImageByID(this.userData().id).subscribe({
             next: (res) => {
               this.isUpdate = true;
               this.imageUrl.set(res);
@@ -86,7 +86,7 @@ export class UserProfileComponent implements OnInit {
   private sanitizer = inject(DomSanitizer);
   imageUrl = signal<SafeUrl | null>(null);
   private originalImageUrl: SafeUrl | null = null;
-  userData: GetUserByIdDto = {
+  userData = signal<GetUserByIdDto>({
     id: 0,
     firstName: '',
     lastName: '',
@@ -98,12 +98,13 @@ export class UserProfileComponent implements OnInit {
     username: '',
     aboutMe: '',
     photoURL: '',
-  };
+  });
+
   userImage: UserImageCommand = {
     userID: 0,
   };
   private resetUserData(): void {
-    this.userData = {
+    this.userData.update((profile) => ({
       id: 0,
       firstName: '',
       lastName: '',
@@ -115,7 +116,7 @@ export class UserProfileComponent implements OnInit {
       username: '',
       aboutMe: '',
       photoURL: '',
-    };
+    }));
     this.profileForm.reset();
   }
   profileForm = new FormGroup({
@@ -131,19 +132,19 @@ export class UserProfileComponent implements OnInit {
   env = environment.apiUrl;
   getUserData(): void {
     this.userDataService.getUser(this.currentUser.userId() as number).subscribe((response) => {
-      this.userData = response;
+      this.userData.set(response);
       this.initializeInputData();
     });
   }
   initializeInputData(): void {
-    this.originalCityId = this.userData.cityID;
+    this.originalCityId = this.userData().cityID;
     this.profileForm.patchValue({
-      firstName: this.userData.firstName,
-      lastName: this.userData.lastName,
-      date: this.userData.dateTime,
-      city: this.userData.city,
-      aboutMe: this.userData.aboutMe,
-      username: this.userData.username,
+      firstName: this.userData().firstName,
+      lastName: this.userData().lastName,
+      date: this.userData().dateTime,
+      city: this.userData().city,
+      aboutMe: this.userData().aboutMe,
+      username: this.userData().username,
     });
   }
 
@@ -166,16 +167,17 @@ export class UserProfileComponent implements OnInit {
     const cityId = typeof cityValue === 'number' ? cityValue : this.originalCityId;
 
     const firstName =
-      (this.profileForm.get('firstName')?.value as string) || this.userData.firstName;
-    const lastName = (this.profileForm.get('lastName')?.value as string) || this.userData.lastName;
+      (this.profileForm.get('firstName')?.value as string) || this.userData().firstName;
+    const lastName =
+      (this.profileForm.get('lastName')?.value as string) || this.userData().lastName;
     const aboutMe =
-      (this.profileForm.get('aboutMe')?.value as string) || this.userData.aboutMe || '';
-    const date = (this.profileForm.get('date')?.value as string) || this.userData.dateTime;
+      (this.profileForm.get('aboutMe')?.value as string) || this.userData().aboutMe || '';
+    const date = (this.profileForm.get('date')?.value as string) || this.userData().dateTime;
 
     const formChanged = this.hasFormFieldChanges(cityId);
     const imageChanged = this.hasImageChanges();
 
-    this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+    this.profileForm.get('city')?.setValue(this.userData().city, { emitEvent: false });
 
     if (!formChanged && !imageChanged) {
       return;
@@ -192,27 +194,33 @@ export class UserProfileComponent implements OnInit {
         cityId: cityId,
         aboutMe: aboutMe,
       };
-      requests.userPostData = this.userDataService.updateUser(this.userData.id, payload);
+      requests.userPostData = this.userDataService.updateUser(this.userData().id, payload);
     }
     if (imageChanged) {
       requests.userImage = this.isUpdate
-        ? this.userImageService.updateUserImage(this.userData.id, this.selectedImage!)
-        : this.userImageService.createUserImage(this.userData.id, this.selectedImage!);
+        ? this.userImageService.updateUserImage(this.userData().id, this.selectedImage!)
+        : this.userImageService.createUserImage(this.userData().id, this.selectedImage!);
     }
 
     forkJoin(requests).subscribe({
       next: (res) => {
-        this.userData.firstName = firstName;
-        this.userData.lastName = lastName;
-        this.userData.dateTime = date;
-        this.userData.aboutMe = aboutMe;
-
+        this.userData.update((profile) => ({
+          ...profile,
+          firstName: firstName,
+          lastName: lastName,
+          dateTime: date,
+          aboutMe: aboutMe,
+        }));
+        this.cd.detectChanges();
         const selectedCity = this.cityList.items.find((city: any) => city.id === cityId);
         if (selectedCity) {
-          this.userData.city = selectedCity.name;
+          this.userData.update((profile) => ({
+            ...profile,
+            city: selectedCity.name,
+          }));
           this.originalCityId = cityId;
         }
-        this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
+        this.profileForm.get('city')?.setValue(this.userData().city, { emitEvent: false });
 
         this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
       },
@@ -228,7 +236,7 @@ export class UserProfileComponent implements OnInit {
   }
   hasFormFieldChanges(cityId: number): boolean {
     const formDate = this.profileForm.get('date')?.value;
-    const originalDate = this.userData.dateTime;
+    const originalDate = this.userData().dateTime;
 
     const normalizeDate = (val: any): string => {
       if (!val) return '';
@@ -237,12 +245,12 @@ export class UserProfileComponent implements OnInit {
     };
 
     return (
-      this.userData.firstName !== this.profileForm.get('firstName')?.value ||
-      this.userData.lastName !== this.profileForm.get('lastName')?.value ||
+      this.userData().firstName !== this.profileForm.get('firstName')?.value ||
+      this.userData().lastName !== this.profileForm.get('lastName')?.value ||
       normalizeDate(originalDate) !== normalizeDate(formDate) ||
       cityId !== this.originalCityId ||
-      this.userData.aboutMe !== this.profileForm.get('aboutMe')?.value ||
-      this.userData.username !== this.profileForm.get('username')?.value
+      this.userData().aboutMe !== this.profileForm.get('aboutMe')?.value ||
+      this.userData().username !== this.profileForm.get('username')?.value
     );
   }
 
@@ -285,7 +293,7 @@ export class UserProfileComponent implements OnInit {
     this.selectedImage = undefined;
     this.profileForm.disable();
     this.imageUrl.set(this.originalImageUrl);
-    this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
-    this.profileForm.get('aboutMe')?.setValue(this.userData.aboutMe ?? '', { emitEvent: false });
+    this.profileForm.get('city')?.setValue(this.userData().city, { emitEvent: false });
+    this.profileForm.get('aboutMe')?.setValue(this.userData().aboutMe ?? '', { emitEvent: false });
   }
 }
