@@ -23,7 +23,7 @@ import { UserImageService } from '../../../../../../api-services/userImage/userI
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { environment } from '../../../../../../../environments/environment.development';
+import { environment } from '../../../../../../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { ReportCommentComponent } from '../../../../../client/report-comment-component/report-comment-component/report-comment-component';
 
@@ -78,6 +78,7 @@ export class PostComments implements OnInit, OnDestroy {
   }
 
   loadComments() {
+    const isFirstLoad = !this.hasLoaded();
     this.commentsService.getComments(this.request).subscribe({
       next: (incomingData) => {
         const existingItems = this.commentsList?.items || [];
@@ -88,6 +89,9 @@ export class PostComments implements OnInit, OnDestroy {
           items: [...existingItems, ...newItems],
         };
         this.hasLoaded.set(true);
+        if (isFirstLoad) {
+          this.commentsLoaded.emit();
+        }
       },
       error: () => {
         this.isLoadingMore = false;

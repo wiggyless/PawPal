@@ -222,9 +222,24 @@ mat-paginator {
 .viewport {
   height: 600px; /* Crucial: Viewport must have an explicit height */
   width: 100%;
-  border: 1px solid #ccc;
+  border: 2px solid var(--card-text-color);
+  border-radius: 25px;
   display: flex;
   margin-bottom: 100px;
+}
+.no-comments-message {
+  height: 600px;
+  width: 100%;
+  border: 2px solid var(--card-text-color);
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 100px;
+  color: var(--card-text-color);
+  font-size: 25px;
+  font-style: italic;
+  text-align: center;
 }
 .comment-details {
   color: var(--card-text-color);

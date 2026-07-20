@@ -73,7 +73,6 @@ export class LoginComponent extends BaseComponent implements OnInit {
       fingerprint: null,
       recaptchaToken: token,
     };
-
     this.auth.login(payload).subscribe({
       next: () => {
         const target = this.currentUser.getDefaultRoute();

@@ -23,6 +23,7 @@ import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ConfirmEmailComponent } from './confirm-email/confirm-email';
+import { ConfirmEmailChangeComponent } from './confirm-email-change/confirm-email-change';
 import { PasswordRecoveryDialog } from './login/login/password-recovery-dialog/password-recovery-dialog/password-recovery-dialog';
 
 @NgModule({
@@ -32,6 +33,7 @@ import { PasswordRecoveryDialog } from './login/login/password-recovery-dialog/p
     LogoutComponent,
     RegisterComponent,
     ConfirmEmailComponent,
+    ConfirmEmailChangeComponent,
     PasswordRecoveryDialog,
   ],
   imports: [

@@ -1,9 +1,4 @@
-/* 1. Animate the Backdrop (The dark blur) */
-.smooth-dialog-container {
-  /* This targets the wrapper around your dialog */
-}
 
-/* Target the container specifically when it's being "born" */
 @keyframes dialog-zoom-in {
   0% {
     opacity: 0;
@@ -25,14 +20,8 @@
   --button-text: #51432d;
 }
 body {
-  font-family:
-    'Inter',
-    -apple-system,
-    Roboto,
-    Helvetica,
-    sans-serif;
+   background-color: #191408;
   border-radius: 20px;
-  background-color: transparent;
   background-image: none;
   color: #c7b18c;
   min-height: 100vh;

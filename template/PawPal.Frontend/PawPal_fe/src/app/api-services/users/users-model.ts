@@ -74,3 +74,7 @@ export interface UpdateUserPassword {
   passwordRecovery: boolean;
   currentPassword?: string;
 }
+
+export interface RequestEmailChangeCommand {
+  newEmail: string;
+}

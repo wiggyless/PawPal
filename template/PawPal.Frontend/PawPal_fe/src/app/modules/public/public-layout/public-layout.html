@@ -25,14 +25,14 @@
               }
             </mat-select>
           </mat-form-field>
+          <mat-form-field>
+            <mat-select class="sel" placeholder="Select a canton" [(ngModel)]="selectedCanton">
+              @for (cant of cantons?.items; track cant) {
+                <mat-option [value]="cant.id">{{ cant.fullName }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
         }
-        <mat-form-field>
-          <mat-select class="sel" placeholder="Select a canton" [(ngModel)]="selectedCanton">
-            @for (cant of cantons.items; track cant) {
-              <mat-option [value]="cant.id">{{ cant.fullName }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
       </div>
       <div class="search-btn">
         <button class="primarybtn" (click)="searchCatalog()">SEARCH</button>
