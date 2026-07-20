@@ -14,13 +14,12 @@ namespace PawPal.Application.Modules.LikedUserPosts.Commands.Delete
             {
                 throw new PawPalConflictException("User is not allowed to do this");
             }
-            var likedUserList = context.LikedUserPosts
-                .FirstOrDefault(x => x.UserId == command.UserId && command.PostId == x.PostId);
+            var likedUserList = await context.LikedUserPosts
+                .FirstOrDefaultAsync(x => x.UserId == command.UserId && command.PostId == x.PostId, cancellationToken);
             if(likedUserList is null)
             {
                 throw new PawPalNotFoundException("Does not exist");
             }
-            likedUserList.IsDeleted = true;
             context.LikedUserPosts.Remove(likedUserList);
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;

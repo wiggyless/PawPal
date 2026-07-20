@@ -13,7 +13,6 @@ export class UserDisabledService {
   private apiUrl = environment.apiUrl + '/UsersDisabledHistory';
 
   createUserDisable(payload: CreateUserDisabled): Observable<{ id: number }> {
-    console.log(payload);
     return this.http.post<{ id: number }>(this.apiUrl, payload);
   }
   deleteUserDisable(id: number): Observable<{ id: number }> {

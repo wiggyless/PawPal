@@ -10,9 +10,11 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Del
     {
         public async Task<Unit> Handle(DeleteRequirementCommand command,CancellationToken cancellationToken)
         {
-            if (user.UserId is null) throw new PawPalNotFoundException("User does not authorized to do this action");
             var req = await context.AdoptionRequirements.FirstOrDefaultAsync(x=>x.Id == command.Id,cancellationToken);
-            if (req is null) throw new PawPalNotFoundException("Requirement does not exist inisde the database");
+            if (req is null) throw new PawPalNotFoundException("Requirement does not exist in the database");
+            var owningRequest = await context.AdoptionRequests.FirstOrDefaultAsync(x => x.RequirementId == command.Id, cancellationToken);
+            if (owningRequest is not null && owningRequest.UserId != user.UserId && user.RoleId != 3)
+                throw new PawPalConflictException("User is not authorized to do this action");
             req.IsDeleted = true;
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;

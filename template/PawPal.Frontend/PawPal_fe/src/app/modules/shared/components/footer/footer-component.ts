@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ReportedProblemService } from '../../../../api-services/moderation/reported-problem/reported-problem.service';
-import { Subscriber, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { FormsModule } from '@angular/forms';
 import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
@@ -31,6 +31,7 @@ export class FooterComponent implements OnInit {
   sendReport(): void {
     if (!this.currentUserService.isAuthenticated()) {
       this.router.navigate(['login']);
+      return;
     }
     this.sub = this.reportedProblemService
       .createProblemReport({
@@ -45,7 +46,7 @@ export class FooterComponent implements OnInit {
         },
         error: (res) => {
           this.clearText();
-          this.dialogPopUp.success(res, 'OK');
+          this.dialogPopUp.error('Error', res?.error?.message ?? 'Something went wrong.', 'OK');
         },
       });
   }

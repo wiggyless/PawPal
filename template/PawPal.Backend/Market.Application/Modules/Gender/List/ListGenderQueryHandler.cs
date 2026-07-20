@@ -13,8 +13,6 @@ namespace PawPal.Application.Modules.Gender.List
             var genders = context.Genders.AsQueryable();
             if (!string.IsNullOrWhiteSpace(request.SearchName))
                 genders = genders.Where(x => x.GenderName.ToLower().Contains(request.SearchName));
-            if (genders is null)
-                throw new PawPalNotFoundException("Gender does not exist");
             var finalList = genders.OrderBy(x => x.GenderName).Select(x => new ListGenderQueryDto
             {
                 Id = x.Id,

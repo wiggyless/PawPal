@@ -17,6 +17,9 @@ public sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEntit
             .IsRequired()
             .HasMaxLength(200);
 
+        b.Property(x => x.PendingEmail)
+            .HasMaxLength(200);
+
         b.Property(x => x.PasswordHash)
             .IsRequired();
 

@@ -2,11 +2,14 @@
 
 namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Create;
 
-public class CreateProductCategoryCommandHandler(IAppDbContext context)
+public class CreateProductCategoryCommandHandler(IAppDbContext context, IAppCurrentUser currentUser)
     : IRequestHandler<CreateProductCategoryCommand, int>
 {
     public async Task<int> Handle(CreateProductCategoryCommand request, CancellationToken cancellationToken)
     {
+        if (currentUser.RoleId != 3)
+            throw new PawPalConflictException("Only administrators can create categories.");
+
         var normalized = request.Name?.Trim();
 
         if (string.IsNullOrWhiteSpace(normalized))

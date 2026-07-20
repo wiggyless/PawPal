@@ -25,9 +25,9 @@ export class SettingsComponent implements OnInit {
   showChangeEmailForm: boolean = false;
   showChangePasswordForm = signal(false);
   newEmail: string = '';
-  currentPassword: string = '';
-  newPassword: string = '';
-  confirmPassword: string = '';
+  isSendingEmailChange: boolean = false;
+  emailChangeRequested: boolean = false;
+  pendingEmail: string = '';
   isDarkTheme: boolean = false;
   isSecurityEnabled = signal(false);
   showPassword = signal(false);
@@ -59,17 +59,18 @@ export class SettingsComponent implements OnInit {
 
   toggleChangeEmailForm(): void {
     this.showChangeEmailForm = !this.showChangeEmailForm;
+    this.emailChangeRequested = false;
+    this.pendingEmail = '';
     if (!this.showChangeEmailForm) {
       this.newEmail = '';
     }
   }
 
   toggleChangePasswordForm(): void {
-    this.showChangePasswordForm.set(!this.showChangePasswordForm);
-    if (!this.showChangePasswordForm) {
-      this.currentPassword = '';
-      this.newPassword = '';
-      this.confirmPassword = '';
+    this.showChangePasswordForm.set(!this.showChangePasswordForm());
+    if (!this.showChangePasswordForm()) {
+      this.passwordFormGroup.reset();
+      this.showPassword.set(false);
     }
   }
 
@@ -88,7 +89,6 @@ export class SettingsComponent implements OnInit {
     ) {
       this.dialogPopUp.error('Error', 'Passwords do not match', 'OK');
     } else if (this.passwordFormGroup.valid) {
-      console.log(this.passwordFormGroup.get('currentPassword')?.value as string);
       this.userService
         .updatePassword({
           email: this.currentUser.email() as string,
@@ -99,10 +99,10 @@ export class SettingsComponent implements OnInit {
         .subscribe({
           next: (res) => {
             this.dialogPopUp.success('Success', 'New password successfully saved', 'OK');
-            this.showChangePasswordForm.set(!this.showChangePasswordForm);
+            this.showChangePasswordForm.set(!this.showChangePasswordForm());
           },
           error: (res) => {
-            this.dialogPopUp.success('Errorr', res?.error.message, 'OK');
+            this.dialogPopUp.error('Error', res?.error.message, 'OK');
           },
         });
     } else {

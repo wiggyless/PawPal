@@ -4,6 +4,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.UpdateSt
 
 public sealed class UpdateAdoptionStatusCommandHandler(
     IAppDbContext context,
+    IAppCurrentUser currentUser,
     IFirebaseNotificationService firebaseNotificationService,
     IEmailService emailService)
     : IRequestHandler<UpdateAdoptionStatusCommand>
@@ -21,6 +22,9 @@ public sealed class UpdateAdoptionStatusCommandHandler(
 
         if (adoptionRequest is null)
             throw new PawPalNotFoundException("Adoption request does not exist");
+
+        if (adoptionRequest.Post?.UserId != currentUser.UserId && currentUser.RoleId != 3)
+            throw new PawPalConflictException("Only the post owner can accept or deny adoption requests.");
 
         var validStatuses = new[] { "Accepted", "Denied" };
         if (!validStatuses.Contains(request.Status))
@@ -64,8 +68,7 @@ public sealed class UpdateAdoptionStatusCommandHandler(
                 }
                 catch (Exception)
                 {
-                    // don't let a transient email failure fail the whole approval
-                    // TODO: replace with proper logger once wired in
+                    // Don't let a transient email failure fail the whole approval.
                 }
             }
         }

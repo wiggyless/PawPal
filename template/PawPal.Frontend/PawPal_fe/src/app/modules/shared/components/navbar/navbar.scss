@@ -79,38 +79,6 @@
   color: #a89878;
 }
 
-.nav-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 1000;
-  min-width: 200px;
-  background-color: #2e2310;
-  font-size: 18px;
-  text-align: left;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  animation: slideDown 0.3s ease-out;
-
-  .menu-item {
-    cursor: pointer;
-    padding: 20px;
-    color: #c7b18c;
-    border: 1px solid #473619;
-    background-color: #2e2310;
-    transition: all 0.3s ease;
-
-    &:hover {
-      background-color: #54411f;
-      color: #a89878;
-    }
-  }
-}
-
 .avatar-container {
   position: relative;
   display: inline-block;
@@ -253,6 +221,7 @@
 .notification-bell {
   position: relative;
   cursor: pointer;
+  z-index: 2;
 }
 
 .notif-badge {
@@ -269,6 +238,7 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  z-index: 5;
 }
 
 .notifications-dropdown {

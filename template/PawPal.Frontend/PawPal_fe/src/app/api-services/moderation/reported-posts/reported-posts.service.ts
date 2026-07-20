@@ -6,7 +6,7 @@ import {
   GetReportedPostDto,
   GetReportedPostQuery,
 } from './reported-posts.model';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { buildHttpParams } from '../../../core/models/build-http-params';
 import { PageResult } from '../../../core/models/paging/page-result';
 

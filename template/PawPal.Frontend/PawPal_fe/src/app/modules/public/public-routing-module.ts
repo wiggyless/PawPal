@@ -4,6 +4,8 @@ import { PublicLayout } from './public-layout/public-layout';
 import { CatalogComponent } from './catalog/catalog/catalog';
 import { PostComponent } from './post/post/post';
 import { Profile } from './profile/profile/profile';
+import { NewsListComponent } from './news/news-list/news-list';
+import { NewsDetailComponent } from './news/news-detail/news-detail';
 const routes: Routes = [
   {
     path: '',
@@ -20,6 +22,14 @@ const routes: Routes = [
   {
     path: 'profile',
     component: Profile,
+  },
+  {
+    path: 'news',
+    component: NewsListComponent,
+  },
+  {
+    path: 'news/:id',
+    component: NewsDetailComponent,
   },
 ];
 

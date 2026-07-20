@@ -162,7 +162,7 @@
 
         <mat-paginator
           [length]="page.totalItems"
-          [pageSize]=""
+          [pageSize]="page.pageSize"
           [pageSizeOptions]="page.pageSizeOption"
           aria-label="Select page"
           (page)="handlePageEvent($event)"

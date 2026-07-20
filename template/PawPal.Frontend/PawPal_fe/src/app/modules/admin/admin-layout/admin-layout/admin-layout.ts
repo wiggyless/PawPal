@@ -19,7 +19,6 @@ export class AdminLayout {
   hasLoaded: boolean = false;
   url = signal('');
   ngOnInit(): void {
-    console.log(this.router.url);
     this.selectedItem = this.router.url;
   }
   constructor() {

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommentService } from '../../../../../../api-services/comments/comments.service';
-import { environment } from '../../../../../../../environments/environment.development';
+import { environment } from '../../../../../../../environments/environment';
 import { UserImageService } from '../../../../../../api-services/userImage/userImage-service';
 import { UserService } from '../../../../../../api-services/users/users-service';
 import { Router } from '@angular/router';

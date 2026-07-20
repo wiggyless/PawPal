@@ -9,7 +9,8 @@ import {
   RefreshTokenCommandDto,
   LogoutCommand,
   ConfirmEmailCommandDto,
-  ResendConfirmationEmailCommand
+  ResendConfirmationEmailCommand,
+  ConfirmEmailChangeCommandDto
 } from './auth-api.model';
 
 @Injectable({
@@ -54,5 +55,15 @@ confirmEmail(token: string): Observable<ConfirmEmailCommandDto> {
 }
 resendConfirmationEmail(email: string): Observable<ResendConfirmationEmailCommand> {
   return this.http.post<ResendConfirmationEmailCommand>(`${environment.apiUrl}/Users/resend-confirmation`, { email });
+}
+
+/**
+ * GET /Auth/confirm-email-change
+ * Confirm a pending email change using the token from the verification email.
+ */
+confirmEmailChange(token: string): Observable<ConfirmEmailChangeCommandDto> {
+  return this.http.get<ConfirmEmailChangeCommandDto>(`${this.baseUrl}/confirm-email-change`, {
+    params: { token }
+  });
 }
 }

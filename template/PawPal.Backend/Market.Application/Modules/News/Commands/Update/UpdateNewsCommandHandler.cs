@@ -6,17 +6,21 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.News.Commands.Update
 {
-    public sealed class UpdateNewsCommandHandler(IAppDbContext ctx)
+    public sealed class UpdateNewsCommandHandler(IAppDbContext ctx, IAppCurrentUser user)
         :IRequestHandler<UpdateNewsCommand, Unit>
     {
         public async Task<Unit> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
         {
+            if (user.RoleId != 3) //only admins can update news
+                throw new ValidationException("Only administrators can update news.");
+
             var news = await ctx.News.FirstOrDefaultAsync(n => n.Id == request.Id, cancellationToken);
             if (news == null)
                 throw new PawPalNotFoundException($"News with Id {request.Id} does not exist!");
 
             news.Title = string.IsNullOrWhiteSpace(request.Title) ? news.Title : request.Title.Trim();
             news.Content = string.IsNullOrWhiteSpace(request.Content) ? news.Content : request.Content.Trim();
+            news.PhotoURL = string.IsNullOrWhiteSpace(request.PhotoURL) ? news.PhotoURL : request.PhotoURL;
 
             await ctx.SaveChangesAsync(cancellationToken);
             return Unit.Value;

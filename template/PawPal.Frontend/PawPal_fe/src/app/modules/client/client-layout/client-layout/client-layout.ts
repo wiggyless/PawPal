@@ -33,7 +33,6 @@ export class ClientLayout implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((event: NavigationEnd) => {
-        console.log('URL successfully changed to:', event.urlAfterRedirects);
         this.url.set(
           event.urlAfterRedirects.slice(
             event.urlAfterRedirects.indexOf('/', 1),

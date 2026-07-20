@@ -35,7 +35,6 @@ export class ReportUserComponent implements OnInit {
       reason: [null, Validators.required],
       description: [''],
     });
-    console.log(this.data);
   }
 
   onCancel(): void {
@@ -57,13 +56,11 @@ export class ReportUserComponent implements OnInit {
       })
       .subscribe({
         next: (res) => {
-          console.log('next fired', res);
           this.isSubmitting = false;
           this.submitted = true;
           this.cd.detectChanges();
         },
         error: (err) => {
-          console.log('err fired', err);
           this.isSubmitting = false;
           this.errorMessage = 'Something went wrong. Please try again.';
         },

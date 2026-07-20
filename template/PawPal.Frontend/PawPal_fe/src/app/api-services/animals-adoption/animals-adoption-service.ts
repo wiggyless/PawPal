@@ -24,7 +24,6 @@ export class AnimalRequestService {
     request?: GetAdoptionRequestListQuery,
   ): Observable<PageResult<GetAdoptionRequestList>> {
     const params = request ? buildHttpParams(request as any) : undefined;
-    console.log(params?.toString());
     return this.httpClient.get<PageResult<GetAdoptionRequestList>>(this.apiUrl, { params });
   }
   
@@ -32,7 +31,6 @@ export class AnimalRequestService {
     request?: GetAdoptionRequestListQuery,
   ): Observable<PageResult<GetAdoptionRequestList>> {
     const params = request ? buildHttpParams(request as any) : undefined;
-    console.log(params?.toString());
     return this.httpClient.get<PageResult<GetAdoptionRequestList>>(this.apiUrl + '/history', {
       params,
     });
@@ -60,7 +58,6 @@ export class AnimalRequestService {
     request?: GetAdoptionRequestListByPostIDQuery,
   ): Observable<PageResult<GetAdoptionRequestByPostID>> {
     const params = request ? buildHttpParams(request as any) : undefined;
-    console.log(params?.toString());
     return this.httpClient.get<PageResult<GetAdoptionRequestByPostID>>(`${this.apiUrl}/userPost`, {
       params,
     });

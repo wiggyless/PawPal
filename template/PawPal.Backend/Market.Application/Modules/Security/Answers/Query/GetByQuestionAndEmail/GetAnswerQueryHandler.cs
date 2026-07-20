@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Security.Cryptography;
 namespace PawPal.Application.Modules.Security.Answers.Query.GetByQuestionAndEmail
 {
@@ -34,11 +33,15 @@ namespace PawPal.Application.Modules.Security.Answers.Query.GetByQuestionAndEmai
             var answerDict = await context.SecurityAnswers
                     .Where(x => x.Email == query.Email && questionIds.Contains(x.QuestionID))
                     .ToDictionaryAsync(
-                    x => x.QuestionID, 
-                    x => x.Answer,     
+                    x => x.QuestionID,
+                    x => x.Answer,
                     cancellationToken
                     );
 
+            if (answerDict.Count != questionIds.Count)
+            {
+                return new GetAnswerQueryDto { isTrueAnswer = false };
+            }
 
             var isTrue = new GetAnswerQueryDto()
             {
@@ -61,11 +64,4 @@ namespace PawPal.Application.Modules.Security.Answers.Query.GetByQuestionAndEmai
             return Convert.ToHexString(hashBytes);
         }
     }
-
-    public class CheckAnswerDto
-    {
-        public int QuestionID { get; set; }
-        public string Answer { get; set; }
-    };
-
 }

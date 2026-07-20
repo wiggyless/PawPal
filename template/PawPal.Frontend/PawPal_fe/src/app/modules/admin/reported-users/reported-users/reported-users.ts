@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from 
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription, forkJoin, take } from 'rxjs';
-import { environment } from '../../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment';
 import { GetMainImagePostBlobClass } from '../../../../api-services/animal-post-images/animal-post-images-model';
 import { PageResult } from '../../../../core/models/paging/page-result';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';

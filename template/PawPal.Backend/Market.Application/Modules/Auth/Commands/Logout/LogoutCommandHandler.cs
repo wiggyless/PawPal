@@ -1,10 +1,5 @@
-﻿using PawPal.Application.Abstractions;
+﻿namespace PawPal.Application.Modules.Auth.Commands.Logout;
 
-namespace PawPal.Application.Modules.Auth.Commands.Logout;
-
-/// <summary>
-/// Handler that revokes the user's refresh token (idempotently).
-/// </summary>
 public sealed class LogoutCommandHandler(IAppDbContext ctx, IJwtTokenService tokens) : IRequestHandler<LogoutCommand>
 {
     public async Task Handle(LogoutCommand request, CancellationToken ct)
@@ -17,7 +12,6 @@ public sealed class LogoutCommandHandler(IAppDbContext ctx, IJwtTokenService tok
                 !x.IsRevoked &&
                 !x.IsDeleted, ct);
 
-        // Idempotent — if the token does not exist or has already been revoked, nothing happens.
         if (rt is null)
             return;
 

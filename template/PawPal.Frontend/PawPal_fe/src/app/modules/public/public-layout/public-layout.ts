@@ -8,10 +8,13 @@ import { ListAnimal } from '../../../api-services/animal-posts/animal-posts.mode
 import { GenderService } from '../../../api-services/gender/gender-service';
 import { Router } from '@angular/router';
 import { CantonsService } from '../../../api-services/cantons/cantons-service';
+import { ListCantonsDto } from '../../../api-services/cantons/cantons-model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
 import { ListAnimalCategoriesQueryDto } from '../../../api-services/animal-categories/animal-categories.model';
 import { GenderEnum, ListGenderDto } from '../../../api-services/gender/gender-model';
+import { NewsService } from '../../../api-services/news/news.service';
+import { ListNewsQuery, ListNewsQueryDto } from '../../../api-services/news/news.model';
 
 @Component({
   selector: 'app-public-layout',
@@ -25,10 +28,12 @@ export class PublicLayout implements OnInit, OnDestroy {
   currentUser = inject(CurrentUserService);
   postService = inject(AnimalPostService);
   genderService = inject(GenderService);
+  newsService = inject(NewsService);
   postList: PageResult<ListAnimal> | undefined;
-  cantons: any = [];
+  cantons: PageResult<ListCantonsDto> | undefined;
   animalCategories: PageResult<ListAnimalCategoriesQueryDto> | undefined;
-  selectedCategory: ListAnimalCategoriesQueryDto | undefined;
+  latestNews: ListNewsQueryDto | undefined;
+  selectedCategory: string | undefined;
   selectedCanton: number = 0;
   mySubcribe: Subscription | undefined;
   router = inject(Router);
@@ -45,6 +50,7 @@ export class PublicLayout implements OnInit, OnDestroy {
   env = environment;
   public myBackgroundImage: string = `${this.env.apiUrl}/StaticImages/header-photo.webp`;
   imagesLoaded = signal(false);
+  newsLoaded = signal(false);
   ngOnInit(): void {
     this.mySubcribe = forkJoin({
       posts: this.postService.listAnimalPosts(this.pagingObject),
@@ -59,6 +65,17 @@ export class PublicLayout implements OnInit, OnDestroy {
         this.animalCategories = response.categories;
         this.imagesLoaded.set(true);
       },
+    });
+
+    const latestNewsQuery = new ListNewsQuery();
+    latestNewsQuery.paging.page = 1;
+    latestNewsQuery.paging.pageSize = 1;
+    this.newsService.listNews(latestNewsQuery).subscribe({
+      next: (response) => {
+        this.latestNews = response.items[0];
+        this.newsLoaded.set(true);
+      },
+      error: () => this.newsLoaded.set(true),
     });
   }
   ngOnDestroy(): void {
@@ -83,5 +100,14 @@ export class PublicLayout implements OnInit, OnDestroy {
   }
   getImageForPost(imagePath: string) {
     return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + imagePath);
+  }
+  getNewsImageUrl(photoUrl?: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + '/' + (photoUrl ?? ''));
+  }
+  getNewsPreview(content: string, limit: number = 220): string {
+    return content.length > limit ? content.slice(0, limit).trimEnd() + '…' : content;
+  }
+  routeToNews(item: ListNewsQueryDto) {
+    this.router.navigate(['news', item.id]);
   }
 }

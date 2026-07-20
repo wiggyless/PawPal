@@ -2,17 +2,20 @@
 
 namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Status.Disable;
 
-public sealed class DisableProductCategoryCommandHandler(IAppDbContext ctx)
+public sealed class DisableProductCategoryCommandHandler(IAppDbContext ctx, IAppCurrentUser currentUser)
     : IRequestHandler<DisableProductCategoryCommand, Unit>
 {
     public async Task<Unit> Handle(DisableProductCategoryCommand request, CancellationToken ct)
     {
+        if (currentUser.RoleId != 3)
+            throw new PawPalConflictException("Only administrators can disable categories.");
+
         var cat = await ctx.ProductCategories
             .FirstOrDefaultAsync(x => x.Id == request.Id, ct);
 
         if (cat is null)
         {
-            throw new PawPalNotFoundException($"Kategorija (ID={request.Id}) nije pronađena.");
+            throw new PawPalNotFoundException($"Category (ID={request.Id}) not found.");
         }
 
         if (!cat.IsEnabled) return Unit.Value; // idempotent
@@ -30,9 +33,6 @@ public sealed class DisableProductCategoryCommandHandler(IAppDbContext ctx)
         cat.IsEnabled = false;
 
         await ctx.SaveChangesAsync(ct);
-
-        // await _bus.PublishAsync(new ProductCategoryDisabledV1IntegrationEvent(cat.Id, ...), ct);
-        // await _cache.RemoveAsync(CacheKeys.CategoriesList, ct);
 
         return Unit.Value;
     }

@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from 
 import { UserService } from '../../../../api-services/users/users-service';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
-import { Observable, Subscriber, Subscription, tap } from 'rxjs';
-import { environment } from '../../../../../environments/environment.development';
+import { Subscription } from 'rxjs';
+import { environment } from '../../../../../environments/environment';
 import { GetUserList, GetUserQuery } from '../../../../api-services/users/users-model';
 import { BaseListPagedComponent } from '../../../../core/components/base-classes/base-list-paged-component';
 import { PageResult } from '../../../../core/models/paging/page-result';
@@ -60,6 +60,14 @@ export class UserProfiles
     this.isLoaded.set(false);
     this.subscribe = this.userProfileService.getUserList(this.request).subscribe((res) => {
       this.userProfilesList = res;
+      this.page = {
+        pageSize: res.pageSize,
+        currentPage: res.currentPage,
+        includedTotal: res.includedTotal,
+        totalItems: res.totalItems,
+        totalPages: res.totalPages,
+        pageSizeOption: this.page.pageSizeOption,
+      };
       this.isLoaded.set(true);
     });
   }

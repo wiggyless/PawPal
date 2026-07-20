@@ -1,6 +1,6 @@
 import { PageRequest } from './page-request';
 
-// pratimo klasu c# BasePagedQuery.cs
+// Mirrors the C# BasePagedQuery.cs class
 export class BasePagedQuery {
   paging: PageRequest;
 

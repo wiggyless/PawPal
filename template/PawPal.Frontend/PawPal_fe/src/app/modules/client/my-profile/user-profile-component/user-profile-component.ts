@@ -17,7 +17,7 @@ import {
   CropDialogResult,
   UserProfileImageCropDialog,
 } from './user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
-import { environment } from '../../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-user-profile-component',
@@ -62,9 +62,7 @@ export class UserProfileComponent implements OnInit {
       });
     });
   }
-  ngOnInit(): void {
-    this.userData;
-  }
+  ngOnInit(): void {}
   ngOnDestroy(): void {
     if (this.objectUrl) {
       URL.revokeObjectURL(this.objectUrl);
@@ -88,7 +86,6 @@ export class UserProfileComponent implements OnInit {
   private sanitizer = inject(DomSanitizer);
   imageUrl = signal<SafeUrl | null>(null);
   private originalImageUrl: SafeUrl | null = null;
-  originalUrl: string | null = null;
   userData: GetUserByIdDto = {
     id: 0,
     firstName: '',
@@ -146,12 +143,12 @@ export class UserProfileComponent implements OnInit {
       date: this.userData.dateTime,
       city: this.userData.city,
       aboutMe: this.userData.aboutMe,
+      username: this.userData.username,
     });
   }
 
   loadCities() {
     this.cityService.listCities().subscribe((res) => {
-      console.log(res);
       this.cityList = res;
     });
   }
@@ -190,7 +187,7 @@ export class UserProfileComponent implements OnInit {
       const payload: UpdateUserCommand = {
         firstName: firstName,
         lastName: lastName,
-        profilePictureURL: this.originalUrl ?? '',
+        profilePictureURL: this.imageUrl()?.toString() ?? '',
         date: date,
         cityId: cityId,
         aboutMe: aboutMe,
@@ -220,7 +217,6 @@ export class UserProfileComponent implements OnInit {
         this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
       },
       error: (res) => {
-        console.log('ERROR: =>', res);
         this.dialog.error(
           'Error',
           'An error occurred while updating your profile. Please try again.',
@@ -280,7 +276,6 @@ export class UserProfileComponent implements OnInit {
 
         this.selectedImage = result.croppedFile;
         this.imageChanged.set(true);
-        this.originalUrl = this.imageUrl()?.toString() ?? null;
         this.imageUrl.set(result.croppedUrl);
       });
   }

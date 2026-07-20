@@ -2,7 +2,7 @@ import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { Router } from '@angular/router';
 import { computed, Injectable, signal, inject, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { Observable, of, catchError } from 'rxjs'; 
 
 export interface AppNotification {

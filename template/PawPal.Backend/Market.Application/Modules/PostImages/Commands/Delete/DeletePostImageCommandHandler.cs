@@ -11,7 +11,9 @@ namespace PawPal.Application.Modules.PostImages.Commands.Delete
     {
         public async Task<Unit> Handle(DeletePostImageCommand command,CancellationToken cancellationToken)
         {
-            if (!user.IsAuthenticated) throw new MarketBusinessRuleException("123", "User isn't authorized to do this");
+            var post = await context.Posts.Where(x => x.Id == command.PostId).FirstOrDefaultAsync(cancellationToken);
+            if (post is not null && post.UserId != user.UserId && user.RoleId != 3)
+                throw new MarketBusinessRuleException("123", "User isn't authorized to do this");
             var postImage = await context.PostImages.Where(x => x.PostId == command.PostId).FirstOrDefaultAsync(cancellationToken);
             if (postImage is null) return Unit.Value;
             postImage.IsDeleted = true;

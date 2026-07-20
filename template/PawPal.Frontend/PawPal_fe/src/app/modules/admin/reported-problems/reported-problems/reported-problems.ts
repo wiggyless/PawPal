@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subscription, forkJoin, take } from 'rxjs';
-import { environment } from '../../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment';
 import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 import { GetReportedPostDto } from '../../../../api-services/moderation/reported-posts/reported-posts.model';
 import { ReportedPostsService } from '../../../../api-services/moderation/reported-posts/reported-posts.service';

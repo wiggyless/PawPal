@@ -32,14 +32,10 @@ namespace PawPal.API.Controllers.UserImage
             }
             string safeFileName = Path.GetFileName(command.Image.FileName);
             string route = Path.Combine(storeFileDirectory, safeFileName);
-            using (var ms = new MemoryStream())
+            using (var stream = new FileStream(route, FileMode.Create))
             {
-                using (var stream = new FileStream(route, FileMode.Create))
-                {
-                    await command.Image.CopyToAsync(stream, cancellationToken);
-                }
+                await command.Image.CopyToAsync(stream, cancellationToken);
             }
-            var fileLocation = Path.Combine(subFolder, command.Image.FileName).Replace("\\", "/");
             return id;
         }
         [AllowAnonymous]
@@ -56,27 +52,23 @@ namespace PawPal.API.Controllers.UserImage
             string root = env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
 
 
-            var postImage = await context.PostImages.Where(x => x.PostId == id).FirstOrDefaultAsync(cancellationToken);
-            if (postImage is null)
-                throw new PawPalNotFoundException("PostImages not found");
+            var userImage = await context.UserImage.Where(x => x.UserID == id).FirstOrDefaultAsync(cancellationToken);
+            if (userImage is null)
+                throw new PawPalNotFoundException("UserImage not found");
             var newPostImage = new GetImagesPostByIdFileQueryDto
             {
                 PostId = id,
                 PostImages = new List<byte[]>()
             };
 
-            foreach (var img in postImage.PhotoURL)
-            {
-                string route = root.Replace("\\", "/");
-                string drugiRut = route + img;
-                newPostImage.PostImages.Add(await System.IO.File.ReadAllBytesAsync(drugiRut));
-            }
+            string route = root.Replace("\\", "/");
+            string fullPath = route + userImage.PhotoURL;
+            newPostImage.PostImages.Add(await System.IO.File.ReadAllBytesAsync(fullPath));
 
             return newPostImage;
         }
 
 
-        [AllowAnonymous]
         [HttpPut]
         public async Task Update([FromForm] UpdateUserImageCommand command, CancellationToken cancellationToken)
         {

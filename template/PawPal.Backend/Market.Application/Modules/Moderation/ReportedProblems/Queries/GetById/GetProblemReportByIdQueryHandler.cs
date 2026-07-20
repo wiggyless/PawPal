@@ -12,7 +12,7 @@ namespace PawPal.Application.Modules.Moderation.ReportedProblems.Queries.GetById
     {
         public async Task<GetProblemReportByIdQueryDto> Handle(GetProblemReportById request, CancellationToken cancellationToken)
         {
-            var q = await context.ReportProblems.FirstOrDefaultAsync(x => request.Id == request.Id, cancellationToken);
+            var q = await context.ReportProblems.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (q is null)
             {
                 throw new PawPalConflictException("Post report does not exist");

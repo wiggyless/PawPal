@@ -3,7 +3,7 @@ export const NET_CLAIM_TYPES = {
     Email: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
 } as const;
 
-// payload kako dolazi iz JWT-a
+// Payload shape as it comes from the JWT
 export interface JwtPayloadDto {
   sub: string;
   [NET_CLAIM_TYPES.NameIdentifier]: string;

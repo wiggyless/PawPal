@@ -12,8 +12,8 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Delet
     {
         public async Task<Unit> Handle(DeleteAnimalCategoryCommand request, CancellationToken cancellationToken)
         {
-            if (appCurrentUser.UserId is null)
-                throw new MarketBusinessRuleException("123", "User isn't authorized to do this."); //this will change later
+            if (appCurrentUser.RoleId != 3)
+                throw new MarketBusinessRuleException("123", "Only administrators can delete animal categories.");
 
             var animalCategory = await context.AnimalCategories.FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
             if (animalCategory == null)

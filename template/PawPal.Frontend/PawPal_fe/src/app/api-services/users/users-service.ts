@@ -11,6 +11,7 @@ import {
   GetUserQuery,
   UpdateUserCommand,
   UpdateUserPassword,
+  RequestEmailChangeCommand,
 } from './users-model';
 import { buildHttpParams } from '../../core/models/build-http-params';
 import { PageResult } from '../../core/models/paging/page-result';
@@ -26,11 +27,15 @@ export class UserService {
   }
 
   getByUsername(username: string): Observable<GetByUsernameQueryDto> {
-    return this.http.get<GetByUsernameQueryDto>(`${this.apiUrl}/lookup?username=${username}`);
+    return this.http.get<GetByUsernameQueryDto>(`${this.apiUrl}/lookup`, {
+      params: { username },
+    });
   }
 
   getByEmail(email: string): Observable<GetByEmailQueryDto> {
-    return this.http.get<GetByEmailQueryDto>(`${this.apiUrl}/lookup?email=${email}`);
+    return this.http.get<GetByEmailQueryDto>(`${this.apiUrl}/lookup`, {
+      params: { email },
+    });
   }
   getUserList(query: GetUserQuery): Observable<PageResult<GetUserList>> {
     const params = query ? buildHttpParams(query as any) : undefined;
@@ -43,13 +48,13 @@ export class UserService {
     const params = payload ? buildHttpParams(payload as any) : undefined;
     return this.http.put<void>(`${this.apiUrl}/${id}`, payload);
   }
-  getUserDisabled(id: number): Observable<GetUserByIdDto> {
-    return this.http.get<GetUserByIdDto>(`${this.apiUrl}/${id}/disabled`);
-  }
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
   updatePassword(request: UpdateUserPassword): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/passwordRecovery`, request);
+  }
+  requestEmailChange(id: number, request: RequestEmailChangeCommand): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${id}/request-email-change`, request);
   }
 }

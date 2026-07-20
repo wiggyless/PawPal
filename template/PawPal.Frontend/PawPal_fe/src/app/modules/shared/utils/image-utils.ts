@@ -18,35 +18,3 @@ export function base64ToBlobUrl(base64String: string): string {
   const blob = new Blob([byteArray], { type: mimeType });
   return URL.createObjectURL(blob);
 }
-
-/*
-  loadBlob(items: GetImagePostBlob) {
-    this.newImage = false;
-    items.postImages.forEach((base64String: string) => {
-      const byteCharacters = atob(base64String);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      let mimeType = 'image/png';
-      if (byteArray.length > 4) {
-        const header = byteArray.slice(0, 4);
-        let headerHex = '';
-        for (let i = 0; i < header.length; i++) {
-          headerHex += header[i].toString(16).toUpperCase();
-        }
-        if (headerHex.startsWith('89504E47')) {
-          mimeType = 'image/png';
-        } else if (headerHex.startsWith('FFD8FF')) {
-          mimeType = 'image/jpeg';
-        }
-      }
-      const blob = new Blob([byteArray], { type: mimeType });
-      const imageUrl = URL.createObjectURL(blob);
-      this.imageControls.push(this._formBuilder.control(imageUrl));
-    });
-    this.newImage = true;
-    this.createFiles(items);
-  }
-    */

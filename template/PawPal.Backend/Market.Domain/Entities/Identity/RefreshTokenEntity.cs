@@ -1,11 +1,4 @@
-﻿// RefreshTokenEntity.cs
-
-// RefreshTokenEntity.cs
-
-// RefreshTokenEntity.cs
-
-// RefreshTokenEntity.cs
-using PawPal.Domain.Common;
+﻿using PawPal.Domain.Common;
 
 namespace PawPal.Domain.Entities.Identity;
 

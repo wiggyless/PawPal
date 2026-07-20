@@ -29,7 +29,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.ListHist
             {
                 RequestId = y.Id,
                 Name = y.Post.Animal.Name,
-                Gender = y.Post.Animal.Name,
+                Gender = y.Post.Animal.Gender.GenderName,
                 Breed = y.Post.Animal.Breed,
                 City = y.Post.City.Name,
                 Canton = y.Post.City.Canton.FullName,
@@ -42,48 +42,6 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.ListHist
 
             return await PageResult<ListAdoptionRequestHistoryQueryDto>.FromQueryableAsync(finalList,
                 request.Paging, cancellationToken);
-            /*
-
-
-        // this is something new I learned to use. Way faster and easier to understand than our stoneage way 
-        // Here you you have a list of posts where you associate one post with a list of requests and what attributes you take
-        var combined = postList.GroupJoin(
-                        reqList,
-                        post => post.Id,               // Key from Posts
-                        request => request.PostId,      // Key from AdoptionRequests
-                        (post, requests) => new {       // Result selector
-                        PostId = post.Id,
-                        Name = post.Animal.Name,
-                        Gender = post.Animal.Gender.GenderName,
-                        Breed = post.Animal.Breed,
-                        City = post.City.Name,
-                        Canton = post.City.Canton.FullName,
-                         Requests = requests.ToList() // This is now a collection
-                        }
-                        ).ToList();
-
-        var finalList = new List<ListAdoptionRequestQueryDto>();
-        foreach (var item in combined) { 
-            foreach(var req in item.Requests)
-            {
-                finalList.Add(new ListAdoptionRequestQueryDto
-                {
-                    RequestId = req.Id,
-                    Name = item.Name,
-                    Gender = item.Gender,
-                    Breed = item.Breed,
-                    City = item.City,
-                    Canton = item.Canton,
-                    Status = req.Status,
-                    DateSent = req.DateSent,
-                    RequirementId = req.Id,
-                    UserID = req.UserId,
-
-                });
-            }
-        }
-
-        */
         }
     }
 }

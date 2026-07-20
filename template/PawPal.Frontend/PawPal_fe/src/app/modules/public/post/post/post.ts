@@ -74,7 +74,7 @@ export class PostComponent implements OnInit, OnDestroy {
     breed: '',
     gender: '',
     age: 0,
-    has_Papers: false,
+    hasPapers: false,
   };
   router = inject(Router);
   user: GetUserByIdDto | undefined;
@@ -125,10 +125,9 @@ export class PostComponent implements OnInit, OnDestroy {
         });
       },
       error: (res) => {
-        this.dialogPopUP.error('Error', res, 'OK');
+        this.dialogPopUP.error('Error', res?.error?.message ?? 'Something went wrong.', 'OK');
       },
     });
-    this.postSub = this.postService.getPostById(this.postId).subscribe((res) => {});
   }
   ngOnDestroy(): void {
     this.animalSub?.unsubscribe();

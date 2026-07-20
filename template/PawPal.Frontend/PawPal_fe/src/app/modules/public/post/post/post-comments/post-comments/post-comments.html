@@ -6,15 +6,20 @@
 
 <div class="comments">
   @if (hasLoaded()) {
-    <cdk-virtual-scroll-viewport
-      [itemSize]="200"
-      class="viewport"
-      (scrolledIndexChange)="onScrollIndexChange($event)"
-    >
-      <div
-        *cdkVirtualFor="let comment of commentsList.items; trackBy: trackComment"
-        class="singl-comment-container"
+    @if (commentsList.totalItems === 0) {
+      <div class="no-comments-message">
+        <p>Be the first one to comment.</p>
+      </div>
+    } @else {
+      <cdk-virtual-scroll-viewport
+        [itemSize]="200"
+        class="viewport"
+        (scrolledIndexChange)="onScrollIndexChange($event)"
       >
+        <div
+          *cdkVirtualFor="let comment of commentsList.items; trackBy: trackComment"
+          class="singl-comment-container"
+        >
         <div class="singl-comment-user">
           <div class="singl-comment-user-imgHolder">
             @if (comment.photoURL != '') {
@@ -69,6 +74,7 @@
           </button>
         </div>
       </div>
-    </cdk-virtual-scroll-viewport>
+      </cdk-virtual-scroll-viewport>
+    }
   }
 </div>

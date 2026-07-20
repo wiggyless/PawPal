@@ -15,9 +15,13 @@ namespace PawPal.Application.Modules.Posts.Commands.Create
         {
             if (currentUser.RoleId != 2 || !currentUser.IsAuthenticated)
             {
-                throw new Exception("User is not verified to make this action");
+                throw new PawPalConflictException("User is not verified to make this action");
             }
-            var user = await context.Users.Where(x => x.Id == request.UserId).FirstOrDefaultAsync(cancellationToken);
+            var user = await context.Users.Where(x => x.Id == currentUser.UserId).FirstOrDefaultAsync(cancellationToken);
+            if (user == null)
+            {
+                throw new PawPalNotFoundException("User does not exist inside the database");
+            }
             var animal = await context.Animals.Where(x => x.Id == request.AnimalID).FirstOrDefaultAsync(cancellationToken);
             if (animal == null)
             {

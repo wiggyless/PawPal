@@ -74,6 +74,10 @@ export class AuthFacadeService {
     return this.api.confirmEmail(token).pipe(map(() => void 0));
   }
 
+  confirmEmailChange(token: string): Observable<void> {
+    return this.api.confirmEmailChange(token).pipe(map(() => void 0));
+  }
+
   timeoutRefresh(payload: RefreshTokenCommand) {
     this.api.refresh(payload).subscribe((response) => {
       this.storage.saveRefresh(response);

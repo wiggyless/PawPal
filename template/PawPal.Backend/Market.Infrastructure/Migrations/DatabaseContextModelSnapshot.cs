@@ -820,6 +820,12 @@ namespace PawPal.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EmailChangeToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EmailChangeTokenExpiresAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("EmailConfirmationToken")
                         .HasColumnType("nvarchar(max)");
 
@@ -854,6 +860,9 @@ namespace PawPal.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PendingEmail")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProfilePictureURL")

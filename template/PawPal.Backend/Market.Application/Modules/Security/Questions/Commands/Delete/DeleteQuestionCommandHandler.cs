@@ -12,9 +12,9 @@ namespace PawPal.Application.Modules.Security.Questions.Commands.Delete
     {
         public async Task<Unit> Handle(DeleteQuestionCommand command, CancellationToken cancellationToken)
         {
-            if(user is null)
+            if(user.RoleId != 3)
             {
-                throw new PawPalConflictException("User cannot do this action");
+                throw new PawPalConflictException("Only administrators can delete security questions.");
             }
             var question = await context.SecurityQuestions.FirstOrDefaultAsync(x=>x.Id == command.Id,cancellationToken);
             if(question == null)

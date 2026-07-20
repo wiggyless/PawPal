@@ -1,6 +1,6 @@
 <div class="stepper-container">
   <mat-stepper linear #stepper class="adoption-stepper">
-    <!-- Step 1: Informacije o prebivalištu -->
+    <!-- Step 1: Residence information -->
     <ng-template matStepperIcon="number" let-index="index">
       @if(index==0){
       <svg
@@ -173,7 +173,7 @@
                     }
                 </div>
 
-                <!-- Broj sprata -->
+                <!-- Floor number -->
                 <div class="form-field">
                   <label class="field-label">Floor number</label>
                   <mat-form-field appearance="outline" class="custom-field number-field">
@@ -217,7 +217,7 @@
                   </defs>
                 </svg>
               </div>
-              <!-- Broj ukućana -->
+              <!-- Number of household members -->
               <div class="form-child">
                 <div class="form-field">
                   <label class="field-label"> Number of residents <span class="required">*</span> </label>
@@ -234,7 +234,7 @@
                   </mat-form-field>
                 </div>
 
-                <!-- Djeca prisutna -->
+                <!-- Children present -->
                 <div class="checkbox-field">
                   <mat-checkbox formControlName="children" class="custom-checkbox">
                     <svg
@@ -253,7 +253,7 @@
                   </mat-checkbox>
                 </div>
 
-                <!-- Starije osobe prisutne -->
+                <!-- Elderly present -->
                 <div class="checkbox-field">
                   <mat-checkbox formControlName="olderPeople" class="custom-checkbox">
                     <svg
@@ -274,7 +274,7 @@
                   </mat-checkbox>
                 </div>
 
-                <!-- Drugi ljubimci -->
+                <!-- Other pets -->
                 <div class="checkbox-field">
                   <mat-checkbox formControlName="otherPets" class="custom-checkbox">
                     <svg
@@ -316,7 +316,7 @@
                   />
                 </svg>
               </div>
-              <!-- Dostupno dvorište -->
+              <!-- Yard available -->
               <div id="dvoriste-child">
                 <div class="checkbox-field" id="dvoriste-checkbox">
                   <mat-checkbox
@@ -328,7 +328,7 @@
                   </mat-checkbox>
                 </div>
 
-                <!-- Detalji o dvorištu -->
+                <!-- Yard details -->
                 <div class="form-field">
                   <label class="field-label">Yard details:</label>
                   <mat-form-field
@@ -366,7 +366,7 @@
       </div>
     </mat-step>
 
-    <!-- Step 2: Briga o ljubimcu -->
+    <!-- Step 2: Pet care -->
     <mat-step [stepControl]="step2FormGroup">
       <ng-template matStepLabel>
         <span class="custom-step-label-text">Pet care</span>
@@ -394,7 +394,7 @@
                 </svg>
               </div>
               <div class="form-child">
-                <!-- Prethodno iskustvo -->
+                <!-- Previous experience -->
                 <div class="checkbox-field">
                   <mat-checkbox
                     (change)="toggleExp()"
@@ -412,7 +412,7 @@
                   </mat-form-field>
                 </div>
 
-                <!-- Da li će vaš ljubimac biti u vašoj kući ili van nje -->
+                <!-- Whether your pet will stay inside or outside your home -->
                 <div class="form-field">
                   <label class="field-label">
                     Will your pet be inside or outside of your house?
@@ -454,7 +454,7 @@
                 </svg>
               </div>
               <div class="form-child">
-                <!-- Dostupnost ukućana -->
+                <!-- Household availability -->
                 <div class="form-field">
                   <label class="field-label">
                     How available will the residents be during the day?
@@ -474,7 +474,7 @@
                   }
                 </div>
 
-                <!-- Da li ovog ljubimca uzimate kao poklon -->
+                <!-- Whether you're adopting this pet as a gift -->
                 <div class="checkbox-field" style="margin: 40px 0px 40px 0px;">
                   <mat-checkbox formControlName="gift" class="custom-checkbox">
                     <svg
@@ -496,7 +496,7 @@
                   </mat-checkbox>
                 </div>
 
-                <!-- Koliko planirate prebivati u vašem trenutnom domu -->
+                <!-- How long you plan to stay in your current home -->
                 <div class="form-field">
                   <label class="field-label">
                     How long will you be staying at your residence?
@@ -520,7 +520,7 @@
 
             <!-- Right Column -->
             <div class="form-column">
-              <!-- Finansijski ulog -->
+              <!-- Financial contribution -->
               <div class="dvoriste-icon" style="visibility: hidden;">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -549,7 +549,7 @@
                   </mat-form-field>
                 </div>
 
-                <!-- Alergije -->
+                <!-- Allergies -->
                  <div class="checkbox-container">
 <div class="checkbox-field">
                   <mat-checkbox formControlName="allergies" class="custom-checkbox">
@@ -573,7 +573,7 @@
                   </mat-checkbox>
                 </div>
 
-                <!-- Spremnost za agresivnost -->
+                <!-- Readiness for aggressive behavior -->
                 <div class="checkbox-field">
                   <mat-checkbox formControlName="angerIssues" class="custom-checkbox">
                     <svg
@@ -592,7 +592,7 @@
                   </mat-checkbox>
                 </div>
 
-                <!-- Spremnost za vraćanje -->
+                <!-- Willingness to return the pet -->
                 <div class="checkbox-field" id="second-field">
                   <mat-checkbox formControlName="readyToBack" class="custom-checkbox">
                     <svg
@@ -633,7 +633,7 @@
       </div>
     </mat-step>
 
-    <!-- Step 3: Finalni komentari -->
+    <!-- Step 3: Final comments -->
     <mat-step [stepControl]="step3FormGroup">
       <ng-template matStepLabel>
         <span class="custom-step-label-text">Final comments</span>
@@ -643,7 +643,7 @@
           <div class="form-row final-step">
             <!-- Left Column -->
             <div class="form-column-wide">
-              <!-- Opis prebivališta -->
+              <!-- Residence description -->
               <div class="form-field">
                 <label class="field-label">
                  Describe your residence in details. <span class="required">*</span>
@@ -662,7 +662,7 @@
                 }
               </div>
 
-              <!-- Dodatni komentar -->
+              <!-- Additional comment -->
               <div class="form-field">
                 <label class="field-label">Additional comments for the author of this post?</label>
                 <mat-form-field appearance="outline" class="custom-field textarea-field">

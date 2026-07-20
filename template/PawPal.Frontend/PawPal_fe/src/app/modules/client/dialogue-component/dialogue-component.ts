@@ -33,32 +33,30 @@ export class DialogueComponent implements OnInit {
     animalId: number;
   }>(MAT_DIALOG_DATA);
 
-  userId: any;
+  userId: number | null = null;
   ngOnInit(): void {
-    this.userId = this.userService.userId;
+    this.userId = this.userService.userId();
     this.postDeletion = this.data.postDelete;
     this.profileDeletion = this.data.profileDelete;
     this.postID = this.data.postId;
     this.animalID = this.data.animalId;
   }
-  //OVA FUNKCIJA JE UNUTAR dialogue-component.ts koja kontroliše brisanje korisnika ili objava
+  // Handles deletion of the currently active user's account or one of their posts.
   onDeleteUser(): void {
-    this.userActualService.deleteUser(this.userId).subscribe({
-      //zovemo naš servis, i šaljemo mu id usera koji je trenutno aktivan
-      //user.Id smo dobili korištenjem currentUser servisa
+    this.userActualService.deleteUser(this.userId as number).subscribe({
       next: (res) => {
-        this.dialog.closeAll(); //zatvara se dijalog
-        this.router.navigate(['/auth/logout']); //navigiramo korisnika na logout, kako bi se njegov token izbrisao iz lokalnog storage-a
+        this.dialog.closeAll();
+        // Send the user to logout so their token is cleared from local storage.
+        this.router.navigate(['/auth/logout']);
       },
       error: (res) => {
-        console.log('Didnt work', res);
+        this.dialog.closeAll();
       },
     });
   }
   onDeletePost(): void {
     this.postService.deletePost(this.postID, this.animalID).subscribe({
       next: (res) => {
-        console.log('WORKED', res);
         this.dialog.closeAll();
         if (this.userService.roleid() == 3) {
           this.router.navigate(['admin']);
@@ -69,7 +67,7 @@ export class DialogueComponent implements OnInit {
         }
       },
       error: (res) => {
-        console.log('Didnt work', res);
+        this.dialog.closeAll();
       },
     });
   }

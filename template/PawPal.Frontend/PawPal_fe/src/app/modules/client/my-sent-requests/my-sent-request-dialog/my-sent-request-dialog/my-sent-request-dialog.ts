@@ -66,9 +66,7 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
     }).subscribe({
       next: (reponse) => {
         this.reqData = reponse.request;
-        console.log(this.reqData);
         this.fullAddress = `${this.reqData.address}, Floor ${this.reqData.floorNumber}`;
-        console.log(this.reqData);
         this.userAPI.getUser(reponse.post.userID).subscribe((reponse) => {
           this.user = reponse;
           this.isLoaded = true;
@@ -83,7 +81,7 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
   }
   rejectRequest() {
     this.updateRequest.requestID = this.requestID;
-    this.updateRequest.status = 'Rejected';
+    this.updateRequest.status = 'Denied';
     this.updateSubcription = this.requestService
       .updateRequest(this.updateRequest)
       .subscribe((response) => {
