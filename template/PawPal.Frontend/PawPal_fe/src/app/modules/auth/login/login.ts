@@ -1,13 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { BaseComponent } from '../../../../core/components/base-classes/base-component';
+import { BaseComponent } from '../../../../app/core/components/base-classes/base-component';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AuthFacadeService } from '../../../../core/services/auth/auth-facade.service';
+import { AuthFacadeService } from '../../../../app/core/services/auth/auth-facade.service';
 import { Router } from '@angular/router';
-import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
-import { LoginCommand } from '../../../../api-services/auth/auth-api.model';
-import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
+import { CurrentUserService } from '../../../../app/core/services/auth/current-user.service';
+import { LoginCommand } from '../../../../app/api-services/auth/auth-api.model';
+import { DialoguePopupService } from '../../../../app/api-services/dialogue-popup/dialogue-popup.service';
 import { ActivatedRoute } from '@angular/router';
-import { AuthTimeoutService } from '../../../../core/services/auth/auth-timeout.service';
+import { AuthTimeoutService } from '../../../../app/core/services/auth/auth-timeout.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PasswordRecoveryDialog } from './password-recovery-dialog/password-recovery-dialog/password-recovery-dialog';
 

@@ -125,10 +125,9 @@ export class PostComponent implements OnInit, OnDestroy {
         });
       },
       error: (res) => {
-        this.dialogPopUP.error('Error', res, 'OK');
+        this.dialogPopUP.error('Error', res?.error?.message ?? 'Something went wrong.', 'OK');
       },
     });
-    this.postSub = this.postService.getPostById(this.postId).subscribe((res) => {});
   }
   ngOnDestroy(): void {
     this.animalSub?.unsubscribe();

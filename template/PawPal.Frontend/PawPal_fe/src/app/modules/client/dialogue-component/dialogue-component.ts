@@ -33,19 +33,24 @@ export class DialogueComponent implements OnInit {
     animalId: number;
   }>(MAT_DIALOG_DATA);
 
-  userId: any;
+  userId: number | null = null;
   ngOnInit(): void {
-    this.userId = this.userService.userId;
+    this.userId = this.userService.userId();
     this.postDeletion = this.data.postDelete;
     this.profileDeletion = this.data.profileDelete;
     this.postID = this.data.postId;
     this.animalID = this.data.animalId;
   }
+  // Handles deletion of the currently active user's account or one of their posts.
   onDeleteUser(): void {
-    this.userActualService.deleteUser(this.userId).subscribe({
+    this.userActualService.deleteUser(this.userId as number).subscribe({
       next: (res) => {
         this.dialog.closeAll();
+        // Send the user to logout so their token is cleared from local storage.
         this.router.navigate(['/auth/logout']);
+      },
+      error: (res) => {
+        this.dialog.closeAll();
       },
       error: (res) => {},
     });
@@ -62,7 +67,9 @@ export class DialogueComponent implements OnInit {
           this.dialogRef.close(false);
         }
       },
-      error: (res) => {},
+      error: (res) => {
+        this.dialog.closeAll();
+      },
     });
   }
 }

@@ -8,22 +8,29 @@ export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
 
   const requireAuth = route.data['requireAuth'] === true;
   const isAuth = currentUser.isAuthenticated();
+  // 1) If the route requires auth and the user isn't logged in -> login
   if (requireAuth && !isAuth) {
     router.navigate(['/auth/login']);
     return false;
   }
 
+  // If it doesn't require auth -> let it through (public routes)
   if (!requireAuth) {
     return true;
   }
 
+  // 2) Role check
   const user = currentUser.snapshot;
   if (!user) {
     router.navigate(['/auth/login']);
     return false;
   }
-
-  if (route.data['paht'] == 'client' && user.roleid != 2) {
+  const requireRoleId = route.data['requireRoleId'];
+  if (requireRoleId !== undefined && user.roleid !== requireRoleId) {
+    router.navigate([currentUser.getDefaultRoute()]);
+    return false;
+  }
+  if (route.data['path'] == 'client' && user.roleid != 2) {
     router.navigate(['/']);
     return false;
   }
@@ -33,8 +40,4 @@ export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
 export interface MyAuthRouteData {
   requireAuth?: boolean;
   requireRoleId?: number;
-}
-
-export function myAuthData(data: MyAuthRouteData): { auth: MyAuthRouteData } {
-  return { auth: data };
 }

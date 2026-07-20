@@ -14,22 +14,6 @@ public partial class StaticDataSeeder
 
     private static void SeedProductCategories(ModelBuilder modelBuilder)
     {
-        // todo: user roles
-
-        //modelBuilder.Entity<UserRoles>().HasData(new List<UserRoleEntity>
-        //{
-        //    new UserRoleEntity{
-        //        Id = 1,
-        //        Name = "Admin",
-        //        CreatedAt = dateTime,
-        //        ModifiedAt = null,
-        //    },
-        //    new UserRoleEntity{
-        //        Id = 2,
-        //        Name = "Employee",
-        //        CreatedAt = dateTime,
-        //        ModifiedAt = null,
-        //    },
-        //});
+        // Roles are seeded dynamically at startup instead (see DynamicDataSeeder.SeedRolesAsync).
     }
 }

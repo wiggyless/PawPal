@@ -14,10 +14,11 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Up
         public async Task<Unit> Handle(UpdateAnimalHealthHistoryCommand request, CancellationToken cancellationToken)
         {
             var healthHistory = await context.AnimalHealthHistories.FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
-            var animalAllergies = await context.AnimalsAllergies.Where(x => x.AnimalHealthHistoryId == healthHistory.Id).ToListAsync(cancellationToken);
-            var animalDisabilities = await context.AnimalsDisabilities.Where(x => x.AnimalHealthHistoryId == healthHistory.Id).ToListAsync(cancellationToken);
             if (healthHistory == null)
                 throw new PawPalNotFoundException($"Animal health history with Id {request.Id} does not exist!");
+
+            var animalAllergies = await context.AnimalsAllergies.Where(x => x.AnimalHealthHistoryId == healthHistory.Id).ToListAsync(cancellationToken);
+            var animalDisabilities = await context.AnimalsDisabilities.Where(x => x.AnimalHealthHistoryId == healthHistory.Id).ToListAsync(cancellationToken);
 
             var animal = await context.Animals.FirstOrDefaultAsync(a => a.Id == request.AnimalId, cancellationToken);
             if(animal == null)
@@ -32,7 +33,9 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Up
 
             var allergies = new List<int>();
             var disabilities = new List<int>();
-                
+
+            // Validate that the user entered valid allergies and disabilities.
+
             if(request.Allergies.Count != 0)
             {
                 foreach (var a in request.Allergies)
@@ -56,10 +59,10 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Up
                     disabilities.Add(disability.Id);
                 }
             }
-            var toRemoveAllergies = animalAllergies.Where(x => !allergies.Contains(x.Id));
-            var toRemoveDisablities = animalDisabilities.Where(x => !disabilities.Contains(x.Id));
-            var toBeAddedAllergies = allergies.Where(x => !animalAllergies.Select(y => y.Id).Contains(x));
-            var toBeAddedDisabilities = disabilities.Where(x => !animalDisabilities.Select(y => y.Id).Contains(x));
+            var toRemoveAllergies = animalAllergies.Where(x => !allergies.Contains(x.AllergyId));
+            var toRemoveDisablities = animalDisabilities.Where(x => !disabilities.Contains(x.DisabilityId));
+            var toBeAddedAllergies = allergies.Where(x => !animalAllergies.Select(y => y.AllergyId).Contains(x));
+            var toBeAddedDisabilities = disabilities.Where(x => !animalDisabilities.Select(y => y.DisabilityId).Contains(x));
 
             foreach(var rmv in toRemoveAllergies)
             {

@@ -386,6 +386,10 @@ export class CreatePost implements OnInit {
   }
 
   updatePost(): void {
+    if (this.secondFormGroup.invalid) {
+      this.secondFormGroup.markAllAsTouched();
+      return;
+    }
     this.healthHistory.getAnimalHealthHistoryById(this.routeAnimalID).subscribe((response) => {
       const healthHistoryID = response.animalHealthHistoryId;
 
@@ -422,6 +426,10 @@ export class CreatePost implements OnInit {
   }
 
   addPost(): void {
+    if (this.secondFormGroup.invalid) {
+      this.secondFormGroup.markAllAsTouched();
+      return;
+    }
     const mainInfo = this.fourthFromGroup.value.mainInfo;
 
     const newAnimal: AddAnimalDto = {

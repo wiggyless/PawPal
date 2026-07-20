@@ -20,7 +20,7 @@ export class DialoguePopupService {
     secondaryButtonText?: string,
     onConfirm?: () => void,
     onSecondary?: () => void,
-    duration = 10000000, //10000,
+    duration = 10000,
   ) {
     const id = this.nextId++;
     this.dialoguePopups.update((n) => [

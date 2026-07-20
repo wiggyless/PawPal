@@ -73,6 +73,7 @@ export interface UpdateUserPassword {
   newPassword: string;
   passwordRecovery: boolean;
   currentPassword?: string;
+  answers?: Record<number, string>;
 }
 
 export interface RequestEmailChangeCommand {

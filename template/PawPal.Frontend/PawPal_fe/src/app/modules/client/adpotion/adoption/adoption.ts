@@ -65,6 +65,12 @@ export class Adoption implements OnInit {
   }
 
   sendRequest() {
+    if (this.step1FormGroup.invalid || this.step2FormGroup.invalid || this.step3FormGroup.invalid) {
+      this.step1FormGroup.markAllAsTouched();
+      this.step2FormGroup.markAllAsTouched();
+      this.step3FormGroup.markAllAsTouched();
+      return;
+    }
     let isCheckReady = this.step3FormGroup.value.iAmReady;
     const payload: CreateAdoptionRequirement = {
       houseType: this.step1FormGroup.controls['houseType'].value as string,

@@ -14,5 +14,6 @@ namespace PawPal.Application.Modules.Users.Commands.UpdatePassword
         public string NewPassword { get; set; }
         public bool PasswordRecovery { get; set; }
         public string? CurrentPassword { get; set; }
+        public Dictionary<int, string>? Answers { get; set; }
     }
 }

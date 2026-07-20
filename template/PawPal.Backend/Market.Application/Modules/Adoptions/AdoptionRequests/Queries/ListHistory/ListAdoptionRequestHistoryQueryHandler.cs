@@ -29,7 +29,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.ListHist
             {
                 RequestId = y.Id,
                 Name = y.Post.Animal.Name,
-                Gender = y.Post.Animal.Name,
+                Gender = y.Post.Animal.Gender.GenderName,
                 Breed = y.Post.Animal.Breed,
                 City = y.Post.City.Name,
                 Canton = y.Post.City.Canton.FullName,
@@ -42,9 +42,6 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.ListHist
 
             return await PageResult<ListAdoptionRequestHistoryQueryDto>.FromQueryableAsync(finalList,
                 request.Paging, cancellationToken);
-
-
-     
         }
     }
 }

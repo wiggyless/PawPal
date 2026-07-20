@@ -13,7 +13,7 @@ import { DialoguePopupService } from '../../../../../../api-services/dialogue-po
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserDisabledService } from '../../../../../../api-services/users-disabled/users-disabled.service';
 import { ProfileDisableDialog } from './profile-disable-dialog/profile-disable-dialog/profile-disable-dialog';
-import { environment } from '../../../../../../../environments/environment.development';
+import { environment } from '../../../../../../../environments/environment';
 import { ReportUserService } from '../../../../../../api-services/moderation/reported-posts/reported-users/reported-users.service';
 
 @Component({
@@ -131,8 +131,9 @@ export class Profile implements OnInit {
             },
           })
           .afterClosed()
-          .subscribe((res) => {
-            this.userReportsService.deleteUserReport(this.repID as number).subscribe((res) => {
+          .subscribe((confirmed) => {
+            if (!confirmed) return;
+            this.userReportsService.deleteUserReport(this.repID as number).subscribe(() => {
               this.route.navigate(['reported-users']);
             });
           });

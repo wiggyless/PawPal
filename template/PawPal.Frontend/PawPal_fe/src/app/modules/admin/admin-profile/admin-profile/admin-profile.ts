@@ -17,7 +17,7 @@ import {
   CropDialogResult,
 } from '../../../client/my-profile/user-profile-component/user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
 import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
-import { environment } from '../../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-admin-profile',
@@ -60,9 +60,7 @@ export class AdminProfile implements OnInit {
       });
     });
   }
-  ngOnInit(): void {
-    this.userData;
-  }
+  ngOnInit(): void {}
   ngOnDestroy(): void {
     if (this.objectUrl) {
       URL.revokeObjectURL(this.objectUrl);

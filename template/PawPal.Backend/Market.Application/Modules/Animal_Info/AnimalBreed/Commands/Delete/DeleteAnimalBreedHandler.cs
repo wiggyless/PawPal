@@ -11,6 +11,9 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalBreed.Commands.Delete
     {
         public async Task<Unit> Handle(DeleteAnimalBreedCommand request,CancellationToken cancellationToken)
         {
+            if (user.RoleId != 3)
+                throw new PawPalConflictException("Only administrators can delete animal breeds.");
+
             var breed = await context.Breeds.Where(x=>x.Id == request.Id).FirstOrDefaultAsync(cancellationToken);
             if (breed is null)
                 throw new PawPalNotFoundException("Breed does not exist");

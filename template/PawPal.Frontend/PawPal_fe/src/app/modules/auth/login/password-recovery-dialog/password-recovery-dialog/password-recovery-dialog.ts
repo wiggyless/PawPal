@@ -2,21 +2,18 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import {
-  GetAndPostAnswerDTO,
   IsAnswerTrue,
-} from '../../../../../../api-services/security/answers/answer-model';
-import { SecurityAnswerService } from '../../../../../../api-services/security/answers/answer-service';
+} from '../../../../../../app/api-services/security/answers/answer-model';
+import { SecurityAnswerService } from '../../../../../../app/api-services/security/answers/answer-service';
 import {
   GetSecurityQuestionDTO,
-  GetSecurityQuestionsQueryByEmail,
-} from '../../../../../../api-services/security/questions/questions-model';
-import { SecurityQuestionService } from '../../../../../../api-services/security/questions/questions-service';
-import { CurrentUserService } from '../../../../../../core/services/auth/current-user.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+} from '../../../../../../app/api-services/security/questions/questions-model';
+import { SecurityQuestionService } from '../../../../../../app/api-services/security/questions/questions-service';
+import { CurrentUserService } from '../../../../../../app/core/services/auth/current-user.service';
 import { Subject, take, takeUntil } from 'rxjs';
-import { UserService } from '../../../../../../api-services/users/users-service';
+import { UserService } from '../../../../../../app/api-services/users/users-service';
 import { MatStepper } from '@angular/material/stepper';
-import { DialoguePopupService } from '../../../../../../api-services/dialogue-popup/dialogue-popup.service';
+import { DialoguePopupService } from '../../../../../../app/api-services/dialogue-popup/dialogue-popup.service';
 @Component({
   selector: 'app-password-recovery-dialog',
   standalone: false,
@@ -52,6 +49,7 @@ export class PasswordRecoveryDialog {
   error = signal(false);
   lastEmail = '';
   answerCorrect: IsAnswerTrue | undefined;
+  private verifiedAnswers: Record<number, string> | undefined;
   securityQuestionList = signal<GetSecurityQuestionDTO[]>([]);
   showPassword = signal(false);
   private destroyRef = new Subject<void>();
@@ -113,6 +111,7 @@ export class PasswordRecoveryDialog {
           next: (response) => {
             if (response.isTrueAnswer) {
               this.answerCorrect = response;
+              this.verifiedAnswers = answersRecord;
               stepper.selected!.completed = true;
               this.cd.detectChanges();
               stepper.next();
@@ -137,22 +136,23 @@ export class PasswordRecoveryDialog {
             email: this.emailFormGroup.get('email')!.value as string,
             newPassword: this.passwordFormGroup.get('password')!.value as string,
             passwordRecovery: true,
+            answers: this.verifiedAnswers,
           })
           .pipe(take(1))
           .subscribe({
             next: (res) => {
-              this.dialogPopUp.success('Success', 'Password has been sucessfully reset', 'OK');
+              this.dialogPopUp.success('Success', 'Password has been successfully reset', 'OK');
               this.dialogRef.close();
             },
             error: (res) => {
-              this.dialogPopUp.success('Error', res?.error.message, 'OK');
+              this.dialogPopUp.error('Error', res?.error.message, 'OK');
             },
           });
       } else {
         this.dialogPopUp.error('Error', 'Passwords are not the same', 'OK');
       }
     } else {
-      this.dialogPopUp.success(
+      this.dialogPopUp.error(
         'Error',
         'Please check if the passwords fields are correctly filled',
         'OK',

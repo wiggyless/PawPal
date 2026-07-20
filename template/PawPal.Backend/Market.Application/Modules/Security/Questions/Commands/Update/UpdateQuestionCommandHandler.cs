@@ -8,10 +8,13 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Security.Questions.Commands.Update
 {
-    public class UpdateQuestionCommandHandler(IAppDbContext context): IRequestHandler<UpdateQuestionCommand, Unit>
+    public class UpdateQuestionCommandHandler(IAppDbContext context, IAppCurrentUser currentUser): IRequestHandler<UpdateQuestionCommand, Unit>
     {
         public async Task<Unit> Handle(UpdateQuestionCommand command, CancellationToken cancellationToken)
         {
+            if (currentUser.RoleId != 3)
+                throw new PawPalConflictException("Only administrators can update security questions.");
+
             var question = await context.SecurityQuestions.FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
             if(question == null)
             {

@@ -81,7 +81,7 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
   }
   rejectRequest() {
     this.updateRequest.requestID = this.requestID;
-    this.updateRequest.status = 'Rejected';
+    this.updateRequest.status = 'Denied';
     this.updateSubcription = this.requestService
       .updateRequest(this.updateRequest)
       .subscribe((response) => {
