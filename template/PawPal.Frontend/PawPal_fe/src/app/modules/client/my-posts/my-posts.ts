@@ -31,7 +31,6 @@ export class MyPosts extends BaseListPagedComponent<ListAnimal, GetPostQuery> im
     this.request.paging.pageSize = 4;
   }
   protected override loadPagedData(): void {}
-  // Page Values ( didnt use the template cuz whats going on???)
   page = {
     pageSize: 10,
     currentPage: 1,

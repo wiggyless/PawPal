@@ -39,27 +39,26 @@ export class AuthFacadeService {
       tap((response: LoginCommandDto) => {
         this.storage.saveLogin(response);
         this.decodeAndSetUser(response.accessToken);
-        this.notificationService.checkPermission(); // this already calls listenForeground internally
-        // REMOVE the extra if(Notification.permission === 'granted') listenForeground() call
+        this.notificationService.checkPermission();
       }),
       map(() => void 0),
     );
   }
 
- logout(): Observable<void> {
-  const refreshToken = this.storage.getRefreshToken();
+  logout(): Observable<void> {
+    const refreshToken = this.storage.getRefreshToken();
 
-  return this.notificationService.clearToken().pipe(
-    switchMap(() => {
-      this.clearUserState();
-      if (!refreshToken) {
-        return of(void 0);
-      }
-      const payload: LogoutCommand = { refreshToken };
-      return this.api.logout(payload).pipe(catchError(() => of(void 0)));
-    }),
-  );
-}
+    return this.notificationService.clearToken().pipe(
+      switchMap(() => {
+        this.clearUserState();
+        if (!refreshToken) {
+          return of(void 0);
+        }
+        const payload: LogoutCommand = { refreshToken };
+        return this.api.logout(payload).pipe(catchError(() => of(void 0)));
+      }),
+    );
+  }
 
   refresh(payload: RefreshTokenCommand): Observable<RefreshTokenCommandDto> {
     return this.api.refresh(payload).pipe(
@@ -102,7 +101,7 @@ export class AuthFacadeService {
     const token = this.storage.getAccessToken();
     if (token) {
       this.decodeAndSetUser(token);
-      this.notificationService.checkPermission(); // handles everything internally
+      this.notificationService.checkPermission();
     }
   }
 

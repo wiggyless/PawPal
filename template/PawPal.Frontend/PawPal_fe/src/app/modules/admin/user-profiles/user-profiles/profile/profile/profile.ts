@@ -114,7 +114,6 @@ export class Profile implements OnInit {
 
   loadCities() {
     this.cityService.listCities().subscribe((res) => {
-      console.log(res);
       this.cityList = res;
     });
   }

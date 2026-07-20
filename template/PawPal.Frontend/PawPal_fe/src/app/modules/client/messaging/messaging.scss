@@ -1,19 +1,17 @@
 .messaging-layout {
   display: flex;
-  height: 100vh; // adjust 64px to your navbar height
+  height: 100vh;
   overflow: hidden;
   background: var(--messaging-background-color);
   font-size: 16px;
 }
 
-// ── Sidebar ──────────────────────────────────────────────────────────────────
-
 .sidebar {
-  width: 310px;  
+  width: 310px;
   min-width: 310px;
   display: flex;
   flex-direction: column;
-  background: var(--messaging-sidebar-background-color)
+  background: var(--messaging-sidebar-background-color);
 }
 
 .sidebar-header {
@@ -25,14 +23,17 @@
   font-weight: 500;
   color: var(--box-text-color);
 
-  i { font-size: 22px; color: #ff0000; }
+  i {
+    font-size: 22px;
+    color: #ff0000;
+  }
 }
 
 .convo-list {
   flex: 1;
   overflow-y: auto;
   list-style: none;
-  margin-top:17px;
+  margin-top: 17px;
   padding: 0px;
 }
 
@@ -45,8 +46,12 @@
   border-bottom: 1px solid var(--messaging-sidebar-convo-item-border);
   transition: background 0.12s;
 
-  &:hover   { background: var(--messaging-sidebar-convo-item-hover-bg-color); }
-  &.active  { background: var(--messaging-sidebar-convo-item-active-bg-color); }
+  &:hover {
+    background: var(--messaging-sidebar-convo-item-hover-bg-color);
+  }
+  &.active {
+    background: var(--messaging-sidebar-convo-item-active-bg-color);
+  }
 }
 
 .convo-meta {
@@ -75,7 +80,7 @@
 }
 
 .badge {
-  background:var(--primary-button-color);
+  background: var(--primary-button-color);
   color: #fff;
   font-size: 12px;
   font-weight: 500;
@@ -112,7 +117,11 @@
   padding: 16px 22px;
   background: var(--background-color);
   border-bottom: 1px solid var(--messaging-sidebar-convo-item-border);
-  .avatar { width: 36px; height: 36px; font-size: 12px; }
+  .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
 }
 
 .chat-header-name {
@@ -126,7 +135,9 @@
   color: var(--messaging-sidebar-convo-item-text-color);
   margin-top: 1px;
 
-  &.online { color: #1D9E75; }
+  &.online {
+    color: #1d9e75;
+  }
 }
 
 .messages-area {
@@ -143,7 +154,9 @@
   align-items: flex-end;
   gap: 6px;
 
-  &.sent { flex-direction: row-reverse; }
+  &.sent {
+    flex-direction: row-reverse;
+  }
 }
 
 .bubble {
@@ -192,13 +205,23 @@
   background: var(--box-text-color);
   animation: bounce 1.2s infinite;
 
-  &:nth-child(2) { animation-delay: 0.2s; }
-  &:nth-child(3) { animation-delay: 0.4s; }
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0.4s;
+  }
 }
 
 @keyframes bounce {
-  0%, 60%, 100% { transform: translateY(0); }
-  30%            { transform: translateY(-5px); }
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-5px);
+  }
 }
 
 .input-row {
@@ -206,7 +229,7 @@
   align-items: center;
   gap: 10px;
   padding: 14px 19px;
-  background:  var(--messaging-input-general-area);
+  background: var(--messaging-input-general-area);
   border-top: 1px solid var(--messaging-input-general-area);
 }
 
@@ -221,7 +244,10 @@
   color: #222;
   transition: border-color 0.15s;
 
-  &:focus { border-color: var(--messaging-input-general-area); background: var(--messaging-otheruser-text-bubble-highlight); }
+  &:focus {
+    border-color: var(--messaging-input-general-area);
+    background: var(--messaging-otheruser-text-bubble-highlight);
+  }
 }
 
 .send-btn {
@@ -237,8 +263,13 @@
   flex-shrink: 0;
   transition: opacity 0.15s;
 
-  i { color: #fff; font-size: 19px; }
-  &:hover { opacity: 0.85; }
+  i {
+    color: #fff;
+    font-size: 19px;
+  }
+  &:hover {
+    opacity: 0.85;
+  }
 }
 
 .empty-state {
@@ -250,24 +281,28 @@
   gap: 10px;
   color: #bbb;
 
-  i  { font-size: 44px; }
-  p  { font-size: 14px; }
+  i {
+    font-size: 44px;
+  }
+  p {
+    font-size: 14px;
+  }
 }
 
-.ti{
+.ti {
   color: var(--messaging-text-tooltip);
 }
 
-p{
+p {
   color: var(--messaging-text-tooltip);
 }
 
-#loadText{
-  display:flex;
+#loadText {
+  display: flex;
   align-self: center;
 }
 
-.load-more{
-  margin-right:auto;
-  margin-left:auto;
+.load-more {
+  margin-right: auto;
+  margin-left: auto;
 }

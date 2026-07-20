@@ -62,7 +62,6 @@ export class Adoption implements OnInit {
         this.postID = params['postID'];
       });
     }
-    console.log(this.postID);
   }
 
   sendRequest() {
@@ -93,10 +92,8 @@ export class Adoption implements OnInit {
     };
     this.requirementService.addRequirements(payload).subscribe({
       next: (res) => {
-        console.log('Requirements made successfully: ', res);
         this.requirementIDFromRes = res;
 
-        console.log(this.requirementIDFromRes);
         const payload: CreateAdoptionRequest = {
           status: 'SENT',
           dateSend: new Date(),
@@ -113,9 +110,7 @@ export class Adoption implements OnInit {
           },
         });
       },
-      error: (err) => {
-        console.log('ERROR => ', err);
-      },
+      error: (err) => {},
     });
     if (isCheckReady) {
       this.dialog.success(

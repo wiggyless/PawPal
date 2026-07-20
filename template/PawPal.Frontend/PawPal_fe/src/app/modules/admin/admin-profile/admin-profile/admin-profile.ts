@@ -148,7 +148,6 @@ export class AdminProfile implements OnInit {
 
   loadCities() {
     this.cityService.listCities().subscribe((res) => {
-      console.log(res);
       this.cityList = res;
     });
   }
@@ -179,7 +178,6 @@ export class AdminProfile implements OnInit {
     this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
 
     if (!formChanged && !imageChanged) {
-      console.log();
       return;
     }
 
@@ -224,7 +222,6 @@ export class AdminProfile implements OnInit {
         this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
       },
       error: (res) => {
-        console.log('ERROR: =>', res);
         this.dialog.error(
           'Error',
           'An error occurred while updating your profile. Please try again.',

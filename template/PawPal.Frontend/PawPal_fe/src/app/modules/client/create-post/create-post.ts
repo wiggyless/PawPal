@@ -410,7 +410,6 @@ export class CreatePost implements OnInit {
         postId: this.routePostID,
         postImages: this.imgFileList,
       };
-      console.log(newPostIamge);
       forkJoin({
         animals: this.animalService.updateAnimal(updateAnimal, this.routeAnimalID),
         health: this.healthHistory.updateAnimalHealthHistory(updateHealth, healthHistoryID),

@@ -152,11 +152,6 @@ export class PasswordRecoveryDialog {
         this.dialogPopUp.error('Error', 'Passwords are not the same', 'OK');
       }
     } else {
-      console.log(
-        this.passwordFormGroup.get('password')?.value +
-          ' ' +
-          this.passwordFormGroup.get('secondPassword')?.value,
-      );
       this.dialogPopUp.success(
         'Error',
         'Please check if the passwords fields are correctly filled',

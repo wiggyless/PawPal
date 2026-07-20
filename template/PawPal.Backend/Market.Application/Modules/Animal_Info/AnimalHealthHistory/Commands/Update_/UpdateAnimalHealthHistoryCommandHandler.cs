@@ -32,8 +32,6 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Up
 
             var allergies = new List<int>();
             var disabilities = new List<int>();
-
-            //validacija da li je korisnik unio ispravne alergije i poremecaje
                 
             if(request.Allergies.Count != 0)
             {

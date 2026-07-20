@@ -60,7 +60,6 @@ export class ReportedComments implements OnInit, OnDestroy {
       request: this.commentReportService.getCommentReportList(this.request),
     }).subscribe({
       next: (response) => {
-        console.log(response);
         this.requestsList = response.request;
         this.imagesLoaded.set(true);
       },

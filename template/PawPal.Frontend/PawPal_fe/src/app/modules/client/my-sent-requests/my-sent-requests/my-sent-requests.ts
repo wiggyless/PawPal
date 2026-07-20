@@ -70,7 +70,6 @@ export class MySentRequests implements OnInit, OnDestroy {
         if (this.requestsList.items.length == 0) {
           this.listEmpty.set(true);
         }
-        console.log(this.requestsList);
         this.cantonsList = response.cantons;
         this.imagesLoaded.set(true);
       },
@@ -104,10 +103,15 @@ export class MySentRequests implements OnInit, OnDestroy {
     this.loadRequest();
   }
 
-
   deleteRequest(request: GetAdoptionRequestList) {
-    this.dialogConfirm.warning("Delete your request?", "Are you sure you want to delete this request? This action cannot be undone.", "Delete", "Cancel", () => {
-    this.myRequestApi.deleteRequest(request.requestId).subscribe();
-  });
-}
+    this.dialogConfirm.warning(
+      'Delete your request?',
+      'Are you sure you want to delete this request? This action cannot be undone.',
+      'Delete',
+      'Cancel',
+      () => {
+        this.myRequestApi.deleteRequest(request.requestId).subscribe();
+      },
+    );
+  }
 }

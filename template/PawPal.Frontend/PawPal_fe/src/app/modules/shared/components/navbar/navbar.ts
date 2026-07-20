@@ -34,7 +34,6 @@ export class NavbarComponent {
   private mouseLeave$ = new Subject<void>();
   private subscription: Subscription;
   enableNotifications() {
-    console.log('enableNotifications clicked');
     this.notificationService.requestPermissionAndRegister();
   }
 

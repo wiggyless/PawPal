@@ -69,11 +69,10 @@ export class AuthTimeoutService implements OnDestroy {
       'No',
       () => {
         this.auth.timeoutRefresh(refresh);
-        console.log('Extended session');
       },
       () => {
-      this.handleLogout();
-    }
+        this.handleLogout();
+      },
     );
   }
 

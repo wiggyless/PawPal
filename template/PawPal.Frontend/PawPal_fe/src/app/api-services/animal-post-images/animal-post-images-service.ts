@@ -38,7 +38,6 @@ export class PostImagesService {
     const params = request ? buildHttpParams(request as any) : undefined;
     const formData = new FormData();
     formData.append('postId', request.postId.toString());
-    console.log(request.postImages);
     request.postImages.forEach((x) => {
       formData.append('postImages', x, x.name);
     });
@@ -52,8 +51,8 @@ export class PostImagesService {
       formData.append('postImages', x, x.name);
     });
     return this.httpClient.post<number>(`${this.apiUrl}`, formData, {
-      reportProgress: true, // Required for tracking upload packets!
-      observe: 'events', // Required to stream chunk updates!
+      reportProgress: true,
+      observe: 'events',
     });
   }
 }

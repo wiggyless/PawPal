@@ -32,7 +32,6 @@ export class CatalogComponent
   extends BaseListPagedComponent<ListAnimal, GetPostQuery>
   implements OnInit
 {
-  // Injections //
   currentUser = inject(CurrentUserService);
   animalCatService = inject(AnimalCategoriesService);
   animalBreedService = inject(AnimalBreedService);
@@ -45,7 +44,6 @@ export class CatalogComponent
   activeRoute = inject(ActivatedRoute);
   likedPosts = inject(LikedPostsService);
   private fb = inject(FormBuilder);
-  // Page Values ( didnt use the template cuz whats going on???)
   page = {
     pageSize: 4,
     currentPage: 1,
@@ -55,7 +53,6 @@ export class CatalogComponent
     pageSizeOption: [4, 16, 32],
   };
 
-  // Lists //
   animalCategories: PageResult<ListAnimalCategoriesQueryDto> | undefined;
   animalBreed: PageResult<ListAnimalBreedQueryDto> | undefined;
   animalPosts: Observable<PageResult<ListAnimal>> = new Observable<PageResult<ListAnimal>>();
@@ -64,7 +61,6 @@ export class CatalogComponent
   breedArr: Array<ListAnimalBreedQueryDto> = new Array<ListAnimalBreedQueryDto>();
   postArr: Observable<PageResult<ListAnimal>> = new Observable<PageResult<ListAnimal>>();
 
-  // List selections //
   filterForm = new FormGroup({
     selectedCat: new FormControl<string>(''),
     selectedBreed: new FormControl<string>(''),
@@ -83,7 +79,6 @@ export class CatalogComponent
   });
   favoritePostList: number[] = [];
   deleteFavoritePostList: number[] = [];
-  // random values
   env = environment;
   tempList: number[] = [];
   cantonID: number | undefined;
@@ -138,7 +133,6 @@ export class CatalogComponent
     this.animalPosts = this.animalPostsService.listAnimalPosts(this.request).pipe(
       shareReplay(1),
       tap((res) => {
-        console.log(res.items);
         this.likedPosts
           .listLikedPosts({
             userId: this.currentUser.userId() as number,
@@ -196,7 +190,6 @@ export class CatalogComponent
       start: null,
       end: null,
     });
-    console.log(this.getValue('selectedBreed'));
     this.mapRequest();
     this.loadPosts();
   }
@@ -224,7 +217,7 @@ export class CatalogComponent
   }
   likeUnlikePost(index: number, event: Event) {
     if (this.currentUser.getDefaultRoute() == '/login') {
-      this.router.navigate(['login']);
+      this.router.navigate(['/auth/login']);
     } else {
       event.stopPropagation();
       if (this.favoritePostList.find((x) => x == index) != undefined) {
@@ -235,7 +228,6 @@ export class CatalogComponent
           .deletePost({ userId: this.currentUser.userId() as number, postId: index })
           .subscribe();
       } else {
-        console.log(index);
         this.favoritePostList.push(index);
         this.likedPosts
           .addLikedPosts({ userID: this.currentUser.userId() as number, postID: index })
@@ -254,6 +246,5 @@ export class CatalogComponent
       searchCantonId: this.getValue('selectedCanton')?.id,
       paging: this.request.paging,
     };
-    console.log(this.request);
   }
 }
