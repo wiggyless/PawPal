@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper'; // ← both from same library
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 
 export interface CropDialogData {
   imageFile: File;

@@ -1,4 +1,3 @@
-// src/app/core/services/auth/current-user.service.ts
 import { Injectable, inject, computed } from '@angular/core';
 import { AuthFacadeService } from './auth-facade.service';
 
@@ -6,7 +5,6 @@ import { AuthFacadeService } from './auth-facade.service';
 export class CurrentUserService {
   private auth = inject(AuthFacadeService);
 
-  /** Signal the UI can read (read-only) */
   currentUser = computed(() => this.auth.currentUser());
 
   isAuthenticated = computed(() => this.auth.isAuthenticated());
@@ -18,7 +16,6 @@ export class CurrentUserService {
   }
   email = computed(() => this.auth.email());
 
-  /** Rule: admin -> everyone else -> client */
   getDefaultRoute(): string {
     const user = this.snapshot;
     if (!user) return '/login';

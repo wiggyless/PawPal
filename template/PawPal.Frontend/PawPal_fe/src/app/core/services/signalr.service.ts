@@ -14,11 +14,10 @@ export class SignalRService {
   private messageReceivedSource = new Subject<MessageDto>();
   private userTypingSource = new Subject<string>();
   private userStoppedTypingSource = new Subject<string>();
-  
+
   messageReceived$ = this.messageReceivedSource.asObservable();
   userTyping$ = this.userTypingSource.asObservable();
   userStoppedTyping$ = this.userStoppedTypingSource.asObservable();
-  
 
   constructor() {
     this.initCommentHub();
@@ -37,9 +36,10 @@ export class SignalRService {
       .withAutomaticReconnect()
       .build();
 
-    this.commentHubConnection.start()
+    this.commentHubConnection
+      .start()
       .then(() => console.log('SignalR: Comment hub connected'))
-      .catch(err => console.error('SignalR: Comment hub error', err));
+      .catch((err) => console.error('SignalR: Comment hub error', err));
 
     this.commentHubConnection.on('ReceiveComment', (data: any) => {
       this.commentReceivedSource.next(data);
@@ -54,9 +54,10 @@ export class SignalRService {
       .withAutomaticReconnect()
       .build();
 
-    this.messageHubConnection.start()
+    this.messageHubConnection
+      .start()
       .then(() => console.log('SignalR: Message hub connected'))
-      .catch(err => console.error('SignalR: Message hub error', err));
+      .catch((err) => console.error('SignalR: Message hub error', err));
 
     this.messageHubConnection.on('ReceiveMessage', (msg: MessageDto) => {
       this.messageReceivedSource.next(msg);
@@ -71,9 +72,9 @@ export class SignalRService {
     });
   }
   notifyTyping(recipientId: number) {
-  this.messageHubConnection.invoke('UserTyping', recipientId);
-}
-notifyStoppedTyping(recipientId: number) {
-  this.messageHubConnection.invoke('UserStoppedTyping', recipientId);
-}
+    this.messageHubConnection.invoke('UserTyping', recipientId);
+  }
+  notifyStoppedTyping(recipientId: number) {
+    this.messageHubConnection.invoke('UserStoppedTyping', recipientId);
+  }
 }
