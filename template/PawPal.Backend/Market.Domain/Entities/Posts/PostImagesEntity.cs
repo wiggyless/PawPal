@@ -10,7 +10,7 @@ namespace PawPal.Domain.Entities.Posts
     public class PostImagesEntity : BaseEntity
     {
         public int PostId { get; set; } 
-        public string MainImage { get; set; } //glavni thumbnail slike u katalogu
+        public string MainImage { get; set; } // main thumbnail image shown in the catalog
         public List<string>? PhotoURL { get; set; }
     }
 }

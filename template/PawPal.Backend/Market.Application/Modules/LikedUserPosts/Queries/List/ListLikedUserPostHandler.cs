@@ -12,10 +12,6 @@ namespace PawPal.Application.Modules.LikedUserPosts.Queries.List
         public async Task<ListLikedUserPostDto> Handle(ListLikedUserPost request,CancellationToken cancellationToken)
         {
             var list = await context.LikedUserPosts.Include(x => x.Post).Where(x => x.UserId == request.UserId).ToArrayAsync(cancellationToken);
-            if(list is null)
-            {
-                throw new PawPalNotFoundException("List is empty");
-            }
             var finalList = new ListLikedUserPostDto { UserId = request.UserId,PostList = new List<int>() };
             if(request.PostIdList is not null)
             {

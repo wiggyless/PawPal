@@ -17,7 +17,7 @@ import {
   CropDialogResult,
 } from '../../../client/my-profile/user-profile-component/user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
 import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
-import { environment } from '../../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-admin-profile',
@@ -60,9 +60,7 @@ export class AdminProfile implements OnInit {
       });
     });
   }
-  ngOnInit(): void {
-    this.userData;
-  }
+  ngOnInit(): void {}
   ngOnDestroy(): void {
     if (this.objectUrl) {
       URL.revokeObjectURL(this.objectUrl);
@@ -148,7 +146,6 @@ export class AdminProfile implements OnInit {
 
   loadCities() {
     this.cityService.listCities().subscribe((res) => {
-      console.log(res);
       this.cityList = res;
     });
   }
@@ -179,7 +176,6 @@ export class AdminProfile implements OnInit {
     this.profileForm.get('city')?.setValue(this.userData.city, { emitEvent: false });
 
     if (!formChanged && !imageChanged) {
-      console.log();
       return;
     }
 
@@ -224,7 +220,6 @@ export class AdminProfile implements OnInit {
         this.dialog.success('Success', 'Your profile has been updated successfully.', 'OK');
       },
       error: (res) => {
-        console.log('ERROR: =>', res);
         this.dialog.error(
           'Error',
           'An error occurred while updating your profile. Please try again.',

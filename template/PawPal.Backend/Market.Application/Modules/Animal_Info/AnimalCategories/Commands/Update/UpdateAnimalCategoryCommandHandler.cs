@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Update
 {
-    public sealed class UpdateAnimalCategoryCommandHandler(IAppDbContext context)
+    public sealed class UpdateAnimalCategoryCommandHandler(IAppDbContext context, IAppCurrentUser currentUser)
             : IRequestHandler<UpdateAnimalCategoryCommand, Unit>
     {
         public async Task<Unit> Handle(UpdateAnimalCategoryCommand request, CancellationToken cancellationToken)
         {
+            if (currentUser.RoleId != 3)
+                throw new PawPalConflictException("Only administrators can update animal categories.");
+
             var animalCategory = await context.AnimalCategories.FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
             if (animalCategory == null)
                 throw new PawPalNotFoundException($"Animal category with Id {request.Id} does not exist!");

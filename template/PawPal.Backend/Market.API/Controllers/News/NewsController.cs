@@ -1,10 +1,8 @@
-﻿using PawPal.Application.Modules.Animal_Info.Animals.Commands.Delete;
-using PawPal.Application.Modules.News.Commands.Create;
+﻿using PawPal.Application.Modules.News.Commands.Create;
 using PawPal.Application.Modules.News.Commands.Delete;
 using PawPal.Application.Modules.News.Commands.Update;
 using PawPal.Application.Modules.News.Queries.GetById;
 using PawPal.Application.Modules.News.Queries.List;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace PawPal.API.Controllers.News
 {
@@ -18,10 +16,9 @@ namespace PawPal.API.Controllers.News
         public async Task<ActionResult<int>> CreateNews
             ([FromForm] CreateNewsCommand command, CancellationToken ct) //from form means we will be handling file uploads
         {
-            if (command.Photo != null) //htjela sam da odvojim ovo u zaseban servis ali imam problema pa 
-                //myb ovo fixam neki drugi put, za sad nek ostane ovako jer radi
+            if (command.Photo != null) //wanted to split this into a separate service, but ran into issues, so leaving it here for now since it works
             {
-                var fileName = command.Photo.FileName; //what is the file's name
+                var fileName = Path.GetFileName(command.Photo.FileName); //what is the file's name
 
                 var storeFileDirectory = Path.Combine(environment.WebRootPath, subFolder);
                 //full path to the subfolder
@@ -48,6 +45,7 @@ namespace PawPal.API.Controllers.News
             return CreatedAtAction(nameof(GetById), new { id }, new { id });
         }
 
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<GetNewsByIdQueryDto>> GetById(int id, CancellationToken ct)
         {
@@ -70,17 +68,36 @@ namespace PawPal.API.Controllers.News
             await sender.Send(new DeleteNewsCommand { Id = id }, ct);
         }
 
-        //[HttpPut("{id:int}")]
-        //public async Task Update(UpdateNewsCommand cmd, int id, CancellationToken ct)
-        //{
-        //    cmd.Id = id;
-        //    if (cmd.Photo != null)
-        //    {
-        //        var fileName = cmd.Photo.FileName;
-        //        var storeFileDirectory = Path.Combine(environment.WebRootPath, subFolder);
-        //        string route = Path.Combine(storeFileDirectory, fileName);
-        //    }
-        //    await sender.Send(cmd, ct);
-        //}
+        [HttpPut("{id:int}")]
+        public async Task Update(int id, [FromForm] UpdateNewsCommand command, CancellationToken ct)
+        {
+            command.Id = id;
+
+            if (command.Photo != null)
+            {
+                var fileName = Path.GetFileName(command.Photo.FileName);
+
+                var storeFileDirectory = Path.Combine(environment.WebRootPath, subFolder);
+
+                if (!Directory.Exists(storeFileDirectory))
+                {
+                    Directory.CreateDirectory(storeFileDirectory);
+                }
+
+                string route = Path.Combine(storeFileDirectory, fileName);
+
+                using (var ms = new MemoryStream())
+                {
+                    await command.Photo.CopyToAsync(ms, ct);
+                    var content = ms.ToArray();
+                    await System.IO.File.WriteAllBytesAsync(route, content, ct);
+                }
+
+                var fileLocation = Path.Combine(subFolder, fileName).Replace("\\", "/");
+                command.PhotoURL = fileLocation;
+            }
+
+            await sender.Send(command, ct);
+        }
     }
 }

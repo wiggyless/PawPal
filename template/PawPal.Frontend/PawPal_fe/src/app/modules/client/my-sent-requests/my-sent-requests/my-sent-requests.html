@@ -88,8 +88,14 @@
           <div class="status-section">
             <div class="status-divider"></div>
             <p class="status-label">STATUS:</p>
-            <div class="status-value status-processing">
+            <div
+              class="status-value"
+              [class.status-accepted]="request.status === 'Accepted'"
+              [class.status-rejected]="request.status === 'Denied'"
+              [class.status-processing]="request.status !== 'Accepted' && request.status !== 'Denied'"
+            >
               <span>{{ request.status.toUpperCase() }}</span>
+              @if (request.status !== 'Accepted' && request.status !== 'Denied') {
               <svg
                 class="loading-spinner"
                 xmlns="http://www.w3.org/2000/svg"
@@ -144,6 +150,7 @@
                   </filter>
                 </defs>
               </svg>
+              }
             </div>
 
             <div class="action-buttons">

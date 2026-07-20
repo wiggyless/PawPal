@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { Subject } from 'rxjs';
 import { MessageDto } from '../../api-services/messaging/messaging.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class SignalRService {
@@ -30,7 +31,7 @@ export class SignalRService {
 
   private initCommentHub() {
     this.commentHubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:7260/commentHub', {
+      .withUrl(`${environment.apiUrl}/commentHub`, {
         accessTokenFactory: () => this.getToken(),
       })
       .withAutomaticReconnect()
@@ -47,7 +48,7 @@ export class SignalRService {
 
   private initMessageHub() {
     this.messageHubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:7260/messageHub', {
+      .withUrl(`${environment.apiUrl}/messageHub`, {
         accessTokenFactory: () => this.getToken(),
       })
       .withAutomaticReconnect()

@@ -80,7 +80,6 @@ public static class DynamicDataSeeder
         context.Users.AddRange(admin, user, johnnyDoe);
         await context.SaveChangesAsync();
 
-        Console.WriteLine("✅ Dynamic seed: demo users added.");
     }
     private static async Task SeedAnimalCategoriesAsync(DatabaseContext context)
     {
@@ -97,7 +96,6 @@ public static class DynamicDataSeeder
             rabbitCategory, birdCategory);
         await context.SaveChangesAsync();
 
-        Console.WriteLine("✅ Dynamic seed: Animal Categories added.");
 
     }
     private static async Task SeedGendersAsync(DatabaseContext context)
@@ -140,7 +138,6 @@ public static class DynamicDataSeeder
         context.Allergies.AddRange(pollen, proteins, fleas);
         await context.SaveChangesAsync();
 
-        Console.WriteLine("✅ Dynamic seed: Allergies added.");
 
     }
     private static async Task SeedDisabilitiesAsync(DatabaseContext context)
@@ -168,7 +165,6 @@ public static class DynamicDataSeeder
 
         context.Disabilities.AddRange(cerebellar,  blind, deaf);
         await context.SaveChangesAsync();
-        Console.WriteLine("✅ Dynamic seed: Disabilities added.");
     }
     private static async Task SeedAnimalHealthHistoriesAsync(DatabaseContext context)
     {
@@ -237,7 +233,7 @@ public static class DynamicDataSeeder
         await context.SaveChangesAsync();
         var animalAllergyLoona = new AllergiesAnimalHealthHistory
         {
-            AnimalHealthHistoryId = krompirHealth.Id,
+            AnimalHealthHistoryId = loonaHealth.Id,
             AllergyId = allergies[random.Next(allergies.Count)].Id,
         };
         context.AnimalsAllergies.Add(animalAllergyLoona);
@@ -265,7 +261,6 @@ public static class DynamicDataSeeder
         };
         context.AnimalsDisabilities.Add(animalDisabilityWrld);
         await context.SaveChangesAsync();
-        Console.WriteLine("✅ Dynamic seed: Animal Health Histories added.");
 
 
     }
@@ -413,11 +408,10 @@ public static class DynamicDataSeeder
         };
         ct.Cities.AddRange(tesanj, mostar, bihac, zenica, jablanica, sanskiMost);
         await ct.SaveChangesAsync();
-        Console.WriteLine("✅ Dynamic seed: Cantons added.");
     }
     private static async Task SeedCantonsAsync(DatabaseContext ct)
     {
-        if (await ct.Cities.AnyAsync()) return; 
+        if (await ct.Cantons.AnyAsync()) return; 
 
         var usk = new CantonEntity
         {
@@ -436,7 +430,6 @@ public static class DynamicDataSeeder
         };
         ct.Cantons.AddRange(usk, zdk, hnk);
         await ct.SaveChangesAsync();
-        Console.WriteLine("✅ Dynamic seed: Cantons added.");
     }
     private static async Task SeedRolesAsync(DatabaseContext ct)
     {
@@ -593,7 +586,6 @@ public static class DynamicDataSeeder
                 await file.CopyToAsync(stream);
             }
         }
-        Console.WriteLine("✅ Dynamic seed: Animals added.");
     }
 
 }

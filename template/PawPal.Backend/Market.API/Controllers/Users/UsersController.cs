@@ -13,7 +13,7 @@ using PawPal.Application.Modules.Users.Queries.GetByIdDisabled;
 using PawPal.Application.Modules.Users.Queries.GetByUsername;
 using PawPal.Application.Modules.Users.Queries.List;
 
-namespace PawPal.API.Controllers.Places
+namespace PawPal.API.Controllers.Users
 {
     [ApiController]
     [Route("[controller]")]
@@ -48,7 +48,6 @@ namespace PawPal.API.Controllers.Places
             var result = await sender.Send(query, ct);
             return result;
         }
-        [AllowAnonymous]
         [HttpPut("{id:int}")]
         public async Task Update(UpdateUserCommand uuc, int id, CancellationToken ct)
         {
@@ -63,7 +62,6 @@ namespace PawPal.API.Controllers.Places
             return result;
         }
 
-        [AllowAnonymous]
         [HttpDelete("{id:int}")]
         public async Task Delete(int id, CancellationToken ct)
         {

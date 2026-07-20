@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthLayout } from './auth-layout/auth-layout/auth-layout';
-import { LoginComponent } from './login/login/login';
-import { LogoutComponent } from './logout/logout/logout';
+import { LoginComponent } from './login/login';
+import { LogoutComponent } from './logout/logout';
 import { ClientLayout } from '../client/client-layout/client-layout/client-layout';
 import { RegisterComponent } from './register/register-component/register-component';
 import { ConfirmEmailComponent } from './confirm-email/confirm-email';

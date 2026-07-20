@@ -7,7 +7,6 @@ using PawPal.Application.Modules.Places.Cantons.Lists;
 using PawPal.Application.Modules.Places.Cantons.Queries_;
 using PawPal.Application.Modules.Posts.Queries.GetByID;
 using PawPal.Application.Modules.Users.Commands.Create;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace PawPal.API.Controllers.Moderation
 {

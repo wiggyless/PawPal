@@ -5,13 +5,9 @@ public sealed class GetMessagesQueryHandler(IAppDbContext context) :
 {
     public async Task<PageResult<MessageDto>> Handle(GetMessagesQuery query, CancellationToken cancellationToken)
     {
-        Console.WriteLine($"Looking for conversation with Id: {query.ConversationId}");
-
         var conversation = await context.Conversations
             .Where(x => x.Id == query.ConversationId)
             .FirstOrDefaultAsync(cancellationToken);
-
-        Console.WriteLine($"Conversation found: {conversation?.Id}");
 
         if (conversation is null)
             throw new PawPalNotFoundException("Conversation does not exist");

@@ -20,7 +20,6 @@ export class AnimalRequirementService {
     request?: GetAdoptionRequirementQuery
   ): Observable<PageResult<GetAdoptionRequirementList>> {
     const params = request ? buildHttpParams(request as any) : undefined;
-    console.log(params?.toString());
     return this.httpClient.get<PageResult<GetAdoptionRequirementList>>(this.apiUrl, { params });
   }
   getAnimalRequirementsById(request: number): Observable<GetAdoptionRequirementsById> {

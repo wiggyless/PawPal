@@ -16,17 +16,17 @@ namespace PawPal.Application.Modules.Animal_Info.Animals.Queries.List
             var q = context.Animals.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(request.SearchName))
-                q = context.Animals.Where(x => x.Name.ToLower().Contains(request.SearchName.ToLower()));
+                q = q.Where(x => x.Name.ToLower().Contains(request.SearchName.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(request.SearchBreed))
-                q = context.Animals.Where(x => x.Breed.ToLower().Contains(request.SearchBreed.ToLower()));
+                q = q.Where(x => x.Breed.ToLower().Contains(request.SearchBreed.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(request.SearchGender))
-                q = context.Animals.Where(x => x.Gender.GenderName.ToLower().
+                q = q.Where(x => x.Gender.GenderName.ToLower().
                 Contains(request.SearchGender.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(request.SearchCategory))
-                q = context.Animals.Where(x => x.Category.CategoryName.ToLower().Contains(
+                q = q.Where(x => x.Category.CategoryName.ToLower().Contains(
                     request.SearchCategory.ToLower()));
 
             var finalResult = q.OrderBy(x => x.Name).Select(x => new ListAnimalsQueryDto

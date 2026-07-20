@@ -6,7 +6,7 @@ using PawPal.Domain.Entities.Identity;
 using PawPal.Domain.Entities.Places;
 using System.ComponentModel.DataAnnotations;
 
-namespace PawPal.Application.Tests.Modules.Users.Commands.Create
+namespace PawPal.Tests.UnitTests.User
 {
     public class CreateUsersCommandHandlerTests : IDisposable
     {

@@ -7,11 +7,14 @@ using System.Text;using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Create
 {
-    public sealed class CreateAnimalCategoryCommandHandler(IAppDbContext context)
+    public sealed class CreateAnimalCategoryCommandHandler(IAppDbContext context, IAppCurrentUser currentUser)
         :IRequestHandler<CreateAnimalCategoryCommand, int>
     {
         public async Task<int> Handle(CreateAnimalCategoryCommand request, CancellationToken cancellationToken)
         {
+            if (currentUser.RoleId != 3)
+                throw new PawPalConflictException("Only administrators can create animal categories.");
+
             var categoryName = request.CategoryName?.Trim();
 
             if (string.IsNullOrWhiteSpace(categoryName))

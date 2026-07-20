@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PawPal</title>
+  </head>
+  <body>
+    <div class="news-container">
+      <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
+
+      <div class="news-content">
+        <div class="news-header">
+          <p>Latest News</p>
+          @if (currentUser.roleid() === 3) {
+            <button class="primarybtn" (click)="openAddNewsDialog()">Add News</button>
+          }
+        </div>
+
+        @if (isLoaded()) {
+          @if (newsItems.length > 0) {
+            <div class="news-grid">
+              @for (item of newsItems; track item.id) {
+                <div class="news-card" (click)="routeToNews(item)">
+                  <img [src]="getImageUrl(item.photoURL)" class="news-card-image" alt="{{ item.title }}" />
+                  <div class="news-card-detail">
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ getPreview(item.content) }}</p>
+                    <span class="news-card-date">{{ item.publishedAt | date: 'mediumDate' }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+            <mat-paginator
+              [length]="page.totalItems"
+              [pageIndex]="page.currentPage - 1"
+              [pageSize]="page.pageSize"
+              [pageSizeOptions]="page.pageSizeOption"
+              aria-label="Select page"
+              (page)="handlePageEvent($event)"
+            >
+            </mat-paginator>
+          } @else {
+            <div class="news-empty">
+              <p>No news has been published yet.</p>
+            </div>
+          }
+        } @else {
+          <div class="news-loading">
+            <mat-spinner></mat-spinner>
+          </div>
+        }
+      </div>
+    </div>
+    <app-footer></app-footer>
+  </body>
+</html>

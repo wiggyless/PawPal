@@ -386,6 +386,10 @@ export class CreatePost implements OnInit {
   }
 
   updatePost(): void {
+    if (this.secondFormGroup.invalid) {
+      this.secondFormGroup.markAllAsTouched();
+      return;
+    }
     this.healthHistory.getAnimalHealthHistoryById(this.routeAnimalID).subscribe((response) => {
       const healthHistoryID = response.animalHealthHistoryId;
 
@@ -410,7 +414,6 @@ export class CreatePost implements OnInit {
         postId: this.routePostID,
         postImages: this.imgFileList,
       };
-      console.log(newPostIamge);
       forkJoin({
         animals: this.animalService.updateAnimal(updateAnimal, this.routeAnimalID),
         health: this.healthHistory.updateAnimalHealthHistory(updateHealth, healthHistoryID),
@@ -423,6 +426,10 @@ export class CreatePost implements OnInit {
   }
 
   addPost(): void {
+    if (this.secondFormGroup.invalid) {
+      this.secondFormGroup.markAllAsTouched();
+      return;
+    }
     const mainInfo = this.fourthFromGroup.value.mainInfo;
 
     const newAnimal: AddAnimalDto = {

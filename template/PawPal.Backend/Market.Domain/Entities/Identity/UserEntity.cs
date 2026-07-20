@@ -1,5 +1,4 @@
-﻿// MarketUserEntity.cs
-using PawPal.Domain.Common;
+﻿using PawPal.Domain.Common;
 using PawPal.Domain.Entities.Places;
 using System.Security.Principal;
 

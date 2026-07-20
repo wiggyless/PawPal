@@ -63,7 +63,7 @@ export class MyFavorites
       isLiked: true,
       paging: this.request.paging,
     });
-    this.animalPostList.subscribe((res) => {
+    this.sub = this.animalPostList.subscribe((res) => {
       this.imagesLoaded.set(true);
     });
   }
