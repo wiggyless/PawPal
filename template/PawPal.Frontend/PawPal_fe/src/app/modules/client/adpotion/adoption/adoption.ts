@@ -42,7 +42,7 @@ export class Adoption implements OnInit {
     familyAvail: new FormControl('', [Validators.required]),
     gift: new FormControl(false),
     placeToLive: new FormControl('', [Validators.required]),
-    financialSupport: new FormControl(0, [Validators.required]),
+    financialSupport: new FormControl(0, [Validators.required, Validators.min(1)]),
     allergies: new FormControl(false),
     angerIssues: new FormControl(false),
     readyToBack: new FormControl(false),
