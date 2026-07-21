@@ -1,4 +1,3 @@
-
 @keyframes dialog-zoom-in {
   0% {
     opacity: 0;
@@ -20,7 +19,7 @@
   --button-text: #51432d;
 }
 body {
-   background-color: #191408;
+  background-color: #191408;
   border-radius: 20px;
   background-image: none;
   color: #c7b18c;
@@ -305,7 +304,11 @@ textarea {
 .back-btn:hover {
   transform: translateY(-2px);
 }
-
+.photo {
+  width: 182px;
+  height: 182px;
+  border-radius: 200px;
+}
 .button-container {
   display: flex;
   justify-content: flex-end;
