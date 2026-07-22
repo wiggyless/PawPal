@@ -193,7 +193,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   routeMessage(): void {
     if (this.currentUser.getDefaultRoute() == '/login') {
-      this.routeNext.navigate(['login']);
+      this.router.navigate(['/auth/login']);
     } else {
       this.routeNext.navigate(['/client/messages'], {
         queryParams: {

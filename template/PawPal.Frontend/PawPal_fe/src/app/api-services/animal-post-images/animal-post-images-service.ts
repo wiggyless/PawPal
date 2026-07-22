@@ -51,8 +51,8 @@ export class PostImagesService {
       formData.append('postImages', x, x.name);
     });
     return this.httpClient.post<number>(`${this.apiUrl}`, formData, {
-      reportProgress: true, // Required for tracking upload packets!
-      observe: 'events', // Required to stream chunk updates!
+      reportProgress: true,
+      observe: 'events',
     });
   }
 }

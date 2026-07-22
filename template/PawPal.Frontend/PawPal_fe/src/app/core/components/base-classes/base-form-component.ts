@@ -14,7 +14,6 @@ import { BaseComponent } from './base-component';
  */
 @Directive()
 export abstract class BaseFormComponent<TModel> extends BaseComponent {
-
   form!: FormGroup;
   isEditMode = false;
   model?: TModel;
@@ -46,7 +45,6 @@ export abstract class BaseFormComponent<TModel> extends BaseComponent {
    * Validates form before calling save().
    */
   onSubmit(): void {
-    // Mark all controls as touched to show validation errors
     this.form.markAllAsTouched();
 
     if (this.form.invalid) {

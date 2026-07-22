@@ -71,8 +71,8 @@ export class AuthTimeoutService implements OnDestroy {
         this.auth.timeoutRefresh(refresh);
       },
       () => {
-      this.handleLogout();
-    }
+        this.handleLogout();
+      },
     );
   }
 

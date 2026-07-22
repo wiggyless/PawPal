@@ -10,6 +10,8 @@ import { UpdateRequestByID } from '../../../../../api-services/animals-adoption/
 import { CurrentUserService } from '../../../../../core/services/auth/current-user.service';
 import { GetUserByIdDto } from '../../../../../api-services/users/users-model';
 import { Router } from '@angular/router';
+import { environment } from '../../../../../../environments/environment';
+import { DialoguePopupService } from '../../../../../api-services/dialogue-popup/dialogue-popup.service';
 
 @Component({
   selector: 'app-my-requests-dialog',
@@ -17,7 +19,6 @@ import { Router } from '@angular/router';
   templateUrl: './my-requests-dialog.html',
   styleUrl: './my-requests-dialog.scss',
 })
-
 export class MyRequestsDialog implements OnInit, OnDestroy {
   dialogReg = inject(MatDialogRef);
   routeNext = inject(Router);
@@ -28,6 +29,7 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
   requestService = inject(AnimalRequestService);
   reqID: number = 0;
   postID: number = 0;
+  animalID: number = 0;
   status: string = '';
   cityCantonName: string = '';
   sentDate: Date = new Date();
@@ -38,7 +40,8 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
   user: GetUserByIdDto | undefined;
   currentUser = inject(CurrentUserService);
   fullAddress: string = '';
-
+  postService = inject(AnimalPostService);
+  env = environment.apiUrl;
   cd = inject(ChangeDetectorRef);
 
   updateRequest: UpdateRequestByID = {
@@ -47,6 +50,7 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
   };
   private mySubscription?: Subscription;
   private updateSubcription?: Subscription;
+  dialogPopUp = inject(DialoguePopupService);
   isLoaded = false;
   ngOnInit(): void {
     this.reqID = this.dialogData.reqID;
@@ -57,57 +61,64 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
     this.sentDateString = new Date(this.sentDate).toISOString().replace('T', ' ').split('.')[0];
     this.requestID = this.dialogData.requestID;
     this.isAnotherUser = this.dialogData.isAnotherUser;
+    this.animalID = this.dialogData.animalID;
     this.loadReq();
   }
   ngOnDestroy(): void {
     this.mySubscription?.unsubscribe();
     this.updateSubcription?.unsubscribe();
   }
- loadReq() {
-  this.mySubscription = forkJoin({
-    post: this.postAPI.getPostById(this.postID),
-    request: this.reqAPI.getAnimalRequirementsById(this.reqID),
-    adoptionRequest: this.requestService.getAnimalRequestById(this.requestID),
-  }).subscribe({
-    next: (reponse) => {
-      this.reqData = reponse.request;
-      this.fullAddress = `${this.reqData.address}, Floor ${this.reqData.floorNumber}`;
-      this.isLoaded = true;
-
-      // Use the requester's userId, not the post owner's userID
-      this.userAPI.getUser(reponse.adoptionRequest.userId).subscribe((userResponse) => {
-        this.user = userResponse;
+  loadReq() {
+    this.mySubscription = forkJoin({
+      post: this.postAPI.getPostById(this.postID),
+      request: this.reqAPI.getAnimalRequirementsById(this.reqID),
+      adoptionRequest: this.requestService.getAnimalRequestById(this.requestID),
+    }).subscribe({
+      next: (reponse) => {
+        this.reqData = reponse.request;
+        this.fullAddress = `${this.reqData.address}, Floor ${this.reqData.floorNumber}`;
         this.isLoaded = true;
-        this.cd.detectChanges();
-      });
-    },
-  });
-}
 
+        this.userAPI.getUser(reponse.adoptionRequest.userId).subscribe((userResponse) => {
+          this.user = userResponse;
+          this.isLoaded = true;
+          this.cd.detectChanges();
+        });
+      },
+    });
+  }
 
   closeDialog() {
     this.dialogReg.close();
   }
- rejectRequest() {
-  this.updateRequest.requestID = this.requestID;
-  this.updateRequest.status = 'Denied';
-  this.updateSubcription = this.requestService
-    .updateRequest(this.updateRequest)
-    .subscribe(() => {
+  rejectRequest() {
+    this.updateRequest.requestID = this.requestID;
+    this.updateRequest.status = 'Denied';
+    this.updateSubcription = this.requestService.updateRequest(this.updateRequest).subscribe(() => {
       this.dialogReg.close(true);
     });
-}
- approveRequest() {
-  this.updateRequest.requestID = this.requestID;
-  this.updateRequest.status = 'Accepted';
-  this.updateSubcription = this.requestService
-    .updateRequest(this.updateRequest)
-    .subscribe(() => {
-      this.dialogReg.close(true); 
+  }
+  approveRequest() {
+    this.updateRequest.requestID = this.requestID;
+    this.updateRequest.status = 'Accepted';
+    this.updateSubcription = this.requestService.updateRequest(this.updateRequest).subscribe({
+      next: () => {
+        this.postService.deletePost(this.postID, this.animalID).subscribe({
+          next: () => {
+            this.dialogReg.close(true);
+          },
+          error: (res) => {
+            this.dialogPopUp.error('Error', res?.error.message, 'OK');
+          },
+        });
+      },
+      error: () => {
+        this.dialogReg.close(false);
+      },
     });
-}
- routeMessage(): void {
-  this.dialogReg.close();
+  }
+  routeMessage(): void {
+    this.dialogReg.close();
     if (this.currentUser.getDefaultRoute() == '/login') {
       this.routeNext.navigate(['login']);
     } else {
@@ -118,6 +129,4 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
       });
     }
   }
-
 }
-

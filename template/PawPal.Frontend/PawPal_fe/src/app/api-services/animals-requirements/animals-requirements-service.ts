@@ -8,16 +8,16 @@ import {
   GetAdoptionRequirementQuery,
   GetAdoptionRequirementList,
   GetAdoptionRequirementsById,
-  CreateAdoptionRequirement
+  CreateAdoptionRequirement,
 } from './animals-requirements-model';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AnimalRequirementService {
   httpClient = inject(HttpClient);
   private apiUrl = environment.apiUrl + '/AdotptionRequirements';
   listAnimalRequirements(
-    request?: GetAdoptionRequirementQuery
+    request?: GetAdoptionRequirementQuery,
   ): Observable<PageResult<GetAdoptionRequirementList>> {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.get<PageResult<GetAdoptionRequirementList>>(this.apiUrl, { params });
@@ -25,7 +25,7 @@ export class AnimalRequirementService {
   getAnimalRequirementsById(request: number): Observable<GetAdoptionRequirementsById> {
     const params = request ? buildHttpParams(request as any) : undefined;
     return this.httpClient.get<GetAdoptionRequirementsById>(`${this.apiUrl}/${request}`, {
-      params
+      params,
     });
   }
   addRequirements(request?: CreateAdoptionRequirement): Observable<any> {
@@ -35,8 +35,8 @@ export class AnimalRequirementService {
   deleteRequirements(requestId: number): Observable<number> {
     return this.httpClient.delete<number>(`${this.apiUrl}/${requestId}`, {
       body: {
-        requestID: requestId
-      }
+        requestID: requestId,
+      },
     });
   }
 }

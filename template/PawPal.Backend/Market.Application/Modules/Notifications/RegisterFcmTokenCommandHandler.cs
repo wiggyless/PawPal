@@ -7,7 +7,7 @@ public class RegisterFcmTokenCommandHandler(IAppDbContext db, IAppCurrentUser cu
 {
     public async Task Handle(RegisterFcmTokenCommand request, CancellationToken ct)
     {
-        var user = await db.Users.FindAsync(currentUser.UserId, ct);
+        var user = await db.Users.FirstOrDefaultAsync(x=>x.Id == currentUser.UserId, ct);
         if (user is null) return;
 
         user.FcmToken = request.Token;

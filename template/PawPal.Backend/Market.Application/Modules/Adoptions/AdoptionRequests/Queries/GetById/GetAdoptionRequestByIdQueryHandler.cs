@@ -12,6 +12,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.GetById
         public async Task<GetAdoptionRequestByIdQueryDto> Handle(GetAdoptionRequestByIdQuery request,CancellationToken cancellationToken)
         {
             var adoptionReq = await context.AdoptionRequests.
+                Include(x=>x.Post).
                 Where(y => y.Id == request.Id).
                 Select(x => new GetAdoptionRequestByIdQueryDto
                 {
@@ -19,7 +20,8 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.GetById
                     DateSent = x.DateSent,
                     UserId = x.UserId,
                     PostId = x.PostId,
-                    RequirementId = x.RequirementId
+                    RequirementId = x.RequirementId,
+                    AnimalID = x.Post.AnimalID,
                 }).FirstOrDefaultAsync(cancellationToken);
             if (adoptionReq is null) throw new PawPalNotFoundException($"Adoption request with {request.Id} does not exist");
             return adoptionReq;

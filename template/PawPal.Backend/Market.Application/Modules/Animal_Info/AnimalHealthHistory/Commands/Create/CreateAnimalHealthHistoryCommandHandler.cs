@@ -29,12 +29,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Cr
             context.AnimalHealthHistories.Add(healthHistory);
             await context.SaveChangesAsync(cancellationToken);
 
-            // One record must be stored in the junction table per allergy/disability.
-            // If an AnimalHealthHistory has multiple allergies, one record is stored per
-            // allergy, so an animal allergic to both pollen and a certain plant would look
-            // like this:
-            // AnimalHealthHistory_ID : 231 | Allergy : Pollen, Allergy_ID : 1
-            // AnimalHealthHistory_ID : 231 | Allergy : Some_Plant, Allergy_ID : 2
+   
 
             if (request.Allergies.Count() > 0)
             {
@@ -62,7 +57,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Cr
 
             if (request.Disabilities.Count() > 0)
             {
-                foreach (var disabilityByUser in request.Disabilities) // list of disabilities sent by the user
+                foreach (var disabilityByUser in request.Disabilities) 
                 {
                     if(disabilityByUser != "")
                     {

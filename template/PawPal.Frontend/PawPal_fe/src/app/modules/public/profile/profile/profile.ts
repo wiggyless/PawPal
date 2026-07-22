@@ -65,7 +65,7 @@ export class Profile implements OnInit {
   userImage: UserImageCommand = {
     userID: 0,
   };
-  private userID: number | undefined;
+  userID: number | undefined;
   private repID: number | undefined;
   route = inject(Router);
   profileForm = new FormGroup({

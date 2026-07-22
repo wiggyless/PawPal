@@ -56,7 +56,8 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.List
                 MainImage = context.PostImages
                         .Where(img => img.PostId == y.PostId)
                         .Select(img => img.MainImage)
-                        .FirstOrDefault() ?? " "
+                        .FirstOrDefault() ?? " ",
+                AnimalID = y.Post.AnimalID,
             }).AsQueryable();
 
             return await PageResult<ListAdoptionRequestQueryDto>.FromQueryableAsync(finalList,

@@ -16,7 +16,7 @@ namespace PawPal.Application.Modules.Users.Commands.Delete
             var userPosts = await context.Posts.Where(x => x.UserId == user.Id). ToListAsync(cancellationToken);  
 
             foreach( var userPost in userPosts ) {
-                await sender.Send(new DeletePostCommand { Id = userPost.Id }, cancellationToken); // cascade-delete the user's posts
+                await sender.Send(new DeletePostCommand { Id = userPost.Id }, cancellationToken); 
             };
 
             user.IsDeleted = true;

@@ -9,25 +9,16 @@ import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthFacadeService } from '../services/auth/auth-facade.service';
 
-// Global state for refresh (shared between requests)
 let refreshInProgress = false;
 const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
-/**
- * HTTP interceptor that:
- * 1. Adds Authorization header with access token
- * 2. Handles 401 errors by refreshing token
- * 3. Retries failed request with new token
- */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthFacadeService);
 
-  // 1) Skip auth endpoints (login/refresh/logout)
   if (isAuthEndpoint(req.url) || isStaticFile(req.url)) {
     return next(req);
   }
 
-  // 2) Add Authorization header if token exists
   const accessToken = auth.getAccessToken();
   let authReq = req;
 
@@ -39,7 +30,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     });
   }
 
-  // 3) Handle 401 → refresh → retry
   return next(authReq).pipe(
     catchError((err) => {
       if (err instanceof HttpErrorResponse && err.status === 401) {
@@ -50,9 +40,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   );
 };
 
-/**
- * Check if URL is an auth endpoint that should not be intercepted.
- */
 function isAuthEndpoint(url: string): boolean {
   return url.includes('/Auth/');
 }
@@ -60,9 +47,7 @@ function isAuthEndpoint(url: string): boolean {
 function isStaticFile(url: string): boolean {
   return /\.(jpg|jpeg|png|webp|gif|svg|png)$/i.test(url);
 }
-/**
- * Handle 401 error by refreshing token and retrying request.
- */
+
 function handle401Error(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
@@ -70,13 +55,11 @@ function handle401Error(
 ): Observable<any> {
   const refreshToken = auth.getRefreshToken();
 
-  // No refresh token → redirect to login
   if (!refreshToken) {
     auth.redirectToLogin();
     return throwError(() => new Error('No refresh token'));
   }
 
-  // If refresh already in progress → wait for result
   if (refreshInProgress) {
     return refreshTokenSubject.pipe(
       filter((token) => token !== null),
@@ -90,7 +73,6 @@ function handle401Error(
     );
   }
 
-  // Start refresh process
   refreshInProgress = true;
   refreshTokenSubject.next(null);
 
@@ -100,7 +82,6 @@ function handle401Error(
       const newAccessToken = res.accessToken;
       refreshTokenSubject.next(newAccessToken);
 
-      // Retry original request with new token
       const clonedReq = req.clone({
         setHeaders: { Authorization: `Bearer ${newAccessToken}` },
       });
@@ -114,5 +95,4 @@ function handle401Error(
       return throwError(() => error);
     }),
   );
-  
 }

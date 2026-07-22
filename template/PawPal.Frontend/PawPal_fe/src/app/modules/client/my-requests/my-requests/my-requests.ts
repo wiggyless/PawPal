@@ -71,27 +71,28 @@ export class MyRequests implements OnInit, OnDestroy {
     this.myPostSubscription?.unsubscribe();
   }
   loadRequestDialog(request: GetAdoptionRequestList) {
-  const dialogRef = this.dialog.open(MyRequestsDialog, {
-    width: '70%',
-    maxWidth: '90vw',
-    maxHeight: '95vh',
-    panelClass: 'transparent-dialog',
-    data: {
-      reqID: request.requirementId,
-      cityCantonName: request.city + ',' + request.canton,
-      sentDate: request.dateSent,
-      status: request.status.toLocaleUpperCase(),
-      postID: request.postID,
-      requestID: request.requestId,
-    },
-  });
+    const dialogRef = this.dialog.open(MyRequestsDialog, {
+      width: '70%',
+      maxWidth: '90vw',
+      maxHeight: '95vh',
+      panelClass: 'transparent-dialog',
+      data: {
+        reqID: request.requirementId,
+        cityCantonName: request.city + ',' + request.canton,
+        sentDate: request.dateSent,
+        status: request.status.toLocaleUpperCase(),
+        postID: request.postID,
+        requestID: request.requestId,
+        animalID: request.animalID,
+      },
+    });
 
-  dialogRef.afterClosed().subscribe((didUpdate) => {
-    if (didUpdate) {
-      this.loadRequest();
-    }
-  });
-}
+    dialogRef.afterClosed().subscribe((didUpdate) => {
+      if (didUpdate) {
+        this.loadRequest();
+      }
+    });
+  }
   getPostImage(imagePath: string) {
     return this.sanitizer.bypassSecurityTrustUrl(this.envLink.apiUrl + imagePath);
   }

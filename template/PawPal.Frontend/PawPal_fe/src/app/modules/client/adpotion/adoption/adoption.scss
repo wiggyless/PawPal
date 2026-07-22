@@ -2,7 +2,6 @@
   min-height: 100vh;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(187, 116, 34, 0.2) 100%), #e5d7c4;
   padding: 2rem 1rem;
-
 }
 
 ::ng-deep .mat-step-header .mat-step-icon-selected,
@@ -36,7 +35,6 @@
   background: transparent;
 
   ::ng-deep {
-    // Stepper header customization
     .mat-step-header {
       padding: 1.5rem 1rem;
       pointer-events: none;
@@ -73,7 +71,6 @@
       }
     }
 
-    // Content area styling
     .mat-horizontal-content-container {
       padding: 1.2rem 0.5rem 1.2rem 0.5rem;
       box-shadow: 0 10px 16px 2px #51432d;
@@ -177,12 +174,12 @@
 .form-column:not(:last-child)::after {
   content: '';
   position: absolute;
-  top: 10%; /* Adjust to make the line start lower */
-  bottom: 10%; /* Adjust to make the line end higher */
+  top: 10%;
+  bottom: 10%;
   right: 0;
-  width: 1.5px; /* Thickness of the line */
-  background-color: #354024; /* Use your dark green color */
-  opacity: 0.6; /* Makes it look more subtle/cool */
+  width: 1.5px;
+  background-color: #354024;
+  opacity: 0.6;
   border-radius: 2px;
 }
 #dvoriste-child {
@@ -202,32 +199,30 @@
 .form-column-wide:not(:last-child)::after {
   content: '';
   position: absolute;
-  top: 10%; /* Adjust to make the line start lower */
-  bottom: 10%; /* Adjust to make the line end higher */
+  top: 10%;
+  bottom: 10%;
   right: 0;
-  width: 1.5px; /* Thickness of the line */
-  background-color: #354024; /* Use your dark green color */
-  opacity: 0.6; /* Makes it look more subtle/cool */
+  width: 1.5px;
+  background-color: #354024;
+  opacity: 0.6;
   border-radius: 2px;
 }
-/* Ensure the textarea dictates the height of the field */
+
 .textarea-field {
   height: auto !important;
 }
 
-/* Reach inside to the MDC internal container */
 ::ng-deep .textarea-field .mat-mdc-text-field-wrapper {
   height: auto !important;
   min-height: unset !important;
 }
 
-/* Remove default padding that might push the rows out of alignment */
 ::ng-deep .textarea-field textarea.mat-mdc-input-element {
   margin: 0 !important;
-  padding: 8px 0 !important; /* Adjust this to control top/bottom space inside border */
-  line-height: 1.5; /* Setting a specific line-height makes '8 rows' consistent */
+  padding: 8px 0 !important;
+  line-height: 1.5;
 }
-/* Optional: Removes the extra spacing at the bottom used for hints/errors */
+
 ::ng-deep #iskustvo-field .mat-mdc-form-field-subscript-wrapper {
   display: none;
 }
@@ -308,8 +303,8 @@
     gap: 0px;
   }
   .arrow-container mat-icon:hover {
-    color: #252d19; /* Darker color on hover */
-    transform: scale(1.2); /* Slightly grow the arrow */
+    color: #252d19;
+    transform: scale(1.2);
   }
   .arrow-container {
     z-index: 10;
@@ -317,7 +312,7 @@
   }
 
   .arrow-container mat-icon {
-    pointer-events: auto !important; /* Forces the icon to be interactive */
+    pointer-events: auto !important;
   }
   &.textarea-field {
     ::ng-deep {
@@ -372,20 +367,19 @@
   justify-content: center;
   margin-bottom: 20px;
 }
-/* In your component.scss */
+
 ::ng-deep .textarea-field {
-  /* This targets the modern Angular Material (MDC) placeholder color */
   --mdc-filled-text-field-placeholder-text-color: rgba(0, 0, 0, 0.4);
   --mdc-outlined-text-field-placeholder-text-color: rgba(0, 0, 0, 0.4);
 }
 .textarea-field textarea {
-  resize: none !important; /* This disables the drag handle entirely */
-  overflow: auto; /* Ensures a scrollbar appears if text exceeds 6 rows */
+  resize: none !important;
+  overflow: auto;
 }
-/* Fallback for standard pseudo-elements */
+
 ::ng-deep .textarea-field textarea::placeholder {
-  color: #888888 !important; /* Adjust hex to your preferred grey */
-  opacity: 1; /* Firefox requires this to show the full color */
+  color: #888888 !important;
+  opacity: 1;
 }
 .custom-checkbox {
   ::ng-deep {
@@ -563,7 +557,7 @@
   min-width: 200px;
 }
 
-::ng-deep .number-field input[type="number"] {
+::ng-deep .number-field input[type='number'] {
   appearance: textfield;
   -moz-appearance: textfield;
 

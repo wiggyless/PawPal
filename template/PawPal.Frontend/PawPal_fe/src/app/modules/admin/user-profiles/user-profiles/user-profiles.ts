@@ -39,7 +39,6 @@ export class UserProfiles
   }
   env = environment.apiUrl;
   protected override loadPagedData(): void {}
-  // Page Values ( didnt use the template cuz whats going on???)
   page = {
     pageSize: 10,
     currentPage: 1,

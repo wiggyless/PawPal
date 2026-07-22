@@ -38,7 +38,6 @@ export class DialoguePopupService {
       },
     ]);
 
-    // If the popup component isn't attached to the body yet, attach it!
     if (!this.overlayRef) {
       this.attachToBodyRoot();
     }
@@ -48,7 +47,6 @@ export class DialoguePopupService {
 
   private attachToBodyRoot() {
     this.overlayRef = this.overlay.create({
-      // This tells the CDK to place it at the root of the document body
       positionStrategy: this.overlay.position().global(),
       scrollStrategy: this.overlay.scrollStrategies.noop(),
     });
@@ -80,7 +78,6 @@ export class DialoguePopupService {
   dismiss(id: number) {
     this.dialoguePopups.update((n) => n.filter((x) => x.id !== id));
 
-    // Clean up the overlay if no popups are remaining
     if (this.dialoguePopups().length === 0 && this.overlayRef) {
       this.overlayRef.dispose();
       this.overlayRef = null;
