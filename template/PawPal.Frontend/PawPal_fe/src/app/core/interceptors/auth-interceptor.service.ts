@@ -61,14 +61,17 @@ function handle401Error(
   }
 
   if (refreshInProgress) {
+    // Only the final emission of a refresh cycle matters here: a non-null token (success),
+    // or null once refreshInProgress has already flipped back to false (failure). The
+    // in-progress null reset below is filtered out so it doesn't get mistaken for a failure.
     return refreshTokenSubject.pipe(
-      filter((token) => token !== null),
+      filter((token) => token !== null || !refreshInProgress),
       take(1),
       switchMap((token) => {
-        const cloned = token
-          ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
-          : req;
-        return next(cloned);
+        if (!token) {
+          return throwError(() => new Error('Session refresh failed'));
+        }
+        return next(req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }));
       }),
     );
   }

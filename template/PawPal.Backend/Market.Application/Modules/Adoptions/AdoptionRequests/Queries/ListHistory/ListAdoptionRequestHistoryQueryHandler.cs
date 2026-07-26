@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.ListHistory
 {
-    internal class ListAdoptionRequestHistoryQueryHandler (IAppDbContext context):
+    internal class ListAdoptionRequestHistoryQueryHandler (IAppDbContext context, IAppCurrentUser currentUser):
         IRequestHandler<ListAdoptionRequestHistoryQuery, PageResult<ListAdoptionRequestHistoryQueryDto>>
     {
         public async Task<PageResult<ListAdoptionRequestHistoryQueryDto>> Handle(ListAdoptionRequestHistoryQuery request, CancellationToken cancellationToken)
         {
+            request.UserID = currentUser.UserId ?? throw new PawPalConflictException("User is not authenticated");
+
             var reqList = context.AdoptionRequests.Include(x => x.Post)
                 .Include(x => x.Post.Animal)
                 .Include(x => x.Post.City)

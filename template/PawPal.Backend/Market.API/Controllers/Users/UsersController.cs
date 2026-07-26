@@ -27,7 +27,6 @@ namespace PawPal.API.Controllers.Users
             int id = await sender.Send(cuc, ct);
             return CreatedAtAction(nameof(GetById), new { id }, new { id});
         }
-        [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<GetUserByIdQueryDto> GetById(int id, CancellationToken ct)
         {
@@ -40,7 +39,6 @@ namespace PawPal.API.Controllers.Users
             var user = await sender.Send(new GetByIdDisabledQuery { Id = id }, ct);
             return user;
         }
-        [AllowAnonymous]
         [HttpGet]
         public async Task<PageResult<ListUsersQueryDto>> List([FromQuery]
         ListUsersQuery query,CancellationToken ct)

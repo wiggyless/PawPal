@@ -10,32 +10,17 @@ namespace PawPal.Application.Modules.Users.Queries.GetByUsername
     public sealed class GetByUsernameQueryHandler(IAppDbContext context)
        : IRequestHandler<GetByUsernameQuery, GetByUsernameQueryDto>
     {
-        public Task<GetByUsernameQueryDto> Handle(GetByUsernameQuery request, CancellationToken cancellationToken)
+        public async Task<GetByUsernameQueryDto> Handle(GetByUsernameQuery request, CancellationToken cancellationToken)
         {
             var username = request.Username;
 
-            var user = context.Users
-                .Where(u => u.Username == username)
-                .Select(u => new GetByUsernameQueryDto
-                {
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    Email = u.Email,
-                    Username = u.Username
-                })
-                .FirstOrDefaultAsync(cancellationToken);
-            if(user == null)
+            var exists = await context.Users.AnyAsync(u => u.Username == username, cancellationToken);
+
+            return new GetByUsernameQueryDto
             {
-               var nullUser = new GetByUsernameQueryDto
-                {
-                    FirstName = string.Empty,
-                    LastName = string.Empty,
-                    Email = string.Empty,
-                    Username = string.Empty
-                };
-                return Task.FromResult(nullUser);
-            }
-            return user;
+                Username = username,
+                Exists = exists
+            };
         }
     }
     

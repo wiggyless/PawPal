@@ -6,12 +6,10 @@ using PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.List;
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.ListHistory;
 namespace PawPal.API.Controllers.Adoptions
 {
-    [AllowAnonymous]
     [ApiController]
     [Route("[controller]")]
     public class AdoptionRequestController(ISender sender) : ControllerBase
     {
-        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<int>> CreateRequest(CreateAdoptionRequestCommand crc, CancellationToken cancellationToken)
         {

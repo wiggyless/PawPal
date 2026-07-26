@@ -51,19 +51,9 @@ public static class DynamicDataSeeder
             RoleId = adminRole.Id,
             Role = adminRole,
             IsEnabled = true,
-            CityId = mostar.Id
-        };
+            CityId = mostar.Id,
+            IsEmailConfirmed = true
 
-        var user = new UserEntity
-        {
-            FirstName = "nesto",
-            LastName = "nesto",
-            Email = "manager@market.local",
-            PasswordHash = hasher.HashPassword(null!, "User123!"),
-            RoleId = verifiedRole.Id,
-            Role = verifiedRole,
-            IsEnabled = true,
-            CityId = mostar.Id
         };
 
         var johnnyDoe = new UserEntity
@@ -75,7 +65,9 @@ public static class DynamicDataSeeder
             IsEnabled = true,
             RoleId = verifiedRole.Id,
             Role = verifiedRole,
-            CityId = mostar.Id
+            CityId = mostar.Id,
+            IsEmailConfirmed = true
+
         };
         context.Users.AddRange(admin, user, johnnyDoe);
         await context.SaveChangesAsync();

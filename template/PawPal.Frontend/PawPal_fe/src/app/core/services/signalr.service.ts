@@ -19,9 +19,15 @@ export class SignalRService {
   userTyping$ = this.userTypingSource.asObservable();
   userStoppedTyping$ = this.userStoppedTypingSource.asObservable();
 
-  constructor() {
+  connect(): void {
+    this.disconnect();
     this.initCommentHub();
     this.initMessageHub();
+  }
+
+  disconnect(): void {
+    this.commentHubConnection?.stop().catch((err) => console.error('SignalR: Comment hub stop error', err));
+    this.messageHubConnection?.stop().catch((err) => console.error('SignalR: Message hub stop error', err));
   }
 
   private getToken(): string {
