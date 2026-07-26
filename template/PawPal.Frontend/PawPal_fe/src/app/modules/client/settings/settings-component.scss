@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $primary-color: #483c28;
 $secondary-color: #c7b18c;
 $light-bg: #f3e9db;
@@ -240,13 +242,13 @@ $divider-color: #e5d7c4;
   color: white;
 
   &:hover {
-    background-color: darken($danger-color, 10%);
-    border-color: darken($danger-color, 10%);
+    background-color: color.adjust($danger-color, $lightness: -10%);
+    border-color: color.adjust($danger-color, $lightness: -10%);
   }
 
   &:active {
-    background-color: darken($danger-color, 15%);
-    border-color: darken($danger-color, 15%);
+    background-color: color.adjust($danger-color, $lightness: -15%);
+    border-color: color.adjust($danger-color, $lightness: -15%);
   }
 }
 .eye-btn {

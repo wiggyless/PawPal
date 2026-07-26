@@ -85,7 +85,7 @@ export class CreatePost implements OnInit {
     name: ['', Validators.required],
     genderID: [0, Validators.min(1)],
     categoryID: [0, Validators.min(1)],
-    age: [0, Validators.required],
+    age: [0, [Validators.required, Validators.min(0)]],
     breed: ['', Validators.required],
     passportCtrl: [{ value: '', disabled: true }, Validators.required],
     passportCheck: [false],

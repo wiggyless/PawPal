@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { AnimalRequestService } from '../../../../api-services/animals-adoption/animals-adoption-service';
 import {
@@ -35,6 +35,7 @@ export class MySentRequests implements OnInit, OnDestroy {
   dialog = inject(MatDialog);
   dialogConfirm = inject(DialoguePopupService);
   sanitizer = inject(DomSanitizer);
+  cd = inject(ChangeDetectorRef);
 
   cantonsList: any = [];
   envLink = environment;
@@ -110,7 +111,18 @@ export class MySentRequests implements OnInit, OnDestroy {
       'Delete',
       'Cancel',
       () => {
-        this.myRequestApi.deleteRequest(request.requestId).subscribe();
+        this.myRequestApi.deleteRequest(request.requestId).subscribe({
+          next: () => {
+            if (this.requestsList) {
+              this.requestsList.items = this.requestsList.items.filter(
+                (item) => item.requestId !== request.requestId,
+              );
+              this.requestsList.totalItems--;
+              this.listEmpty.set(this.requestsList.items.length === 0);
+            }
+            this.cd.detectChanges();
+          },
+        });
       },
     );
   }
