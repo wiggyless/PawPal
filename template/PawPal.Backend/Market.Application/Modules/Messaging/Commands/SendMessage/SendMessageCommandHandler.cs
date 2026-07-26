@@ -4,11 +4,13 @@ using PawPal.Domain.Entities.Messaging;
 
 namespace PawPal.Application.Modules.Messaging.Commands.SendMessage
 {
-    public sealed class SendMessageCommandHandler(IAppDbContext context, IMessageHubService messageHubService) :
+    public sealed class SendMessageCommandHandler(IAppDbContext context, IMessageHubService messageHubService, IAppCurrentUser currentUser) :
         IRequestHandler<SendMessageCommand, MessageDto>
     {
         public async Task<MessageDto> Handle(SendMessageCommand command, CancellationToken cancellationToken)
         {
+            command.SenderId = currentUser.UserId ?? throw new PawPalConflictException("User is not authenticated");
+
             int u1 = Math.Min(command.SenderId, command.RecipientId);
             int u2 = Math.Max(command.SenderId, command.RecipientId);
 

@@ -127,10 +127,18 @@ public partial class Program
             builder.Services.AddTransient<IEmailService, EmailService>();
             builder.Services.AddHostedService<ExpiredTokenCleanupService>();
 
-            FirebaseApp.Create(new AppOptions
+            var firebaseCredentialsPath = Path.Combine(builder.Environment.ContentRootPath, "firebase-service-account.json");
+            if (File.Exists(firebaseCredentialsPath))
             {
-                Credential = GoogleCredential.FromFile("firebase-service-account.json")
-            });
+                FirebaseApp.Create(new AppOptions
+                {
+                    Credential = GoogleCredential.FromFile(firebaseCredentialsPath)
+                });
+            }
+            else
+            {
+                Log.Warning("firebase-service-account.json not found at {Path}. Push notifications will be disabled.", firebaseCredentialsPath);
+            }
             builder.Services.AddSingleton<IFirebaseNotificationService, FirebaseNotificationService>();
 
             var app = builder.Build();

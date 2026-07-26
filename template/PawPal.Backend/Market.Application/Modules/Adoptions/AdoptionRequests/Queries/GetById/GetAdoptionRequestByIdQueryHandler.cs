@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.GetById
 {
-    public sealed class GetAdoptionRequestByIdQueryHandler(IAppDbContext context) : 
+    public sealed class GetAdoptionRequestByIdQueryHandler(IAppDbContext context, IAppCurrentUser currentUser) :
         IRequestHandler<GetAdoptionRequestByIdQuery,GetAdoptionRequestByIdQueryDto>
     {
         public async Task<GetAdoptionRequestByIdQueryDto> Handle(GetAdoptionRequestByIdQuery request,CancellationToken cancellationToken)
@@ -14,17 +14,23 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.GetById
             var adoptionReq = await context.AdoptionRequests.
                 Include(x=>x.Post).
                 Where(y => y.Id == request.Id).
-                Select(x => new GetAdoptionRequestByIdQueryDto
+                Select(x => new
                 {
-                    Status = x.Status,
-                    DateSent = x.DateSent,
-                    UserId = x.UserId,
-                    PostId = x.PostId,
-                    RequirementId = x.RequirementId,
-                    AnimalID = x.Post.AnimalID,
+                    Dto = new GetAdoptionRequestByIdQueryDto
+                    {
+                        Status = x.Status,
+                        DateSent = x.DateSent,
+                        UserId = x.UserId,
+                        PostId = x.PostId,
+                        RequirementId = x.RequirementId,
+                        AnimalID = x.Post.AnimalID,
+                    },
+                    PostOwnerId = x.Post.UserId,
                 }).FirstOrDefaultAsync(cancellationToken);
             if (adoptionReq is null) throw new PawPalNotFoundException($"Adoption request with {request.Id} does not exist");
-            return adoptionReq;
+            if (adoptionReq.Dto.UserId != currentUser.UserId && adoptionReq.PostOwnerId != currentUser.UserId && currentUser.RoleId != 3)
+                throw new PawPalConflictException("User is not allowed to do this action");
+            return adoptionReq.Dto;
         }
     }
 }

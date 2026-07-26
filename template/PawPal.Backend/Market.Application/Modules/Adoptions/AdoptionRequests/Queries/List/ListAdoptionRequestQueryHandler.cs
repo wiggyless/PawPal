@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.List
 {
-    public sealed class ListAdoptionRequestQueryHandler(IAppDbContext context) :
+    public sealed class ListAdoptionRequestQueryHandler(IAppDbContext context, IAppCurrentUser currentUser) :
         IRequestHandler<ListAdoptionRequestQuery,PageResult<ListAdoptionRequestQueryDto>>
     {
         public async Task<PageResult<ListAdoptionRequestQueryDto>> Handle(ListAdoptionRequestQuery request,CancellationToken cancellationToken)
         {
+            request.UserID = currentUser.UserId ?? throw new PawPalConflictException("User is not authenticated");
+
             var reqList = context.AdoptionRequests.Include(x => x.Post)
                 .Include(x => x.Post.Animal)
                 .Include(x => x.Post.City)

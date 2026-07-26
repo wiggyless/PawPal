@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Observable, of, tap, catchError, map, switchMap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { NotificationService } from '../notifications/notification.service';
+import { SignalRService } from '../signalr.service';
 import { AuthApiService } from '../../../api-services/auth/auth-api.service';
 import {
   LoginCommand,
@@ -22,6 +23,7 @@ export class AuthFacadeService {
   private storage = inject(AuthStorageService);
   private router = inject(Router);
   private notificationService = inject(NotificationService);
+  private signalR = inject(SignalRService);
   private _currentUser = signal<CurrentUserDto | null>(null);
 
   currentUser = this._currentUser.asReadonly();
@@ -40,6 +42,7 @@ export class AuthFacadeService {
         this.storage.saveLogin(response);
         this.decodeAndSetUser(response.accessToken);
         this.notificationService.checkPermission();
+        this.signalR.connect();
       }),
       map(() => void 0),
     );
@@ -102,6 +105,7 @@ export class AuthFacadeService {
     if (token) {
       this.decodeAndSetUser(token);
       this.notificationService.checkPermission();
+      this.signalR.connect();
     }
   }
 
@@ -125,6 +129,7 @@ export class AuthFacadeService {
   private clearUserState(): void {
     this._currentUser.set(null);
     this.storage.clear();
+    this.signalR.disconnect();
   }
   resendConfirmationEmail(email: string): Observable<void> {
     return this.api.resendConfirmationEmail(email).pipe(map(() => void 0));

@@ -11,6 +11,7 @@ namespace PawPal.Application.Modules.Posts.Commands.Update
     {
         [JsonIgnore]
         public int Id { get; set; }
-        // will add more attributes
+        public string? Status { get; set; }
+        public int? CityId { get; set; }
     }
 }

@@ -4,6 +4,7 @@ namespace PawPal.Application.Modules.Messaging.Commands.SendMessage
 {
     public class SendMessageCommand : IRequest<MessageDto>
     {
+        [JsonIgnore]
         public int SenderId { get; set; }
         public int RecipientId { get; set; }
         public string Content { get; set; } = string.Empty;

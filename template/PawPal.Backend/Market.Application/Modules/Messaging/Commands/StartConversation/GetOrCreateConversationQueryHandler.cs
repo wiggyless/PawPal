@@ -1,11 +1,13 @@
 ﻿using PawPal.Application.Modules.Messaging.Commands.StartConversation;
 using PawPal.Application.Modules.Messaging.Dtos;
 
-public sealed class GetOrCreateConversationQueryHandler(IAppDbContext context) :
+public sealed class GetOrCreateConversationQueryHandler(IAppDbContext context, IAppCurrentUser currentUser) :
     IRequestHandler<GetOrCreateConversationQuery, ConversationDto>
 {
     public async Task<ConversationDto> Handle(GetOrCreateConversationQuery query, CancellationToken cancellationToken)
     {
+        query.SenderId = currentUser.UserId ?? throw new PawPalConflictException("User is not authenticated");
+
         int u1 = Math.Min(query.SenderId, query.RecipientId);
         int u2 = Math.Max(query.SenderId, query.RecipientId);
 

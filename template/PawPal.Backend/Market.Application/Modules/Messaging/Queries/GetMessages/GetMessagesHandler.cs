@@ -1,16 +1,21 @@
 ﻿using PawPal.Application.Modules.Messaging.Dtos;
 
-public sealed class GetMessagesQueryHandler(IAppDbContext context) :
+public sealed class GetMessagesQueryHandler(IAppDbContext context, IAppCurrentUser currentUser) :
     IRequestHandler<GetMessagesQuery, PageResult<MessageDto>>
 {
     public async Task<PageResult<MessageDto>> Handle(GetMessagesQuery query, CancellationToken cancellationToken)
     {
+        query.RequestingUserId = currentUser.UserId ?? throw new PawPalConflictException("User is not authenticated");
+
         var conversation = await context.Conversations
             .Where(x => x.Id == query.ConversationId)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (conversation is null)
             throw new PawPalNotFoundException("Conversation does not exist");
+
+        if (conversation.User1Id != query.RequestingUserId && conversation.User2Id != query.RequestingUserId)
+            throw new PawPalConflictException("User is not allowed to do this action");
 
         var unread = await context.Messages
             .Where(m => m.ConversationId == query.ConversationId

@@ -78,9 +78,9 @@ export class AuthTimeoutService implements OnDestroy {
 
   private handleLogout(): void {
     this.stopExpirationTracker();
-    this.auth.logout();
-    this.currentUser.getDefaultRoute();
-    this.router.navigate(['/auth/login']);
+    this.auth.logout().subscribe(() => {
+      this.router.navigate(['/auth/login']);
+    });
   }
 
   ngOnDestroy(): void {

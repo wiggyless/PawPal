@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, of } from 'rxjs';
+import { map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { buildHttpParams } from '../../core/models/build-http-params';
 import { GetUserImageById, UserImageCommand, UserImageDto, UserImageQuery } from './userImage-model';
@@ -34,13 +34,17 @@ createUserImage(userID: number, image: File): Observable<number> {
   const formData = new FormData();
   formData.append('userID', userID.toString());
   formData.append('Image', image, image.name);
-  return this.httpClient.post<number>(this.apiUrl, formData);
+  return this.httpClient
+    .post<number>(this.apiUrl, formData)
+    .pipe(tap(() => this.imageCache.delete(userID)));
 }
 
 updateUserImage(userID: number, image: File): Observable<number> {
   const formData = new FormData();
   formData.append('userID', userID.toString());
   formData.append('Image', image, image.name);
-  return this.httpClient.put<number>(this.apiUrl, formData);
+  return this.httpClient
+    .put<number>(this.apiUrl, formData)
+    .pipe(tap(() => this.imageCache.delete(userID)));
 }
 }
