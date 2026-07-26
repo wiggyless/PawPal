@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 .stepper-container {
   min-height: 100vh;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(187, 116, 34, 0.2) 100%), #e5d7c4;
@@ -478,7 +480,7 @@
   color: #c7b18c;
 
   &:hover:not(:disabled) {
-    background: darken(#354024, 5%);
+    background: color.adjust(#354024, $lightness: -5%);
   }
 
   &:disabled {
@@ -493,7 +495,7 @@
   border: 1px solid rgba(81, 67, 45, 0.5);
 
   &:hover {
-    background: darken(#c7b18c, 5%);
+    background: color.adjust(#c7b18c, $lightness: -5%);
   }
 }
 

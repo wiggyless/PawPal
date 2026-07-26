@@ -448,6 +448,12 @@
                       <mat-option value="oboje">Mix</mat-option>
                     </mat-select>
                   </mat-form-field>
+                  @if (
+                    this.step2FormGroup.controls['petInHouse']?.hasError('required') &&
+                    this.step2FormGroup.controls['petInHouse'].touched
+                  ) {
+                    <mat-error>Please choose whether your pet will stay inside or outside!</mat-error>
+                  }
                 </div>
               </div>
             </div>
@@ -573,11 +579,25 @@
                   <mat-form-field appearance="outline" class="custom-field">
                     <input
                       matInput
+                      type="number"
                       required
+                      min="1"
                       formControlName="financialSupport"
                       placeholder="e.g. 1000 KM"
                     />
                   </mat-form-field>
+                  @if (
+                    this.step2FormGroup.controls['financialSupport']?.hasError('required') &&
+                    this.step2FormGroup.controls['financialSupport'].touched
+                  ) {
+                    <mat-error>Please enter the amount you're willing to invest!</mat-error>
+                  }
+                  @if (
+                    this.step2FormGroup.controls['financialSupport']?.hasError('min') &&
+                    this.step2FormGroup.controls['financialSupport'].touched
+                  ) {
+                    <mat-error>The amount must be greater than 0!</mat-error>
+                  }
                 </div>
 
                 <!-- Allergies -->
