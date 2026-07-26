@@ -56,19 +56,6 @@ public static class DynamicDataSeeder
 
         };
 
-        var user = new UserEntity
-        {
-            FirstName = "nesto",
-            LastName = "nesto",
-            Email = "manager@market.local",
-            PasswordHash = hasher.HashPassword(null!, "User123!"),
-            RoleId = verifiedRole.Id,
-            Role = verifiedRole,
-            IsEnabled = true,
-            CityId = mostar.Id,
-            IsEmailConfirmed = true
-        };
-
         var johnnyDoe = new UserEntity
         {
             FirstName = "Johnny",
