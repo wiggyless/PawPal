@@ -88,7 +88,7 @@ export class CatalogComponent
   constructor() {
     super();
     this.request = new GetPostQuery();
-    this.request.paging.pageSize = 4;
+    this.request.paging.pageSize = 10;
     this.request.paging.page = 1;
     const navigation = this.router.currentNavigation();
     this.cantonID = navigation?.extras.state?.['cantonID'];
@@ -133,6 +133,7 @@ export class CatalogComponent
     this.animalPosts = this.animalPostsService.listAnimalPosts(this.request).pipe(
       shareReplay(1),
       tap((res) => {
+        console.log(res);
         this.likedPosts
           .listLikedPosts({
             userId: this.currentUser.userId() as number,
