@@ -46,13 +46,15 @@ public static class DynamicDataSeeder
         {
             FirstName = "nesto",
             LastName = "nesto",
+            Username= "Glavni ovde",
             Email = "admin@market.local",
             PasswordHash = hasher.HashPassword(null!, "Admin123!"),
             RoleId = adminRole.Id,
             Role = adminRole,
             IsEnabled = true,
             CityId = mostar.Id,
-            IsEmailConfirmed = true
+            IsEmailConfirmed = true,
+            isUserDisabled = false
 
         };
 
@@ -60,13 +62,15 @@ public static class DynamicDataSeeder
         {
             FirstName = "Johnny",
             LastName = "Doe",
+            Username= "johnDoe",
             Email = "johnnydoe1@gmail.com",
             PasswordHash = hasher.HashPassword(null!, "johnnydoe1"),
             IsEnabled = true,
             RoleId = verifiedRole.Id,
             Role = verifiedRole,
             CityId = mostar.Id,
-            IsEmailConfirmed = true
+            IsEmailConfirmed = true,
+            isUserDisabled = false
 
         };
         context.Users.AddRange(admin, johnnyDoe);

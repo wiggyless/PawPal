@@ -18,10 +18,6 @@ namespace PawPal.Application.Modules.Security.Questions.Query.GetByEmail
                 throw new PawPalConflictException("Email can't be an empty filed");
             }
             var answer = db.SecurityAnswers.AsNoTracking().Where(x => x.Email == request.Email).Select(x => x.QuestionID); 
-            if(answer.AsQueryable().Count() == 0)
-            {
-                throw new PawPalNotFoundException("Email not found within the answers");
-            }
             var question = db.SecurityQuestions.Where(x => answer.Contains(x.Id));
             var result = question.OrderBy(x => x.Question).
                 Select(x => new GetSecurityQuestionByEmailQueryDto
