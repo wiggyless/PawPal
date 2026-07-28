@@ -45,7 +45,11 @@ export class SettingsComponent implements OnInit {
         .getSecurityQuestionsByEmail({ email: this.userEmail, paging: { page: 1, pageSize: 10 } })
         .subscribe({
           next: (res) => {
-            this.isSecurityEnabled.set(true);
+            if (res.items.length == 0) {
+              this.isSecurityEnabled.set(false);
+            } else {
+              this.isSecurityEnabled.set(true);
+            }
           },
           error: (res) => {
             this.isSecurityEnabled.set(false);
@@ -155,7 +159,11 @@ export class SettingsComponent implements OnInit {
           .getSecurityQuestionsByEmail({ email: this.userEmail, paging: { page: 1, pageSize: 10 } })
           .subscribe({
             next: (res) => {
-              this.isSecurityEnabled.set(true);
+              if (res.items.length == 0) {
+                this.isSecurityEnabled.set(false);
+              } else {
+                this.isSecurityEnabled.set(true);
+              }
             },
             error: (res) => {
               this.isSecurityEnabled.set(false);

@@ -46,13 +46,15 @@ public static class DynamicDataSeeder
         {
             FirstName = "nesto",
             LastName = "nesto",
+            Username= "Glavni ovde",
             Email = "admin@market.local",
             PasswordHash = hasher.HashPassword(null!, "Admin123!"),
             RoleId = adminRole.Id,
             Role = adminRole,
             IsEnabled = true,
             CityId = mostar.Id,
-            IsEmailConfirmed = true
+            IsEmailConfirmed = true,
+            isUserDisabled = false
 
         };
 
@@ -60,16 +62,18 @@ public static class DynamicDataSeeder
         {
             FirstName = "Johnny",
             LastName = "Doe",
+            Username= "johnDoe",
             Email = "johnnydoe1@gmail.com",
             PasswordHash = hasher.HashPassword(null!, "johnnydoe1"),
             IsEnabled = true,
             RoleId = verifiedRole.Id,
             Role = verifiedRole,
             CityId = mostar.Id,
-            IsEmailConfirmed = true
+            IsEmailConfirmed = true,
+            isUserDisabled = false
 
         };
-        context.Users.AddRange(admin, user, johnnyDoe);
+        context.Users.AddRange(admin, johnnyDoe);
         await context.SaveChangesAsync();
 
     }
@@ -560,7 +564,18 @@ public static class DynamicDataSeeder
                 PostImages = formFileCollection
             };
 
-            int id = await sender.Send(command);
+            // Seeding runs before any HTTP request exists, so there is no current user for
+            // CreatePostImageCommandHandler's ownership check to pass. Insert the row directly instead.
+            var listName = command.PostImages
+                .Select(x => "/posts/Post_" + command.PostId + "/" + x.FileName)
+                .ToList();
+            context.PostImages.Add(new PostImagesEntity
+            {
+                PostId = command.PostId,
+                PhotoURL = listName,
+                MainImage = listName[0],
+            });
+            await context.SaveChangesAsync();
 
             var subFolder = "posts";
             string root = env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");

@@ -71,7 +71,7 @@ dotnet run --launch-profile https
 ```bash
 cd template/PawPal.Frontend/PawPal_fe
 npm install
-ng serve
+npm start
 ```
 
 Then open `http://localhost:4200`. The frontend expects the backend at `https://localhost:7260` (see `src/environments/environment.ts`) — the first time you hit it, your browser will likely warn about the backend's self-signed dev HTTPS certificate; you'll need to accept/trust it (or run `dotnet dev-certs https --trust` once on the backend machine).
