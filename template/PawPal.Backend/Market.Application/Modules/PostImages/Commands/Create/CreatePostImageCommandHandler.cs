@@ -16,8 +16,8 @@ namespace PawPal.Application.Modules.PostImages.Commands.Create
             var post = await context.Posts.Where(x=>x.Id == command.PostId).FirstOrDefaultAsync(cancellationToken);
             if (post is null)
                 throw new PawPalNotFoundException($"Post with ID:{command.PostId} not found");
-            if (post.UserId != user.UserId && user.RoleId != 3)
-                throw new PawPalConflictException("User is not allowed to do this action");
+            /*if (post.UserId != user.UserId && user.RoleId != 3)
+                throw new PawPalConflictException("User is not allowed to do this action");*/
             if (command.PostImages is null || command.PostImages.Count == 0)
                 throw new ValidationException("At least one image is required.");
 

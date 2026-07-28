@@ -4,7 +4,7 @@
     {
         public CreateAnimalValidator()
         {
-            RuleFor(x => x.Name).NotEmpty().MinimumLength(4).MaximumLength(20);
+            RuleFor(x => x.Name).NotEmpty().MinimumLength(1).MaximumLength(20);
             RuleFor(x => x.Breed).NotEmpty();
             RuleFor(x=>x.Age).NotEmpty();
         }
