@@ -69,7 +69,7 @@ public static class DynamicDataSeeder
             IsEmailConfirmed = true
 
         };
-        context.Users.AddRange(admin, user, johnnyDoe);
+        context.Users.AddRange(admin, johnnyDoe);
         await context.SaveChangesAsync();
 
     }
@@ -560,7 +560,18 @@ public static class DynamicDataSeeder
                 PostImages = formFileCollection
             };
 
-            int id = await sender.Send(command);
+            // Seeding runs before any HTTP request exists, so there is no current user for
+            // CreatePostImageCommandHandler's ownership check to pass. Insert the row directly instead.
+            var listName = command.PostImages
+                .Select(x => "/posts/Post_" + command.PostId + "/" + x.FileName)
+                .ToList();
+            context.PostImages.Add(new PostImagesEntity
+            {
+                PostId = command.PostId,
+                PhotoURL = listName,
+                MainImage = listName[0],
+            });
+            await context.SaveChangesAsync();
 
             var subFolder = "posts";
             string root = env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");

@@ -41,7 +41,7 @@ export function usernameTakenValidator(userService: UserService): AsyncValidator
       debounceTime(600),
       distinctUntilChanged(),
       switchMap((username) => userService.getByUsername(username)),
-      map((res) => (res != null ? { usernameTaken: true } : null)),
+      map((res) => (res?.exists ? { usernameTaken: true } : null)),
       catchError(() => of(null)),
       first(),
     );
@@ -56,7 +56,7 @@ export function emailTakenValidator(userService: UserService): AsyncValidatorFn 
       debounceTime(600),
       distinctUntilChanged(),
       switchMap((email) => userService.getByEmail(email)),
-      map((res) => (res != null ? { emailTaken: true } : null)),
+      map((res) => (res?.exists ? { emailTaken: true } : null)),
       catchError(() => of(null)),
       first(),
     );

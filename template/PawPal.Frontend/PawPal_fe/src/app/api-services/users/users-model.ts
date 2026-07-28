@@ -56,17 +56,13 @@ export interface DeleteUserCommand {
 }
 
 export interface GetByUsernameQueryDto {
-  firstName: string;
-  lastName: string;
-  email: string;
   username: string;
+  exists: boolean;
 }
 
 export interface GetByEmailQueryDto {
-  firstName: string;
-  lastName: string;
   email: string;
-  username: string;
+  exists: boolean;
 }
 export interface UpdateUserPassword {
   email: string;
