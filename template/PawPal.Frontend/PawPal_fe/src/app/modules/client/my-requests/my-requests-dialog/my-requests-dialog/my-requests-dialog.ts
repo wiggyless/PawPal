@@ -109,6 +109,7 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
           },
           error: (res) => {
             this.dialogPopUp.error('Error', res?.error.message, 'OK');
+            this.dialogReg.close(false);
           },
         });
       },

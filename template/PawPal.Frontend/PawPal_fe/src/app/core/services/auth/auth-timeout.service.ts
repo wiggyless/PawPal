@@ -23,6 +23,9 @@ export class AuthTimeoutService implements OnDestroy {
     this.stopExpirationTracker();
     const token = localStorage.getItem('accessToken');
     if (!token) return;
+    this.hasSessionExpired(token);
+  }
+  hasSessionExpired(token: string) {
     const expirationTimeMs = this.getTokenExpirationDate(token);
     const currentTimeMs = Date.now();
     const timeRemainingMs = expirationTimeMs - currentTimeMs;
@@ -38,7 +41,13 @@ export class AuthTimeoutService implements OnDestroy {
       this.handleLogout();
     }
   }
+  isTokenExpired(): boolean {
+    const token = localStorage.getItem('accessToken');
+    if (!token) return false;
 
+    const expirationTimeMs = this.getTokenExpirationDate(token);
+    return Date.now() >= expirationTimeMs;
+  }
   stopExpirationTracker(): void {
     if (this.timeoutSubscription) {
       this.timeoutSubscription.unsubscribe();
@@ -76,7 +85,7 @@ export class AuthTimeoutService implements OnDestroy {
     );
   }
 
-  private handleLogout(): void {
+  handleLogout(): void {
     this.stopExpirationTracker();
     this.auth.logout().subscribe(() => {
       this.router.navigate(['/auth/login']);
