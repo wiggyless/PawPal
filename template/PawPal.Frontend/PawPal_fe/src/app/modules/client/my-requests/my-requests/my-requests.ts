@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { MyRequestsDialog } from '../my-requests-dialog/my-requests-dialog/my-requests-dialog';
 import { AnimalRequestService } from '../../../../api-services/animals-adoption/animals-adoption-service';
@@ -51,6 +51,7 @@ export class MyRequests implements OnInit, OnDestroy {
   imagesLoaded = signal(false);
   tempList: number[] = [];
   sanitizer = inject(DomSanitizer);
+  cd = inject(ChangeDetectorRef);
   ngOnInit(): void {
     this.loadRequest();
   }
@@ -63,6 +64,7 @@ export class MyRequests implements OnInit, OnDestroy {
         this.requestsList = response.request;
         this.cantonsList = response.cantons;
         this.imagesLoaded.set(true);
+        this.cd.detectChanges();
       },
     });
   }
@@ -71,27 +73,28 @@ export class MyRequests implements OnInit, OnDestroy {
     this.myPostSubscription?.unsubscribe();
   }
   loadRequestDialog(request: GetAdoptionRequestList) {
-    const dialogRef = this.dialog.open(MyRequestsDialog, {
-      width: '70%',
-      maxWidth: '90vw',
-      maxHeight: '95vh',
-      panelClass: 'transparent-dialog',
-      data: {
-        reqID: request.requirementId,
-        cityCantonName: request.city + ',' + request.canton,
-        sentDate: request.dateSent,
-        status: request.status.toLocaleUpperCase(),
-        postID: request.postID,
-        requestID: request.requestId,
-        animalID: request.animalID,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((didUpdate) => {
-      if (didUpdate) {
-        this.loadRequest();
-      }
-    });
+    const dialogRef = this.dialog
+      .open(MyRequestsDialog, {
+        width: '70%',
+        maxWidth: '90vw',
+        maxHeight: '95vh',
+        panelClass: 'transparent-dialog',
+        data: {
+          reqID: request.requirementId,
+          cityCantonName: request.city + ',' + request.canton,
+          sentDate: request.dateSent,
+          status: request.status.toLocaleUpperCase(),
+          postID: request.postID,
+          requestID: request.requestId,
+          animalID: request.animalID,
+        },
+      })
+      .afterClosed()
+      .subscribe((didUpdate) => {
+        if (didUpdate) {
+          this.loadRequest();
+        }
+      });
   }
   getPostImage(imagePath: string) {
     return this.sanitizer.bypassSecurityTrustUrl(this.envLink.apiUrl + imagePath);
