@@ -1,12 +1,13 @@
 ﻿using Market.Infrastructure.Database;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using PawPal.Application.Modules.PostImages.Commands.Create;
 using PawPal.Domain.Entities.Animal_Info;
 using PawPal.Domain.Entities.Animal_Info.ManyToMany;
 using PawPal.Domain.Entities.Places;
-using Microsoft.AspNetCore.Http;
 using PawPal.Domain.Entities.Posts;
+using PawPal.Domain.Entities.Security;
 namespace PawPal.Infrastructure.Database.Seeders;
 
 public static class DynamicDataSeeder
@@ -26,7 +27,7 @@ public static class DynamicDataSeeder
         await SeedDisabilitiesAsync(context);
         await SeedAnimalsAsync(context, sender, env);
         await SeedAnimalHealthHistoriesAsync(context);
-
+        await SeedSecurityQuestions(context);
 
     }
     private static async Task SeedUsersAsync(DatabaseContext context)
@@ -36,9 +37,9 @@ public static class DynamicDataSeeder
 
         var hasher = new PasswordHasher<UserEntity>();
 
-        var adminRole = await context.Roles.Where(r=> r.Id == 3).FirstOrDefaultAsync();
-        var verifiedRole = await context.Roles.Where(r=> r.Id == 2).FirstOrDefaultAsync();
-        var basicRole = await context.Roles.Where(r=> r.Id == 1).FirstOrDefaultAsync();
+        var adminRole = await context.Roles.Where(r => r.Id == 3).FirstOrDefaultAsync();
+        var verifiedRole = await context.Roles.Where(r => r.Id == 2).FirstOrDefaultAsync();
+        var basicRole = await context.Roles.Where(r => r.Id == 1).FirstOrDefaultAsync();
 
         var mostar = await context.Cities.Where(x => x.Name == "Mostar").FirstOrDefaultAsync();
 
@@ -46,7 +47,7 @@ public static class DynamicDataSeeder
         {
             FirstName = "nesto",
             LastName = "nesto",
-            Username= "Glavni ovde",
+            Username = "Glavni ovde",
             Email = "admin@market.local",
             PasswordHash = hasher.HashPassword(null!, "Admin123!"),
             RoleId = adminRole.Id,
@@ -62,7 +63,7 @@ public static class DynamicDataSeeder
         {
             FirstName = "Johnny",
             LastName = "Doe",
-            Username= "johnDoe",
+            Username = "johnDoe",
             Email = "johnnydoe1@gmail.com",
             PasswordHash = hasher.HashPassword(null!, "johnnydoe1"),
             IsEnabled = true,
@@ -82,13 +83,13 @@ public static class DynamicDataSeeder
         if (await context.AnimalCategories.AnyAsync())
             return;
 
-        var catCategory = new AnimalCategoriesEntity { CategoryName = "Cat"};
-        var dogCategory = new AnimalCategoriesEntity { CategoryName = "Dog"};
-        var fishCategory = new AnimalCategoriesEntity{ CategoryName = "Fish"};
-        var rabbitCategory = new AnimalCategoriesEntity {CategoryName = "Rabbit"};
-        var birdCategory = new AnimalCategoriesEntity  { CategoryName = "Bird"};
+        var catCategory = new AnimalCategoriesEntity { CategoryName = "Cat" };
+        var dogCategory = new AnimalCategoriesEntity { CategoryName = "Dog" };
+        var fishCategory = new AnimalCategoriesEntity { CategoryName = "Fish" };
+        var rabbitCategory = new AnimalCategoriesEntity { CategoryName = "Rabbit" };
+        var birdCategory = new AnimalCategoriesEntity { CategoryName = "Bird" };
 
-        context.AnimalCategories.AddRange(catCategory, dogCategory, fishCategory, 
+        context.AnimalCategories.AddRange(catCategory, dogCategory, fishCategory,
             rabbitCategory, birdCategory);
         await context.SaveChangesAsync();
 
@@ -100,12 +101,12 @@ public static class DynamicDataSeeder
             return;
 
         var male = new GenderEntity { GenderName = "Male" };
-        var female = new GenderEntity {  GenderName = "Female" };
+        var female = new GenderEntity { GenderName = "Female" };
 
         context.Genders.AddRange(male, female);
         await context.SaveChangesAsync();
     }
-  
+
     private static async Task SeedAllergiesAsync(DatabaseContext context)
     {
         if (await context.Allergies.AnyAsync())
@@ -159,7 +160,7 @@ public static class DynamicDataSeeder
             Description = "Animals can lose or be born without the sense of hearing. Most commonly, deafness is associated with specific pigmentation phenotypes, including white coat color, and is heritable."
         };
 
-        context.Disabilities.AddRange(cerebellar,  blind, deaf);
+        context.Disabilities.AddRange(cerebellar, blind, deaf);
         await context.SaveChangesAsync();
     }
     private static async Task SeedAnimalHealthHistoriesAsync(DatabaseContext context)
@@ -407,7 +408,7 @@ public static class DynamicDataSeeder
     }
     private static async Task SeedCantonsAsync(DatabaseContext ct)
     {
-        if (await ct.Cantons.AnyAsync()) return; 
+        if (await ct.Cantons.AnyAsync()) return;
 
         var usk = new CantonEntity
         {
@@ -429,7 +430,7 @@ public static class DynamicDataSeeder
     }
     private static async Task SeedRolesAsync(DatabaseContext ct)
     {
-        if(await ct.Roles.AnyAsync()) return;
+        if (await ct.Roles.AnyAsync()) return;
 
         var basicUser = new RolesEntity
         {
@@ -440,7 +441,7 @@ public static class DynamicDataSeeder
             RoleName = "Verified user" //2
         };
 
-        var admin = new RolesEntity 
+        var admin = new RolesEntity
         {
             RoleName = "Admin" //3
         };
@@ -473,7 +474,7 @@ public static class DynamicDataSeeder
         var rabbit = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "rabbit").FirstOrDefaultAsync();
         var fish = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "fish").FirstOrDefaultAsync();
         var bird = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == "bird").FirstOrDefaultAsync();
-        var users = context.Users.AsNoTracking().Where(x=>x.RoleId != 3).ToList();
+        var users = context.Users.AsNoTracking().Where(x => x.RoleId != 3).ToList();
         var cities = context.Cities.AsNoTracking().ToList();
 
         if (femaleGender != null && maleGender != null)
@@ -546,10 +547,10 @@ public static class DynamicDataSeeder
 
         await context.SaveChangesAsync();
         var posts = context.Posts.AsNoTracking().ToList();
-        foreach(var post in posts)
+        foreach (var post in posts)
         {
             var animal = context.Animals.FirstOrDefault(x => x.Id == post.AnimalID);
-            var seedImagesFolder = Path.Combine(env.WebRootPath, "SeedData", animal?.CategoryId.ToString() is null 
+            var seedImagesFolder = Path.Combine(env.WebRootPath, "SeedData", animal?.CategoryId.ToString() is null
                 ? "1" : animal.CategoryId.ToString());
             var filePaths = Directory.GetFiles(seedImagesFolder);
 
@@ -594,5 +595,20 @@ public static class DynamicDataSeeder
             }
         }
     }
-
+    private static async Task SeedSecurityQuestions(DatabaseContext context)
+    {
+        if (await context.SecurityQuestions.AnyAsync())
+            return;
+        List<SecurityQuestion> questions = new()
+        {
+        new SecurityQuestion { Question = "What was the name of your first pet?" },
+        new SecurityQuestion { Question = "What was the make and model of your first car?" },
+        new SecurityQuestion { Question = "In what city or town did your parents meet?" },
+        new SecurityQuestion { Question = "What was the name of your elementary school?" },
+        new SecurityQuestion { Question = "What is your maternal grandmother's maiden name?" },
+        new SecurityQuestion { Question = "What was the street name of the house you grew up in?" }
+        };
+        context.AddRange(questions);
+        await context.SaveChangesAsync();
+    }
 }
