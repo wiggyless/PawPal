@@ -10,7 +10,7 @@ A pet adoption / marketplace app with an Angular frontend and a .NET (Clean Arch
 | Node.js | 20.19+ or 22.12+ | required by Angular 21 |
 | Angular CLI | 21.x | `npm install -g @angular/cli` (optional — `npx ng` also works) |
 | SQL Server | any local instance, **or** LocalDB | see [Database](#database) below |
-| Docker | any recent version | optional — only needed to run the Mailpit SMTP catcher for testing registration |
+| Docker | any recent version | required - needed to run the Mailpit SMTP catcher for registration |
 
 ## 1. Clone the repo
 
@@ -43,6 +43,9 @@ This assumes a local SQL Server instance reachable as `localhost` using Windows 
 
 `firebase-service-account.json` is a private key and is **not** in the repo (it's gitignored). If you have it, drop it into `template/PawPal.Backend/Market.API/` (same folder as `Program.cs`). If it's missing, the API still starts fine — it logs a warning and push notifications are simply skipped.
 
+Upon logging in, you're supposed to get a popup asking for push notification permissions. If such don't appear, please check if you have put 'firebase-service-account.json' in the Market.API folder or if notification permissions have been set to 'Allowed' by default on your browser. 
+
+
 ### Email (SMTP) — needed for registration
 
 New-account registration sends a confirmation email via SMTP, configured in `Market.API/appsettings.Development.json` to point at `localhost:1025`. This is meant to be caught by a local dev SMTP tool rather than a real mail server. If nothing is listening on that port, **registering a new account will fail** (login with the pre-seeded accounts below still works fine, since those don't need to send email).
@@ -53,7 +56,7 @@ To test registration, run a local SMTP catcher before starting the API. A ready-
 docker compose up -d
 ```
 
-Caught emails can be viewed at `http://localhost:8025`. (Any similar tool — Mailpit, Papercut, smtp4dev — works the same way.)
+Caught emails can be viewed at `http://localhost:8025`.
 
 ### reCAPTCHA — needs internet access
 
