@@ -124,7 +124,7 @@ export class PostComments implements OnInit, OnDestroy {
 
   addNewComment() {
     if (this.currentUser.getDefaultRoute() == '/login') {
-      this.router.navigate(['login']);
+      this.router.navigate(['/auth/login']);
     } else if (this.comment().trim() != '') {
       const newComment: CreateCommentCommand = {
         userID: this.currentUser.userId() as number,
@@ -153,9 +153,13 @@ export class PostComments implements OnInit, OnDestroy {
     };
   }
   openReportCommentDialog(commentID: number): void {
-    this.dialog.open(ReportCommentComponent, {
-      data: { commentId: commentID },
-    });
+    if (this.currentUser.getDefaultRoute() == '/login') {
+      this.router.navigate(['/auth/login']);
+    } else {
+      this.dialog.open(ReportCommentComponent, {
+        data: { commentId: commentID },
+      });
+    }
   }
   routeToProfile(id: number): void {
     this.router.navigate(['profile'], {

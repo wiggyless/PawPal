@@ -30,7 +30,7 @@ export class FooterComponent implements OnInit {
   }
   sendReport(): void {
     if (!this.currentUserService.isAuthenticated()) {
-      this.router.navigate(['login']);
+      this.router.navigate(['/auth/login']);
       return;
     }
     this.sub = this.reportedProblemService

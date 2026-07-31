@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\posts\" />
     <Folder Include="wwwroot\SeedData\1\" />
     <Folder Include="wwwroot\SeedData\2\" />
     <Folder Include="wwwroot\SeedData\3\" />
