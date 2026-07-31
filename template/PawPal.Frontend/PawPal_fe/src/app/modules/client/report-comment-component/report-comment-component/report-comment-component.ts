@@ -46,7 +46,7 @@ export class ReportCommentComponent implements OnInit {
   onSubmit(): void {
     if (this.form.invalid || this.isSubmitting) return;
     if (!this.currentUser.isAuthenticated()) {
-      this.route.navigate(['login']);
+      this.route.navigate(['/auth/login']);
       return;
     }
     this.isSubmitting = true;
