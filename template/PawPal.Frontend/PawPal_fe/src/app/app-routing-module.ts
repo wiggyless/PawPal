@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { myAuthGuard } from './core/guards/my-auth-guard';
 import { PreloadDashboardStrategy } from './core/preload/preload-strategy';
+import { myExpireGuard } from './core/guards/my-expire-guard';
 const routes: Routes = [
   {
     path: '',
+    canActivate: [myExpireGuard],
     loadChildren: () => import('./modules/public/public-module').then((m) => m.PublicModule),
   },
   {

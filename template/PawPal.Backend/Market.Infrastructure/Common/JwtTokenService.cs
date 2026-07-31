@@ -27,7 +27,7 @@ public sealed class JwtTokenService : IJwtTokenService
         // Now from TimeProvider (consistent with the rest of the app)
         var nowInstant = _time.GetUtcNow();
         var nowUtc = nowInstant.UtcDateTime;
-        var accessExpires = nowInstant.AddMinutes(_jwt.AccessTokenMinutes).UtcDateTime;
+        var accessExpires = nowInstant.AddMinutes(2).UtcDateTime;
         var refreshExpires = nowInstant.AddDays(_jwt.RefreshTokenDays).UtcDateTime;
 
         // --- Claims (including jti/aud for standard compliance) ---
