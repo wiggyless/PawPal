@@ -1379,10 +1379,6 @@ namespace PawPal.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1392,11 +1388,17 @@ namespace PawPal.Infrastructure.Migrations
                     b.Property<int>("QuestionID")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionID");
 
-                    b.ToTable("SecurityAnswers");
+                    b.HasIndex("UserId", "QuestionID")
+                        .IsUnique();
+
+                    b.ToTable("SecurityAnswers", (string)null);
                 });
 
             modelBuilder.Entity("PawPal.Domain.Entities.Security.SecurityQuestion", b =>
@@ -1744,7 +1746,15 @@ namespace PawPal.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PawPal.Domain.Entities.Identity.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Question");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ConversationEntity", b =>

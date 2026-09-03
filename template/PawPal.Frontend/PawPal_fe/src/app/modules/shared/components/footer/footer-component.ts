@@ -36,7 +36,6 @@ export class FooterComponent implements OnInit {
     this.sub = this.reportedProblemService
       .createProblemReport({
         description: this.description,
-        userID: this.currentUserService.userId() as number,
         dateSent: new Date(),
       })
       .subscribe({

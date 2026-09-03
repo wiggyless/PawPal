@@ -117,8 +117,21 @@ public partial class Program
 
                     return RateLimitPartition.GetFixedWindowLimiter(ipAddress, _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = 100,   
+                        PermitLimit = 100,
                         Window = TimeSpan.FromSeconds(60),
+                        QueueLimit = 0
+                    });
+                });
+
+                // Security-answer verification guesses hashed answers; keep attempts tight per IP.
+                options.AddPolicy("SecurityAnswerVerifyPolicy", httpContext =>
+                {
+                    var ipAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "anonymous";
+
+                    return RateLimitPartition.GetFixedWindowLimiter(ipAddress, _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 5,
+                        Window = TimeSpan.FromMinutes(15),
                         QueueLimit = 0
                     });
                 });

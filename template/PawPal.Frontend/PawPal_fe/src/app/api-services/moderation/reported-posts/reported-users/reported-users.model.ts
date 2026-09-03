@@ -39,7 +39,6 @@ export interface CreateReportedUserCommand {
   reason: ReportUserEnum;
   description?: string;
   reportedUserID: number;
-  reportCreatedByUserID: number;
   dateSent: Date;
 }
 export interface GetUserReportDto {

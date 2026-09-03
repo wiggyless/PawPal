@@ -25,7 +25,7 @@ export class MessagingService {
   return this.http.post<MessageDto>(`${this.apiUrl}/send`, cmd);
 }
 
-  getOrCreateConversation(params: { senderId: number, recipientId: number }): Observable<ConversationDto> {
+  getOrCreateConversation(params: { recipientId: number }): Observable<ConversationDto> {
   return this.http.get<ConversationDto>(`${this.apiUrl}/conversation`, { params: { ...params } });
 }
 }

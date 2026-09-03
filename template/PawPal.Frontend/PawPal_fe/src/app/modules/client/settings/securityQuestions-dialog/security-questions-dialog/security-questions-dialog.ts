@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { SecurityQuestionService } from '../../../../../api-services/security/questions/questions-service';
 import { GetSecurityQuestionDTO } from '../../../../../api-services/security/questions/questions-model';
 import { DialogRef } from '@angular/cdk/dialog';
-import { GetAndPostAnswerDTO } from '../../../../../api-services/security/answers/answer-model';
+import { PostAnswerDTO } from '../../../../../api-services/security/answers/answer-model';
 import { CurrentUserService } from '../../../../../core/services/auth/current-user.service';
 import { SecurityAnswerService } from '../../../../../api-services/security/answers/answer-service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -82,9 +82,8 @@ export class SecurityQuestionsDialog implements OnInit {
         [this.Question('second')]: this.Answer('second') as string,
         [this.Question('third')]: this.Answer('third') as string,
       };
-      const anwserDTO: GetAndPostAnswerDTO = {
+      const anwserDTO: PostAnswerDTO = {
         answers: answersRecord,
-        email: this.currentUserService.email()!,
       };
       if (this.matDialogData.isEnabled) {
         this.answerService.updateSecurityAnswers(anwserDTO).subscribe({

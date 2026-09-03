@@ -6,11 +6,21 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Queries.GetById
 {
-    public sealed class GetRequirementByIdQueryHandler(IAppDbContext context) :
+    public sealed class GetRequirementByIdQueryHandler(IAppDbContext context, IAppCurrentUser currentUser) :
         IRequestHandler<GetRequirementByIdQuery,GetRequirementByIdQueryDto>
     {
         public async Task<GetRequirementByIdQueryDto> Handle(GetRequirementByIdQuery command,CancellationToken cancellationToken)
         {
+            // This holds the applicant's address, financial details, and household composition —
+            // only the applicant, the post owner reviewing the application, or an admin may read it.
+            var owningRequest = await context.AdoptionRequests.AsNoTracking()
+                .Include(x => x.Post)
+                .FirstOrDefaultAsync(x => x.RequirementId == command.Id, cancellationToken);
+            var isApplicant = owningRequest?.UserId == currentUser.UserId;
+            var isPostOwner = owningRequest?.Post?.UserId == currentUser.UserId;
+            if (owningRequest is not null && !isApplicant && !isPostOwner && currentUser.RoleId != 3)
+                throw new PawPalConflictException("User is not authorized for this action");
+
             var newReq = await context.AdoptionRequirements.
                 Where(x => x.Id == command.Id).
                 Select(y => new GetRequirementByIdQueryDto

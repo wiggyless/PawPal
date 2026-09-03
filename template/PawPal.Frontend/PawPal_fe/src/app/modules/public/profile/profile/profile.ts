@@ -11,7 +11,7 @@ import { ReportUserService } from '../../../../api-services/moderation/reported-
 import { UserImageCommand } from '../../../../api-services/userImage/userImage-model';
 import { UserImageService } from '../../../../api-services/userImage/userImage-service';
 import { UserDisabledService } from '../../../../api-services/users-disabled/users-disabled.service';
-import { GetUserByIdDto } from '../../../../api-services/users/users-model';
+import { GetPublicUserProfileDto } from '../../../../api-services/users/users-model';
 import { UserService } from '../../../../api-services/users/users-service';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { ProfileDisableDialog } from '../../../admin/user-profiles/user-profiles/profile/profile/profile-disable-dialog/profile-disable-dialog/profile-disable-dialog';
@@ -49,14 +49,11 @@ export class Profile implements OnInit {
   private originalCityId: number = 0;
   imageUrl = signal<SafeUrl | null>(null);
   originalUrl: string | null = null;
-  userData: GetUserByIdDto = {
+  userData: GetPublicUserProfileDto = {
     id: 0,
     firstName: '',
     lastName: '',
-    email: '',
-    dateTime: '',
     city: '',
-    cantonAbbrevation: '',
     cityID: 0,
     username: '',
     aboutMe: '',
@@ -71,7 +68,6 @@ export class Profile implements OnInit {
   profileForm = new FormGroup({
     firstName: new FormControl({ value: '', disabled: true }),
     lastName: new FormControl({ value: '', disabled: true }),
-    date: new FormControl({ value: '', disabled: true }),
     city: new FormControl<string | number>({ value: '', disabled: true }),
     aboutMe: new FormControl({ value: '', disabled: true }),
   });
@@ -95,7 +91,7 @@ export class Profile implements OnInit {
   }
   getUserData(): void {
     this.sub = forkJoin({
-      userData: this.userDataService.getUser(this.userID as number),
+      userData: this.userDataService.getPublicProfile(this.userID as number),
       cities: this.cityService.listCities(),
     }).subscribe({
       next: (response) => {
@@ -121,7 +117,6 @@ export class Profile implements OnInit {
     this.profileForm.patchValue({
       firstName: this.userData.firstName,
       lastName: this.userData.lastName,
-      date: this.userData.dateTime,
       city: this.userData.city,
       aboutMe: this.userData.aboutMe,
     });
@@ -135,7 +130,7 @@ export class Profile implements OnInit {
 
   reportProfile(): void {
     this.dialog.open(ReportUserComponent, {
-      data: { reportedUserID: this.userID, reportSentByID: this.currentUser.userId() },
+      data: { reportedUserID: this.userID },
     });
   }
   handlePageEvent(event: PageEvent) {

@@ -9,10 +9,10 @@ namespace PawPal.Application.Modules.Messaging.Commands.SendMessage
     {
         public async Task<MessageDto> Handle(SendMessageCommand command, CancellationToken cancellationToken)
         {
-            command.SenderId = currentUser.UserId ?? throw new PawPalConflictException("User is not authenticated");
+            var senderId = currentUser.UserId ?? throw new PawPalConflictException("User is not authenticated");
 
-            int u1 = Math.Min(command.SenderId, command.RecipientId);
-            int u2 = Math.Max(command.SenderId, command.RecipientId);
+            int u1 = Math.Min(senderId, command.RecipientId);
+            int u2 = Math.Max(senderId, command.RecipientId);
 
             var conversation = await context.Conversations
                 .FirstOrDefaultAsync(c => c.User1Id == u1 && c.User2Id == u2, cancellationToken);
@@ -27,7 +27,7 @@ namespace PawPal.Application.Modules.Messaging.Commands.SendMessage
             var message = new MessageEntity
             {
                 ConversationId = conversation.Id,
-                SenderId = command.SenderId,
+                SenderId = senderId,
                 Content = command.Content,
                 SentAt = DateTime.UtcNow
             };
@@ -36,7 +36,7 @@ namespace PawPal.Application.Modules.Messaging.Commands.SendMessage
             await context.SaveChangesAsync(cancellationToken);
 
             var sender = await context.Users
-                .Where(x => x.Id == command.SenderId)
+                .Where(x => x.Id == senderId)
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (sender is null)

@@ -6,6 +6,7 @@ import {
   CreateUserCommand,
   GetByEmailQueryDto,
   GetByUsernameQueryDto,
+  GetPublicUserProfileDto,
   GetUserByIdDto,
   GetUserList,
   GetUserQuery,
@@ -43,6 +44,9 @@ export class UserService {
   }
   getUser(id: number): Observable<GetUserByIdDto> {
     return this.http.get<GetUserByIdDto>(`${this.apiUrl}/${id}`);
+  }
+  getPublicProfile(id: number): Observable<GetPublicUserProfileDto> {
+    return this.http.get<GetPublicUserProfileDto>(`${this.apiUrl}/${id}/public-profile`);
   }
   updateUser(id: number, payload: UpdateUserCommand): Observable<void> {
     const params = payload ? buildHttpParams(payload as any) : undefined;

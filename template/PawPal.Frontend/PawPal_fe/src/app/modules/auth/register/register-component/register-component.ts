@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
   AsyncValidatorFn,
@@ -14,13 +14,6 @@ import { CreateUserCommand } from '../../../../api-services/users/users-model';
 import { Router } from '@angular/router';
 import { catchError, debounceTime, distinctUntilChanged, first, map, Observable, of, switchMap } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { UserImageService } from '../../../../api-services/userImage/userImage-service';
-import {
-  CropDialogResult,
-  UserProfileImageCropDialog,
-} from '../../../client/my-profile/user-profile-component/user-profile-imageCrop/user-profile-image-crop-dialog/user-profile-image-crop-dialog';
-import { MatDialog } from '@angular/material/dialog';
-import { SafeUrl } from '@angular/platform-browser';
 
 export const passwordMatchValidator: ValidatorFn = (
   group: AbstractControl,
@@ -86,7 +79,6 @@ export class RegisterComponent implements OnInit {
   private cityService = inject(CitiesService);
   private userService = inject(UserService);
   private router = inject(Router);
-  private userImageService = inject(UserImageService);
 
   cityList: any = [];
   cityId: number = 0;
@@ -94,7 +86,6 @@ export class RegisterComponent implements OnInit {
   showPassword = false;
   showRepeatPassword = false;
   dateControl = new FormControl(new Date());
-  dialogRef = inject(MatDialog);
 
   basicInfo = this._formBuilder.group({
     firstName: ['', Validators.required],
@@ -102,8 +93,6 @@ export class RegisterComponent implements OnInit {
     cityId: ['', Validators.required],
     dateOfBirth: ['', Validators.required],
   });
-
-  imageChanged = signal(false);
 
   accountInfo = this._formBuilder.group(
     {
@@ -122,36 +111,6 @@ export class RegisterComponent implements OnInit {
     },
     { validators: passwordMatchValidator },
   );
-
-  profileImagePreview: string | null = null;
-  selectedProfileImage: File | undefined;
-  imageUrl = signal<SafeUrl | null>(null);
-
-  onProfileImageSelected(event: any): void {
-    const files = event.target.files;
-    if (!files || files.length === 0) return;
-
-    const file: File = files[0];
-
-    event.target.value = '';
-    this.dialogRef
-      .open(UserProfileImageCropDialog, {
-        data: { imageFile: file },
-        width: '40vw',
-        maxWidth: '40vw',
-        maxHeight: '95vh',
-        disableClose: true,
-        panelClass: 'image-crop-dialog-panel',
-      })
-      .afterClosed()
-      .subscribe((result: CropDialogResult | undefined) => {
-        if (!result) return;
-
-        this.selectedProfileImage = result.croppedFile;
-        this.imageChanged.set(true);
-        this.imageUrl.set(result.croppedUrl);
-      });
-  }
 
   additionalInfo = this._formBuilder.group({
     aboutMe: ['', [Validators.maxLength(500), Validators.required]],
@@ -212,25 +171,14 @@ export class RegisterComponent implements OnInit {
       username: this.accountInfo.value.username ?? '',
       email: this.accountInfo.value.email ?? '',
       password: this.accountInfo.value.password ?? '',
-      roleID: 2,
       city: this.basicInfo.value.cityId ?? 0,
       aboutMe: this.additionalInfo.value.aboutMe ?? '',
     };
 
+    // A profile picture can be added later from Settings, once the account has a real
+    // session — uploads no longer happen anonymously during signup.
     this.userService.createUser(payload).subscribe({
-      next: (response: { id: number }) => {
-        if (this.selectedProfileImage && response.id) {
-          this.userImageService.createUserImage(response.id, this.selectedProfileImage).subscribe({
-            next: () => this.navigateAfterRegister(),
-            error: (err) => {
-              console.error('Image upload failed:', err);
-              this.navigateAfterRegister();
-            },
-          });
-        } else {
-          this.navigateAfterRegister();
-        }
-      },
+      next: () => this.navigateAfterRegister(),
       error: (err) => {
         console.error('Registration error:', err);
       },

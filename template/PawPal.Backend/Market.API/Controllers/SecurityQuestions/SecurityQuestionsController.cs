@@ -47,7 +47,6 @@ namespace PawPal.API.Controllers.SecurityQuestions
             upc.Id = id;
             await sender.Send(upc, ct);
         }
-        [AllowAnonymous]
         [HttpDelete("{id:int}")]
         public async Task Delete(DeleteQuestionCommand deletePost, CancellationToken ct)
         {

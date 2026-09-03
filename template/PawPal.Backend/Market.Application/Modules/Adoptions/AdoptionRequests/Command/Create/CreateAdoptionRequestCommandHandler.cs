@@ -10,32 +10,28 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create
     {
         public async Task<int> Handle(CreateAdoptionRequestCommand request, CancellationToken cancellationToken)
         {
-            var user = await context.Users.Where(x => x.Id == request.UserID).FirstOrDefaultAsync(cancellationToken);
-            var post = await context.Posts.Where(x => x.Id == request.PostID).FirstOrDefaultAsync(cancellationToken);
-            var req = await context.AdoptionRequirements.Where(x => x.Id == request.RequirementID).FirstOrDefaultAsync(cancellationToken);
-            if (user is null) throw new PawPalNotFoundException("User does not exist");
-            if (!currentUser.IsAuthenticated)
+            if (currentUser.UserId is null)
             {
                 throw new PawPalConflictException("User is not authenticated to do this action");
             }
-            if (currentUser.UserId != user.Id)
-            {
-                throw new PawPalConflictException("User is not allowed to do this aciton");
-            }
+            var user = await context.Users.Where(x => x.Id == currentUser.UserId).FirstOrDefaultAsync(cancellationToken);
+            var post = await context.Posts.Where(x => x.Id == request.PostID).FirstOrDefaultAsync(cancellationToken);
+            var req = await context.AdoptionRequirements.Where(x => x.Id == request.RequirementID).FirstOrDefaultAsync(cancellationToken);
+            if (user is null) throw new PawPalNotFoundException("User does not exist");
             if (post is null) throw new PawPalNotFoundException("Post does not exist");
             if (req is null) throw new PawPalNotFoundException("Adoption requirement does not exist");
-            if (post.UserId == request.UserID)
+            if (post.UserId == user.Id)
                 throw new PawPalConflictException("The same user cannot request to its own post");
 
             var existing = await context.AdoptionRequests
-                .Where(x => x.PostId == request.PostID && x.UserId == request.UserID && x.Status == "Pending")
+                .Where(x => x.PostId == request.PostID && x.UserId == user.Id && x.Status == "Pending")
                 .FirstOrDefaultAsync(cancellationToken);
             if (existing is not null)
                 throw new PawPalConflictException("You already have a pending request for this post");
 
             var newRequest = new AdoptionRequestEntity
             {
-                UserId = request.UserID,
+                UserId = user.Id,
                 PostId = request.PostID,
                 RequirementId = request.RequirementID,
                 DateSent = DateTime.Now,

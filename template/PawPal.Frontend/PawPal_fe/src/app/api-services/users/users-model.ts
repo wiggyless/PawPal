@@ -8,7 +8,6 @@ export interface CreateUserCommand {
   username: string;
   email: string;
   password: string;
-  roleID: number;
   city: string | number;
   aboutMe: string;
   profilePictureURL?: string | null;
@@ -26,6 +25,18 @@ export interface GetUserByIdDto {
   aboutMe?: string;
   photoURL: string;
   disabled?: boolean;
+}
+// Public, redacted view of a user — no email/birthdate/canton/disabled status — for anyone
+// viewing someone else's profile (catalog post authorship, public profile page, etc).
+export interface GetPublicUserProfileDto {
+  id: number;
+  firstName: string;
+  lastName: string;
+  username: string;
+  city: string;
+  cityID: number;
+  aboutMe?: string;
+  photoURL: string;
 }
 export interface GetUserList {
   id: number;

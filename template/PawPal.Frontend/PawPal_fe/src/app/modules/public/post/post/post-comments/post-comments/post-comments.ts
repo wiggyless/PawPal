@@ -127,7 +127,6 @@ export class PostComments implements OnInit, OnDestroy {
       this.router.navigate(['/auth/login']);
     } else if (this.comment().trim() != '') {
       const newComment: CreateCommentCommand = {
-        userID: this.currentUser.userId() as number,
         postID: +this.postId,
         content: this.comment(),
       };

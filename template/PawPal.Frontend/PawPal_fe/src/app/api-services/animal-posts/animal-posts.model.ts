@@ -33,7 +33,6 @@ export interface AnimalPostByIdQuery {
 export interface AddAnimalPost {
   animalID: number;
   cityID: number;
-  userId: number;
   status: boolean;
 }
 

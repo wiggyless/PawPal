@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Update_
 {
-    public class UpdateAnimalHealthHistoryCommandHandler(IAppDbContext context)
+    public class UpdateAnimalHealthHistoryCommandHandler(IAppDbContext context, IAppCurrentUser currentUser)
         : IRequestHandler<UpdateAnimalHealthHistoryCommand, Unit>
     {
         public async Task<Unit> Handle(UpdateAnimalHealthHistoryCommand request, CancellationToken cancellationToken)
@@ -16,6 +16,12 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Up
             var healthHistory = await context.AnimalHealthHistories.FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
             if (healthHistory == null)
                 throw new PawPalNotFoundException($"Animal health history with Id {request.Id} does not exist!");
+
+            // Only the owner of the post this health history belongs to (or an admin) may edit it.
+            var owningPost = await context.Posts.AsNoTracking()
+                .FirstOrDefaultAsync(p => p.AnimalHistoryId == healthHistory.Id, cancellationToken);
+            if (currentUser.RoleId != 3 && (owningPost is null || owningPost.UserId != currentUser.UserId))
+                throw new PawPalConflictException("User is not allowed to do this action");
 
             var animalAllergies = await context.AnimalsAllergies.Where(x => x.AnimalHealthHistoryId == healthHistory.Id).ToListAsync(cancellationToken);
             var animalDisabilities = await context.AnimalsDisabilities.Where(x => x.AnimalHealthHistoryId == healthHistory.Id).ToListAsync(cancellationToken);

@@ -6,7 +6,6 @@ import { REPORT_REASON_LABELS } from '../../../api-services/moderation/reported-
 
 export interface ReportPostDialogData {
   postId: number;
-  userId: number;
 }
 
 @Component({
@@ -52,7 +51,6 @@ export class ReportPostComponent implements OnInit {
         reason: this.form.value.reason,
         description: this.form.value.description?.trim() || undefined,
         postID: this.data.postId,
-        userID: this.data.userId,
         dateSent: new Date(),
       })
       .subscribe({

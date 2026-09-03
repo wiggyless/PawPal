@@ -1,4 +1,4 @@
-﻿using Moq;
+using Moq;
 using PawPal.Application.Abstractions;
 using PawPal.Application.Common.Exceptions;
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create;
@@ -52,11 +52,12 @@ public class CreateAdoptionRequestCommandHandlerTests
         return (requester, owner, post, req);
     }
 
-    private CreateAdoptionRequestCommand ValidCommand(int userId, int postId, int reqId) => new()
+    // The requester is always taken from IAppCurrentUser — there is no field on the command
+    // a caller could use to submit a request "as" someone else.
+    private static CreateAdoptionRequestCommand ValidCommand(int postId, int reqId) => new()
     {
         Status = "Pending",
         DateSend = DateTime.Now,
-        UserID = userId,
         PostID = postId,
         RequirementID = reqId
     };
@@ -65,10 +66,9 @@ public class CreateAdoptionRequestCommandHandlerTests
     public async Task Handle_WithValidData_CreatesRequestAndReturnsId()
     {
         var (requester, owner, post, req) = await SeedAsync();
-        _currentUserMock.Setup(c => c.IsAuthenticated).Returns(true);
         _currentUserMock.Setup(c => c.UserId).Returns(requester.Id);
 
-        var command = ValidCommand(requester.Id, post.Id, req.Id);
+        var command = ValidCommand(post.Id, req.Id);
 
         var id = await _sut.Handle(command, CancellationToken.None);
 
@@ -82,7 +82,9 @@ public class CreateAdoptionRequestCommandHandlerTests
     public async Task Handle_WithNonExistentUser_ThrowsNotFoundException()
     {
         var (_, _, post, req) = await SeedAsync();
-        var command = ValidCommand(userId: 999, post.Id, req.Id);
+        _currentUserMock.Setup(c => c.UserId).Returns(999);
+
+        var command = ValidCommand(post.Id, req.Id);
 
         await Assert.ThrowsAsync<PawPalNotFoundException>(
             () => _sut.Handle(command, CancellationToken.None));
@@ -91,10 +93,10 @@ public class CreateAdoptionRequestCommandHandlerTests
     [Fact]
     public async Task Handle_WhenNotAuthenticated_ThrowsConflictException()
     {
-        var (requester, _, post, req) = await SeedAsync();
-        _currentUserMock.Setup(c => c.IsAuthenticated).Returns(false);
+        var (_, _, post, req) = await SeedAsync();
+        _currentUserMock.Setup(c => c.UserId).Returns((int?)null);
 
-        var command = ValidCommand(requester.Id, post.Id, req.Id);
+        var command = ValidCommand(post.Id, req.Id);
 
         var ex = await Assert.ThrowsAsync<PawPalConflictException>(
             () => _sut.Handle(command, CancellationToken.None));
@@ -102,27 +104,12 @@ public class CreateAdoptionRequestCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_WhenCurrentUserDoesNotMatchRequestUserId_ThrowsConflictException()
-    {
-        // Alice is authenticated but the command claims to be on behalf of a different user id
-        var (requester, owner, post, req) = await SeedAsync();
-        _currentUserMock.Setup(c => c.IsAuthenticated).Returns(true);
-        _currentUserMock.Setup(c => c.UserId).Returns(owner.Id); // mismatched
-
-        var command = ValidCommand(requester.Id, post.Id, req.Id);
-
-        await Assert.ThrowsAsync<PawPalConflictException>(
-            () => _sut.Handle(command, CancellationToken.None));
-    }
-
-    [Fact]
     public async Task Handle_WithNonExistentPost_ThrowsNotFoundException()
     {
         var (requester, _, _, req) = await SeedAsync();
-        _currentUserMock.Setup(c => c.IsAuthenticated).Returns(true);
         _currentUserMock.Setup(c => c.UserId).Returns(requester.Id);
 
-        var command = ValidCommand(requester.Id, postId: 999, req.Id);
+        var command = ValidCommand(postId: 999, req.Id);
 
         await Assert.ThrowsAsync<PawPalNotFoundException>(
             () => _sut.Handle(command, CancellationToken.None));
@@ -132,10 +119,9 @@ public class CreateAdoptionRequestCommandHandlerTests
     public async Task Handle_WithNonExistentRequirement_ThrowsNotFoundException()
     {
         var (requester, _, post, _) = await SeedAsync();
-        _currentUserMock.Setup(c => c.IsAuthenticated).Returns(true);
         _currentUserMock.Setup(c => c.UserId).Returns(requester.Id);
 
-        var command = ValidCommand(requester.Id, post.Id, reqId: 999);
+        var command = ValidCommand(post.Id, reqId: 999);
 
         await Assert.ThrowsAsync<PawPalNotFoundException>(
             () => _sut.Handle(command, CancellationToken.None));
@@ -145,10 +131,9 @@ public class CreateAdoptionRequestCommandHandlerTests
     public async Task Handle_WhenUserRequestsOwnPost_ThrowsConflictException()
     {
         var (_, owner, post, req) = await SeedAsync();
-        _currentUserMock.Setup(c => c.IsAuthenticated).Returns(true);
         _currentUserMock.Setup(c => c.UserId).Returns(owner.Id);
 
-        var command = ValidCommand(owner.Id, post.Id, req.Id); // owner requesting their own post
+        var command = ValidCommand(post.Id, req.Id); // owner requesting their own post
 
         var ex = await Assert.ThrowsAsync<PawPalConflictException>(
             () => _sut.Handle(command, CancellationToken.None));
@@ -159,7 +144,6 @@ public class CreateAdoptionRequestCommandHandlerTests
     public async Task Handle_WhenPendingRequestAlreadyExists_ThrowsConflictException()
     {
         var (requester, _, post, req) = await SeedAsync();
-        _currentUserMock.Setup(c => c.IsAuthenticated).Returns(true);
         _currentUserMock.Setup(c => c.UserId).Returns(requester.Id);
 
         _context.AdoptionRequests.Add(new AdoptionRequestEntity
@@ -172,7 +156,7 @@ public class CreateAdoptionRequestCommandHandlerTests
         });
         await _context.SaveChangesAsync();
 
-        var command = ValidCommand(requester.Id, post.Id, req.Id);
+        var command = ValidCommand(post.Id, req.Id);
 
         var ex = await Assert.ThrowsAsync<PawPalConflictException>(
             () => _sut.Handle(command, CancellationToken.None));
@@ -184,7 +168,6 @@ public class CreateAdoptionRequestCommandHandlerTests
     {
         // Confirms the duplicate check only blocks "Pending", not historical statuses
         var (requester, _, post, req) = await SeedAsync();
-        _currentUserMock.Setup(c => c.IsAuthenticated).Returns(true);
         _currentUserMock.Setup(c => c.UserId).Returns(requester.Id);
 
         _context.AdoptionRequests.Add(new AdoptionRequestEntity
@@ -197,7 +180,7 @@ public class CreateAdoptionRequestCommandHandlerTests
         });
         await _context.SaveChangesAsync();
 
-        var command = ValidCommand(requester.Id, post.Id, req.Id);
+        var command = ValidCommand(post.Id, req.Id);
 
         var id = await _sut.Handle(command, CancellationToken.None);
         Assert.True(id > 0);
@@ -207,10 +190,9 @@ public class CreateAdoptionRequestCommandHandlerTests
     public async Task Handle_WhenPostOwnerHasFcmToken_SendsNotification()
     {
         var (requester, owner, post, req) = await SeedAsync();
-        _currentUserMock.Setup(c => c.IsAuthenticated).Returns(true);
         _currentUserMock.Setup(c => c.UserId).Returns(requester.Id);
 
-        var command = ValidCommand(requester.Id, post.Id, req.Id);
+        var command = ValidCommand(post.Id, req.Id);
         await _sut.Handle(command, CancellationToken.None);
 
         _notificationMock.Verify(n => n.SendAsync(
@@ -228,10 +210,9 @@ public class CreateAdoptionRequestCommandHandlerTests
         owner.FcmToken = null;
         await _context.SaveChangesAsync();
 
-        _currentUserMock.Setup(c => c.IsAuthenticated).Returns(true);
         _currentUserMock.Setup(c => c.UserId).Returns(requester.Id);
 
-        var command = ValidCommand(requester.Id, post.Id, req.Id);
+        var command = ValidCommand(post.Id, req.Id);
         await _sut.Handle(command, CancellationToken.None);
 
         _notificationMock.Verify(n => n.SendAsync(

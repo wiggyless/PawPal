@@ -19,7 +19,6 @@ namespace PawPal.API.Controllers.Posts
     [Route("[controller]")]
     public class LikedPostsController(ISender sender) : ControllerBase
     {
-        [AllowAnonymous]
         [HttpPost]
 
         public async Task<ActionResult<int>> CreateLikedPost(CreateLikedUserPostCommand command, CancellationToken cancellationToken)
@@ -27,7 +26,6 @@ namespace PawPal.API.Controllers.Posts
             int id = await sender.Send(command, cancellationToken);
             return CreatedAtAction(nameof(GetById), new { id }, new { id });
         }
-        [AllowAnonymous]
         [HttpGet("{id:int}")]
 
         public async Task<GetLikedUserPostByQueryDto> GetById(int id, CancellationToken cancellationToken)
@@ -35,7 +33,6 @@ namespace PawPal.API.Controllers.Posts
             var post = await sender.Send(new GetLikedUserPostByIdQuery { UserId = id }, cancellationToken);
             return post;
         }
-        [AllowAnonymous]
         [HttpGet]
 
         public async Task<ListLikedUserPostDto> GetLikedPostList([FromQuery] ListLikedUserPost query, CancellationToken cancellationToken)
@@ -43,12 +40,11 @@ namespace PawPal.API.Controllers.Posts
             var list = await sender.Send(query, cancellationToken);
             return list;
         }
-        [AllowAnonymous]
         [HttpDelete("{id:int}")]
 
         public async Task Delete(DeleteLikedUserPostCommand deletePost, CancellationToken ct)
         {
-            await sender.Send(new DeleteLikedUserPostCommand { UserId = deletePost.UserId,PostId = deletePost.PostId }, ct);
+            await sender.Send(new DeleteLikedUserPostCommand { PostId = deletePost.PostId }, ct);
         }
     }
 }

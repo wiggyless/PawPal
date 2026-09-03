@@ -27,9 +27,8 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Cre
         public bool? Allergy { get; set; }
         public bool? Aggressiveness { get; set; }
         public bool? TakeBack { get; set; }
-        public required string HouseDetials { get; set; } 
+        public required string HouseDetials { get; set; }
         public string? FinalComment { get; set; }
-        public int UserID { get; set; }
         public int PostID { get; set; }
     }
 }

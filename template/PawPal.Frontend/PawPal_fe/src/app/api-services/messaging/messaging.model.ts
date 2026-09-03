@@ -21,7 +21,6 @@ export interface ConversationDto {
 }
 
 export interface SendMessageCommand {
-  senderId: number;
   recipientId: number;
   content: string;
 }

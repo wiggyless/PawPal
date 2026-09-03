@@ -11,6 +11,14 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
     {
         public async Task<GetUserByIdQueryDto> Handle(GetUserByIdQuery request,CancellationToken cancellationToken)
         {
+            // Full profile (email, birthdate, exact canton, disabled status) is private —
+            // only the account owner or an admin may read it. Anyone else gets the public,
+            // redacted profile via GetPublicUserProfileQuery instead.
+            if (currUser.UserId != request.Id && currUser.RoleId != 3)
+            {
+                throw new PawPalConflictException("User is not allowed to view this profile");
+            }
+
             var userImage = await context.UserImage.FirstOrDefaultAsync(x => x.UserID == request.Id, cancellationToken);
             if(userImage is null)
             {

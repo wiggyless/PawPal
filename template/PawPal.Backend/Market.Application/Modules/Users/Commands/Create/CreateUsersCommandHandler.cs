@@ -52,7 +52,10 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 LastName = userLastName,
                 Email = userEmail,
                 BirthDate = birthDate,
-                RoleId = request.RoleID,
+                // Self-registration always creates a standard "Verified user" account (RoleId 2).
+                // The role is never taken from the request — granting Admin (or any other role) is
+                // a separate, authorization-protected action (see UpdateUserRoleCommandHandler).
+                RoleId = 2,
                 PasswordHash = hasher.HashPassword(null, password),
                 CityId = request.City,
                 IsEnabled = true,

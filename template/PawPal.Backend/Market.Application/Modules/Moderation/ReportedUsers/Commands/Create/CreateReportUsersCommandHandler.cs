@@ -13,23 +13,19 @@ namespace PawPal.Application.Modules.Moderation.ReportedUsers.Commands.Create
     {
         public async Task<int> Handle(CreateReportUsersCommand request, CancellationToken cancellationToken)
         {
+            if (currentUser.UserId is null)
+            {
+                throw new PawPalConflictException("User is not allowed to do this action.");
+            }
             var user = await context.Users.FirstOrDefaultAsync(x => x.Id == request.ReportedUserID, cancellationToken);
-            var userSent = await context.Users.FirstOrDefaultAsync(x => x.Id == request.ReportCreatedByUserID, cancellationToken);
+            var userSent = await context.Users.FirstOrDefaultAsync(x => x.Id == currentUser.UserId, cancellationToken);
             if (user is null)
                 throw new PawPalNotFoundException("User does not exist.");
             if (userSent is null)
                 throw new PawPalNotFoundException("User does not exist.");
-            if (currentUser.UserId != userSent.Id)
-            {
-                throw new PawPalConflictException("User is not allowed to do this action.");
-            }
-            if (!currentUser.IsAuthenticated)
-            {
-                throw new PawPalConflictException("User is not allowed to do this action.");
-            }
             var reportedUser = new ReportedUserEntity
             {
-                ReportSentByUserID = request.ReportCreatedByUserID,
+                ReportSentByUserID = userSent.Id,
                 ReportedUserID = request.ReportedUserID,
                 DateSent = request.DateSent,
                 Description = request.Description,
