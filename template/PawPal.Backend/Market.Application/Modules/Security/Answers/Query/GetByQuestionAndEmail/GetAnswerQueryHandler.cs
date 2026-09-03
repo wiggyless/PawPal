@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,54 +8,50 @@ namespace PawPal.Application.Modules.Security.Answers.Query.GetByQuestionAndEmai
 {
     public sealed class GetAnswerQueryHandler(IAppDbContext context) : IRequestHandler<GetAnswerQuery, GetAnswerQueryDto>
     {
+        private static readonly GetAnswerQueryDto Invalid = new() { isTrueAnswer = false };
+
         public async Task<GetAnswerQueryDto> Handle(GetAnswerQuery query, CancellationToken cancellationToken)
         {
-            var questionIds = query.Answers.Keys.ToList();
-            var user = await context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Email == query.Email, cancellationToken);
-            var question = context.SecurityQuestions.AsNoTracking().Where(x => questionIds.Contains(x.Id));
+            if (string.IsNullOrWhiteSpace(query.Email) ||
+                query.Answers is null ||
+                query.Answers.Count == 0 ||
+                query.Answers.Any(x => string.IsNullOrWhiteSpace(x.Value)))
+            {
+                return Invalid;
+            }
+
+            var user = await context.Users.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Email == query.Email, cancellationToken);
             if (user is null)
             {
-                throw new PawPalNotFoundException("Invalid credentials");
+                return Invalid;
             }
-            if (question.Count() != query.Answers.Keys.Count) {
-                throw new PawPalNotFoundException("Question does not exist");
-            }
-            if(query.Answers.Where(x=>string.IsNullOrWhiteSpace(x.Value)).Count() > 0 )
+
+            var registeredAnswers = await context.SecurityAnswers.AsNoTracking()
+                .Where(x => x.UserId == user.Id)
+                .ToDictionaryAsync(x => x.QuestionID, x => x.Answer, cancellationToken);
+
+            if (registeredAnswers.Count == 0)
             {
-                throw new PawPalConflictException("Answer cannot be an empty string");
-            }
-            Dictionary<int,string> hashStringList = [];
-
-            hashStringList = query.Answers.Select(x => new KeyValuePair<int,string>(x.Key, ConvertToHash(x.Value))).ToDictionary();
-
-
-
-            var answerDict = await context.SecurityAnswers
-                    .Where(x => x.Email == query.Email && questionIds.Contains(x.QuestionID))
-                    .ToDictionaryAsync(
-                    x => x.QuestionID,
-                    x => x.Answer,
-                    cancellationToken
-                    );
-
-            if (answerDict.Count != questionIds.Count)
-            {
-                return new GetAnswerQueryDto { isTrueAnswer = false };
+                return Invalid;
             }
 
-            var isTrue = new GetAnswerQueryDto()
+            var submittedAnswers = query.Answers;
+            var registeredQuestionIds = registeredAnswers.Keys.OrderBy(x => x).ToList();
+
+            if (!registeredQuestionIds.SequenceEqual(submittedAnswers.Keys.OrderBy(x => x)))
             {
-                // Found out what Timing Attack Explanation are so i used this cool thing where it checks every byte no 
-                // matter is it wrong or right, it just goes
-                isTrueAnswer = hashStringList.OrderBy(k => k.Key)
-                                .Zip(answerDict.OrderBy(k => k.Key))
-                                .All(pair => CryptographicOperations.FixedTimeEquals(
-                                Encoding.UTF8.GetBytes(pair.First.Value),
-                                Encoding.UTF8.GetBytes(pair.Second.Value)
-                                ))
-            };
-            return isTrue;
+                return Invalid;
+            }
+
+            var isTrueAnswer = registeredQuestionIds.All(questionId =>
+                CryptographicOperations.FixedTimeEquals(
+                    Encoding.UTF8.GetBytes(ConvertToHash(submittedAnswers[questionId])),
+                    Encoding.UTF8.GetBytes(registeredAnswers[questionId])));
+
+            return new GetAnswerQueryDto { isTrueAnswer = isTrueAnswer };
         }
+
         public string ConvertToHash(string answer)
         {
             byte[] inputBytes = Encoding.UTF8.GetBytes(answer);

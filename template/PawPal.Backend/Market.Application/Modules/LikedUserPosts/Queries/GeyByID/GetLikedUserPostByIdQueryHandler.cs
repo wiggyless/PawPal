@@ -6,10 +6,16 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.LikedUserPosts.Queries.GeyByID
 {
-    public sealed class GetLikedUserPostByIdQueryHandler(IAppDbContext context) : IRequestHandler<GetLikedUserPostByIdQuery,GetLikedUserPostByQueryDto>
+    public sealed class GetLikedUserPostByIdQueryHandler(IAppDbContext context, IAppCurrentUser currentUser) : IRequestHandler<GetLikedUserPostByIdQuery,GetLikedUserPostByQueryDto>
     {
         public async Task<GetLikedUserPostByQueryDto> Handle(GetLikedUserPostByIdQuery request,CancellationToken cancellationToken)
         {
+            // A user's liked-posts are private; only that user (or an admin) may view them.
+            if (request.UserId != currentUser.UserId && currentUser.RoleId != 3)
+            {
+                throw new PawPalConflictException("User is not allowed to do this action");
+            }
+
             var likeUserPost = await context.LikedUserPosts.Where(x => x.UserId == request.UserId && x.PostId == request.PostId)
                 .Select(x => new GetLikedUserPostByQueryDto
                 {

@@ -9,7 +9,6 @@ namespace PawPal.Application.Modules.UserImages.Commands.Create
 {
     public class CreateUserImageCommand : IRequest<int>
     {
-        public int UserID { get; set; }
         public IFormFile Image { get; set; }
     }
 

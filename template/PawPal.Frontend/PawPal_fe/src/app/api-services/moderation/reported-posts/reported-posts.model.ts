@@ -22,7 +22,6 @@ export interface CreateReportedPostCommand {
   reason: ReportPostEnum;
   description?: string;
   postID: number;
-  userID: number;
   dateSent: Date;
 }
 export interface GetReportedPostQuery {

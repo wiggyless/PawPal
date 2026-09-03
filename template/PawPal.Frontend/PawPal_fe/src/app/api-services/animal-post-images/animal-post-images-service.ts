@@ -1,8 +1,16 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpEvent, HttpParams } from '@angular/common/http';
+import { createEnvironmentInjector, EnvironmentInjector, inject, Injectable } from '@angular/core';
+import {
+  HttpClient,
+  HttpEvent,
+  HttpParams,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { buildHttpParams } from '../../core/models/build-http-params';
+import { authInterceptor } from '../../core/interceptors/auth-interceptor.service';
+import { rateLimitInterceptor } from '../../core/interceptors/rate-limit-interceptor.service';
 import {
   AddNewPostImages,
   GetImagePostBlob,
@@ -16,6 +24,11 @@ import {
 export class PostImagesService {
   httpClient = inject(HttpClient);
   private apiUrl = environment.apiUrl + '/PostImages';
+
+  private uploadHttpClient = createEnvironmentInjector(
+    [provideHttpClient(withInterceptors([authInterceptor, rateLimitInterceptor]))],
+    inject(EnvironmentInjector),
+  ).get(HttpClient);
 
   getImagePost(request?: any): Observable<string[]> {
     const params = request ? buildHttpParams(request as any) : undefined;
@@ -50,7 +63,7 @@ export class PostImagesService {
     request.postImages.forEach((x) => {
       formData.append('postImages', x, x.name);
     });
-    return this.httpClient.post<number>(`${this.apiUrl}`, formData, {
+    return this.uploadHttpClient.post<number>(`${this.apiUrl}`, formData, {
       reportProgress: true,
       observe: 'events',
     });

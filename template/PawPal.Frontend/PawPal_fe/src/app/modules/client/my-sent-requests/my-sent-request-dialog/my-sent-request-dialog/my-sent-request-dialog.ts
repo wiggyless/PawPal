@@ -5,7 +5,7 @@ import { GetAdoptionRequirementsById } from '../../../../../api-services/animals
 import { forkJoin, Subscription } from 'rxjs';
 import { AnimalPostService } from '../../../../../api-services/animal-posts/animal-posts.service';
 import { UserService } from '../../../../../api-services/users/users-service';
-import { GetUserByIdDto } from '../../../../../api-services/users/users-model';
+import { GetPublicUserProfileDto } from '../../../../../api-services/users/users-model';
 import { AnimalRequestService } from '../../../../../api-services/animals-adoption/animals-adoption-service';
 import { UpdateRequestByID } from '../../../../../api-services/animals-adoption/animals-adoption-model';
 import { environment } from '../../../../../../environments/environment';
@@ -33,7 +33,7 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
   isAnotherUser = false;
   requestID: number = 0;
   reqData: GetAdoptionRequirementsById | undefined;
-  user: GetUserByIdDto | undefined;
+  user: GetPublicUserProfileDto | undefined;
   fullAddress: string = '';
   env = environment.apiUrl;
   cd = inject(ChangeDetectorRef);
@@ -68,7 +68,7 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
       next: (reponse) => {
         this.reqData = reponse.request;
         this.fullAddress = `${this.reqData.address}, Floor ${this.reqData.floorNumber}`;
-        this.userAPI.getUser(reponse.post.userID).subscribe((reponse) => {
+        this.userAPI.getPublicProfile(reponse.post.userID).subscribe((reponse) => {
           this.user = reponse;
           this.isLoaded = true;
           this.cd.detectChanges();

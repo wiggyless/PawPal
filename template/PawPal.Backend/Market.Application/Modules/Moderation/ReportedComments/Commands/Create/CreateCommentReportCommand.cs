@@ -13,6 +13,5 @@ namespace PawPal.Application.Modules.Moderation.ReportedComments.Commands.Create
         public string? Description { get; set; }
         public DateTime DateReported { get; set; }
         public int CommentID { get; set; }
-        public int CommentReportedByID { get; set; }
     }
 }

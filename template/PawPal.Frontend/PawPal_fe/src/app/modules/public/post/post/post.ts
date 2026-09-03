@@ -23,7 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SafeUrl } from '@angular/platform-browser';
 import { ReportPostComponent } from '../../../client/report-post-component/report-post-component';
 import { ReportUserComponent } from '../../../client/report-user-component/report-user-component/report-user-component';
-import { GetUserByIdDto } from '../../../../api-services/users/users-model';
+import { GetPublicUserProfileDto } from '../../../../api-services/users/users-model';
 import { DialoguePopupComponent } from '../../../shared/components/dialogue-popup/dialogue-popup.component';
 import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 
@@ -77,7 +77,7 @@ export class PostComponent implements OnInit, OnDestroy {
     hasPapers: false,
   };
   router = inject(Router);
-  user: GetUserByIdDto | undefined;
+  user: GetPublicUserProfileDto | undefined;
 
   city: GetCityByIdDto = {
     id: 0,
@@ -107,7 +107,7 @@ export class PostComponent implements OnInit, OnDestroy {
           this.togetherSub = forkJoin({
             health: this.animalHealthService.getAnimalHealthHistoryById(this.animalId),
             cities: this.cityService.getCityById(res.cityID),
-            users: this.userService.getUser(res.userID),
+            users: this.userService.getPublicProfile(res.userID),
           }).subscribe({
             next: (response) => {
               let sourceKeys = Object.keys(resA);

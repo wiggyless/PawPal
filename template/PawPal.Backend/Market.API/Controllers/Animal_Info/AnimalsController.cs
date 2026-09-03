@@ -10,7 +10,6 @@ namespace PawPal.API.Controllers.Animal_Info
     [Route("[controller]")]
     public class AnimalsController(ISender sender) : ControllerBase
     {
-        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<int>> CreateAnimal(CreateAnimalCommand cmd, CancellationToken ct)
         {
@@ -34,7 +33,6 @@ namespace PawPal.API.Controllers.Animal_Info
             var res = await sender.Send(query, ct);
             return res;
         }
-        [AllowAnonymous]
         [HttpPut("{id:int}")]
         public async Task Update(UpdateAnimalCommand cmd, int id, CancellationToken ct)
         {

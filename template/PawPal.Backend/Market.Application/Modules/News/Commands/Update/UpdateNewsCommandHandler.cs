@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.News.Commands.Update
 {
-    public sealed class UpdateNewsCommandHandler(IAppDbContext ctx, IAppCurrentUser user)
+    public sealed class UpdateNewsCommandHandler(IAppDbContext ctx, IAppCurrentUser user, IFileStorageService fileStorage)
         :IRequestHandler<UpdateNewsCommand, Unit>
     {
         public async Task<Unit> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
@@ -20,7 +20,11 @@ namespace PawPal.Application.Modules.News.Commands.Update
 
             news.Title = string.IsNullOrWhiteSpace(request.Title) ? news.Title : request.Title.Trim();
             news.Content = string.IsNullOrWhiteSpace(request.Content) ? news.Content : request.Content.Trim();
-            news.PhotoURL = string.IsNullOrWhiteSpace(request.PhotoURL) ? news.PhotoURL : request.PhotoURL;
+
+            if (request.Photo is not null)
+            {
+                news.PhotoURL = await fileStorage.SaveFileAsync(request.Photo, "news_photos", cancellationToken);
+            }
 
             await ctx.SaveChangesAsync(cancellationToken);
             return Unit.Value;

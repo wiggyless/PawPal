@@ -225,14 +225,10 @@ export class CatalogComponent
         let indexNum = this.favoritePostList.findIndex((x) => x == index);
         this.favoritePostList.splice(indexNum, 1);
         this.deleteFavoritePostList.push(index);
-        this.likedPosts
-          .deletePost({ userId: this.currentUser.userId() as number, postId: index })
-          .subscribe();
+        this.likedPosts.deletePost({ postId: index }).subscribe();
       } else {
         this.favoritePostList.push(index);
-        this.likedPosts
-          .addLikedPosts({ userID: this.currentUser.userId() as number, postID: index })
-          .subscribe();
+        this.likedPosts.addLikedPosts({ postID: index }).subscribe();
       }
     }
   }

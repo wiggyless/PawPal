@@ -17,7 +17,7 @@ namespace PawPal.Application.Modules.Security.Answers.Commands.Update
             {
                 throw new PawPalNotFoundException("Question does not exist");
             }
-            if (user.Email != answer.Email && user.RoleId != 3)
+            if (user.UserId != answer.UserId && user.RoleId != 3)
             {
                 throw new PawPalConflictException("User cannot do this action");
             }

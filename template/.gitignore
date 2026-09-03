@@ -543,3 +543,5 @@ http-client.private.env.json
 
 #Firebase
 firebase-service-account.json
+
+CLAUDE.md

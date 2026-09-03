@@ -6,7 +6,6 @@ import { ReportUserService } from '../../../../api-services/moderation/reported-
 
 export interface ReportUserDialogData {
   reportedUserID: number;
-  reportSentByID: number;
 }
 
 @Component({
@@ -51,7 +50,6 @@ export class ReportUserComponent implements OnInit {
         reason: this.form.value.reason,
         description: this.form.value.description?.trim() || undefined,
         reportedUserID: this.data.reportedUserID as number,
-        reportCreatedByUserID: this.data.reportSentByID,
         dateSent: new Date(),
       })
       .subscribe({

@@ -28,7 +28,6 @@ namespace PawPal.API.Controllers.Allergies
             return res;
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<int>> CreateDisablitie(CreateDisabilitieCommand command,CancellationToken cancellationToken)
         {

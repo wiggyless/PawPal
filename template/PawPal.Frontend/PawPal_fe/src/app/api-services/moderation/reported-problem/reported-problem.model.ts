@@ -14,6 +14,5 @@ export interface ReportedProblemsDto {
 }
 export interface CreateReportedProblem {
   description: string;
-  userID: number;
   dateSent: Date;
 }

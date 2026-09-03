@@ -13,25 +13,21 @@ namespace PawPal.Application.Modules.Moderation.ReportedComments.Commands.Create
     {
         public async Task<int> Handle(CreateCommentReportCommand request, CancellationToken cancellationToken)
         {
-            var userSent =context.Users.AsNoTracking().FirstOrDefault(x => x.Id == request.CommentReportedByID);
-            var comment = context.Comments.AsNoTracking().FirstOrDefault(x => x.Id == request.CommentID);
-            if (userSent is null)
-                throw new PawPalNotFoundException("User does not exist.");
-            if (!currentUser.IsAuthenticated)
+            if (currentUser.UserId is null)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }
-            if (currentUser.UserId != userSent.Id)
-            {
-                throw new PawPalConflictException("User is not allowed to do this action.");
-            }
+            var userSent = context.Users.AsNoTracking().FirstOrDefault(x => x.Id == currentUser.UserId);
+            var comment = context.Comments.AsNoTracking().FirstOrDefault(x => x.Id == request.CommentID);
+            if (userSent is null)
+                throw new PawPalNotFoundException("User does not exist.");
             if(comment is null)
             {
                 throw new PawPalNotFoundException("Comment does not exist inside the databse");
             }
             var reportedComments = new ReportedCommentsEntity
             {
-                CommentReportedBy = request.CommentReportedByID,
+                CommentReportedBy = userSent.Id,
                 CommentID = request.CommentID,
                 DateReported = request.DateReported,
                 Description = request.Description ?? "",

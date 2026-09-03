@@ -8,13 +8,13 @@ namespace PawPal.Application.Modules.Moderation.ReportedPosts.Commands.Create
     {
         public async Task<int> Handle(CreateReportPostCommand request, CancellationToken cancellationToken)
         {
-            var user = await context.Users.FirstOrDefaultAsync(x => x.Id == request.UserID,cancellationToken);
-            if (user is null)
-                throw new PawPalNotFoundException("User does not exist.");
-            if (!currentUser.IsAuthenticated)
+            if (currentUser.UserId is null)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Id == currentUser.UserId, cancellationToken);
+            if (user is null)
+                throw new PawPalNotFoundException("User does not exist.");
             var post = await context.Posts.FirstOrDefaultAsync(x => x.Id == request.PostID, cancellationToken);
             if (post is null)
                 throw new PawPalNotFoundException("Post does not exist.");
@@ -22,7 +22,7 @@ namespace PawPal.Application.Modules.Moderation.ReportedPosts.Commands.Create
             var reportedPost = new ReportedPostsEntity
             {
                 PostID = request.PostID,
-                UserID = request.UserID,
+                UserID = currentUser.UserId.Value,
                 Reason = request.Reason,
                 Description = request.Description,
                 DateSent = DateTime.UtcNow,

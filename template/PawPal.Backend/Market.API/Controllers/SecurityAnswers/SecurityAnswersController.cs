@@ -1,4 +1,5 @@
-﻿using PawPal.Application.Modules.Security.Answers.Commands.Create;
+﻿using Microsoft.AspNetCore.RateLimiting;
+using PawPal.Application.Modules.Security.Answers.Commands.Create;
 using PawPal.Application.Modules.Security.Answers.Commands.Update;
 using PawPal.Application.Modules.Security.Answers.Query.GetByQuestionAndEmail;
 using PawPal.Application.Modules.Security.Questions.Commands.Create;
@@ -21,8 +22,9 @@ namespace PawPal.API.Controllers.SecurityAnswers
         }
 
         [AllowAnonymous]
-        [HttpGet]
-        public async Task<GetAnswerQueryDto> List([FromQuery] GetAnswerQuery query, CancellationToken token)
+        [EnableRateLimiting("SecurityAnswerVerifyPolicy")]
+        [HttpPost("verify")]
+        public async Task<GetAnswerQueryDto> Verify([FromBody] GetAnswerQuery query, CancellationToken token)
         {
             var answer = await sender.Send(query, token);
             return answer;

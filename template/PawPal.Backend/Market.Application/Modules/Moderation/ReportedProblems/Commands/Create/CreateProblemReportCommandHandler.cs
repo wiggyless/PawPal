@@ -13,13 +13,13 @@ namespace PawPal.Application.Modules.Moderation.ReportedProblems.Commands.Create
     {
         public async Task<int> Handle(CreateProblemReportCommand request, CancellationToken cancellationToken)
         {
-            if (!currentUser.IsAuthenticated)
+            if (currentUser.UserId is null)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }
             var reportProblem = new ReportProblemEntity
             {
-                UserID = request.UserID,
+                UserID = currentUser.UserId.Value,
                 Description = request.Description,
                 DateSent = DateTime.UtcNow,
             };

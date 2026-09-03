@@ -11,7 +11,6 @@ namespace PawPal.Application.Modules.News.Commands.Create
     {
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
-        public string? PhotoURL { get; set; } = string.Empty;
-        public IFormFile Photo { get; set; }
+        public IFormFile? Photo { get; set; }
     }
 }

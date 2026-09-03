@@ -6,10 +6,10 @@ public sealed class GetOrCreateConversationQueryHandler(IAppDbContext context, I
 {
     public async Task<ConversationDto> Handle(GetOrCreateConversationQuery query, CancellationToken cancellationToken)
     {
-        query.SenderId = currentUser.UserId ?? throw new PawPalConflictException("User is not authenticated");
+        var senderId = currentUser.UserId ?? throw new PawPalConflictException("User is not authenticated");
 
-        int u1 = Math.Min(query.SenderId, query.RecipientId);
-        int u2 = Math.Max(query.SenderId, query.RecipientId);
+        int u1 = Math.Min(senderId, query.RecipientId);
+        int u2 = Math.Max(senderId, query.RecipientId);
 
         var conversation = await context.Conversations
     .FirstOrDefaultAsync(c => c.User1Id == u1 && c.User2Id == u2, cancellationToken);

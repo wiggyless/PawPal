@@ -1,64 +1,70 @@
-﻿using PawPal.Application.Modules.Security.Questions.Commands.Update;
+using PawPal.Application.Modules.Security.Questions.Commands.Update;
 using PawPal.Domain.Entities.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace PawPal.Application.Modules.Security.Answers.Commands.Update
 {
-    public class UpdateAnswerCommandHandler(IAppDbContext context) : IRequestHandler<UpdateAnswerCommand, Unit>
+    public class UpdateAnswerCommandHandler(IAppCurrentUser currentUser, IAppDbContext context) : IRequestHandler<UpdateAnswerCommand, Unit>
     {
         public async Task<Unit> Handle(UpdateAnswerCommand command, CancellationToken cancellationToken)
         {
+            if (currentUser.UserId is null)
+            {
+                throw new PawPalConflictException("User must be logged in to perform this action");
+            }
+            var userId = currentUser.UserId.Value;
+
             var questionIds = command.Answers.Keys.ToList();
-            var question = context.SecurityQuestions.AsNoTracking().Where(x => questionIds.Contains(x.Id));
-            var answers = await context.SecurityAnswers
-            .Where(x => x.Email == command.Email).OrderBy(x=>x.QuestionID)
-            .ToDictionaryAsync(
-            x => x.QuestionID,
-            x => x.Answer,
-            cancellationToken
-            );
-            var email = context.Users.FirstOrDefault(x => string.Compare(x.Email, command.Email) == 0 ? true : false);
-            if (question.Count() != command.Answers.Keys.Count)
+            var matchingQuestionCount = await context.SecurityQuestions.AsNoTracking()
+                .Where(x => questionIds.Contains(x.Id))
+                .CountAsync(cancellationToken);
+            if (matchingQuestionCount != command.Answers.Keys.Count)
             {
                 throw new PawPalConflictException("Question does not exist");
             }
-            if (string.IsNullOrWhiteSpace(command.Email))
+
+            var existingAnswers = await context.SecurityAnswers
+                .Where(x => x.UserId == userId && questionIds.Contains(x.QuestionID))
+                .ToListAsync(cancellationToken);
+
+            foreach (var kvp in command.Answers)
             {
-                throw new PawPalConflictException("Email cannot be empty space");
-            }
-            if (email is null)
-            {
-                throw new PawPalNotFoundException("Email does not exist");
-            }
-            var orderedCommand = command.Answers.OrderBy(x => x.Key);
-            var counter = 0;
-            foreach (var kvp in orderedCommand) { 
-                var temp = answers.FirstOrDefault(x=>x.Key == kvp.Key);
-                if(temp.Value != null)
+                if (string.IsNullOrWhiteSpace(kvp.Value))
                 {
-                   if(kvp.Value != "" || !string.IsNullOrEmpty(kvp.Value))
-                   {
-                     if(kvp.Value.Length <8 || kvp.Value.Length > 30)
-                        {
-                            throw new
-                                PawPalConflictException
-                                ("Answer Length must be at least min 8 and max 30 characters long");
-                        }
-                     temp = new KeyValuePair<int,string>(kvp.Key, kvp.Value);
-                   }
+                    continue;
+                }
+                if (kvp.Value.Length < 8 || kvp.Value.Length > 30)
+                {
+                    throw new PawPalConflictException("Answer Length must be at least min 8 and max 30 characters long");
+                }
+
+                byte[] inputBytes = Encoding.UTF8.GetBytes(kvp.Value);
+                byte[] hashBytes = SHA256.HashData(inputBytes);
+                string hashString = Convert.ToHexString(hashBytes);
+
+                var existing = existingAnswers.FirstOrDefault(x => x.QuestionID == kvp.Key);
+                if (existing is not null)
+                {
+                    existing.Answer = hashString;
                 }
                 else
                 {
-                    var tmp = answers.ElementAt(counter++);
-                    tmp = new KeyValuePair<int, string>(kvp.Key, kvp.Value);
+                    context.SecurityAnswers.Add(new SecurityAnswers
+                    {
+                        Answer = hashString,
+                        QuestionID = kvp.Key,
+                        UserId = userId,
+                    });
                 }
             }
+
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
-    }
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.PostImages.Commands.Update
 {
-    public class UpdatePostImageCommandHandler(IAppDbContext context, IAppCurrentUser user) : IRequestHandler<UpdatePostImageCommand, Unit>
+    public class UpdatePostImageCommandHandler(IAppDbContext context, IAppCurrentUser user, IFileStorageService fileStorage) : IRequestHandler<UpdatePostImageCommand, Unit>
     {
         public async Task<Unit> Handle(UpdatePostImageCommand command,CancellationToken cancellationToken)
         {
@@ -24,14 +24,18 @@ namespace PawPal.Application.Modules.PostImages.Commands.Update
             {
                 throw new ValidationException("At least one image is required.");
             }
+
+            var subFolder = $"posts/Post_{command.PostId}";
+            fileStorage.DeleteFolder(subFolder);
+            var savedPaths = await fileStorage.SaveFilesAsync(command.PostImages, subFolder, cancellationToken);
+
             postImage.PhotoURL.Clear();
-            var listName = command.PostImages.Select(x => "/posts/Post_" + command.PostId + "/" + x.FileName).ToList();
-            for(int i =0;i< listName.Count; i++)
+            for (int i = 0; i < savedPaths.Count; i++)
             {
                 if (postImage.PhotoURL.Count == 10) break;
-                postImage.PhotoURL.Add(listName[i]);
+                postImage.PhotoURL.Add(savedPaths[i]);
             }
-             postImage.MainImage = listName[0];
+            postImage.MainImage = savedPaths[0];
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

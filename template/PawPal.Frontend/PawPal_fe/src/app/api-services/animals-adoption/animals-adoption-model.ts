@@ -3,7 +3,6 @@ import { BasePagedQuery } from '../../core/models/paging/base-paged-query';
 export interface CreateAdoptionRequest {
   status: string;
   dateSend: Date;
-  userID: number;
   postID: number;
   requirementID: number;
 }

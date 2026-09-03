@@ -14,7 +14,5 @@ namespace PawPal.Application.Modules.News.Commands.Update
         public string Title { get; set; }
         public string Content { get; set; }
         public IFormFile? Photo { get; set; }
-        [JsonIgnore]
-        public string? PhotoURL { get; set; }
     }
 }
