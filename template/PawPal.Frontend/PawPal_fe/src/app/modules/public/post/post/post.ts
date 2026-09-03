@@ -203,14 +203,22 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   }
   openReportDialog(): void {
-    this.reportDialog.open(ReportPostComponent, {
-      data: { postId: this.postId },
-    });
+    if (this.currentUser.getDefaultRoute() == '/login') {
+      this.routeNext.navigate(['/auth/login']);
+    } else {
+      this.reportDialog.open(ReportPostComponent, {
+        data: { postId: this.postId, userId: this.currentUser.userId() },
+      });
+    }
   }
   openReportUserDialog(): void {
-    this.reportDialog.open(ReportUserComponent, {
-      data: { reportedUserID: this.user?.id },
-    });
+    if (this.currentUser.getDefaultRoute() == '/login') {
+      this.routeNext.navigate(['/auth/login']);
+    } else {
+      this.reportDialog.open(ReportUserComponent, {
+        data: { reportedUserID: this.user?.id, reportSentByID: this.currentUser.userId() },
+      });
+    }
   }
   routeToProfile(id: number): void {
     this.router.navigate(['profile'], {

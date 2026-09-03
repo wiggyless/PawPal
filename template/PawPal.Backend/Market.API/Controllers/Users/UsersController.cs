@@ -30,6 +30,7 @@ namespace PawPal.API.Controllers.Users
             int id = await sender.Send(cuc, ct);
             return CreatedAtAction(nameof(GetById), new { id }, new { id});
         }
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<GetUserByIdQueryDto> GetById(int id, CancellationToken ct)
         {
