@@ -9,10 +9,8 @@ export interface GetLikedPostList {
   postList?: number[];
 }
 export interface LikePost {
-  userID: number;
   postID: number;
 }
 export interface DeleteLikedPost {
-  userId: number;
   postId: number;
 }

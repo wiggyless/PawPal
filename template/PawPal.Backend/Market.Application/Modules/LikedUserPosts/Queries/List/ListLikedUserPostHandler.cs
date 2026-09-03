@@ -7,10 +7,16 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.LikedUserPosts.Queries.List
 {
-    public sealed class ListLikedUserPostHandler(IAppDbContext context) : IRequestHandler<ListLikedUserPost,ListLikedUserPostDto>
+    public sealed class ListLikedUserPostHandler(IAppDbContext context, IAppCurrentUser currentUser) : IRequestHandler<ListLikedUserPost,ListLikedUserPostDto>
     {
         public async Task<ListLikedUserPostDto> Handle(ListLikedUserPost request,CancellationToken cancellationToken)
         {
+            // A user's liked-posts are private; only that user (or an admin) may view them.
+            if (request.UserId != currentUser.UserId && currentUser.RoleId != 3)
+            {
+                throw new PawPalConflictException("User is not allowed to do this action");
+            }
+
             var list = await context.LikedUserPosts.Include(x => x.Post).Where(x => x.UserId == request.UserId).ToArrayAsync(cancellationToken);
             var finalList = new ListLikedUserPostDto { UserId = request.UserId,PostList = new List<int>() };
             if(request.PostIdList is not null)

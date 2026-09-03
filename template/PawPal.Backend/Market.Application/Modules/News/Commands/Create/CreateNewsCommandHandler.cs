@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.News.Commands.Create
 {
-    public sealed class CreateNewsCommandHandler(IAppDbContext context, IAppCurrentUser user)
+    public sealed class CreateNewsCommandHandler(IAppDbContext context, IAppCurrentUser user, IFileStorageService fileStorage)
         : IRequestHandler<CreateNewsCommand, int>
     {
         public async Task<int> Handle(CreateNewsCommand request, CancellationToken cancellationToken)
@@ -21,12 +21,18 @@ namespace PawPal.Application.Modules.News.Commands.Create
            if(string.IsNullOrWhiteSpace(request.Content))
             throw new ValidationException("Content cannot be empty.");
 
+            string? photoUrl = null;
+            if (request.Photo is not null)
+            {
+                photoUrl = await fileStorage.SaveFileAsync(request.Photo, "news_photos", cancellationToken);
+            }
+
             var news = new NewsEntity
             {
                 Title = request.Title,
                 Content = request.Content,
                 PublishedAt = DateTime.UtcNow,
-                PhotoURL = request.PhotoURL 
+                PhotoURL = photoUrl
             };
 
             context.News.Add(news);

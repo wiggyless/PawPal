@@ -8,7 +8,7 @@ import { UserService } from '../../../../../api-services/users/users-service';
 import { AnimalRequestService } from '../../../../../api-services/animals-adoption/animals-adoption-service';
 import { UpdateRequestByID } from '../../../../../api-services/animals-adoption/animals-adoption-model';
 import { CurrentUserService } from '../../../../../core/services/auth/current-user.service';
-import { GetUserByIdDto } from '../../../../../api-services/users/users-model';
+import { GetPublicUserProfileDto } from '../../../../../api-services/users/users-model';
 import { Router } from '@angular/router';
 import { environment } from '../../../../../../environments/environment';
 import { DialoguePopupService } from '../../../../../api-services/dialogue-popup/dialogue-popup.service';
@@ -37,7 +37,7 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
   isAnotherUser = false;
   requestID: number = 0;
   reqData: GetAdoptionRequirementsById | undefined;
-  user: GetUserByIdDto | undefined;
+  user: GetPublicUserProfileDto | undefined;
   currentUser = inject(CurrentUserService);
   fullAddress: string = '';
   postService = inject(AnimalPostService);
@@ -79,7 +79,7 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
         this.fullAddress = `${this.reqData.address}, Floor ${this.reqData.floorNumber}`;
         this.isLoaded = true;
 
-        this.userAPI.getUser(reponse.adoptionRequest.userId).subscribe((userResponse) => {
+        this.userAPI.getPublicProfile(reponse.adoptionRequest.userId).subscribe((userResponse) => {
           this.user = userResponse;
           this.isLoaded = true;
           this.cd.detectChanges();

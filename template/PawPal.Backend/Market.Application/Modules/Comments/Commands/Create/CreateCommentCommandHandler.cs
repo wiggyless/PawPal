@@ -1,22 +1,24 @@
-﻿using PawPal.Domain.Common;
+using PawPal.Domain.Common;
 using PawPal.Domain.Entities.Posts;
 namespace PawPal.Application.Modules.Comments.Commands.Create
 {
-    public sealed class CreateCommentCommandHandler(IAppDbContext context,IAppCurrentUser currentUser, ICommentHubService _hubService) : IRequestHandler<CreateCommentCommand,int> 
+    public sealed class CreateCommentCommandHandler(IAppDbContext context,IAppCurrentUser currentUser, ICommentHubService _hubService) : IRequestHandler<CreateCommentCommand,int>
     {
 
         public async Task<int> Handle(CreateCommentCommand command,CancellationToken cancellationToken)
         {
-            var user = context.Users.Where(x => x.Id == command.UserID).AsNoTracking().FirstOrDefault();
+            if (currentUser.UserId is null)
+            {
+                throw new PawPalConflictException("User is not allowed to do this action");
+            }
+            var userId = currentUser.UserId.Value;
+
+            var user = context.Users.Where(x => x.Id == userId).AsNoTracking().FirstOrDefault();
             var post = context.Posts.Where(x => x.Id == command.PostID).AsNoTracking().FirstOrDefault();
-            var userImage = context.UserImage.AsNoTracking().FirstOrDefault(x => x.UserID == command.UserID);
+            var userImage = context.UserImage.AsNoTracking().FirstOrDefault(x => x.UserID == userId);
             if(user is null)
             {
                 throw new PawPalNotFoundException("User not found");
-            }
-            if(currentUser is null || !currentUser.IsAuthenticated)
-            {
-                throw new PawPalConflictException("User is not allowed to do this action");
             }
             if(post is null)
             {
@@ -29,7 +31,7 @@ namespace PawPal.Application.Modules.Comments.Commands.Create
             var newComment = new CommentsEntity
             {
                 Content = command.Content,
-                UserId = command.UserID,
+                UserId = userId,
                 PostId = command.PostID,
                 DatePosted = DateTime.UtcNow
             };
@@ -48,7 +50,7 @@ namespace PawPal.Application.Modules.Comments.Commands.Create
             };
             await _hubService.SendCommentNotification(commentDto);
             return newComment.Id;
-        
+
         }
     }
 }

@@ -32,7 +32,6 @@ export interface CreateReportedCommentCommand {
   reason: ReportCommentEnum;
   description?: string;
   commentID: number;
-  commentReportedByID: number;
   dateReported: Date;
 }
 export interface GetReportedCommentQuery {

@@ -1,4 +1,4 @@
-﻿using PawPal.Application.Modules.Security.Questions.Commands.Create;
+using PawPal.Application.Modules.Security.Questions.Commands.Create;
 using PawPal.Domain.Entities.Security;
 using System;
 using System.Collections.Generic;
@@ -9,26 +9,33 @@ using System.Security.Cryptography;
 using System.Text;
 namespace PawPal.Application.Modules.Security.Answers.Commands.Create
 {
-    public class CreateAnswerCommandHandler(IAppDbContext context) : IRequestHandler<CreateAnswerCommand, int>
+    public class CreateAnswerCommandHandler(IAppCurrentUser currentUser, IAppDbContext context) : IRequestHandler<CreateAnswerCommand, int>
     {
         public async Task<int> Handle(CreateAnswerCommand command, CancellationToken cancellationToken)
         {
+            if (currentUser.UserId is null)
+            {
+                throw new PawPalConflictException("User must be logged in to perform this action");
+            }
+            var userId = currentUser.UserId.Value;
+
             var questionIds = command.Answers.Keys.ToList();
             var question = context.SecurityQuestions.AsNoTracking().Where(x => questionIds.Contains(x.Id));
-            var email = context.Users.FirstOrDefault(x => string.Compare(x.Email, command.Email) == 0 ? true : false);
-            if(question.Count() != command.Answers.Keys.Count)
+            if (question.Count() != command.Answers.Keys.Count)
             {
                 throw new PawPalConflictException("Question does not exist");
             }
-            if (string.IsNullOrWhiteSpace(command.Email))
+
+            var alreadyAnswered = await context.SecurityAnswers.AsNoTracking()
+                .Where(x => x.UserId == userId && questionIds.Contains(x.QuestionID))
+                .Select(x => x.QuestionID)
+                .ToListAsync(cancellationToken);
+            if (alreadyAnswered.Count > 0)
             {
-                throw new PawPalConflictException("Email cannot be empty space");
+                throw new PawPalConflictException("An answer has already been registered for one or more of these questions");
             }
-            if(email is null)
-            {
-                throw new PawPalNotFoundException("Email does not exist");
-            }
-            var newAnswer = new SecurityAnswers();
+
+            SecurityAnswers newAnswer = null!;
             for (int i =0;i<command.Answers.Values.Count;i++)
             {
                 if (string.IsNullOrWhiteSpace(command.Answers.Values.ElementAt(i)))
@@ -44,7 +51,7 @@ namespace PawPal.Application.Modules.Security.Answers.Commands.Create
                 {
                     Answer = hashString,
                     QuestionID = command.Answers.Keys.ElementAt(i),
-                    Email = command.Email,
+                    UserId = userId,
                 };
                 context.SecurityAnswers.Add(newAnswer);
                 await context.SaveChangesAsync(cancellationToken);

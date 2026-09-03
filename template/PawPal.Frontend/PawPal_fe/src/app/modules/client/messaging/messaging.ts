@@ -61,7 +61,6 @@ export class Messaging implements OnInit, OnDestroy, AfterViewChecked {
       if (recipientId) {
         this.messagingService
           .getOrCreateConversation({
-            senderId: this.currentUser.userId() as number,
             recipientId: Number(recipientId),
           })
           .subscribe((convo) => {
@@ -208,7 +207,6 @@ export class Messaging implements OnInit, OnDestroy, AfterViewChecked {
 
     this.messagingService
       .sendMessage({
-        senderId: this.currentUser.userId() as number,
         recipientId: this.selectedConversation.otherUserId,
         content,
       })

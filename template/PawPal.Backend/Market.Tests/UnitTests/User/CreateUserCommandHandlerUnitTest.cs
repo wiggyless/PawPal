@@ -1,7 +1,9 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Options;
+using Moq;
 using PawPal.Application.Abstractions;
 using PawPal.Application.Common.Exceptions;
 using PawPal.Application.Modules.Users.Commands.Create;
+using PawPal.Application.Options;
 using PawPal.Domain.Entities.Identity;
 using PawPal.Domain.Entities.Places;
 using System.ComponentModel.DataAnnotations;
@@ -23,7 +25,7 @@ namespace PawPal.Tests.UnitTests.User
             _context = new DatabaseContext(options, TimeProvider.System);
             _emailServiceMock = new Mock<IEmailService>();
 
-            _handler = new CreateUsersCommandHandler(_context, _emailServiceMock.Object);
+            _handler = new CreateUsersCommandHandler(_context, _emailServiceMock.Object, Options.Create(new AppUrlsOptions()));
         }
 
         private static CreateUserCommand ValidCommand(int cityId) => new CreateUserCommand
@@ -33,7 +35,6 @@ namespace PawPal.Tests.UnitTests.User
             Email = "john.doe@example.com",
             Password = "SecureP@ssw0rd!",
             BirthDate = new DateTime(1995, 5, 20),
-            RoleID = 1,
             City = cityId,
             Username = "johndoe",
             AboutMe = "Dog lover"
@@ -61,7 +62,8 @@ namespace PawPal.Tests.UnitTests.User
             Assert.True(createdUser.IsEnabled);
             Assert.False(createdUser.IsEmailConfirmed);
             Assert.False(string.IsNullOrEmpty(createdUser.EmailConfirmationToken));
-            Assert.Equal(1, createdUser.RoleId);
+            // Role is always assigned by the backend, never taken from the request.
+            Assert.Equal(2, createdUser.RoleId);
         }
 
         [Theory]
@@ -82,7 +84,6 @@ namespace PawPal.Tests.UnitTests.User
                 Email = email,
                 Password = password,
                 BirthDate = new DateTime(1995, 5, 20),
-                RoleID = 1,
                 City = 1,
                 Username = "johndoe",
                 AboutMe = null

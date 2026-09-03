@@ -51,6 +51,9 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<IAppCurrentUser, AppCurrentUser>();
 
+        // Upload handling (post images, user avatars, news photos)
+        services.AddScoped<IFileStorageService, FileStorageService>();
+
         // TimeProvider (if used in handlers/services)
         services.AddSingleton(TimeProvider.System);
 

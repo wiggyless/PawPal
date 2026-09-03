@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.RateLimiting;
 using PawPal.Application.Modules.Animal_Info.Animals.Commands.Delete;
 using PawPal.Application.Modules.Disabilities.GetById;
 using PawPal.Application.Modules.Users.Commands.Create;
@@ -7,10 +8,12 @@ using PawPal.Application.Modules.Users.Commands.RequestEmailChange;
 using PawPal.Application.Modules.Users.Commands.ResendConfirmationEmail;
 using PawPal.Application.Modules.Users.Commands.Update;
 using PawPal.Application.Modules.Users.Commands.UpdatePassword;
+using PawPal.Application.Modules.Users.Commands.UpdateRole;
 using PawPal.Application.Modules.Users.Queries.GetByEmail;
 using PawPal.Application.Modules.Users.Queries.GetById;
 using PawPal.Application.Modules.Users.Queries.GetByIdDisabled;
 using PawPal.Application.Modules.Users.Queries.GetByUsername;
+using PawPal.Application.Modules.Users.Queries.GetPublicProfile;
 using PawPal.Application.Modules.Users.Queries.List;
 
 namespace PawPal.API.Controllers.Users
@@ -33,6 +36,15 @@ namespace PawPal.API.Controllers.Users
             var user = await sender.Send(new GetUserByIdQuery { Id = id }, ct);
             return user;
         }
+        // Public, redacted view — no email/birthdate/canton/disabled status — for anyone
+        // viewing someone else's profile (catalog post authorship, public profile page, etc).
+        [AllowAnonymous]
+        [HttpGet("{id:int}/public-profile")]
+        public async Task<GetPublicUserProfileQueryDto> GetPublicProfile(int id, CancellationToken ct)
+        {
+            var user = await sender.Send(new GetPublicUserProfileQuery { Id = id }, ct);
+            return user;
+        }
         [HttpGet("{id:int}/disabled")]
         public async Task<GetByIdDisabledQueryDto> GetByIdDisabled(int id, CancellationToken ct)
         {
@@ -53,6 +65,7 @@ namespace PawPal.API.Controllers.Users
             await sender.Send(uuc, ct);
         }
         [AllowAnonymous]
+        [EnableRateLimiting("SecurityAnswerVerifyPolicy")]
         [HttpPut("passwordRecovery")]
         public async Task<Unit> Update(UpdatePasswordCommand uuc, CancellationToken ct)
         {
@@ -89,6 +102,17 @@ namespace PawPal.API.Controllers.Users
         [Authorize]
         [HttpPost("{id:int}/request-email-change")]
         public async Task<IActionResult> RequestEmailChange(int id, [FromBody] RequestEmailChangeCommand command, CancellationToken ct)
+        {
+            command.UserId = id;
+            await sender.Send(command, ct);
+            return Ok();
+        }
+
+        // Distinct, admin-only use case: role assignment (including granting Admin) is never
+        // something a user can do to their own account via CreateUser/Update.
+        [Authorize]
+        [HttpPut("{id:int}/role")]
+        public async Task<IActionResult> UpdateUserRole(int id, [FromBody] UpdateUserRoleCommand command, CancellationToken ct)
         {
             command.UserId = id;
             await sender.Send(command, ct);

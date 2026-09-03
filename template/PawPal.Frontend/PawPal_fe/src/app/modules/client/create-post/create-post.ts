@@ -455,7 +455,6 @@ export class CreatePost implements OnInit {
     const newPost: AddAnimalPost = {
       animalID: 0,
       cityID: this.userData.cityID,
-      userId: this.userData.id,
       status: true,
     };
 
@@ -485,6 +484,7 @@ export class CreatePost implements OnInit {
       .subscribe({
         next: (event: any) => {
           if (event.type === HttpEventType.UploadProgress && event.total) {
+            this.uploadProgress = Math.round((100 * event.loaded) / event.total);
             if (this.uploadProgress >= 100) {
               this.isUploadingImages.set(false);
               this.isFinalizing.set(true);

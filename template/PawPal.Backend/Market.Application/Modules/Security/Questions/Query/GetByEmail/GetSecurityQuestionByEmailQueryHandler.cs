@@ -17,7 +17,9 @@ namespace PawPal.Application.Modules.Security.Questions.Query.GetByEmail
             {
                 throw new PawPalConflictException("Email can't be an empty filed");
             }
-            var answer = db.SecurityAnswers.AsNoTracking().Where(x => x.Email == request.Email).Select(x => x.QuestionID); 
+            var user = await db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Email == request.Email, ct);
+            var userId = user?.Id ?? -1;
+            var answer = db.SecurityAnswers.AsNoTracking().Where(x => x.UserId == userId).Select(x => x.QuestionID);
             var question = db.SecurityQuestions.Where(x => answer.Contains(x.Id));
             var result = question.OrderBy(x => x.Question).
                 Select(x => new GetSecurityQuestionByEmailQueryDto

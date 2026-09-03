@@ -55,7 +55,6 @@ public class CreatePostCommandHandlerUnitTest
 
         var command = new CreatePostCommand
         {
-            UserId = user.Id,
             AnimalID = animal.Id
         };
 
@@ -80,7 +79,7 @@ public class CreatePostCommandHandlerUnitTest
         _currentUserMock.SetupGet(x => x.RoleId).Returns(2);
         _currentUserMock.SetupGet(x => x.IsAuthenticated).Returns(false);
 
-        var command = new CreatePostCommand { UserId = user.Id, AnimalID = animal.Id };
+        var command = new CreatePostCommand { AnimalID = animal.Id };
 
         await Assert.ThrowsAsync<Exception>(() => _sut.Handle(command, CancellationToken.None));
     }
@@ -94,7 +93,7 @@ public class CreatePostCommandHandlerUnitTest
         _currentUserMock.SetupGet(x => x.RoleId).Returns(1);
         _currentUserMock.SetupGet(x => x.IsAuthenticated).Returns(true);
 
-        var command = new CreatePostCommand { UserId = user.Id, AnimalID = animal.Id };
+        var command = new CreatePostCommand { AnimalID = animal.Id };
 
         await Assert.ThrowsAsync<Exception>(() => _sut.Handle(command, CancellationToken.None));
     }
@@ -105,7 +104,7 @@ public class CreatePostCommandHandlerUnitTest
         var user = await SeedUserAsync();
         SetupAuthorizedUser();
 
-        var command = new CreatePostCommand { UserId = user.Id, AnimalID = 999 };
+        var command = new CreatePostCommand { AnimalID = 999 };
 
         await Assert.ThrowsAsync<NullReferenceException>(
             () => _sut.Handle(command, CancellationToken.None));
@@ -118,7 +117,7 @@ public class CreatePostCommandHandlerUnitTest
         var animal = await SeedAnimalAsync();
         SetupAuthorizedUser();
 
-        var command = new CreatePostCommand { UserId = user.Id, AnimalID = animal.Id };
+        var command = new CreatePostCommand { AnimalID = animal.Id };
 
         var result = await _sut.Handle(command, CancellationToken.None);
 
@@ -138,7 +137,7 @@ public class CreatePostCommandHandlerUnitTest
 
         SetupAuthorizedUser();
 
-        var command = new CreatePostCommand { UserId = user.Id, AnimalID = animal.Id };
+        var command = new CreatePostCommand { AnimalID = animal.Id };
 
         var result = await _sut.Handle(command, CancellationToken.None);
 

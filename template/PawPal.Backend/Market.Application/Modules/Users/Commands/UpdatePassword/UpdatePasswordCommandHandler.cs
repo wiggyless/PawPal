@@ -31,7 +31,7 @@ namespace PawPal.Application.Modules.Users.Commands.UpdatePassword
             {
                 // Anonymous flow: re-verify the security question answers here, server-side,
                 // instead of trusting the client's PasswordRecovery flag alone.
-                await VerifySecurityAnswersAsync(request, cancellationToken);
+                await VerifySecurityAnswersAsync(request, user, cancellationToken);
             }
             var password = request.NewPassword?.Trim();
             if (string.IsNullOrWhiteSpace(password)) {
@@ -43,33 +43,27 @@ namespace PawPal.Application.Modules.Users.Commands.UpdatePassword
             return Unit.Value;
         }
 
-        private async Task VerifySecurityAnswersAsync(UpdatePasswordCommand request, CancellationToken cancellationToken)
+        private async Task VerifySecurityAnswersAsync(UpdatePasswordCommand request, UserEntity user, CancellationToken cancellationToken)
         {
-            if (request.Answers is null || request.Answers.Count == 0)
-                throw new PawPalConflictException("Security answers are required to reset your password.");
-
-            var questionIds = request.Answers.Keys.ToList();
-
-            var matchingQuestionCount = await context.SecurityQuestions
-                .Where(x => questionIds.Contains(x.Id))
-                .CountAsync(cancellationToken);
-            if (matchingQuestionCount != questionIds.Count)
-                throw new PawPalNotFoundException("Question does not exist");
-
-            var storedAnswers = await context.SecurityAnswers
-                .Where(x => x.Email == request.Email && questionIds.Contains(x.QuestionID))
+            // The set of questions to verify against comes from what is actually
+            // registered for this user, never from the question IDs the caller supplies.
+            var registeredAnswers = await context.SecurityAnswers
+                .Where(x => x.UserId == user.Id)
                 .ToDictionaryAsync(x => x.QuestionID, x => x.Answer, cancellationToken);
 
-            if (storedAnswers.Count != questionIds.Count)
+            var registeredQuestionIds = registeredAnswers.Keys.OrderBy(x => x).ToList();
+
+            if (request.Answers is null ||
+                registeredQuestionIds.Count == 0 ||
+                !registeredQuestionIds.SequenceEqual(request.Answers.Keys.OrderBy(x => x)))
+            {
                 throw new PawPalConflictException("Incorrect security answers.");
+            }
 
-            var providedHashes = request.Answers.OrderBy(x => x.Key).Select(x => ConvertToHash(x.Value)).ToList();
-            var storedHashes = storedAnswers.OrderBy(x => x.Key).Select(x => x.Value).ToList();
-
-            var isCorrect = providedHashes.Zip(storedHashes).All(pair =>
+            var isCorrect = registeredQuestionIds.All(questionId =>
                 CryptographicOperations.FixedTimeEquals(
-                    Encoding.UTF8.GetBytes(pair.First),
-                    Encoding.UTF8.GetBytes(pair.Second)));
+                    Encoding.UTF8.GetBytes(ConvertToHash(request.Answers[questionId])),
+                    Encoding.UTF8.GetBytes(registeredAnswers[questionId])));
 
             if (!isCorrect)
                 throw new PawPalConflictException("Incorrect security answers.");

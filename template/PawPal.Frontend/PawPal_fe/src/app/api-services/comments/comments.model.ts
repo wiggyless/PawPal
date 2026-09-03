@@ -15,7 +15,6 @@ export interface CommentDto {
 }
 
 export interface CreateCommentCommand {
-  userID: number;
   postID: number;
   content: string;
 }

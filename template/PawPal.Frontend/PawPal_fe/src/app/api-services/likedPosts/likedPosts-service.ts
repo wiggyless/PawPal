@@ -27,9 +27,8 @@ export class LikedPostsService {
     return this.httpClient.post<number>(`${this.apiUrl}`, request, { params });
   }
   deletePost(request: DeleteLikedPost): Observable<number> {
-    return this.httpClient.delete<number>(`${this.apiUrl}/${request.userId}`, {
+    return this.httpClient.delete<number>(`${this.apiUrl}/${request.postId}`, {
       body: {
-        userId: request.userId,
         postId: request.postId,
       },
     });

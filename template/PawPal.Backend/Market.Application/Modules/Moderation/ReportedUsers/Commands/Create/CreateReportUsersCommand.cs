@@ -10,7 +10,6 @@ namespace PawPal.Application.Modules.Moderation.ReportedUsers.Commands.Create
     public class CreateReportUsersCommand : IRequest<int>
     {
         public int ReportedUserID { get; set; }
-        public int ReportCreatedByUserID { get; set; }
         public string Description { get; set; }
         public DateTime DateSent { get; set; }
         public ReportUserEnum Reason { get; set; }

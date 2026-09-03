@@ -44,6 +44,12 @@ public partial class DatabaseContext
     {
         base.OnModelCreating(modelBuilder);
 
+        // Note: only SecurityAnswersConfiguration is applied explicitly here (rather than via
+        // ApplyConfigurationsFromAssembly) because several other IEntityTypeConfiguration classes
+        // in this assembly were never wired up and scaffold unrelated, risky schema changes
+        // (column truncation, new unique indexes on existing data, FK behavior changes) if activated.
+        modelBuilder.ApplyConfiguration(new PawPal.Infrastructure.Database.Configurations.Security.SecurityAnswersConfiguration());
+
         ApplyGlobalFielters(modelBuilder);
 
         StaticDataSeeder.Seed(modelBuilder); // static data

@@ -31,8 +31,9 @@ export class UserImageService {
   );
 }
 createUserImage(userID: number, image: File): Observable<number> {
+  // The server always resolves the owner from the authenticated session, never from the form —
+  // userID here is only used locally to invalidate this viewer's image cache.
   const formData = new FormData();
-  formData.append('userID', userID.toString());
   formData.append('Image', image, image.name);
   return this.httpClient
     .post<number>(this.apiUrl, formData)
@@ -41,7 +42,6 @@ createUserImage(userID: number, image: File): Observable<number> {
 
 updateUserImage(userID: number, image: File): Observable<number> {
   const formData = new FormData();
-  formData.append('userID', userID.toString());
   formData.append('Image', image, image.name);
   return this.httpClient
     .put<number>(this.apiUrl, formData)

@@ -39,10 +39,9 @@ namespace PawPal.API.Controllers.Messaging
         }
 
         [HttpGet("conversation")]
-        public async Task<IActionResult> GetOrCreate([FromQuery] int senderId, [FromQuery] int recipientId)
+        public async Task<IActionResult> GetOrCreate([FromQuery] int recipientId)
     => Ok(await sender.Send(new GetOrCreateConversationQuery
     {
-        SenderId = senderId,
         RecipientId = recipientId
     }));
     }

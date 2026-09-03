@@ -95,7 +95,6 @@ export class Adoption implements OnInit {
 
       houseDetials: this.step3FormGroup.controls['placeDesc'].value as string,
       finalComment: this.step3FormGroup.controls['comment'].value as string,
-      userID: this.currentUserService.userId() as number,
       postID: this.postID,
     };
     this.requirementService.addRequirements(payload).subscribe({
@@ -105,7 +104,6 @@ export class Adoption implements OnInit {
         const payload: CreateAdoptionRequest = {
           status: 'SENT',
           dateSend: new Date(),
-          userID: this.currentUserService.userId() as number,
           postID: this.postID,
           requirementID: res.id,
         };

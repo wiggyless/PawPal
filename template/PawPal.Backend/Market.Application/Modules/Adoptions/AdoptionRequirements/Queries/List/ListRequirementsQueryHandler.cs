@@ -7,11 +7,17 @@ using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Queries.List
 {
-    public sealed class ListRequirementsQueryHandler(IAppDbContext context) : 
+    public sealed class ListRequirementsQueryHandler(IAppDbContext context, IAppCurrentUser currentUser) :
         IRequestHandler<ListRequirementsQuery,PageResult<ListRequirementsQueryDto>>
     {
         public async Task<PageResult<ListRequirementsQueryDto>> Handle(ListRequirementsQuery request,CancellationToken cancellationToken)
         {
+            // This search has no per-applicant scoping (no UserId/PostId filter), so it would
+            // otherwise expose every applicant's address, finances, and household details to any
+            // logged-in user. Restrict it to admins until it has a real ownership-scoped filter.
+            if (currentUser.RoleId != 3)
+                throw new PawPalConflictException("User is not authorized for this action");
+
             var reqList = context.AdoptionRequirements.AsQueryable();
             if (!string.IsNullOrWhiteSpace(request.SearchHouseType))
                 reqList = reqList.Where(x => x.HouseType.ToLower().Contains(request.SearchHouseType.ToLower()));

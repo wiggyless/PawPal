@@ -57,7 +57,6 @@ export class ReportCommentComponent implements OnInit {
         reason: this.form.value.reason,
         description: this.form.value.description?.trim() || undefined,
         commentID: this.data.commentId,
-        commentReportedByID: this.currentUser.userId() as number,
         dateReported: new Date(),
       })
       .subscribe({
