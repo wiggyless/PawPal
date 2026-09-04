@@ -1,9 +1,10 @@
-﻿using PawPal.Application.Modules.Moderation.ReportedUsers.Commands.Delete;
+using PawPal.Application.Modules.Moderation.ReportedUsers.Commands.Delete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Moderation.ReportedComments.Commands.Delete
 {
@@ -12,7 +13,7 @@ namespace PawPal.Application.Modules.Moderation.ReportedComments.Commands.Delete
     {
         public async Task<Unit> Handle(DeleteCommentReportCommand request, CancellationToken cancellationToken)
         {
-            if (currentUser.RoleId != 3)
+            if (currentUser.RoleId != Roles.Admin)
                 throw new PawPalConflictException("You're not authorized for this action!");
             if (!currentUser.IsAuthenticated)
             {

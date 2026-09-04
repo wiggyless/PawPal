@@ -116,7 +116,7 @@ namespace PawPal.Tests.UnitTests.User
         }
 
         [Fact]
-        public async Task GetPublicProfile_ShouldNotExposePrivateFields()
+        public void GetPublicProfile_ShouldNotExposePrivateFields()
         {
             var dtoProperties = typeof(GetPublicUserProfileQueryDto).GetProperties().Select(p => p.Name);
 

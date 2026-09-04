@@ -1,4 +1,5 @@
-﻿using PawPal.Application.Abstractions;
+using PawPal.Application.Abstractions;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Status.Enable;
 
@@ -7,7 +8,7 @@ public sealed class EnableProductCategoryCommandHandler(IAppDbContext ctx, IAppC
 {
     public async Task<Unit> Handle(EnableProductCategoryCommand request, CancellationToken ct)
     {
-        if (currentUser.RoleId != 3)
+        if (currentUser.RoleId != Roles.Admin)
             throw new PawPalConflictException("Only administrators can enable categories.");
 
         var entity = await ctx.ProductCategories
@@ -22,7 +23,7 @@ public sealed class EnableProductCategoryCommandHandler(IAppDbContext ctx, IAppC
             await ctx.SaveChangesAsync(ct);
         }
 
-        // If already enabled — nothing changes, idempotent
+        // If already enabled � nothing changes, idempotent
         return Unit.Value;
     }
 }

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Update
 {
@@ -14,7 +15,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Upd
             var req = await context.AdoptionRequirements.FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
             if (req is null) throw new PawPalConflictException("Requirement does not exist inside the database");
             var owningRequest = await context.AdoptionRequests.FirstOrDefaultAsync(x => x.RequirementId == command.Id, cancellationToken);
-            if (owningRequest is not null && owningRequest.UserId != user.UserId && user.RoleId != 3)
+            if (owningRequest is not null && owningRequest.UserId != user.UserId && user.RoleId != Roles.Admin)
                 throw new PawPalConflictException("User is not authorized for this action");
             req.PeopleCount = command.PeopleCount;
             req.OtherPetsAround = command.OtherPetsAround;

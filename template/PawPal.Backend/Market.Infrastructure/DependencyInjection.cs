@@ -1,4 +1,6 @@
-﻿using Market.Infrastructure.Database;
+﻿using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Market.Infrastructure.Database;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +10,7 @@ using PawPal.Domain.Entities.Identity;
 using PawPal.Infrastructure.Common;
 using PawPal.Shared.Constants;
 using PawPal.Shared.Options;
+using Serilog;
 
 namespace PawPal.Infrastructure;
 
@@ -53,6 +56,22 @@ public static class DependencyInjection
 
         // Upload handling (post images, user avatars, news photos)
         services.AddScoped<IFileStorageService, FileStorageService>();
+
+        // Firebase push notifications — absence of the service account file just disables
+        // sending (logged as a warning, not fatal).
+        var firebaseCredentialsPath = Path.Combine(env.ContentRootPath, "firebase-service-account.json");
+        if (File.Exists(firebaseCredentialsPath))
+        {
+            FirebaseApp.Create(new AppOptions
+            {
+                Credential = GoogleCredential.FromFile(firebaseCredentialsPath)
+            });
+        }
+        else
+        {
+            Log.Warning("firebase-service-account.json not found at {Path}. Push notifications will be disabled.", firebaseCredentialsPath);
+        }
+        services.AddSingleton<IFirebaseNotificationService, FirebaseNotificationService>();
 
         // TimeProvider (if used in handlers/services)
         services.AddSingleton(TimeProvider.System);

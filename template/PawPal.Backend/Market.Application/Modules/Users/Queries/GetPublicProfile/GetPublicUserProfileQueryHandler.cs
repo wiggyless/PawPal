@@ -1,3 +1,4 @@
+using PawPal.Shared.Constants;
 namespace PawPal.Application.Modules.Users.Queries.GetPublicProfile
 {
     public sealed class GetPublicUserProfileQueryHandler(IAppDbContext context, IAppCurrentUser currUser)
@@ -17,7 +18,7 @@ namespace PawPal.Application.Modules.Users.Queries.GetPublicProfile
             }
             var user = await context.Users.
                 Include(x => x.City).
-                Where(a => a.Id == request.Id && (currUser.RoleId == 3 ? true : !a.isUserDisabled)).
+                Where(a => a.Id == request.Id && (currUser.RoleId == Roles.Admin ? true : !a.isUserDisabled)).
                 Select(x => new GetPublicUserProfileQueryDto
                 {
                     Id = x.Id,

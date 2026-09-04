@@ -18,10 +18,20 @@ export interface GetNewsByIdQueryDto {
 
 export class ListNewsQuery extends BasePagedQuery {
   search?: string;
+  publishedFrom?: string | Date | null;
+  publishedTo?: string | Date | null;
+  hasPhoto?: boolean | null;
+  sortDescending?: boolean;
 }
 
 export interface CreateNewsRequest {
   title: string;
   content: string;
   photo: File;
+}
+
+export interface UpdateNewsRequest {
+  title: string;
+  content: string;
+  photo?: File;
 }

@@ -1,9 +1,10 @@
-﻿using PawPal.Application.Modules.Users.Queries.GetById;
+using PawPal.Application.Modules.Users.Queries.GetById;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Users.Queries.GetByIdDisabled
 {
@@ -22,7 +23,7 @@ namespace PawPal.Application.Modules.Users.Queries.GetByIdDisabled
                     PhotoURL = "",
                 };
             }
-            if(currUser.RoleId != 3)
+            if(currUser.RoleId != Roles.Admin)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }

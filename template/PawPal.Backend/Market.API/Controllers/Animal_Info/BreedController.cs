@@ -35,6 +35,7 @@ namespace PawPal.API.Controllers.Animal_Info
             var result = await sender.Send(query, ct);
             return result;
         }
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpDelete("{id:int}")]
         public async Task Delete(int id, CancellationToken ct)
         {

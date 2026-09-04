@@ -16,7 +16,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Cre
 
             if (command.PeopleCount < 0) throw new PawPalConflictException("Invalid number of people");
             var existing = await context.AdoptionRequests
-                .Where(x => x.PostId == command.PostID && x.UserId == currentUser.UserId && x.Status == "Pending")
+                .Where(x => x.PostId == command.PostID && x.UserId == currentUser.UserId && x.Status == AdoptionRequestStatus.Pending)
                 .FirstOrDefaultAsync(cancellationToken);
             if (existing is not null)
                 throw new PawPalConflictException("You already have a pending request for this post");

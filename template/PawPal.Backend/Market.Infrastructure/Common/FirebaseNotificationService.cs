@@ -1,12 +1,13 @@
-﻿using FirebaseAdmin;
+using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
 using Microsoft.Extensions.Logging;
+using PawPal.Application.Abstractions;
 using FcmMessage = FirebaseAdmin.Messaging.Message;
 using FcmNotification = FirebaseAdmin.Messaging.Notification;
 
-namespace PawPal.Application.Services;
+namespace PawPal.Infrastructure.Common;
 
-public class FirebaseNotificationService(ILogger<FirebaseNotificationService> logger) : IFirebaseNotificationService
+public sealed class FirebaseNotificationService(ILogger<FirebaseNotificationService> logger) : IFirebaseNotificationService
 {
     public async Task SendAsync(string fcmToken, string title, string body, string redirectUrl)
     {

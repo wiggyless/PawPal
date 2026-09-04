@@ -1,4 +1,5 @@
-﻿using PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Delete;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Delete;
 using PawPal.Domain.Entities.Adoptions;
 using PawPal.Domain.Entities.Animal_Info;
 using PawPal.Domain.Entities.Animal_Info.ManyToMany;
@@ -54,4 +55,5 @@ public interface IAppDbContext
     DbSet<UserDisabledHistoryEntity> UserDisabledHistory { get; }
     DbSet<ReportProblemEntity> ReportProblems { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
+    Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct);
 }

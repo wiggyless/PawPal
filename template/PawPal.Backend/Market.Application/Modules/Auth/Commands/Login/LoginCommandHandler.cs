@@ -19,7 +19,12 @@ public sealed class LoginCommandHandler(
         {
             throw new PawPalConflictException("User is disabled. Please contact support for more information");
         }
-        
+
+        if (!user.IsEmailConfirmed)
+        {
+            throw new PawPalConflictException("Please confirm your email address before logging in.");
+        }
+
         var verify = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
         if (verify == PasswordVerificationResult.Failed)
             throw new PawPalConflictException("Wrong credentials.");

@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Delete
 {
@@ -12,7 +13,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Delet
     {
         public async Task<Unit> Handle(DeleteAnimalCategoryCommand request, CancellationToken cancellationToken)
         {
-            if (appCurrentUser.RoleId != 3)
+            if (appCurrentUser.RoleId != Roles.Admin)
                 throw new MarketBusinessRuleException("123", "Only administrators can delete animal categories.");
 
             var animalCategory = await context.AnimalCategories.FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);

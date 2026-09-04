@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { FormControl, FormGroup } from '@angular/forms';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { NewsService } from '../../../../api-services/news/news.service';
 import { ListNewsQuery, ListNewsQueryDto } from '../../../../api-services/news/news.model';
@@ -36,6 +37,16 @@ export class NewsListComponent implements OnInit {
     pageSizeOption: [8, 16, 32],
   };
 
+  filterForm = new FormGroup({
+    search: new FormControl<string>(''),
+    hasPhoto: new FormControl<boolean | null>(null),
+    sortDescending: new FormControl<boolean>(true),
+  });
+  datePicker = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
   constructor() {
     this.request.paging.page = 1;
     this.request.paging.pageSize = this.page.pageSize;
@@ -43,6 +54,25 @@ export class NewsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadNews();
+  }
+
+  searchNews(): void {
+    this.request = {
+      ...this.request,
+      search: this.filterForm.value.search ?? undefined,
+      hasPhoto: this.filterForm.value.hasPhoto ?? undefined,
+      sortDescending: this.filterForm.value.sortDescending ?? true,
+      publishedFrom: this.datePicker.value.start ?? undefined,
+      publishedTo: this.datePicker.value.end ?? undefined,
+    };
+    this.request.paging.page = 1;
+    this.loadNews();
+  }
+
+  clearFilters(): void {
+    this.filterForm.reset({ search: '', hasPhoto: null, sortDescending: true });
+    this.datePicker.reset({ start: null, end: null });
+    this.searchNews();
   }
 
   loadNews(): void {

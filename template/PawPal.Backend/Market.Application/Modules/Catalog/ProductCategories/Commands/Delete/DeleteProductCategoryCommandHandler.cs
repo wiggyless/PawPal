@@ -1,4 +1,5 @@
-﻿using PawPal.Application.Abstractions;
+using PawPal.Application.Abstractions;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Delete;
 
@@ -7,7 +8,7 @@ public class DeleteProductCategoryCommandHandler(IAppDbContext context, IAppCurr
 {
     public async Task<Unit> Handle(DeleteProductCategoryCommand request, CancellationToken cancellationToken)
     {
-        if (appCurrentUser.RoleId != 3)
+        if (appCurrentUser.RoleId != Roles.Admin)
             throw new MarketBusinessRuleException("123", "Only administrators can delete categories.");
 
         var category = await context.ProductCategories

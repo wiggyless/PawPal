@@ -1,9 +1,10 @@
-﻿using PawPal.Application.Modules.Catalog.ProductCategories.Commands.Update;
+using PawPal.Application.Modules.Catalog.ProductCategories.Commands.Update;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Update
 {
@@ -12,7 +13,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Updat
     {
         public async Task<Unit> Handle(UpdateAnimalCategoryCommand request, CancellationToken cancellationToken)
         {
-            if (currentUser.RoleId != 3)
+            if (currentUser.RoleId != Roles.Admin)
                 throw new PawPalConflictException("Only administrators can update animal categories.");
 
             var animalCategory = await context.AnimalCategories.FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);

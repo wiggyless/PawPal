@@ -1,4 +1,6 @@
-﻿public class MessagesConfiguration : IEntityTypeConfiguration<MessageEntity>
+﻿namespace PawPal.Infrastructure.Database.Configurations.Messaging;
+
+public class MessagesConfiguration : IEntityTypeConfiguration<MessageEntity>
 {
     public void Configure(EntityTypeBuilder<MessageEntity> builder)
     {

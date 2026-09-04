@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PawPal.Domain.Entities.Animal_Info;
+using PawPal.Shared.Constants;
 namespace PawPal.Application.Modules.Posts.Commands.Create
 {
     public sealed class CreatePostCommandHandler(IAppDbContext context,IAppCurrentUser currentUser)
@@ -13,7 +14,7 @@ namespace PawPal.Application.Modules.Posts.Commands.Create
     {
         public async Task<int> Handle(CreatePostCommand request,CancellationToken cancellationToken)
         {
-            if (currentUser.RoleId != 2 || !currentUser.IsAuthenticated)
+            if (currentUser.RoleId != Roles.VerifiedUser || !currentUser.IsAuthenticated)
             {
                 throw new PawPalConflictException("User is not verified to make this action");
             }
@@ -37,7 +38,7 @@ namespace PawPal.Application.Modules.Posts.Commands.Create
                 AnimalHealthHistory = health,
                 DateAdded = DateTime.Now,
                 CityId = user.CityId,
-                Status = "active",
+                Status = PostStatus.Active,
             };
             context.Posts.Add(newPost);
             await context.SaveChangesAsync(cancellationToken);

@@ -1,9 +1,10 @@
-﻿using PawPal.Application.Modules.Moderation.ReportedUsers.Queries.GetById;
+using PawPal.Application.Modules.Moderation.ReportedUsers.Queries.GetById;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Moderation.ReportedComments.Queries.GetById
 {
@@ -16,7 +17,7 @@ namespace PawPal.Application.Modules.Moderation.ReportedComments.Queries.GetById
             {
                 throw new PawPalConflictException("User report does not exist");
             }
-            if (currentUser.UserId != q.CommentReportedBy && currentUser.RoleId != 3)
+            if (currentUser.UserId != q.CommentReportedBy && currentUser.RoleId != Roles.Admin)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }

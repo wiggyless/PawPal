@@ -1,10 +1,13 @@
 import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { NewsService } from '../../../../api-services/news/news.service';
 import { GetNewsByIdQueryDto } from '../../../../api-services/news/news.model';
 import { environment } from '../../../../../environments/environment';
+import { AddNewsDialog } from '../add-news-dialog/add-news-dialog';
+import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 
 @Component({
   selector: 'app-news-detail',
@@ -19,6 +22,8 @@ export class NewsDetailComponent implements OnInit {
   newsService = inject(NewsService);
   sanitizer = inject(DomSanitizer);
   cd = inject(ChangeDetectorRef);
+  dialog = inject(MatDialog);
+  dialoguePopup = inject(DialoguePopupService);
   env = environment;
 
   newsId = 0;
@@ -53,5 +58,39 @@ export class NewsDetailComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['news']);
+  }
+
+  openEditDialog(): void {
+    if (!this.news) return;
+    const dialogRef = this.dialog.open(AddNewsDialog, { data: { news: this.news } });
+    dialogRef.afterClosed().subscribe((updated) => {
+      if (updated) {
+        this.loadNews();
+      }
+    });
+  }
+
+  deleteNews(): void {
+    if (!this.news) return;
+    const id = this.news.id;
+
+    this.dialoguePopup.warning(
+      'Confirm action',
+      'Are you sure that you want to delete this news post?',
+      'Yes',
+      'No',
+      () => {
+        this.newsService.deleteNews(id).subscribe({
+          next: () => {
+            this.dialoguePopup.success('Deleted', 'The news post has been deleted.', 'OK');
+            this.router.navigate(['news']);
+          },
+          error: () => {
+            this.dialoguePopup.error('Something went wrong', 'Could not delete the news post.', 'OK');
+          },
+        });
+      },
+      () => {},
+    );
   }
 }
