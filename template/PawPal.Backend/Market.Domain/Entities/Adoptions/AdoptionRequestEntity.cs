@@ -11,7 +11,7 @@ namespace PawPal.Domain.Entities.Adoptions
 {
     public class AdoptionRequestEntity : BaseEntity
     {
-        public string ?Status { get; set; }
+        public AdoptionRequestStatus Status { get; set; }
         public DateTime DateSent { get; set; }
         public int PostId { get; set; }
         public PostsEntity ?Post { get; set; }

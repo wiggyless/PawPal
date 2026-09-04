@@ -9,6 +9,7 @@ namespace PawPal.API.Controllers.Animal_Info
     [Route("[controller]")]
     public class AnimalCategoriesController(ISender sender) : ControllerBase
     {
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpPost]
         public async Task<ActionResult<int>> CreateAnimalCategory
             (CreateAnimalCategoryCommand command, CancellationToken ct)
@@ -33,6 +34,7 @@ namespace PawPal.API.Controllers.Animal_Info
             return result;
         }
 
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpPut ("{id:int}")]
         public async Task Update(int id, UpdateAnimalCategoryCommand cmd, CancellationToken ct)
         {
@@ -41,6 +43,7 @@ namespace PawPal.API.Controllers.Animal_Info
         }
 
 
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpDelete("{id:int}")]
         public async Task Delete(int id, CancellationToken ct)
         {

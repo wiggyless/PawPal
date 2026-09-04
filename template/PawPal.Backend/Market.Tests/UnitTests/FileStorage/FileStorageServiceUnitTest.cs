@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Moq;
 using PawPal.Application.Common.Exceptions;
 using PawPal.Infrastructure.Common;
+using PawPal.Shared.Models;
 using System.Text;
 using Xunit;
 
@@ -32,11 +32,10 @@ namespace PawPal.Tests.UnitTests.FileStorage
             }
         }
 
-        private static IFormFile MakeFile(string fileName, int sizeBytes = 10)
+        private static FileUpload MakeFile(string fileName, int sizeBytes = 10)
         {
             var content = Encoding.UTF8.GetBytes(new string('a', sizeBytes));
-            var stream = new MemoryStream(content);
-            return new FormFile(stream, 0, content.Length, "file", fileName);
+            return new FileUpload { Content = new MemoryStream(content), FileName = fileName, ContentType = "application/octet-stream", Length = content.Length };
         }
 
         [Fact]
@@ -85,8 +84,8 @@ namespace PawPal.Tests.UnitTests.FileStorage
         public async Task SaveFileAsync_ThenReadFileAsync_ShouldRoundTripContent()
         {
             var content = "hello world";
-            var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
-            var file = new FormFile(stream, 0, stream.Length, "file", "photo.png");
+            var bytes = Encoding.UTF8.GetBytes(content);
+            var file = new FileUpload { Content = new MemoryStream(bytes), FileName = "photo.png", ContentType = "image/png", Length = bytes.Length };
 
             var relativePath = await _sut.SaveFileAsync(file, "posts/Post_1", CancellationToken.None);
             var readBack = await _sut.ReadFileAsync(relativePath, CancellationToken.None);
@@ -97,7 +96,7 @@ namespace PawPal.Tests.UnitTests.FileStorage
         [Fact]
         public async Task SaveFilesAsync_ShouldSaveEveryFile()
         {
-            var files = new List<IFormFile> { MakeFile("a.jpg"), MakeFile("b.png"), MakeFile("c.webp") };
+            var files = new List<FileUpload> { MakeFile("a.jpg"), MakeFile("b.png"), MakeFile("c.webp") };
 
             var savedPaths = await _sut.SaveFilesAsync(files, "posts/Post_1", CancellationToken.None);
 

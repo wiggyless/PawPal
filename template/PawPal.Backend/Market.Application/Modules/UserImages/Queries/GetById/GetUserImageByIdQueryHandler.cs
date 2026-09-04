@@ -1,7 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.AspNetCore.Mvc;
 using PawPal.Application.Modules.PostImages.GetById;
 using System;
 using System.Collections.Generic;

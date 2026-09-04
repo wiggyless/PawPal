@@ -14,6 +14,7 @@ namespace PawPal.API.Controllers;
 [Route("[controller]")]
 public class ProductCategoriesController(ISender sender) : ControllerBase
 {
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     [HttpPost]
     public async Task<ActionResult<int>> CreateProductCategory(CreateProductCategoryCommand command, CancellationToken ct)
     {
@@ -22,6 +23,7 @@ public class ProductCategoriesController(ISender sender) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id }, new { id });
     }
 
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     [HttpPut("{id:int}")]
     public async Task Update(int id, UpdateProductCategoryCommand command, CancellationToken ct)
     {
@@ -31,6 +33,7 @@ public class ProductCategoriesController(ISender sender) : ControllerBase
         // no return -> 204 No Content
     }
 
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     [HttpDelete("{id:int}")]
     public async Task Delete(int id, CancellationToken ct)
     {
@@ -52,6 +55,7 @@ public class ProductCategoriesController(ISender sender) : ControllerBase
         return result;
     }
 
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     [HttpPut("{id:int}/disable")]
     public async Task Disable(int id, CancellationToken ct)
     {
@@ -59,6 +63,7 @@ public class ProductCategoriesController(ISender sender) : ControllerBase
         // no return -> 204 No Content
     }
 
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     [HttpPut("{id:int}/enable")]
     public async Task Enable(int id, CancellationToken ct)
     {

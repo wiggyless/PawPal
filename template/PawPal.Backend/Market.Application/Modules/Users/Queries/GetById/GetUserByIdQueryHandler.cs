@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Users.Queries.GetById
 {
@@ -11,10 +12,10 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
     {
         public async Task<GetUserByIdQueryDto> Handle(GetUserByIdQuery request,CancellationToken cancellationToken)
         {
-            // Full profile (email, birthdate, exact canton, disabled status) is private —
+            // Full profile (email, birthdate, exact canton, disabled status) is private �
             // only the account owner or an admin may read it. Anyone else gets the public,
             // redacted profile via GetPublicUserProfileQuery instead.
-            if (currUser.UserId != request.Id && currUser.RoleId != 3)
+            if (currUser.UserId != request.Id && currUser.RoleId != Roles.Admin)
             {
                 throw new PawPalConflictException("User is not allowed to view this profile");
             }
@@ -32,7 +33,7 @@ namespace PawPal.Application.Modules.Users.Queries.GetById
             var user = await context.Users.
                 Include(x =>x.City).
                 Include(x=>x.City.Canton).
-                Where(a => a.Id == request.Id && (currUser.RoleId == 3 ? true : !a.isUserDisabled)).
+                Where(a => a.Id == request.Id && (currUser.RoleId == Roles.Admin ? true : !a.isUserDisabled)).
                 Select(x => new GetUserByIdQueryDto
                 {
      

@@ -1,9 +1,10 @@
-﻿using PawPal.Application.Modules.Moderation.ReportedUsers.Queries.List;
+using PawPal.Application.Modules.Moderation.ReportedUsers.Queries.List;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Moderation.ReportedComments.Queries.List
 {
@@ -16,7 +17,7 @@ namespace PawPal.Application.Modules.Moderation.ReportedComments.Queries.List
             var qIDS = q.Select(x => x.CommentReportedBy);
             var users = context.Users.AsNoTracking().Where(x => qIDS.Contains(x.Id));
             var reportedCommentsIDs = q.Select(x => x.CommentID);
-            if(currentUser.RoleId != 3 || !currentUser.IsAuthenticated)
+            if(currentUser.RoleId != Roles.Admin || !currentUser.IsAuthenticated)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }

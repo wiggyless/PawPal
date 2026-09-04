@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.News.Commands.Update
 {
@@ -11,7 +7,7 @@ namespace PawPal.Application.Modules.News.Commands.Update
     {
         public async Task<Unit> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
         {
-            if (user.RoleId != 3) //only admins can update news
+            if (user.RoleId != Roles.Admin) //only admins can update news
                 throw new ValidationException("Only administrators can update news.");
 
             var news = await ctx.News.FirstOrDefaultAsync(n => n.Id == request.Id, cancellationToken);

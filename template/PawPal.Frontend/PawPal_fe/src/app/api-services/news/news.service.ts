@@ -4,7 +4,13 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { buildHttpParams } from '../../core/models/build-http-params';
 import { PageResult } from '../../core/models/paging/page-result';
-import { CreateNewsRequest, GetNewsByIdQueryDto, ListNewsQuery, ListNewsQueryDto } from './news.model';
+import {
+  CreateNewsRequest,
+  GetNewsByIdQueryDto,
+  ListNewsQuery,
+  ListNewsQueryDto,
+  UpdateNewsRequest,
+} from './news.model';
 
 @Injectable({
   providedIn: 'root',
@@ -28,5 +34,19 @@ export class NewsService {
     formData.append('content', request.content);
     formData.append('photo', request.photo, request.photo.name);
     return this.httpClient.post<{ id: number }>(this.apiUrl, formData);
+  }
+
+  updateNews(id: number, request: UpdateNewsRequest): Observable<void> {
+    const formData = new FormData();
+    formData.append('title', request.title);
+    formData.append('content', request.content);
+    if (request.photo) {
+      formData.append('photo', request.photo, request.photo.name);
+    }
+    return this.httpClient.put<void>(`${this.apiUrl}/${id}`, formData);
+  }
+
+  deleteNews(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

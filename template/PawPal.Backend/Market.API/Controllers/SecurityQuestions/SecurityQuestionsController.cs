@@ -19,6 +19,7 @@ namespace PawPal.API.Controllers.SecurityQuestions
     [Route("[controller]")]
     public class SecurityQuestionsController(ISender sender) : ControllerBase
     {
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpPost]
 
         public async Task<ActionResult<int>> CreateQuestion(CreateQuestionCommand command, CancellationToken cancellationToken)
@@ -41,12 +42,14 @@ namespace PawPal.API.Controllers.SecurityQuestions
             return list;
         }
 
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpPut("{id:int}")]
         public async Task Update(UpdateQuestionCommand upc, int id, CancellationToken ct)
         {
             upc.Id = id;
             await sender.Send(upc, ct);
         }
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpDelete("{id:int}")]
         public async Task Delete(DeleteQuestionCommand deletePost, CancellationToken ct)
         {

@@ -15,6 +15,7 @@ namespace PawPal.API.Controllers.UsersDisabledHistory
 
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     public class UsersDisabledHistoryController(ISender sender) : ControllerBase
     {
         [HttpPost]

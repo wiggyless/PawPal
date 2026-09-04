@@ -1,5 +1,6 @@
-﻿using System.Linq;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Moderation.ReportedPosts.Queries.List
 {
@@ -8,7 +9,7 @@ namespace PawPal.Application.Modules.Moderation.ReportedPosts.Queries.List
     {
         public async Task<PageResult<ListReportedPostsQueryDto>> Handle(ListReportedPostsQuery request, CancellationToken cancellationToken)
         {
-            if (currentUser.RoleId != 3)
+            if (currentUser.RoleId != Roles.Admin)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }

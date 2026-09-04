@@ -1,9 +1,10 @@
-﻿using PawPal.Application.Modules.Users.Queries.List;
+using PawPal.Application.Modules.Users.Queries.List;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Users.Queries.ListDisabledAccounts
 {
@@ -12,7 +13,7 @@ namespace PawPal.Application.Modules.Users.Queries.ListDisabledAccounts
     {
         public async Task<PageResult<ListDisabledAccountsQueryDto>> Handle(ListDisabledAccountsQuery request, CancellationToken cancellationToken)
         {
-            if(!currentUser.IsAuthenticated || currentUser.RoleId !=3)
+            if(!currentUser.IsAuthenticated || currentUser.RoleId != Roles.Admin)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }

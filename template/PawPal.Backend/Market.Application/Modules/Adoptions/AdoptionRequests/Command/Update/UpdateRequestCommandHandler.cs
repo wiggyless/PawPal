@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PawPal.Domain.Entities.Adoptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,11 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Update
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }
-            requestAnimal.Status = command.Status;
+            if (!Enum.TryParse<AdoptionRequestStatus>(command.Status, ignoreCase: true, out var status))
+            {
+                throw new PawPalConflictException("Invalid status value");
+            }
+            requestAnimal.Status = status;
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

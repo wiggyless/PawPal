@@ -69,6 +69,8 @@ public static class DependencyInjection
                 .RequireAuthenticatedUser()
                 .Build();
             o.AddPolicy("StaticFiles", policy => policy.RequireAssertion(_ => true));
+            o.AddPolicy(AuthorizationPolicies.AdminOnly, policy =>
+                policy.RequireAuthenticatedUser().RequireRole(Roles.Admin.ToString()));
         });
 
         // Swagger with Bearer auth

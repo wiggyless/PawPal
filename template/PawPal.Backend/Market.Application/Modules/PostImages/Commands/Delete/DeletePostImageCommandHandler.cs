@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.PostImages.Commands.Delete
 {
@@ -12,7 +13,7 @@ namespace PawPal.Application.Modules.PostImages.Commands.Delete
         public async Task<Unit> Handle(DeletePostImageCommand command,CancellationToken cancellationToken)
         {
             var post = await context.Posts.Where(x => x.Id == command.PostId).FirstOrDefaultAsync(cancellationToken);
-            if (post is not null && post.UserId != user.UserId && user.RoleId != 3)
+            if (post is not null && post.UserId != user.UserId && user.RoleId != Roles.Admin)
                 throw new MarketBusinessRuleException("123", "User isn't authorized to do this");
             var postImage = await context.PostImages.Where(x => x.PostId == command.PostId).FirstOrDefaultAsync(cancellationToken);
             fileStorage.DeleteFolder($"posts/Post_{command.PostId}");

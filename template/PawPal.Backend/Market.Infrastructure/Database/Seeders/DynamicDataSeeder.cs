@@ -1,13 +1,13 @@
 ﻿using Market.Infrastructure.Database;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using PawPal.Application.Modules.PostImages.Commands.Create;
 using PawPal.Domain.Entities.Animal_Info;
 using PawPal.Domain.Entities.Animal_Info.ManyToMany;
 using PawPal.Domain.Entities.Places;
 using PawPal.Domain.Entities.Posts;
 using PawPal.Domain.Entities.Security;
+using PawPal.Shared.Models;
 namespace PawPal.Infrastructure.Database.Seeders;
 
 public static class DynamicDataSeeder
@@ -449,16 +449,17 @@ public static class DynamicDataSeeder
         ct.AddRange(basicUser, verifiedUser, admin);
         await ct.SaveChangesAsync();
     }
-    private static IFormFile CreateFormFile(string filePath)
+    private static FileUpload CreateFileUpload(string filePath)
     {
         var bytes = File.ReadAllBytes(filePath);
-        var stream = new MemoryStream(bytes);
         var fileName = Path.GetFileName(filePath);
 
-        return new FormFile(stream, 0, bytes.Length, "PostImages", fileName)
+        return new FileUpload
         {
-            Headers = new HeaderDictionary(),
-            ContentType = "image/" + Path.GetExtension(fileName).TrimStart('.').ToLower()
+            Content = new MemoryStream(bytes),
+            FileName = fileName,
+            ContentType = "image/" + Path.GetExtension(fileName).TrimStart('.').ToLower(),
+            Length = bytes.Length
         };
     }
     private static async Task SeedAnimalsAsync(DatabaseContext context, ISender sender,
@@ -535,7 +536,7 @@ public static class DynamicDataSeeder
         {
             var post = new PostsEntity
             {
-                Status = "active",
+                Status = PostStatus.Active,
                 DateAdded = DateTime.UtcNow,
                 UserId = users[random.Next(users.Count)].Id,
                 CityId = cities[random.Next(cities.Count)].Id,
@@ -554,15 +555,12 @@ public static class DynamicDataSeeder
                 ? "1" : animal.CategoryId.ToString());
             var filePaths = Directory.GetFiles(seedImagesFolder);
 
-            var formFiles = filePaths.Select(CreateFormFile).ToList();
-
-            var formFileCollection = new FormFileCollection();
-            formFileCollection.AddRange(formFiles);
+            var fileUploads = filePaths.Select(CreateFileUpload).ToList();
 
             var command = new CreatePostImageCommand
             {
                 PostId = post.Id,
-                PostImages = formFileCollection
+                PostImages = fileUploads
             };
 
             // Seeding runs before any HTTP request exists, so there is no current user for
@@ -591,7 +589,7 @@ public static class DynamicDataSeeder
                 string fullPath = Path.Combine(storeFileDirectory, safeFileName);
 
                 using var stream = new FileStream(fullPath, FileMode.Create);
-                await file.CopyToAsync(stream);
+                await file.Content.CopyToAsync(stream);
             }
         }
     }

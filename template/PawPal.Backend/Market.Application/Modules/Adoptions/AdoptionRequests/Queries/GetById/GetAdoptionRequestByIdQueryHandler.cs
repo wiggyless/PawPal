@@ -1,8 +1,10 @@
-﻿using System;
+using PawPal.Domain.Entities.Adoptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.GetById
 {
@@ -18,7 +20,9 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.GetById
                 {
                     Dto = new GetAdoptionRequestByIdQueryDto
                     {
-                        Status = x.Status,
+                        Status = x.Status == AdoptionRequestStatus.Accepted ? "Accepted"
+                            : x.Status == AdoptionRequestStatus.Denied ? "Denied"
+                            : "Pending",
                         DateSent = x.DateSent,
                         UserId = x.UserId,
                         PostId = x.PostId,
@@ -28,7 +32,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.GetById
                     PostOwnerId = x.Post.UserId,
                 }).FirstOrDefaultAsync(cancellationToken);
             if (adoptionReq is null) throw new PawPalNotFoundException($"Adoption request with {request.Id} does not exist");
-            if (adoptionReq.Dto.UserId != currentUser.UserId && adoptionReq.PostOwnerId != currentUser.UserId && currentUser.RoleId != 3)
+            if (adoptionReq.Dto.UserId != currentUser.UserId && adoptionReq.PostOwnerId != currentUser.UserId && currentUser.RoleId != Roles.Admin)
                 throw new PawPalConflictException("User is not allowed to do this action");
             return adoptionReq.Dto;
         }

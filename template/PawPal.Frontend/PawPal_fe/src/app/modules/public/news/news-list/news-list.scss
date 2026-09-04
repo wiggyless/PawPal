@@ -29,6 +29,68 @@
   }
 }
 
+.news-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.news-filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.select-child label {
+  display: block;
+  margin-left: 10px;
+  color: #c7b18c;
+  font-weight: bold;
+}
+
+.news-filter-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+::ng-deep .news-filter-form .mat-mdc-form-field {
+  width: 220px;
+}
+
+::ng-deep .news-filter-form .mdc-text-field--no-label .mat-mdc-form-field-infix {
+  padding-top: 10px !important;
+}
+
+::ng-deep .news-filter-form .mat-mdc-form-field.custom {
+  .mat-mdc-text-field-wrapper {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 100px;
+    background-color: var(--box-color);
+    padding: 5px;
+    box-shadow: 0px 4px 6px var(--box-shadow-color);
+  }
+
+  .mat-mdc-form-field-flex {
+    align-items: center;
+  }
+
+  .mdc-line-ripple {
+    display: none;
+  }
+
+  .mat-mdc-select-trigger {
+    padding: 0 10px;
+  }
+}
+
+::ng-deep .news-filter-form .mat-date-range-input-container {
+  padding-top: 7px;
+}
+
 .news-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));

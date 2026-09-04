@@ -1,3 +1,4 @@
+using PawPal.API.Extensions;
 using PawPal.Application.Modules.UserImages.Commands.Create;
 using PawPal.Application.Modules.UserImages.Commands.Update;
 using PawPal.Application.Modules.UserImages.Queries.GetById;
@@ -10,8 +11,9 @@ namespace PawPal.API.Controllers.UserImage
     public class UserImageController(ISender sender) : ControllerBase
     {
         [HttpPost]
-        public async Task<int> CreatePost([FromForm] CreateUserImageCommand command, CancellationToken cancellationToken)
+        public async Task<int> CreatePost([FromForm] CreateUserImageRequest request, CancellationToken cancellationToken)
         {
+            var command = new CreateUserImageCommand { Image = request.Image.ToFileUpload() };
             return await sender.Send(command, cancellationToken);
         }
         [AllowAnonymous]
@@ -29,8 +31,9 @@ namespace PawPal.API.Controllers.UserImage
         }
 
         [HttpPut]
-        public async Task Update([FromForm] UpdateUserImageCommand command, CancellationToken cancellationToken)
+        public async Task Update([FromForm] UpdateUserImageRequest request, CancellationToken cancellationToken)
         {
+            var command = new UpdateUserImageCommand { Image = request.Image.ToFileUpload() };
             await sender.Send(command, cancellationToken);
         }
     }

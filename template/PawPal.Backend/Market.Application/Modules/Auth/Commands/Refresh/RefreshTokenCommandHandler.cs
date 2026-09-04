@@ -38,6 +38,9 @@ public sealed class RefreshTokenCommandHandler(
         if (user is null || !user.IsEnabled || user.IsDeleted)
             throw new PawPalConflictException("User account is invalid.");
 
+        if (!user.IsEmailConfirmed)
+            throw new PawPalConflictException("Please confirm your email address before logging in.");
+
         // 3) Rotation: revoke the old one
         rt.IsRevoked = true;
         rt.RevokedAtUtc = nowUtc;

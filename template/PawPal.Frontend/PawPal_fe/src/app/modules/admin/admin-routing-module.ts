@@ -11,6 +11,7 @@ import { ReportedComments } from './reported-comments/reported-comments/reported
 import { DisabledUsers } from './disabled-users/disabled-users/disabled-users';
 import { myAuthGuard } from '../../core/guards/my-auth-guard';
 import { ReportedProblems } from './reported-problems/reported-problems/reported-problems';
+import { AdminDashboard } from './admin-dashboard/admin-dashboard/admin-dashboard';
 
 const routes: Routes = [
   {
@@ -19,7 +20,8 @@ const routes: Routes = [
     path: '',
     component: AdminLayout,
     children: [
-      { path: '', redirectTo: 'my-profile', pathMatch: 'full' },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: AdminDashboard },
       { path: 'user-profiles', component: UserProfiles },
       { path: 'my-profile', component: AdminProfile },
       { path: 'profile', component: Profile },

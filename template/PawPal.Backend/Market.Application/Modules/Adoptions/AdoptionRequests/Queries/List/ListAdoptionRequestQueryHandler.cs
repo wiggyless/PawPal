@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PawPal.Domain.Entities.Adoptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,11 +31,14 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.List
 
             if (!string.IsNullOrWhiteSpace(request.SearchStatus))
             {
-                reqList = reqList.Where(x => x.Status.ToLower().Contains(request.SearchStatus.ToLower()));
+                var matchingStatuses = Enum.GetValues<AdoptionRequestStatus>()
+                    .Where(s => s.ToString().Contains(request.SearchStatus, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                reqList = reqList.Where(x => matchingStatuses.Contains(x.Status));
             }
             else
             {
-                reqList = reqList.Where(x => x.Status.ToLower() == "pending");
+                reqList = reqList.Where(x => x.Status == AdoptionRequestStatus.Pending);
             }
 
             if (request.SearchDateSent != null)
@@ -50,7 +54,9 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.List
                 Breed = y.Post.Animal.Breed,
                 City = y.Post.City.Name,
                 Canton = y.Post.City.Canton.FullName,
-                Status = y.Status,
+                Status = y.Status == AdoptionRequestStatus.Accepted ? "Accepted"
+                    : y.Status == AdoptionRequestStatus.Denied ? "Denied"
+                    : "Pending",
                 DateSent = y.DateSent,
                 RequirementId = y.RequirementId,
                 UserID = y.UserId,

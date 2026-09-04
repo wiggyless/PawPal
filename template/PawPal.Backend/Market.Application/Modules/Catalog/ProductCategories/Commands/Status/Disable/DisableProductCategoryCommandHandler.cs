@@ -1,4 +1,5 @@
-﻿using PawPal.Application.Abstractions;
+using PawPal.Application.Abstractions;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Status.Disable;
 
@@ -7,7 +8,7 @@ public sealed class DisableProductCategoryCommandHandler(IAppDbContext ctx, IApp
 {
     public async Task<Unit> Handle(DisableProductCategoryCommand request, CancellationToken ct)
     {
-        if (currentUser.RoleId != 3)
+        if (currentUser.RoleId != Roles.Admin)
             throw new PawPalConflictException("Only administrators can disable categories.");
 
         var cat = await ctx.ProductCategories
