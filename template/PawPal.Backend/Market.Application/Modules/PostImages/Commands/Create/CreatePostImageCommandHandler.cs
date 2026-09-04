@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.PostImages.Commands.Create
 {
@@ -15,7 +16,7 @@ namespace PawPal.Application.Modules.PostImages.Commands.Create
             var post = await context.Posts.Where(x=>x.Id == command.PostId).FirstOrDefaultAsync(cancellationToken);
             if (post is null)
                 throw new PawPalNotFoundException($"Post with ID:{command.PostId} not found");
-            if (post.UserId != user.UserId && user.RoleId != 3)
+            if (post.UserId != user.UserId && user.RoleId != Roles.Admin)
                 throw new PawPalConflictException("User is not allowed to do this action");
             if (command.PostImages is null || command.PostImages.Count == 0)
                 throw new ValidationException("At least one image is required.");

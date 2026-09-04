@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using PawPal.Application.Abstractions;
 using PawPal.Application.Common.Exceptions;
+using PawPal.Shared.Models;
 
 namespace PawPal.Infrastructure.Common;
 
@@ -17,7 +17,7 @@ public sealed class FileStorageService(IWebHostEnvironment env) : IFileStorageSe
 
     private string WebRoot => env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
 
-    public async Task<string> SaveFileAsync(IFormFile file, string subFolder, CancellationToken cancellationToken)
+    public async Task<string> SaveFileAsync(FileUpload file, string subFolder, CancellationToken cancellationToken)
     {
         ValidateFile(file);
 
@@ -33,13 +33,13 @@ public sealed class FileStorageService(IWebHostEnvironment env) : IFileStorageSe
 
         await using (var stream = new FileStream(fullPath, FileMode.Create))
         {
-            await file.CopyToAsync(stream, cancellationToken);
+            await file.Content.CopyToAsync(stream, cancellationToken);
         }
 
         return $"/{normalizedSubFolder}/{generatedFileName}";
     }
 
-    public async Task<IReadOnlyList<string>> SaveFilesAsync(IEnumerable<IFormFile> files, string subFolder, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<string>> SaveFilesAsync(IEnumerable<FileUpload> files, string subFolder, CancellationToken cancellationToken)
     {
         var savedPaths = new List<string>();
         foreach (var file in files)
@@ -66,7 +66,7 @@ public sealed class FileStorageService(IWebHostEnvironment env) : IFileStorageSe
         return await File.ReadAllBytesAsync(fullPath, cancellationToken);
     }
 
-    private static void ValidateFile(IFormFile file)
+    private static void ValidateFile(FileUpload file)
     {
         if (file is null || file.Length == 0)
         {

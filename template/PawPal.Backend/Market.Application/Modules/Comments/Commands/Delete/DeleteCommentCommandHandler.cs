@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Comments.Commands.Delete
 {
@@ -18,7 +19,7 @@ namespace PawPal.Application.Modules.Comments.Commands.Delete
             if (comment == null) {
                 throw new PawPalNotFoundException("Comment does not exist");
             }
-            if (comment.UserId != appCurrentUser.UserId && appCurrentUser.RoleId != 3) {
+            if (comment.UserId != appCurrentUser.UserId && appCurrentUser.RoleId != Roles.Admin) {
                 throw new PawPalConflictException("User is not permitted to do this action");
             }
             context.Comments.Remove(comment);

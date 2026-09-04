@@ -1,4 +1,5 @@
-﻿using PawPal.Application.Abstractions;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using PawPal.Application.Abstractions;
 using PawPal.Domain.Entities.Adoptions;
 using PawPal.Domain.Entities.Animal_Info;
 using PawPal.Domain.Entities.Animal_Info.ManyToMany;
@@ -57,4 +58,6 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     {
         _clock = clock;
     }
+
+    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct) => Database.BeginTransactionAsync(ct);
 }

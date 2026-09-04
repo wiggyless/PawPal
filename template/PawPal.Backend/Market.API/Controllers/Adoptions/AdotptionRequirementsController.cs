@@ -25,6 +25,7 @@ namespace PawPal.API.Controllers.Adoptions
             return req;
         }
 
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpGet]
         public async Task<PageResult<ListRequirementsQueryDto>> List([FromQuery] ListRequirementsQuery query,
             CancellationToken cancellationToken)

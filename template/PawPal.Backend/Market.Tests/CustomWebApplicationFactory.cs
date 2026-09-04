@@ -28,7 +28,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<Progr
             response.EnsureSuccessStatusCode();
 
             var loginResponse = await response.Content.ReadFromJsonAsync<LoginCommandDto>();
-            _cachedToken = loginResponse.AccessToken;
+            _cachedToken = loginResponse!.AccessToken;
         }
         client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", _cachedToken);

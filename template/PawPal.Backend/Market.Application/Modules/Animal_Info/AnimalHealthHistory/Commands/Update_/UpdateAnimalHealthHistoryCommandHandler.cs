@@ -1,10 +1,11 @@
-﻿using PawPal.Domain.Entities.Animal_Info;
+using PawPal.Domain.Entities.Animal_Info;
 using PawPal.Domain.Entities.Animal_Info.ManyToMany;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Update_
 {
@@ -20,7 +21,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Up
             // Only the owner of the post this health history belongs to (or an admin) may edit it.
             var owningPost = await context.Posts.AsNoTracking()
                 .FirstOrDefaultAsync(p => p.AnimalHistoryId == healthHistory.Id, cancellationToken);
-            if (currentUser.RoleId != 3 && (owningPost is null || owningPost.UserId != currentUser.UserId))
+            if (currentUser.RoleId != Roles.Admin && (owningPost is null || owningPost.UserId != currentUser.UserId))
                 throw new PawPalConflictException("User is not allowed to do this action");
 
             var animalAllergies = await context.AnimalsAllergies.Where(x => x.AnimalHealthHistoryId == healthHistory.Id).ToListAsync(cancellationToken);

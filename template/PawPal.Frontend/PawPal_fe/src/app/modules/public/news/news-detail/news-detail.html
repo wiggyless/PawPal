@@ -11,7 +11,15 @@
 
       @if (isLoaded() && news) {
         <div class="news-detail">
-          <button class="secondarybtn back-btn" (click)="goBack()">← Back to News</button>
+          <div class="news-detail-actions">
+            <button class="secondarybtn" (click)="goBack()">← Back to News</button>
+            @if (currentUser.roleid() === 3) {
+              <div class="news-detail-admin-actions">
+                <button class="primarybtn" (click)="openEditDialog()">Edit News</button>
+                <button class="dangerbtn" (click)="deleteNews()">Delete News</button>
+              </div>
+            }
+          </div>
           <img [src]="getImageUrl(news.photoURL)" class="news-detail-image" alt="{{ news.title }}" />
           <div class="news-detail-body">
             <h1>{{ news.title }}</h1>

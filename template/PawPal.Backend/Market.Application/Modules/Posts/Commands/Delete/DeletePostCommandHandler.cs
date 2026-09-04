@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Posts.Commands.Delete
 {
@@ -13,7 +14,7 @@ namespace PawPal.Application.Modules.Posts.Commands.Delete
             var post = await context.Posts.Include(x=>x.Animal).FirstOrDefaultAsync(x => x.Id == request.Id,cancellationToken);
             var postImage = await context.PostImages.FirstOrDefaultAsync(x => x.PostId == request.Id, cancellationToken);
             if (post== null) throw new PawPalNotFoundException($"Post with Id {request.Id} does not exist!");
-            if (post.UserId != currentUser.UserId && currentUser.RoleId != 3)
+            if (post.UserId != currentUser.UserId && currentUser.RoleId != Roles.Admin)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }

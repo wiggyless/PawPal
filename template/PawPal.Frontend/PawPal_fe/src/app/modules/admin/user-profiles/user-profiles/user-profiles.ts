@@ -9,6 +9,7 @@ import { BaseListPagedComponent } from '../../../../core/components/base-classes
 import { PageResult } from '../../../../core/models/paging/page-result';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { UserImageService } from '../../../../api-services/userImage/userImage-service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-user-profiles',
@@ -31,6 +32,14 @@ export class UserProfiles
   isLoadingMore = signal(false);
   subscribe: Subscription | undefined;
   cd = inject(ChangeDetectorRef);
+  fb = inject(FormBuilder);
+  filterForm: FormGroup = this.fb.group({
+    searchFirstName: [''],
+    searchLastName: [''],
+    searchEmail: [''],
+    searchUsername: [''],
+    disabled: [null],
+  });
   constructor(crr: CurrentUserService) {
     super();
     this.currentUser = crr;
@@ -47,15 +56,23 @@ export class UserProfiles
     totalPages: 0,
     pageSizeOption: [4, 8],
   };
-  username = '';
   ngOnInit(): void {
     this.loadUsers();
   }
   ngOnDestroy(): void {
     this.subscribe?.unsubscribe();
   }
+  search(): void {
+    const filters = this.filterForm.value;
+    this.request.searchFirstName = filters.searchFirstName || undefined;
+    this.request.searchLastName = filters.searchLastName || undefined;
+    this.request.searchEmail = filters.searchEmail || undefined;
+    this.request.searchUsername = filters.searchUsername || undefined;
+    this.request.disabled = filters.disabled ?? undefined;
+    this.request.paging.page = 1;
+    this.loadUsers();
+  }
   loadUsers(): void {
-    this.request.searchUsername = this.username;
     this.isLoaded.set(false);
     this.subscribe = this.userProfileService.getUserList(this.request).subscribe((res) => {
       this.userProfilesList = res;

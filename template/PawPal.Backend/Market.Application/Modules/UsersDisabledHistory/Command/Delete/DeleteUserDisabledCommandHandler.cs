@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.UsersDisabledHistory.Command.Delete
 {
@@ -11,7 +12,7 @@ namespace PawPal.Application.Modules.UsersDisabledHistory.Command.Delete
     {
         public async Task<int> Handle(DeleteUserDisabledCommand command, CancellationToken cancellationToken)
         {
-            if (currentUser.RoleId != 3 || !currentUser.IsAuthenticated)
+            if (currentUser.RoleId != Roles.Admin || !currentUser.IsAuthenticated)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }

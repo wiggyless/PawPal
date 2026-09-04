@@ -1,9 +1,10 @@
-﻿using PawPal.Application.Abstractions;
+using PawPal.Application.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.Delete_
 {
@@ -22,7 +23,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalHealthHistory.Commands.De
             // Only the owner of the post this health history belongs to (or an admin) may delete it.
             var owningPost = await context.Posts.AsNoTracking()
                 .FirstOrDefaultAsync(p => p.AnimalID == request.AnimalId, cancellationToken);
-            if (user.RoleId != 3 && (owningPost is null || owningPost.UserId != user.UserId))
+            if (user.RoleId != Roles.Admin && (owningPost is null || owningPost.UserId != user.UserId))
                 throw new PawPalConflictException("User is not allowed to do this action");
 
             healthHistory.IsDeleted = true;

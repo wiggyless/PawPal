@@ -1,10 +1,11 @@
-﻿using PawPal.Domain.Entities.Animal_Info;
+using PawPal.Domain.Entities.Animal_Info;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Disabilities.Command.Create
 {
@@ -12,7 +13,7 @@ namespace PawPal.Application.Modules.Disabilities.Command.Create
     {
         public async Task<int> Handle(CreateDisabilitieCommand command,CancellationToken cancellationToken)
         {
-            if(!currentUser.IsAuthenticated || currentUser.RoleId !=3)
+            if(!currentUser.IsAuthenticated || currentUser.RoleId != Roles.Admin)
             {
                 throw new PawPalNotFoundException("User is not allowed to do this action");
             }

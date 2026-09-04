@@ -1,4 +1,6 @@
-﻿using PawPal.Application.Services;
+using PawPal.Domain.Entities.Adoptions;
+using PawPal.Domain.Entities.Posts;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.UpdateStatus;
 
@@ -23,18 +25,33 @@ public sealed class UpdateAdoptionStatusCommandHandler(
         if (adoptionRequest is null)
             throw new PawPalNotFoundException("Adoption request does not exist");
 
-        if (adoptionRequest.Post?.UserId != currentUser.UserId && currentUser.RoleId != 3)
+        if (adoptionRequest.Post?.UserId != currentUser.UserId && currentUser.RoleId != Roles.Admin)
             throw new PawPalConflictException("Only the post owner can accept or deny adoption requests.");
 
-        var validStatuses = new[] { "Accepted", "Denied" };
-        if (!validStatuses.Contains(request.Status))
+        if (!Enum.TryParse<AdoptionRequestStatus>(request.Status, ignoreCase: true, out var newStatus)
+            || (newStatus != AdoptionRequestStatus.Accepted && newStatus != AdoptionRequestStatus.Denied))
             throw new PawPalConflictException("Invalid status value");
 
-        adoptionRequest.Status = request.Status;
+        if (adoptionRequest.Status != AdoptionRequestStatus.Pending)
+            throw new PawPalConflictException("Only pending requests can be accepted or denied");
 
-        if (request.Status == "Accepted" && adoptionRequest.Post is not null)
+        if (newStatus == AdoptionRequestStatus.Accepted && adoptionRequest.Post is not null && adoptionRequest.Post.Status != PostStatus.Active)
+            throw new PawPalConflictException("This animal is no longer available for adoption");
+
+        adoptionRequest.Status = newStatus;
+
+        if (newStatus == AdoptionRequestStatus.Accepted && adoptionRequest.Post is not null)
         {
-            adoptionRequest.Post.Status = "Adopted";
+            adoptionRequest.Post.Status = PostStatus.Adopted;
+
+            var otherPendingRequests = await context.AdoptionRequests
+                .Where(x => x.PostId == adoptionRequest.PostId
+                    && x.Id != adoptionRequest.Id
+                    && x.Status == AdoptionRequestStatus.Pending)
+                .ToListAsync(cancellationToken);
+
+            foreach (var other in otherPendingRequests)
+                other.Status = AdoptionRequestStatus.Denied;
         }
 
         await context.SaveChangesAsync(cancellationToken);
@@ -43,7 +60,7 @@ public sealed class UpdateAdoptionStatusCommandHandler(
         if (requester is null)
             return;
 
-        if (request.Status == "Accepted")
+        if (newStatus == AdoptionRequestStatus.Accepted)
         {
             if (requester.FcmToken is not null)
             {
@@ -72,7 +89,7 @@ public sealed class UpdateAdoptionStatusCommandHandler(
                 }
             }
         }
-        else if (request.Status == "Denied")
+        else if (newStatus == AdoptionRequestStatus.Denied)
         {
             if (requester.FcmToken is not null)
             {
@@ -90,7 +107,7 @@ public sealed class UpdateAdoptionStatusCommandHandler(
     {
         return $$"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-            <h2 style="color: #2e7d32;">Congratulations, {{requesterUsername}}! 🎉</h2>
+            <h2 style="color: #2e7d32;">Congratulations, {{requesterUsername}}! ??</h2>
             <p>Your adoption request for <strong>{{animalName}}</strong> has been approved by <strong>{{ownerUsername}}</strong>!</p>
 
             <p>Here are the next steps you should take:</p>
@@ -99,7 +116,7 @@ public sealed class UpdateAdoptionStatusCommandHandler(
                 <li>Buy the supplies necessary for your new family member (food, bedding, toys, carrier/crate, etc.).</li>
                 <li>Prepare your home so it's safe and comfortable before your new companion arrives.</li>
                 <li>Schedule a check-up with a local veterinarian for the first few weeks.</li>
-                <li>Be patient during the adjustment period — it can take time for your new pet to settle in.</li>
+                <li>Be patient during the adjustment period � it can take time for your new pet to settle in.</li>
             </ol>
 
             <p>Thank you for choosing to adopt and giving an animal a loving home!</p>

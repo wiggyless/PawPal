@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.News.Commands.Delete
 {
@@ -14,7 +15,7 @@ namespace PawPal.Application.Modules.News.Commands.Delete
             var news = await context.News.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (news == null)
                 throw new PawPalNotFoundException($"News with Id {request.Id} does not exist!");
-            else if (appCurrentUser.RoleId != 3)
+            else if (appCurrentUser.RoleId != Roles.Admin)
                 throw new PawPalConflictException("Only administrators can delete news!");
 
             news.IsDeleted = true;

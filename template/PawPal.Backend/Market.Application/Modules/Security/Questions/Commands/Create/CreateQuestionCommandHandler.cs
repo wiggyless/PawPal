@@ -1,4 +1,4 @@
-﻿using PawPal.Application.Modules.Disabilities.Command.Create;
+using PawPal.Application.Modules.Disabilities.Command.Create;
 using PawPal.Domain.Entities.Animal_Info;
 using PawPal.Domain.Entities.Security;
 using System;
@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Security.Questions.Commands.Create
 {
@@ -13,7 +14,7 @@ namespace PawPal.Application.Modules.Security.Questions.Commands.Create
     {
         public async Task<int> Handle(CreateQuestionCommand command, CancellationToken cancellationToken)
         {
-            if (currentUser.RoleId != 3)
+            if (currentUser.RoleId != Roles.Admin)
                 throw new PawPalConflictException("Only administrators can create security questions.");
 
             var newQuestion = new SecurityQuestion

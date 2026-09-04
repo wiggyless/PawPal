@@ -1,12 +1,42 @@
 <div class="search-div">
   <h1 class="my-user-title">USER PROFILES</h1>
-  <label class="input-label">Username</label>
-  <div class="search-wrapper">
-    <mat-form-field>
-      <input matInput [(ngModel)]="username" class="search" />
-    </mat-form-field>
-    <button class="primarybtn" (click)="loadUsers()">SEARCH</button>
-  </div>
+  <form [formGroup]="filterForm" (ngSubmit)="search()" class="search-wrapper">
+    <div class="select-wrapper">
+      <label class="input-label">First name</label>
+      <mat-form-field>
+        <input matInput formControlName="searchFirstName" class="search" />
+      </mat-form-field>
+    </div>
+    <div class="select-wrapper">
+      <label class="input-label">Last name</label>
+      <mat-form-field>
+        <input matInput formControlName="searchLastName" class="search" />
+      </mat-form-field>
+    </div>
+    <div class="select-wrapper">
+      <label class="input-label">Username</label>
+      <mat-form-field>
+        <input matInput formControlName="searchUsername" class="search" />
+      </mat-form-field>
+    </div>
+    <div class="select-wrapper">
+      <label class="input-label">Email</label>
+      <mat-form-field>
+        <input matInput formControlName="searchEmail" class="search" />
+      </mat-form-field>
+    </div>
+    <div class="select-wrapper">
+      <label class="input-label">Status</label>
+      <mat-form-field>
+        <mat-select formControlName="disabled">
+          <mat-option [value]="null">All</mat-option>
+          <mat-option [value]="false">Active</mat-option>
+          <mat-option [value]="true">Disabled</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <button class="primarybtn" type="submit">SEARCH</button>
+  </form>
 </div>
 <div class="admin-content-users-container">
   <div class="admin-content-users">

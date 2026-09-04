@@ -7,7 +7,7 @@ namespace PawPal.Domain.Entities.Posts
 {
     public class PostsEntity : BaseEntity
     {
-        public string? Status { get; set; }
+        public PostStatus Status { get; set; }
         public DateTime DateAdded { get; set; }
         public int UserId { get; set; }
         public UserEntity ?User { get; set; }

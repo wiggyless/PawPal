@@ -6,7 +6,7 @@ using PawPal.Application.Modules.Users.Commands.Create;
 using PawPal.Application.Options;
 using PawPal.Domain.Entities.Identity;
 using PawPal.Domain.Entities.Places;
-using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace PawPal.Tests.UnitTests.User
 {

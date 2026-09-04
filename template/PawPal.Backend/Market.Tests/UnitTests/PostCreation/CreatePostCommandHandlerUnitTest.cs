@@ -1,5 +1,6 @@
 ﻿using Moq;
 using PawPal.Application.Abstractions;
+using PawPal.Application.Common.Exceptions;
 using PawPal.Application.Modules.Posts.Commands.Create;
 using PawPal.Domain.Entities.Animal_Info;
 using PawPal.Domain.Entities.Identity;
@@ -34,7 +35,7 @@ public class CreatePostCommandHandlerUnitTest
 
     private async Task<AnimalEntity> SeedAnimalAsync(int id = 1)
     {
-        var animal = new AnimalEntity { Id = id  };
+        var animal = new AnimalEntity { Id = id, Name = "Rex", Breed = "Mixed" };
         _context.Animals.Add(animal);
         await _context.SaveChangesAsync();
         return animal;
@@ -44,6 +45,7 @@ public class CreatePostCommandHandlerUnitTest
     {
         _currentUserMock.SetupGet(x => x.RoleId).Returns(2);
         _currentUserMock.SetupGet(x => x.IsAuthenticated).Returns(true);
+        _currentUserMock.SetupGet(x => x.UserId).Returns(1);
     }
 
     [Fact]
@@ -67,7 +69,7 @@ public class CreatePostCommandHandlerUnitTest
         Assert.Equal(user.Id, saved!.UserId);
         Assert.Equal(animal.Id, saved.AnimalID);
         Assert.Equal(user.CityId, saved.CityId);
-        Assert.Equal("active", saved.Status);
+        Assert.Equal(PostStatus.Active, saved.Status);
     }
 
     [Fact]
@@ -81,7 +83,7 @@ public class CreatePostCommandHandlerUnitTest
 
         var command = new CreatePostCommand { AnimalID = animal.Id };
 
-        await Assert.ThrowsAsync<Exception>(() => _sut.Handle(command, CancellationToken.None));
+        await Assert.ThrowsAsync<PawPalConflictException>(() => _sut.Handle(command, CancellationToken.None));
     }
 
     [Fact]
@@ -95,18 +97,18 @@ public class CreatePostCommandHandlerUnitTest
 
         var command = new CreatePostCommand { AnimalID = animal.Id };
 
-        await Assert.ThrowsAsync<Exception>(() => _sut.Handle(command, CancellationToken.None));
+        await Assert.ThrowsAsync<PawPalConflictException>(() => _sut.Handle(command, CancellationToken.None));
     }
 
     [Fact]
-    public async Task Handle_ShouldThrowNullReference_WhenAnimalDoesNotExist()
+    public async Task Handle_ShouldThrowPawPalNotFound_WhenAnimalDoesNotExist()
     {
         var user = await SeedUserAsync();
         SetupAuthorizedUser();
 
         var command = new CreatePostCommand { AnimalID = 999 };
 
-        await Assert.ThrowsAsync<NullReferenceException>(
+        await Assert.ThrowsAsync<PawPalNotFoundException>(
             () => _sut.Handle(command, CancellationToken.None));
     }
 

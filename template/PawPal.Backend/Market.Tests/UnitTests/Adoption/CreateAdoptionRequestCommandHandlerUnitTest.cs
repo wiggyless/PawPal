@@ -2,7 +2,6 @@ using Moq;
 using PawPal.Application.Abstractions;
 using PawPal.Application.Common.Exceptions;
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create;
-using PawPal.Application.Services;
 using PawPal.Domain.Entities.Adoptions;
 using PawPal.Domain.Entities.Identity;
 using PawPal.Domain.Entities.Posts;
@@ -34,7 +33,7 @@ public class CreateAdoptionRequestCommandHandlerTests
         var owner = new UserEntity { Id = 2, Username = "Bob", FcmToken = "tokenB" };
         _context.Users.AddRange(requester, owner);
 
-        var post = new PostsEntity { Id = 10, UserId = owner.Id, AnimalID = 1, Status = "Available", DateAdded = DateTime.Now };
+        var post = new PostsEntity { Id = 10, UserId = owner.Id, AnimalID = 1, Status = PostStatus.Active, DateAdded = DateTime.Now };
         _context.Posts.Add(post);
 
         var req = new AdoptionRequirementEntity
@@ -74,7 +73,7 @@ public class CreateAdoptionRequestCommandHandlerTests
 
         var saved = await _context.AdoptionRequests.FindAsync(id);
         Assert.NotNull(saved);
-        Assert.Equal("Pending", saved.Status);
+        Assert.Equal(AdoptionRequestStatus.Pending, saved.Status);
         Assert.Equal(requester.Id, saved.UserId);
     }
 
@@ -151,7 +150,7 @@ public class CreateAdoptionRequestCommandHandlerTests
             UserId = requester.Id,
             PostId = post.Id,
             RequirementId = req.Id,
-            Status = "Pending",
+            Status = AdoptionRequestStatus.Pending,
             DateSent = DateTime.Now
         });
         await _context.SaveChangesAsync();
@@ -164,9 +163,9 @@ public class CreateAdoptionRequestCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_WhenPreviousRequestWasRejected_AllowsNewRequest()
+    public async Task Handle_WhenPreviousRequestWasDenied_AllowsNewRequest()
     {
-        // Confirms the duplicate check only blocks "Pending", not historical statuses
+        // Confirms the duplicate check only blocks Pending, not historical statuses
         var (requester, _, post, req) = await SeedAsync();
         _currentUserMock.Setup(c => c.UserId).Returns(requester.Id);
 
@@ -175,7 +174,7 @@ public class CreateAdoptionRequestCommandHandlerTests
             UserId = requester.Id,
             PostId = post.Id,
             RequirementId = req.Id,
-            Status = "Rejected",
+            Status = AdoptionRequestStatus.Denied,
             DateSent = DateTime.Now.AddDays(-5)
         });
         await _context.SaveChangesAsync();
@@ -184,6 +183,22 @@ public class CreateAdoptionRequestCommandHandlerTests
 
         var id = await _sut.Handle(command, CancellationToken.None);
         Assert.True(id > 0);
+    }
+
+    [Fact]
+    public async Task Handle_WhenPostIsAlreadyAdopted_ThrowsConflictException()
+    {
+        var (requester, _, post, req) = await SeedAsync();
+        post.Status = PostStatus.Adopted;
+        await _context.SaveChangesAsync();
+
+        _currentUserMock.Setup(c => c.UserId).Returns(requester.Id);
+
+        var command = ValidCommand(post.Id, req.Id);
+
+        var ex = await Assert.ThrowsAsync<PawPalConflictException>(
+            () => _sut.Handle(command, CancellationToken.None));
+        Assert.Contains("no longer available", ex.Message);
     }
 
     [Fact]
@@ -196,9 +211,9 @@ public class CreateAdoptionRequestCommandHandlerTests
         await _sut.Handle(command, CancellationToken.None);
 
         _notificationMock.Verify(n => n.SendAsync(
-            owner.FcmToken,
+            owner.FcmToken!,
             "New Adoption Request",
-            It.Is<string>(msg => msg.Contains(requester.Username)),
+            It.Is<string>(msg => msg.Contains(requester.Username!)),
             It.IsAny<string>()
         ), Times.Once);
     }

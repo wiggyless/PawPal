@@ -1,9 +1,10 @@
-﻿using MediatR;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Queries.List
 {
@@ -15,7 +16,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Queries.List
             // This search has no per-applicant scoping (no UserId/PostId filter), so it would
             // otherwise expose every applicant's address, finances, and household details to any
             // logged-in user. Restrict it to admins until it has a real ownership-scoped filter.
-            if (currentUser.RoleId != 3)
+            if (currentUser.RoleId != Roles.Admin)
                 throw new PawPalConflictException("User is not authorized for this action");
 
             var reqList = context.AdoptionRequirements.AsQueryable();

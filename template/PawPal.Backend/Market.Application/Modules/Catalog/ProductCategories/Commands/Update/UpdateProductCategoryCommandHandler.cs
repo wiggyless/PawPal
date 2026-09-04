@@ -1,4 +1,5 @@
-﻿using PawPal.Application.Abstractions;
+using PawPal.Application.Abstractions;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Catalog.ProductCategories.Commands.Update;
 
@@ -7,7 +8,7 @@ public sealed class UpdateProductCategoryCommandHandler(IAppDbContext ctx, IAppC
 {
     public async Task<Unit> Handle(UpdateProductCategoryCommand request, CancellationToken ct)
     {
-        if (currentUser.RoleId != 3)
+        if (currentUser.RoleId != Roles.Admin)
             throw new PawPalConflictException("Only administrators can update categories.");
 
         var entity = await ctx.ProductCategories

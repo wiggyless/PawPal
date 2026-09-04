@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.List;
+﻿using PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.List;
+using PawPal.Domain.Entities.Adoptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +20,14 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.ListHist
                 .Include(x => x.Post.City)
                 .Include(x => x.Post.City.Canton)
                 .Include(x => x.Post.Animal.Gender).AsQueryable();
-            reqList = reqList.Where(x => x.Post.UserId == request.UserID && x.Status.ToLower() != "sent").AsQueryable();
+            reqList = reqList.Where(x => x.Post.UserId == request.UserID).AsQueryable();
             if (!string.IsNullOrWhiteSpace(request.SearchStatus))
-                reqList = reqList.Where(x => x.Status.ToLower().Contains(request.SearchStatus.ToLower()));
+            {
+                var matchingStatuses = Enum.GetValues<AdoptionRequestStatus>()
+                    .Where(s => s.ToString().Contains(request.SearchStatus, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                reqList = reqList.Where(x => matchingStatuses.Contains(x.Status));
+            }
             if (request.SearchDateSent != null)
             {
                 reqList = reqList.Where(x => x.DateSent == request.SearchDateSent);
@@ -35,7 +40,9 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.ListHist
                 Breed = y.Post.Animal.Breed,
                 City = y.Post.City.Name,
                 Canton = y.Post.City.Canton.FullName,
-                Status = y.Status,
+                Status = y.Status == AdoptionRequestStatus.Accepted ? "Accepted"
+                    : y.Status == AdoptionRequestStatus.Denied ? "Denied"
+                    : "Pending",
                 DateSent = y.DateSent,
                 RequirementId = y.RequirementId,
                 UserID = y.UserId,

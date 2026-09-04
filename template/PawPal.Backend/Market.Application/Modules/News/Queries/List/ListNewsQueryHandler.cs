@@ -1,4 +1,4 @@
-﻿
+
 
 
 namespace PawPal.Application.Modules.News.Queries.List
@@ -10,14 +10,28 @@ namespace PawPal.Application.Modules.News.Queries.List
         {
             var query = ctx.News.AsNoTracking();
 
-            if(!string.IsNullOrWhiteSpace(request.Search))
+            if (!string.IsNullOrWhiteSpace(request.Search))
             {
                 query = query.Where(n =>
-                    n.Title.Contains(request.Search));
+                    n.Title.Contains(request.Search) || n.Content.Contains(request.Search));
             }
 
+            if (request.PublishedFrom is not null)
+                query = query.Where(n => n.PublishedAt >= request.PublishedFrom);
+
+            if (request.PublishedTo is not null)
+                query = query.Where(n => n.PublishedAt <= request.PublishedTo);
+
+            if (request.HasPhoto is not null)
+                query = request.HasPhoto == true
+                    ? query.Where(n => n.PhotoURL != null && n.PhotoURL != string.Empty)
+                    : query.Where(n => n.PhotoURL == null || n.PhotoURL == string.Empty);
+
+            query = request.SortDescending
+                ? query.OrderByDescending(n => n.PublishedAt)
+                : query.OrderBy(n => n.PublishedAt);
+
             var projectedQuery = query
-                .OrderByDescending(n => n.PublishedAt)
                 .Select(n => new ListNewsQueryDto
                 {
                     Id = n.Id,

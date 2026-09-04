@@ -12,36 +12,20 @@ import { CitiesService } from '../../../api-services/cities/cities.service';
 import { GetUserByIdDto } from '../../../api-services/users/users-model';
 import { Location } from '@angular/common';
 import { PostImagesService } from '../../../api-services/animal-post-images/animal-post-images-service';
-import {
-  AddNewPostImages,
-  GetImagePostBlob,
-} from '../../../api-services/animal-post-images/animal-post-images-model';
+import { GetImagePostBlob } from '../../../api-services/animal-post-images/animal-post-images-model';
 
-import { forkJoin, switchMap } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AddAnimalPost } from '../../../api-services/animal-posts/animal-posts.model';
-import { AddAnimalDto, UpdateAnimalDto } from '../../../api-services/animals/animal-model';
-import { AnimalService } from '../../../api-services/animals/animal';
 import { AnimalPostService } from '../../../api-services/animal-posts/animal-posts.service';
 import { ListAnimalBreedQueryDto } from '../../../api-services/animal-breed/animal-breed.model';
 import { AllergyService } from '../../../api-services/allergies/allergy-service';
 import { DisabilityService } from '../../../api-services/disabilities/disability-service';
 import { ListAnimalCategoriesQueryDto } from '../../../api-services/animal-categories/animal-categories.model';
-import {
-  AddAnimalHealthHistory,
-  UpdateHealthHistory,
-} from '../../../api-services/animals-health/animals-health-model';
 import { AnimalsHealthService } from '../../../api-services/animals-health/animals-health-service';
-import {
-  AllergyQueryDto,
-  ListAllergyQueryDto,
-} from '../../../api-services/allergies/allergy-model';
-import {
-  DisabilitiesDto,
-  ListDisabilitiesQueryDto,
-} from '../../../api-services/disabilities/disability-model';
+import { ListAllergyQueryDto } from '../../../api-services/allergies/allergy-model';
+import { ListDisabilitiesQueryDto } from '../../../api-services/disabilities/disability-model';
 import { base64ToBlobUrl } from '../../shared/utils/image-utils';
-import { HttpEventType } from '@angular/common/http';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 import imageCompression from 'browser-image-compression';
 import { PageResult } from '../../../core/models/paging/page-result';
 import { GenderEnum, ListGenderDto } from '../../../api-services/gender/gender-model';
@@ -65,7 +49,6 @@ export class CreatePost implements OnInit {
   currentUser = inject(CurrentUserService);
   animalUserService = inject(UserService);
   cityService = inject(CitiesService);
-  animalService = inject(AnimalService);
   postService = inject(AnimalPostService);
   route = inject(ActivatedRoute);
   location = inject(Location);
@@ -385,43 +368,80 @@ export class CreatePost implements OnInit {
     this.location.back();
   }
 
+  /** Builds the single multipart request body shared by addPost()/updatePost() — animal, health, allergies/disabilities and images all go to one atomic backend endpoint. */
+  private buildAnimalPostFormData(): FormData {
+    const mainInfo = this.secondFormGroup.value;
+    const healthInfo = this.thridFormGroup.value;
+    const formData = new FormData();
+
+    formData.append('name', mainInfo.name as string);
+    formData.append('breed', mainInfo.breed as string);
+    formData.append('genderId', String(mainInfo.genderID));
+    formData.append('age', String(mainInfo.age));
+    formData.append('hasPapers', String(!!mainInfo.passportCheck));
+    formData.append('childFriendly', 'false');
+    formData.append('categoryId', String(mainInfo.categoryID));
+
+    formData.append('vaccinated', String(!!healthInfo.vaccineCheck));
+    formData.append('spayedOrNeutered', String(!!healthInfo.sterCheck));
+    formData.append('parasiteFree', String(!!healthInfo.parasiteCheck));
+    formData.append('dietaryRestrictions', '');
+    ((healthInfo.allergyCtrl as string[]) ?? [])
+      .filter((allergy) => !!allergy)
+      .forEach((allergy) => formData.append('allergies', allergy));
+    ((healthInfo.disCtrl as string[]) ?? [])
+      .filter((disability) => !!disability)
+      .forEach((disability) => formData.append('disabilities', disability));
+
+    this.imgFileList.forEach((file) => formData.append('postImages', file, file.name));
+
+    return formData;
+  }
+
+  private handleAnimalPostUploadEvent(
+    event: HttpEvent<unknown>,
+    onComplete: () => void,
+  ): void {
+    if (event.type === HttpEventType.UploadProgress && event.total) {
+      this.uploadProgress = Math.round((100 * event.loaded) / event.total);
+      if (this.uploadProgress >= 100) {
+        this.isUploadingImages.set(false);
+        this.isFinalizing.set(true);
+      }
+      this.cd.detectChanges();
+    } else if (event.type === HttpEventType.Response) {
+      this.uploadProgress = 100;
+      this.isFinalizing.set(false);
+      this.cd.detectChanges();
+      onComplete();
+    }
+  }
+
   updatePost(): void {
     if (this.secondFormGroup.invalid) {
       this.secondFormGroup.markAllAsTouched();
       return;
     }
-    this.healthHistory.getAnimalHealthHistoryById(this.routeAnimalID).subscribe((response) => {
-      const healthHistoryID = response.animalHealthHistoryId;
 
-      const updateHealth: UpdateHealthHistory = {
-        animalId: this.routeAnimalID,
-        vaccinated: this.thridFormGroup.get('vaccineCheck')!.value as boolean,
-        spayedOrNeutered: this.thridFormGroup.get('sterCheck')!.value as boolean,
-        parasiteFree: this.thridFormGroup.get('parasiteCheck')!.value as boolean,
-        dietaryRestrictions: '',
-        allergies: (this.thridFormGroup.get('allergyCtrl')!.value as string[]).map(
-          (allergy) => new AllergyQueryDto(allergy),
-        ),
-        disabilities: (this.thridFormGroup.get('disCtrl')!.value as string[]).map(
-          (disability) => new DisabilitiesDto(disability),
-        ),
-      };
-      const updateAnimal = this.fourthFromGroup.value.mainInfo as UpdateAnimalDto;
-      updateAnimal.gender = this.genderEnum[this.secondFormGroup!.value.genderID as number];
-      updateAnimal.category = this.selectedCategory.categoryName;
+    const formData = this.buildAnimalPostFormData();
+    this.isUploadingImages.set(true);
+    this.isFinalizing.set(false);
+    this.uploadProgress = 0;
+    this.cd.detectChanges();
 
-      const newPostIamge: AddNewPostImages = {
-        postId: this.routePostID,
-        postImages: this.imgFileList,
-      };
-      forkJoin({
-        animals: this.animalService.updateAnimal(updateAnimal, this.routeAnimalID),
-        health: this.healthHistory.updateAnimalHealthHistory(updateHealth, healthHistoryID),
-        postImages: this.postImages.updatePostImages(newPostIamge),
-      }).subscribe({
-        next: () => this.nextRoute.navigate(['']),
-        error: (err) => console.error('Failed to update post', err),
-      });
+    this.postService.updateAnimalPost(this.routePostID, formData).subscribe({
+      next: (event) =>
+        this.handleAnimalPostUploadEvent(event, () => {
+          this.isUploadingImages.set(false);
+          this.isFinalizing.set(false);
+          this.cd.detectChanges();
+          this.nextRoute.navigate(['']);
+        }),
+      error: (err) => {
+        this.isUploadingImages.set(false);
+        this.isFinalizing.set(false);
+        console.error('Failed to update post', err);
+      },
     });
   }
 
@@ -430,89 +450,34 @@ export class CreatePost implements OnInit {
       this.secondFormGroup.markAllAsTouched();
       return;
     }
-    const mainInfo = this.fourthFromGroup.value.mainInfo;
 
-    const newAnimal: AddAnimalDto = {
-      name: mainInfo?.name as string,
-      age: mainInfo?.age as number,
-      breed: mainInfo?.breed as string,
-      categoryId: mainInfo?.categoryID as any,
-      genderId: mainInfo?.genderID as any,
-      hasPapers: mainInfo?.passportCheck as boolean,
-      childFriendly: false,
-    };
+    const formData = this.buildAnimalPostFormData();
+    this.isUploadingImages.set(true);
+    this.isFinalizing.set(false);
+    this.uploadProgress = 0;
+    this.cd.detectChanges();
 
-    const newAnimalHealthHistory: AddAnimalHealthHistory = {
-      animalId: 0,
-      parasiteFree: this.thridFormGroup.get('parasiteCheck')!.value as boolean,
-      vaccinated: this.thridFormGroup.get('vaccineCheck')!.value as boolean,
-      spayedOrNeutered: this.thridFormGroup.get('sterCheck')!.value as boolean,
-      allergies: this.thridFormGroup.get('allergyCtrl')!.value as string[],
-      disabilities: this.thridFormGroup.get('disCtrl')!.value as string[],
-      dietaryRestrictions: '',
-    };
-
-    const newPost: AddAnimalPost = {
-      animalID: 0,
-      cityID: this.userData.cityID,
-      status: true,
-    };
-
-    const newPostIamge: AddNewPostImages = {
-      postId: 0,
-      postImages: this.imgFileList,
-    };
-
-    this.animalService
-      .addAnimal(newAnimal)
-      .pipe(
-        switchMap((animalId) => {
-          newAnimalHealthHistory.animalId = animalId;
-          newPost.animalID = animalId;
-          return this.healthHistory.addAnimalHealthHistory(newAnimalHealthHistory);
-        }),
-        switchMap(() => this.postService.addPost(newPost)),
-        switchMap((postResponse) => {
-          this.isUploadingImages.set(true);
-          this.isFinalizing.set(false);
-          this.uploadProgress = 0;
-          this.cd.detectChanges();
-          newPostIamge.postId = postResponse.id;
-          return this.postImages.createPostImages(newPostIamge);
-        }),
-      )
-      .subscribe({
-        next: (event: any) => {
-          if (event.type === HttpEventType.UploadProgress && event.total) {
-            this.uploadProgress = Math.round((100 * event.loaded) / event.total);
-            if (this.uploadProgress >= 100) {
-              this.isUploadingImages.set(false);
-              this.isFinalizing.set(true);
-            }
-            this.cd.detectChanges();
-          } else if (event.type === HttpEventType.Response) {
-            this.uploadProgress = 100;
+    this.postService.addAnimalPost(formData).subscribe({
+      next: (event) =>
+        this.handleAnimalPostUploadEvent(event, () => {
+          setTimeout(() => {
+            this.isUploadingImages.set(false);
             this.isFinalizing.set(false);
             this.cd.detectChanges();
-            setTimeout(() => {
-              this.isUploadingImages.set(false);
-              this.isFinalizing.set(false);
-              this.cd.detectChanges();
-              this.dialog.success(
-                'Post Created',
-                'Your post has been created successfully. You can now view it on the catalog!',
-                'OK',
-              );
-              this.nextRoute.navigate(['']);
-            }, 1500);
-          }
-        },
-        error: (err) => {
-          this.isUploadingImages.set(false);
-          this.isFinalizing.set(false);
-          console.error('Something went wrong while creating the post:', err);
-        },
-      });
+            this.dialog.success(
+              'Post Created',
+              'Your post has been created successfully. You can now view it on the catalog!',
+              'OK',
+            );
+            this.nextRoute.navigate(['']);
+          }, 1500);
+        }),
+      error: (err) => {
+        this.isUploadingImages.set(false);
+        this.isFinalizing.set(false);
+        console.error('Something went wrong while creating the post:', err);
+      },
+    });
   }
   nextImage(length: number): void {
     this.currentImageIndex = this.currentImageIndex === length - 1 ? 0 : this.currentImageIndex + 1;

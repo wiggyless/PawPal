@@ -1,10 +1,11 @@
-﻿using PawPal.Application.Modules.Security.Questions.Commands.Create;
+using PawPal.Application.Modules.Security.Questions.Commands.Create;
 using PawPal.Domain.Entities.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Security.Questions.Commands.Update
 {
@@ -12,7 +13,7 @@ namespace PawPal.Application.Modules.Security.Questions.Commands.Update
     {
         public async Task<Unit> Handle(UpdateQuestionCommand command, CancellationToken cancellationToken)
         {
-            if (currentUser.RoleId != 3)
+            if (currentUser.RoleId != Roles.Admin)
                 throw new PawPalConflictException("Only administrators can update security questions.");
 
             var question = await context.SecurityQuestions.FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);

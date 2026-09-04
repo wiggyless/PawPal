@@ -1,5 +1,5 @@
-﻿using PawPal.Application.Services;
-using PawPal.Domain.Entities.Adoptions;
+﻿using PawPal.Domain.Entities.Adoptions;
+using PawPal.Domain.Entities.Posts;
 
 namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create
 {
@@ -23,8 +23,11 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create
             if (post.UserId == user.Id)
                 throw new PawPalConflictException("The same user cannot request to its own post");
 
+            if (post.Status != PostStatus.Active)
+                throw new PawPalConflictException("This animal is no longer available for adoption");
+
             var existing = await context.AdoptionRequests
-                .Where(x => x.PostId == request.PostID && x.UserId == user.Id && x.Status == "Pending")
+                .Where(x => x.PostId == request.PostID && x.UserId == user.Id && x.Status == AdoptionRequestStatus.Pending)
                 .FirstOrDefaultAsync(cancellationToken);
             if (existing is not null)
                 throw new PawPalConflictException("You already have a pending request for this post");
@@ -35,7 +38,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create
                 PostId = request.PostID,
                 RequirementId = request.RequirementID,
                 DateSent = DateTime.Now,
-                Status = "Pending",
+                Status = AdoptionRequestStatus.Pending,
             };
             context.AdoptionRequests.Add(newRequest);
             await context.SaveChangesAsync(cancellationToken);
