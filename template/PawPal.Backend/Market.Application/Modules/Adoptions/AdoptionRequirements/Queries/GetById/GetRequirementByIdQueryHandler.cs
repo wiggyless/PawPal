@@ -12,8 +12,6 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Queries.GetB
     {
         public async Task<GetRequirementByIdQueryDto> Handle(GetRequirementByIdQuery command,CancellationToken cancellationToken)
         {
-            // This holds the applicant's address, financial details, and household composition —
-            // only the applicant, the post owner reviewing the application, or an admin may read it.
             var owningRequest = await context.AdoptionRequests.AsNoTracking()
                 .Include(x => x.Post)
                 .FirstOrDefaultAsync(x => x.RequirementId == command.Id, cancellationToken);

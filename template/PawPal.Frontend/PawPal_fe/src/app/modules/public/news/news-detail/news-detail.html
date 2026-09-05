@@ -1,13 +1,5 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PawPal</title>
-  </head>
-  <body>
-    <div class="news-detail-container">
-      <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
+<div class="news-detail-container">
+  <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
 
       @if (isLoaded() && news) {
         <div class="news-detail">
@@ -33,6 +25,10 @@
         </div>
       }
     </div>
-    <app-footer></app-footer>
-  </body>
-</html>
+  } @else {
+    <div class="news-detail-loading">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+</div>
+<app-footer></app-footer>

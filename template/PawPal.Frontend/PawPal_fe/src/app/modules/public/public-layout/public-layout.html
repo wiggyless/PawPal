@@ -1,99 +1,93 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>PawPal</title>
-  </head>
-  <body class="main-page-layout">
-    <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
-    <div class="header" [style.background-image]="`url(${myBackgroundImage})`">
-      <p>NEED A NEW MEMBER OF YOUR FAMILY?</p>
-      <span
-        >Connect with animal lovers across Bosnia and Herzegovina with our services and adopt an
-        animal today!</span
-      >
-      <br />
-      <div class="options">
-        @if (imagesLoaded()) {
-          <mat-form-field>
-            <mat-select
-              class="sel"
-              placeholder="Select an animal category"
-              [(ngModel)]="selectedCategory"
-            >
-              @for (cat of animalCategories?.items; track cat) {
-                <mat-option [value]="cat.categoryName">{{ cat.categoryName }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-select class="sel" placeholder="Select a canton" [(ngModel)]="selectedCanton">
-              @for (cant of cantons?.items; track cant) {
-                <mat-option [value]="cant.id">{{ cant.fullName }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        }
-      </div>
-      <div class="search-btn">
-        <button class="primarybtn" (click)="searchCatalog()">SEARCH</button>
-      </div>
-    </div>
-    <div class="catalog-latest-container">
-      <p class="catalog-latest-container-title">Check out our newest posts!</p>
-      <div class="catalog-container">
-        <div [class]="imagesLoaded() ? 'header-posts' : 'header-posts-unloaded'">
-          @if (imagesLoaded()) {
-            @for (post of postList?.items; track post; let i = $index) {
-              <div class="post" (click)="routeToPost(post)">
-                <img [src]="getImageForPost(post.mainImage)" class="post-image" />
-                <div class="post-detail">
-                  <h3>{{ post.name }}</h3>
-                  <p>
-                    {{ post.breed }},
-                    {{ genderEnum[post.genderID] }}
-                  </p>
-
-                  <p>{{ post.dateAdded | date: 'short' }}</p>
-                </div>
-              </div>
+<div class="main-page-layout">
+  <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
+  <div class="header" [style.background-image]="`url(${myBackgroundImage})`">
+    <p>NEED A NEW MEMBER OF YOUR FAMILY?</p>
+    <span
+      >Connect with animal lovers across Bosnia and Herzegovina with our services and adopt an
+      animal today!</span
+    >
+    <br />
+    <div class="options">
+      @if (imagesLoaded()) {
+        <mat-form-field>
+          <mat-select
+            class="sel"
+            placeholder="Select an animal category"
+            [(ngModel)]="selectedCategory"
+          >
+            @for (cat of animalCategories?.items; track cat) {
+              <mat-option [value]="cat.categoryName">{{ cat.categoryName }}</mat-option>
             }
-          } @else if (!imagesLoaded()) {
-            <div class="loading-container">
-              <br />
-              <p class="loading-spinner-text">Loading posts</p>
-              <mat-spinner></mat-spinner>
-            </div>
-          }
-        </div>
-      </div>
-      <button class="primarybtn" routerLink="/catalog">TAKE ME THERE!</button>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select class="sel" placeholder="Select a canton" [(ngModel)]="selectedCanton">
+            @for (cant of cantons?.items; track cant) {
+              <mat-option [value]="cant.id">{{ cant.fullName }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
     </div>
-    <div class="news-latest-container">
-      <p class="news-latest-container-title">Latest News</p>
-      <div class="news-feature-container">
-        @if (newsLoaded()) {
-          @if (latestNews) {
-            <div class="news-feature" (click)="routeToNews(latestNews)">
-              <img [src]="getNewsImageUrl(latestNews.photoURL)" class="news-feature-image" />
-              <div class="news-feature-detail">
-                <h3>{{ latestNews.title }}</h3>
-                <p>{{ getNewsPreview(latestNews.content) }}</p>
-                <span class="news-feature-date">{{ latestNews.publishedAt | date: 'longDate' }}</span>
+    <div class="search-btn">
+      <button class="primarybtn" (click)="searchCatalog()">SEARCH</button>
+    </div>
+  </div>
+  <div class="catalog-latest-container">
+    <p class="catalog-latest-container-title">Check out our newest posts!</p>
+    <div class="catalog-container">
+      <div [class]="imagesLoaded() ? 'header-posts' : 'header-posts-unloaded'">
+        @if (imagesLoaded()) {
+          @for (post of postList?.items; track post; let i = $index) {
+            <div class="post" (click)="routeToPost(post)">
+              <img [src]="getImageForPost(post.mainImage)" class="post-image" />
+              <div class="post-detail">
+                <h3>{{ post.name }}</h3>
+                <p>
+                  {{ post.breed }},
+                  {{ genderEnum[post.genderID] }}
+                </p>
+
+                <p>{{ post.dateAdded | date: 'short' }}</p>
               </div>
             </div>
-          } @else {
-            <div class="loading-container">
-              <p class="loading-spinner-text">No news has been published yet.</p>
-            </div>
           }
-        } @else {
+        } @else if (!imagesLoaded()) {
           <div class="loading-container">
+            <br />
+            <p class="loading-spinner-text">Loading posts</p>
             <mat-spinner></mat-spinner>
           </div>
         }
       </div>
-      <button class="primarybtn" routerLink="/news">TAKE ME THERE!</button>
     </div>
-    <app-footer></app-footer>
-  </body>
-</html>
+    <button class="primarybtn" routerLink="/catalog">TAKE ME THERE!</button>
+  </div>
+  <div class="news-latest-container">
+    <p class="news-latest-container-title">Latest News</p>
+    <div class="news-feature-container">
+      @if (newsLoaded()) {
+        @if (latestNews) {
+          <div class="news-feature" (click)="routeToNews(latestNews)">
+            <img [src]="getNewsImageUrl(latestNews.photoURL)" class="news-feature-image" />
+            <div class="news-feature-detail">
+              <h3>{{ latestNews.title }}</h3>
+              <p>{{ getNewsPreview(latestNews.content) }}</p>
+              <span class="news-feature-date">{{ latestNews.publishedAt | date: 'longDate' }}</span>
+            </div>
+          </div>
+        } @else {
+          <div class="loading-container">
+            <p class="loading-spinner-text">No news has been published yet.</p>
+          </div>
+        }
+      } @else {
+        <div class="loading-container">
+          <mat-spinner></mat-spinner>
+        </div>
+      }
+    </div>
+    <button class="primarybtn" routerLink="/news">TAKE ME THERE!</button>
+  </div>
+  <app-footer></app-footer>
+</div>
