@@ -1,3 +1,4 @@
+using PawPal.Shared.Constants;
 namespace PawPal.Application.Modules.Users.Commands.UpdateRole
 {
     // Assigning a role (including Admin) is a distinct, authorization-gated administrative
@@ -7,7 +8,7 @@ namespace PawPal.Application.Modules.Users.Commands.UpdateRole
     {
         public async Task<Unit> Handle(UpdateUserRoleCommand command, CancellationToken cancellationToken)
         {
-            if (currentUser.RoleId != 3)
+            if (currentUser.RoleId != Roles.Admin)
             {
                 throw new PawPalConflictException("Only administrators can change a user's role.");
             }

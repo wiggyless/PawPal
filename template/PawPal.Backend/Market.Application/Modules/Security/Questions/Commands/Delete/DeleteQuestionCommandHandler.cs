@@ -1,10 +1,11 @@
-﻿using PawPal.Application.Modules.Security.Questions.Commands.Create;
+using PawPal.Application.Modules.Security.Questions.Commands.Create;
 using PawPal.Domain.Entities.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Security.Questions.Commands.Delete
 {
@@ -12,7 +13,7 @@ namespace PawPal.Application.Modules.Security.Questions.Commands.Delete
     {
         public async Task<Unit> Handle(DeleteQuestionCommand command, CancellationToken cancellationToken)
         {
-            if(user.RoleId != 3)
+            if(user.RoleId != Roles.Admin)
             {
                 throw new PawPalConflictException("Only administrators can delete security questions.");
             }

@@ -1,4 +1,5 @@
-﻿namespace PawPal.Application.Modules.Animal_Info.Animals.Commands.Update
+using PawPal.Shared.Constants;
+namespace PawPal.Application.Modules.Animal_Info.Animals.Commands.Update
 {
     public sealed class UpdateAnimalCommandHandler(IAppDbContext context, IAppCurrentUser currentUser)
            : IRequestHandler<UpdateAnimalCommand, Unit>
@@ -13,16 +14,16 @@
             // no post yet has no owner, so only an admin can touch it).
             var owningPost = await context.Posts.AsNoTracking()
                 .FirstOrDefaultAsync(p => p.AnimalID == animal.Id, cancellationToken);
-            if (currentUser.RoleId != 3 && (owningPost is null || owningPost.UserId != currentUser.UserId))
+            if (currentUser.RoleId != Roles.Admin && (owningPost is null || owningPost.UserId != currentUser.UserId))
                 throw new PawPalConflictException("User is not allowed to do this action");
 
             var gender = await context.Genders.Where(x => x.GenderName.ToLower() == request.Gender.ToLower()).FirstOrDefaultAsync();
             if (gender == null)
                 throw new PawPalNotFoundException($"Gender with the name {request.Gender} is not valid!");
 
-            var category = await context.AnimalCategories.Where(x => x.CategoryName.ToLower() == request.Category.ToLower()).FirstOrDefaultAsync();
+            var category = await context.AnimalCategories.FirstOrDefaultAsync(x => x.Id == request.CategoryID, cancellationToken);
             if (category == null)
-                throw new PawPalNotFoundException($"Category with the name {request.Category} is not valid!");
+                throw new PawPalNotFoundException($"Category with Id {request.CategoryID} is not valid!");
 
             var breedsList = await context.Breeds.Where(b => b.CategoryID == category.Id).ToListAsync(cancellationToken);
 
@@ -44,9 +45,8 @@
             animal.Age = request.Age;
             animal.ChildFriendly = request.ChildFriendly;
             animal.HasPapers = request.HasPapers;
-            animal.Gender = request.Gender == null ? animal.Gender : gender;
-            animal.Category = request.Category == null ? animal.Category : category;
-            animal.CategoryId = request.CategoryID;
+            animal.Gender = gender;
+            animal.Category = category;
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

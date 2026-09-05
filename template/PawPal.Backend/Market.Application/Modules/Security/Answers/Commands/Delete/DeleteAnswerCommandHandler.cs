@@ -1,9 +1,10 @@
-﻿using PawPal.Application.Modules.Security.Questions.Commands.Delete;
+using PawPal.Application.Modules.Security.Questions.Commands.Delete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Security.Answers.Commands.Update
 {
@@ -17,7 +18,7 @@ namespace PawPal.Application.Modules.Security.Answers.Commands.Update
             {
                 throw new PawPalNotFoundException("Question does not exist");
             }
-            if (user.UserId != answer.UserId && user.RoleId != 3)
+            if (user.UserId != answer.UserId && user.RoleId != Roles.Admin)
             {
                 throw new PawPalConflictException("User cannot do this action");
             }

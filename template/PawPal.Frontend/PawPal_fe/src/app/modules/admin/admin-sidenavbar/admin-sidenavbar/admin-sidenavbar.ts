@@ -10,6 +10,7 @@ export class AdminSidenavbar {
   @Input() selItem: string | null = null;
   cd = inject(ChangeDetectorRef);
   matListItems = {
+    Dashboard: '/admin/dashboard',
     My_Profile: '/admin/my-profile',
     User_Profiles: '/admin/user-profiles',
     Reported_Users: '/admin/reported-users',

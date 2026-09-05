@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using PawPal.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,6 @@ namespace PawPal.Application.Modules.News.Commands.Create
     {
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
-        public IFormFile? Photo { get; set; }
+        public FileUpload? Photo { get; set; }
     }
 }

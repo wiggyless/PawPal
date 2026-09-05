@@ -1,3 +1,4 @@
+using PawPal.API.Extensions;
 using PawPal.Application.Modules.PostImages.Commands.Create;
 using PawPal.Application.Modules.PostImages.Commands.Delete;
 using PawPal.Application.Modules.PostImages.Commands.Update;
@@ -13,8 +14,13 @@ namespace PawPal.API.Controllers.Posts
     public class PostImagesController(ISender sender) : ControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult<int>> CreatePost([FromForm] CreatePostImageCommand command, CancellationToken cancellationToken)
+        public async Task<ActionResult<int>> CreatePost([FromForm] CreatePostImageRequest request, CancellationToken cancellationToken)
         {
+            var command = new CreatePostImageCommand
+            {
+                PostId = request.PostId,
+                PostImages = request.PostImages.ToFileUploads()
+            };
             int id = await sender.Send(command, cancellationToken);
             return Ok(id);
         }
@@ -40,8 +46,13 @@ namespace PawPal.API.Controllers.Posts
         }
 
         [HttpPut]
-        public async Task Update(UpdatePostImageCommand command, CancellationToken cancellationToken)
+        public async Task Update(UpdatePostImageRequest request, CancellationToken cancellationToken)
         {
+            var command = new UpdatePostImageCommand
+            {
+                PostId = request.PostId,
+                PostImages = request.PostImages.ToFileUploads()
+            };
             await sender.Send(command, cancellationToken);
         }
         [HttpDelete("{id:int}")]

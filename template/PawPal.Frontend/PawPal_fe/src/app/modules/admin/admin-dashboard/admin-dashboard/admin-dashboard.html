@@ -1,0 +1,63 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1 class="my-post-title">DASHBOARD</h1>
+    <p class="dashboard-subtitle">A live overview of what's happening on PawPal.</p>
+  </div>
+
+  @if (isLoaded()) {
+    @if (hasError()) {
+      <div class="error-state">
+        <mat-icon class="error-icon">error_outline</mat-icon>
+        <p class="loading-spinner-text">Could not load dashboard data.</p>
+        <button class="primarybtn" (click)="loadSummary()">RETRY</button>
+      </div>
+    } @else {
+      <section class="stat-section">
+        <h2 class="section-title">Activity</h2>
+        <div class="stat-grid stat-grid-2col">
+          @for (tile of activityTiles(); track tile.label; let i = $index) {
+            <div class="stat-tile" [style.animation-delay.ms]="i * 60">
+              <div class="stat-icon-holder">
+                <mat-icon>{{ tile.icon }}</mat-icon>
+              </div>
+              <div class="stat-body">
+                <span class="stat-value">{{ tile.value }}</span>
+                <span class="stat-label">{{ tile.label }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+      <section class="stat-section">
+        <h2 class="section-title">Moderation Queue</h2>
+        <div class="stat-grid stat-grid-3col">
+          @for (tile of moderationTiles(); track tile.label; let i = $index) {
+            <a
+              class="stat-tile stat-tile-link"
+              [class.stat-tile-alert]="tile.value > 0"
+              [routerLink]="tile.route"
+              [style.animation-delay.ms]="(activityTiles().length + i) * 60"
+            >
+              <div class="stat-icon-holder">
+                <mat-icon>{{ tile.icon }}</mat-icon>
+              </div>
+              <div class="stat-body">
+                <span class="stat-value">{{ tile.value }}</span>
+                <span class="stat-label">{{ tile.label }}</span>
+              </div>
+              @if (tile.value > 0) {
+                <span class="stat-badge">{{ tile.value }}</span>
+              }
+            </a>
+          }
+        </div>
+      </section>
+    }
+  } @else {
+    <div class="loading-container">
+      <p class="loading-spinner-text">Loading dashboard</p>
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+</div>

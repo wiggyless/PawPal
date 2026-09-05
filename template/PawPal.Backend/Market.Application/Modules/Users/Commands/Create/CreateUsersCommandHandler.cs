@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Users.Commands.Create
 {
@@ -55,7 +56,7 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 // Self-registration always creates a standard "Verified user" account (RoleId 2).
                 // The role is never taken from the request — granting Admin (or any other role) is
                 // a separate, authorization-protected action (see UpdateUserRoleCommandHandler).
-                RoleId = 2,
+                RoleId = Roles.VerifiedUser,
                 PasswordHash = hasher.HashPassword(null, password),
                 CityId = request.City,
                 IsEnabled = true,

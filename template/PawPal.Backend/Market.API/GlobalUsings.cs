@@ -8,3 +8,4 @@ global using Microsoft.AspNetCore.Mvc;
 global using PawPal.Application.Common;
 
 global using Microsoft.AspNetCore.Authorization;
+global using PawPal.Shared.Constants;

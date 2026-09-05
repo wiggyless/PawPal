@@ -1,4 +1,4 @@
-<h2 mat-dialog-title style="color: var(--card-text-color);">Add News</h2>
+<h2 mat-dialog-title style="color: var(--card-text-color);">{{ isEditMode ? 'Edit News' : 'Add News' }}</h2>
 
 <mat-dialog-content>
   <form [formGroup]="form" id="add-news-form" novalidate>
@@ -35,11 +35,15 @@
 
 <mat-dialog-actions align="end">
   <button class="secondarybtn" (click)="close()">CANCEL</button>
-  <button class="primarybtn" [disabled]="form.invalid || !selectedPhoto || isSubmitting()" (click)="submit()">
+  <button
+    class="primarybtn"
+    [disabled]="form.invalid || (!isEditMode && !selectedPhoto) || isSubmitting()"
+    (click)="submit()"
+  >
     @if (isSubmitting()) {
       <mat-spinner diameter="18"></mat-spinner>
     } @else {
-      PUBLISH
+      {{ isEditMode ? 'SAVE' : 'PUBLISH' }}
     }
   </button>
 </mat-dialog-actions>

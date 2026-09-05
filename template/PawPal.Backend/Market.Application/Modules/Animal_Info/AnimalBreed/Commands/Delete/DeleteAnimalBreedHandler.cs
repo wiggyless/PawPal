@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Animal_Info.AnimalBreed.Commands.Delete
 {
@@ -11,7 +12,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalBreed.Commands.Delete
     {
         public async Task<Unit> Handle(DeleteAnimalBreedCommand request,CancellationToken cancellationToken)
         {
-            if (user.RoleId != 3)
+            if (user.RoleId != Roles.Admin)
                 throw new PawPalConflictException("Only administrators can delete animal breeds.");
 
             var breed = await context.Breeds.Where(x=>x.Id == request.Id).FirstOrDefaultAsync(cancellationToken);

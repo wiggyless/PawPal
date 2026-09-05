@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Users.Queries.List
 {
-    public sealed class ListUsersQueryHandler(IAppDbContext context)
+    public sealed class ListUsersQueryHandler(IAppDbContext context, IAppCurrentUser currentUser)
         : IRequestHandler<ListUsersQuery,PageResult<ListUsersQueryDto>>
     {
         public async Task<PageResult<ListUsersQueryDto>> Handle(ListUsersQuery request, CancellationToken cancellationToken)
         {
-            
+            if (currentUser.RoleId != Roles.Admin)
+                throw new PawPalConflictException("Only administrators can list all users.");
+
             var usr = context.Users.Include(x=>x.Role).AsNoTracking().AsQueryable();
             if (request.Disabled is not null)
             {

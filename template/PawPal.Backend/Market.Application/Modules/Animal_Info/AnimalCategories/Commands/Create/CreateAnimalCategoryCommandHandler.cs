@@ -1,9 +1,10 @@
-﻿﻿using System;
-﻿using PawPal.Domain.Entities.Animal_Info;
 using System;
+using PawPal.Domain.Entities.Animal_Info;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;using System.Threading.Tasks;
+using PawPal.Shared.Constants;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Create
 {
@@ -12,7 +13,7 @@ namespace PawPal.Application.Modules.Animal_Info.AnimalCategories.Commands.Creat
     {
         public async Task<int> Handle(CreateAnimalCategoryCommand request, CancellationToken cancellationToken)
         {
-            if (currentUser.RoleId != 3)
+            if (currentUser.RoleId != Roles.Admin)
                 throw new PawPalConflictException("Only administrators can create animal categories.");
 
             var categoryName = request.CategoryName?.Trim();

@@ -1,7 +1,4 @@
-﻿using FirebaseAdmin;
-using FirebaseAdmin.Auth;
-using Google.Apis.Auth.OAuth2;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.FileProviders;
@@ -10,7 +7,6 @@ using PawPal.API.Middleware;
 using PawPal.Application;
 using PawPal.Application.Abstractions;
 using PawPal.Application.Options;
-using PawPal.Application.Services;
 using PawPal.Infrastructure;
 using PawPal.Infrastructure.BackgroundServices;
 using PawPal.Infrastructure.Common;
@@ -139,20 +135,6 @@ public partial class Program
 
             builder.Services.AddTransient<IEmailService, EmailService>();
             builder.Services.AddHostedService<ExpiredTokenCleanupService>();
-
-            var firebaseCredentialsPath = Path.Combine(builder.Environment.ContentRootPath, "firebase-service-account.json");
-            if (File.Exists(firebaseCredentialsPath))
-            {
-                FirebaseApp.Create(new AppOptions
-                {
-                    Credential = GoogleCredential.FromFile(firebaseCredentialsPath)
-                });
-            }
-            else
-            {
-                Log.Warning("firebase-service-account.json not found at {Path}. Push notifications will be disabled.", firebaseCredentialsPath);
-            }
-            builder.Services.AddSingleton<IFirebaseNotificationService, FirebaseNotificationService>();
 
             var app = builder.Build();
 

@@ -9,17 +9,80 @@
       }
     </div>
 
-    @if (isLoaded()) {
-      @if (newsItems.length > 0) {
-        <div class="news-grid">
-          @for (item of newsItems; track item.id) {
-            <div class="news-card" (click)="routeToNews(item)">
-              <img [src]="getImageUrl(item.photoURL)" class="news-card-image" alt="{{ item.title }}" />
-              <div class="news-card-detail">
-                <h3>{{ item.title }}</h3>
-                <p>{{ getPreview(item.content) }}</p>
-                <span class="news-card-date">{{ item.publishedAt | date: 'mediumDate' }}</span>
-              </div>
+        <div class="news-filters">
+          <form [formGroup]="filterForm" class="news-filter-form">
+            <div class="select-child">
+              <label for="news-search">Search</label>
+              <mat-form-field class="custom">
+                <input id="news-search" matInput formControlName="search" placeholder="Search title or content" />
+              </mat-form-field>
+            </div>
+
+            <div class="select-child">
+              <label for="news-date">Published between</label>
+              <mat-form-field class="custom date-form">
+                <mat-date-range-input id="news-date" [formGroup]="datePicker" [rangePicker]="picker">
+                  <input matInput matStartDate formControlName="start" placeholder="Start date" />
+                  <input matInput matEndDate formControlName="end" placeholder="End date" />
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+            </div>
+
+            <div class="select-child">
+              <label for="news-has-photo">Has photo</label>
+              <mat-form-field class="custom">
+                <mat-select id="news-has-photo" formControlName="hasPhoto" placeholder="Any">
+                  <mat-option [value]="null">Any</mat-option>
+                  <mat-option [value]="true">With photo</mat-option>
+                  <mat-option [value]="false">Without photo</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="select-child">
+              <label for="news-sort">Sort by</label>
+              <mat-form-field class="custom">
+                <mat-select id="news-sort" formControlName="sortDescending" placeholder="Newest first">
+                  <mat-option [value]="true">Newest first</mat-option>
+                  <mat-option [value]="false">Oldest first</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </form>
+          <div class="news-filter-buttons">
+            <button class="primarybtn" (click)="searchNews()">SEARCH</button>
+            <button class="secondarybtn" (click)="clearFilters()">CLEAR</button>
+          </div>
+        </div>
+
+        @if (isLoaded()) {
+          @if (newsItems.length > 0) {
+            <div class="news-grid">
+              @for (item of newsItems; track item.id) {
+                <div class="news-card" (click)="routeToNews(item)">
+                  <img [src]="getImageUrl(item.photoURL)" class="news-card-image" alt="{{ item.title }}" />
+                  <div class="news-card-detail">
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ getPreview(item.content) }}</p>
+                    <span class="news-card-date">{{ item.publishedAt | date: 'mediumDate' }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+            <mat-paginator
+              [length]="page.totalItems"
+              [pageIndex]="page.currentPage - 1"
+              [pageSize]="page.pageSize"
+              [pageSizeOptions]="page.pageSizeOption"
+              aria-label="Select page"
+              (page)="handlePageEvent($event)"
+            >
+            </mat-paginator>
+          } @else {
+            <div class="news-empty">
+              <p>No news has been published yet.</p>
             </div>
           }
         </div>

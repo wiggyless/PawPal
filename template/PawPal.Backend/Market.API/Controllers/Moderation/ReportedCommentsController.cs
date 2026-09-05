@@ -15,6 +15,7 @@ namespace PawPal.API.Controllers.Moderation
     (ISender sender) : ControllerBase
     {
 
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpGet]
         public async Task<PageResult<ListCommentReportsQueryDto>> List([FromQuery]
         ListCommentReportsQuery query, CancellationToken tk)
@@ -35,6 +36,7 @@ namespace PawPal.API.Controllers.Moderation
             int id = await sender.Send(command, ct);
             return id;
         }
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<Unit>> DeleteCommentReport(int id, CancellationToken ct)
         {

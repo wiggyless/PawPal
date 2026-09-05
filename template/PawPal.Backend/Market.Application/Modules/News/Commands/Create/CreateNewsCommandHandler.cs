@@ -1,9 +1,5 @@
-﻿using PawPal.Domain.Entities.News;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PawPal.Domain.Entities.News;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.News.Commands.Create
 {
@@ -12,14 +8,8 @@ namespace PawPal.Application.Modules.News.Commands.Create
     {
         public async Task<int> Handle(CreateNewsCommand request, CancellationToken cancellationToken)
         {
-            if(user.RoleId != 3) //only admins can create news
+            if(user.RoleId != Roles.Admin) //only admins can create news
                 throw new ValidationException("Only administrators can create news.");
-
-            if (string.IsNullOrWhiteSpace(request.Title))
-            throw new ValidationException("Title cannot be empty.");
-
-           if(string.IsNullOrWhiteSpace(request.Content))
-            throw new ValidationException("Content cannot be empty.");
 
             string? photoUrl = null;
             if (request.Photo is not null)

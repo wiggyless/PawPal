@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using PawPal.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +9,7 @@ namespace PawPal.Application.Modules.PostImages.Commands.Update
 {
     public class UpdatePostImageCommand : IRequest<Unit>
     {
-        [FromForm(Name = "postId")]
         public int PostId { get; set; }
-        [FromForm(Name = "postImages")]
-        public IFormFileCollection PostImages { get; set; }
+        public List<FileUpload> PostImages { get; set; }
     }
 }

@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using PawPal.Application.Abstractions;
 using PawPal.Application.Common.Exceptions;
 using PawPal.Application.Modules.UserImages.Commands.Create;
 using PawPal.Domain.Entities.Identity;
+using PawPal.Shared.Models;
 using System.Text;
 using Xunit;
 
@@ -29,7 +29,7 @@ namespace PawPal.Tests.UnitTests.UserImages
             _currentUserMock = new Mock<IAppCurrentUser>();
             _fileStorageMock = new Mock<IFileStorageService>();
             _fileStorageMock
-                .Setup(x => x.SaveFileAsync(It.IsAny<IFormFile>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Setup(x => x.SaveFileAsync(It.IsAny<FileUpload>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync("/users/User_1/generated.jpg");
 
             _sut = new CreateUserImageCommandHandler(_context, _currentUserMock.Object, _fileStorageMock.Object);
@@ -43,8 +43,8 @@ namespace PawPal.Tests.UnitTests.UserImages
             return user;
         }
 
-        private static IFormFile MakeFile() =>
-            new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("data")), 0, 4, "file", "photo.jpg");
+        private static FileUpload MakeFile() =>
+            new() { Content = new MemoryStream(Encoding.UTF8.GetBytes("data")), FileName = "photo.jpg", ContentType = "image/jpeg", Length = 4 };
 
         [Fact]
         public async Task Handle_ShouldSaveImage_ForTheAuthenticatedCaller()
@@ -69,7 +69,7 @@ namespace PawPal.Tests.UnitTests.UserImages
             await _sut.Handle(new CreateUserImageCommand { Image = MakeFile() }, CancellationToken.None);
 
             _fileStorageMock.Verify(
-                x => x.SaveFileAsync(It.IsAny<IFormFile>(), $"users/User_{user.Id}", It.IsAny<CancellationToken>()),
+                x => x.SaveFileAsync(It.IsAny<FileUpload>(), $"users/User_{user.Id}", It.IsAny<CancellationToken>()),
                 Times.Once);
         }
 
@@ -83,7 +83,7 @@ namespace PawPal.Tests.UnitTests.UserImages
                 () => _sut.Handle(new CreateUserImageCommand { Image = MakeFile() }, CancellationToken.None));
 
             _fileStorageMock.Verify(
-                x => x.SaveFileAsync(It.IsAny<IFormFile>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
+                x => x.SaveFileAsync(It.IsAny<FileUpload>(), It.IsAny<string>(), It.IsAny<CancellationToken>()),
                 Times.Never);
         }
 

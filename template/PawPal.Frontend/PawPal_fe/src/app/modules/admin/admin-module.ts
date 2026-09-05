@@ -34,6 +34,7 @@ import { ReportedCommentDialog } from './reported-comments/reported-comments/rep
 import { ProfileDisableDialog } from './user-profiles/user-profiles/profile/profile/profile-disable-dialog/profile-disable-dialog/profile-disable-dialog';
 import { DisabledUsers } from './disabled-users/disabled-users/disabled-users';
 import { ReportedProblems } from './reported-problems/reported-problems/reported-problems';
+import { AdminDashboard } from './admin-dashboard/admin-dashboard/admin-dashboard';
 @NgModule({
   declarations: [
     AdminLayout,
@@ -48,6 +49,7 @@ import { ReportedProblems } from './reported-problems/reported-problems/reported
     ProfileDisableDialog,
     DisabledUsers,
     ReportedProblems,
+    AdminDashboard,
   ],
   imports: [
     AdminRoutingModule,

@@ -1,10 +1,11 @@
-﻿using PawPal.API.Controllers.Moderation.ReportedPosts.Commands.Create;
+using PawPal.API.Controllers.Moderation.ReportedPosts.Commands.Create;
 using PawPal.Application.Modules.Moderation.ReportedProblems.Commands.Delete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Moderation.ReportedPosts.Commands.Delete
 {
@@ -13,7 +14,7 @@ namespace PawPal.Application.Modules.Moderation.ReportedPosts.Commands.Delete
     {
         public async Task<Unit> Handle(DeleteReportedPostCommand request, CancellationToken cancellationToken)
         {
-            if (currentUser.RoleId != 3 || !currentUser.IsAuthenticated)
+            if (currentUser.RoleId != Roles.Admin || !currentUser.IsAuthenticated)
                 throw new PawPalConflictException("You're not authorized for this actioN!");
 
             var reportedPost = await context.ReportedPosts.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);

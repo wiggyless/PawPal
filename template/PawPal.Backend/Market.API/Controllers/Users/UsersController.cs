@@ -46,12 +46,14 @@ namespace PawPal.API.Controllers.Users
             var user = await sender.Send(new GetPublicUserProfileQuery { Id = id }, ct);
             return user;
         }
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpGet("{id:int}/disabled")]
         public async Task<GetByIdDisabledQueryDto> GetByIdDisabled(int id, CancellationToken ct)
         {
             var user = await sender.Send(new GetByIdDisabledQuery { Id = id }, ct);
             return user;
         }
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpGet]
         public async Task<PageResult<ListUsersQueryDto>> List([FromQuery]
         ListUsersQuery query,CancellationToken ct)
@@ -111,7 +113,7 @@ namespace PawPal.API.Controllers.Users
 
         // Distinct, admin-only use case: role assignment (including granting Admin) is never
         // something a user can do to their own account via CreateUser/Update.
-        [Authorize]
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpPut("{id:int}/role")]
         public async Task<IActionResult> UpdateUserRole(int id, [FromBody] UpdateUserRoleCommand command, CancellationToken ct)
         {

@@ -1,9 +1,10 @@
-﻿using PawPal.Application.Modules.Moderation.ReportedPosts.Queries.List;
+using PawPal.Application.Modules.Moderation.ReportedPosts.Queries.List;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PawPal.Shared.Constants;
 
 namespace PawPal.Application.Modules.Moderation.ReportedProblems.Queries.List
 {
@@ -12,7 +13,7 @@ namespace PawPal.Application.Modules.Moderation.ReportedProblems.Queries.List
     {
         public async Task<PageResult<ListProblemReportsQueryDto>> Handle(ListProblemReportsQuery request, CancellationToken cancellationToken)
         {
-            if (currentUser.RoleId != 3)
+            if (currentUser.RoleId != Roles.Admin)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }

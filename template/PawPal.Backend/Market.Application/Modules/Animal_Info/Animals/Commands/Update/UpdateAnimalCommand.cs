@@ -16,7 +16,6 @@ namespace PawPal.Application.Modules.Animal_Info.Animals.Commands.Update
         public int Age { get; set; }
         public bool HasPapers { get; set; }
         public bool ChildFriendly { get; set; }
-        public string Category { get; set; }
         public int CategoryID { get; set; }
     }
 }

@@ -28,6 +28,7 @@ namespace PawPal.API.Controllers.Allergies
             return res;
         }
 
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         [HttpPost]
         public async Task<ActionResult<int>> CreateDisablitie(CreateDisabilitieCommand command,CancellationToken cancellationToken)
         {
