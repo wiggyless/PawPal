@@ -35,7 +35,7 @@ public sealed class RefreshTokenCommandHandler(
         }
 
         var user = rt.User;
-        if (user is null || !user.IsEnabled || user.IsDeleted)
+        if (user is null || !user.IsEnabled || user.IsDeleted || user.isUserDisabled)
             throw new PawPalConflictException("User account is invalid.");
 
         if (!user.IsEmailConfirmed)

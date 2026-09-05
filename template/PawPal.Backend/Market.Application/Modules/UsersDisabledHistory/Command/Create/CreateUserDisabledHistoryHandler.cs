@@ -29,6 +29,13 @@ namespace PawPal.Application.Modules.UsersDisabledHistory.Command.Create
                 Reason = command.Reason,
             };
             user.isUserDisabled = true;
+
+            // Deactivating the account kills every active session: drop all refresh tokens.
+            var refreshTokens = await context.RefreshTokens
+                .Where(rt => rt.UserId == user.Id)
+                .ToListAsync(cancellationToken);
+            context.RefreshTokens.RemoveRange(refreshTokens);
+
             await context.UserDisabledHistory.AddAsync(result,cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
             return result.Id;

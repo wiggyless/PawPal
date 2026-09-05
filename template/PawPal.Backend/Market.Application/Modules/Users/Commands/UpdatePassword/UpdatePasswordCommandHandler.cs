@@ -39,6 +39,14 @@ namespace PawPal.Application.Modules.Users.Commands.UpdatePassword
             }
             var hasher = new PasswordHasher<UserEntity>();
             user.PasswordHash = hasher.HashPassword(null, password);
+
+            // A password change (whether initiated by the user or via the recovery flow)
+            // invalidates every existing session: drop all refresh tokens for this user.
+            var refreshTokens = await context.RefreshTokens
+                .Where(rt => rt.UserId == user.Id)
+                .ToListAsync(cancellationToken);
+            context.RefreshTokens.RemoveRange(refreshTokens);
+
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
