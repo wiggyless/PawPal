@@ -53,7 +53,8 @@ export class NewsDetailComponent implements OnInit {
   }
 
   getImageUrl(photoUrl?: string): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + '/' + (photoUrl ?? ''));
+    if (!photoUrl) return this.sanitizer.bypassSecurityTrustUrl('');
+    return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + '/' + photoUrl);
   }
 
   goBack(): void {
@@ -86,7 +87,11 @@ export class NewsDetailComponent implements OnInit {
             this.router.navigate(['news']);
           },
           error: () => {
-            this.dialoguePopup.error('Something went wrong', 'Could not delete the news post.', 'OK');
+            this.dialoguePopup.error(
+              'Something went wrong',
+              'Could not delete the news post.',
+              'OK',
+            );
           },
         });
       },

@@ -157,6 +157,7 @@ export class CatalogComponent
     this.cd.detectChanges();
   }
   getImageUrl(imagePath: string): SafeUrl {
+    if (!imagePath) return this.sanitizer.bypassSecurityTrustUrl('');
     return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + imagePath);
   }
   getBreedSelect(): void {

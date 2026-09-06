@@ -368,7 +368,6 @@ export class CreatePost implements OnInit {
     this.location.back();
   }
 
-  /** Builds the single multipart request body shared by addPost()/updatePost() — animal, health, allergies/disabilities and images all go to one atomic backend endpoint. */
   private buildAnimalPostFormData(): FormData {
     const mainInfo = this.secondFormGroup.value;
     const healthInfo = this.thridFormGroup.value;
@@ -398,10 +397,7 @@ export class CreatePost implements OnInit {
     return formData;
   }
 
-  private handleAnimalPostUploadEvent(
-    event: HttpEvent<unknown>,
-    onComplete: () => void,
-  ): void {
+  private handleAnimalPostUploadEvent(event: HttpEvent<unknown>, onComplete: () => void): void {
     if (event.type === HttpEventType.UploadProgress && event.total) {
       this.uploadProgress = Math.round((100 * event.loaded) / event.total);
       if (this.uploadProgress >= 100) {
