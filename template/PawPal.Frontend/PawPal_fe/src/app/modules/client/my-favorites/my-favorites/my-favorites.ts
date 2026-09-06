@@ -84,6 +84,7 @@ export class MyFavorites
     this.loadAnimalPosts();
   }
   getPostImage(imagePath: string) {
+    if (!imagePath) return this.sanitizer.bypassSecurityTrustUrl('');
     return this.sanitizer.bypassSecurityTrustUrl(this.envLink.apiUrl + imagePath);
   }
 }

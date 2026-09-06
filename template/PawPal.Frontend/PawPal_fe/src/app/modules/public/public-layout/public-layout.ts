@@ -99,10 +99,12 @@ export class PublicLayout implements OnInit, OnDestroy {
     });
   }
   getImageForPost(imagePath: string) {
+    if (!imagePath) return this.sanitizer.bypassSecurityTrustUrl('');
     return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + imagePath);
   }
   getNewsImageUrl(photoUrl?: string) {
-    return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + '/' + (photoUrl ?? ''));
+    if (!photoUrl) return this.sanitizer.bypassSecurityTrustUrl('');
+    return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + '/' + photoUrl);
   }
   getNewsPreview(content: string, limit: number = 220): string {
     return content.length > limit ? content.slice(0, limit).trimEnd() + '…' : content;

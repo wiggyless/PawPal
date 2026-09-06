@@ -104,7 +104,8 @@ export class NewsListComponent implements OnInit {
   }
 
   getImageUrl(photoUrl?: string): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + '/' + (photoUrl ?? ''));
+    if (!photoUrl) return this.sanitizer.bypassSecurityTrustUrl('');
+    return this.sanitizer.bypassSecurityTrustUrl(this.env.apiUrl + '/' + photoUrl);
   }
 
   getPreview(content: string, limit: number = 30): string {
