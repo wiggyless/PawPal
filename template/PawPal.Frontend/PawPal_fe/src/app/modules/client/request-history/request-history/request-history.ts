@@ -88,6 +88,7 @@ export class RequestHistory implements OnInit, OnDestroy {
     });
   }
   getPostImage(imagePath: string) {
+    if (!imagePath) return this.sanitizer.bypassSecurityTrustUrl('');
     return this.sanitizer.bypassSecurityTrustUrl(this.envLink.apiUrl + imagePath);
   }
   handlePageEvent(event: PageEvent) {

@@ -44,10 +44,7 @@ public partial class DatabaseContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Note: configurations are applied explicitly here (rather than via
-        // ApplyConfigurationsFromAssembly) because several other IEntityTypeConfiguration classes
-        // in this assembly were never wired up and scaffold unrelated, risky schema changes
-        // (column truncation, new unique indexes on existing data, FK behavior changes) if activated.
+
         modelBuilder.ApplyConfiguration(new PawPal.Infrastructure.Database.Configurations.Security.SecurityAnswersConfiguration());
         modelBuilder.ApplyConfiguration(new PawPal.Infrastructure.Database.Configurations.Adoptions.AdoptionRequestConfiguration());
         modelBuilder.ApplyConfiguration(new PawPal.Infrastructure.Database.Configurations.Posts.PostsConfiguration());
