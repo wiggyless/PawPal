@@ -17,7 +17,13 @@ namespace PawPal.Application.Modules.PostImages.Commands.Update
                 throw new PawPalNotFoundException($"Post with id {command.PostId} not found");
             }
             var post = await context.Posts.Where(x => x.Id == command.PostId).FirstOrDefaultAsync(cancellationToken);
-            if (post is not null && post.UserId != user.UserId && user.RoleId != Roles.Admin)
+            // Fail closed: a missing post (e.g. already soft-deleted) must not skip the
+            // ownership check — it previously let anyone overwrite that post's images.
+            if (post is null)
+            {
+                throw new PawPalNotFoundException($"Post with id {command.PostId} not found");
+            }
+            if (post.UserId != user.UserId && user.RoleId != Roles.Admin)
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }

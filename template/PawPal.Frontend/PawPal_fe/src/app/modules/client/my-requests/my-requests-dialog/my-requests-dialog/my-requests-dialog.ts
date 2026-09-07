@@ -29,18 +29,16 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
   requestService = inject(AnimalRequestService);
   reqID: number = 0;
   postID: number = 0;
-  animalID: number = 0;
   status: string = '';
   cityCantonName: string = '';
   sentDate: Date = new Date();
-  sentDateString = '';
   isAnotherUser = false;
+  canModerate = false;
   requestID: number = 0;
   reqData: GetAdoptionRequirementsById | undefined;
   user: GetPublicUserProfileDto | undefined;
   currentUser = inject(CurrentUserService);
   fullAddress: string = '';
-  postService = inject(AnimalPostService);
   env = environment.apiUrl;
   cd = inject(ChangeDetectorRef);
 
@@ -58,10 +56,9 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
     this.status = this.dialogData.status;
     this.cityCantonName = this.dialogData.cityCantonName;
     this.sentDate = this.dialogData.sentDate;
-    this.sentDateString = new Date(this.sentDate).toISOString().replace('T', ' ').split('.')[0];
     this.requestID = this.dialogData.requestID;
     this.isAnotherUser = this.dialogData.isAnotherUser;
-    this.animalID = this.dialogData.animalID;
+    this.canModerate = this.dialogData.canModerate ?? false;
     this.loadReq();
   }
   ngOnDestroy(): void {
@@ -79,11 +76,25 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
         this.fullAddress = `${this.reqData.address}, Floor ${this.reqData.floorNumber}`;
         this.isLoaded = true;
 
-        this.userAPI.getPublicProfile(reponse.adoptionRequest.userId).subscribe((userResponse) => {
-          this.user = userResponse;
-          this.isLoaded = true;
-          this.cd.detectChanges();
+        this.userAPI.getPublicProfile(reponse.adoptionRequest.userId).subscribe({
+          next: (userResponse) => {
+            this.user = userResponse;
+            this.isLoaded = true;
+            this.cd.detectChanges();
+          },
+          error: () => {
+            this.isLoaded = true;
+            this.cd.detectChanges();
+          },
         });
+      },
+      error: (err) => {
+        this.dialogPopUp.error(
+          'Error',
+          err?.error?.message ?? 'Could not load the request details. Please try again.',
+          'OK',
+        );
+        this.dialogReg.close(false);
       },
     });
   }
@@ -94,8 +105,19 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
   rejectRequest() {
     this.updateRequest.requestID = this.requestID;
     this.updateRequest.status = 'Denied';
-    this.updateSubcription = this.requestService.updateRequest(this.updateRequest).subscribe(() => {
-      this.dialogReg.close(true);
+    this.updateSubcription = this.requestService.updateRequest(this.updateRequest).subscribe({
+      next: () => {
+        this.dialogPopUp.success('Request Denied', 'The adoption request has been denied.', 'OK');
+        this.dialogReg.close(true);
+      },
+      error: (err) => {
+        this.dialogPopUp.error(
+          'Error',
+          err?.error?.message ?? 'Could not deny the request. Please try again.',
+          'OK',
+        );
+        this.dialogReg.close(false);
+      },
     });
   }
   approveRequest() {
@@ -103,17 +125,19 @@ export class MyRequestsDialog implements OnInit, OnDestroy {
     this.updateRequest.status = 'Accepted';
     this.updateSubcription = this.requestService.updateRequest(this.updateRequest).subscribe({
       next: () => {
-        this.postService.deletePost(this.postID, this.animalID).subscribe({
-          next: () => {
-            this.dialogReg.close(true);
-          },
-          error: (res) => {
-            this.dialogPopUp.error('Error', res?.error.message, 'OK');
-            this.dialogReg.close(false);
-          },
-        });
+        this.dialogPopUp.success(
+          'Request Approved',
+          'The adoption request has been approved and the animal is now marked as adopted.',
+          'OK',
+        );
+        this.dialogReg.close(true);
       },
-      error: () => {
+      error: (err) => {
+        this.dialogPopUp.error(
+          'Error',
+          err?.error?.message ?? 'Could not approve the request. Please try again.',
+          'OK',
+        );
         this.dialogReg.close(false);
       },
     });

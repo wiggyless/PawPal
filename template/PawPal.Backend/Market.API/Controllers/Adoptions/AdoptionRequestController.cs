@@ -1,4 +1,5 @@
 ﻿using PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create;
+using PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.CreateWithRequirement;
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Delete;
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.UpdateStatus;
 using PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.GetById;
@@ -12,6 +13,14 @@ namespace PawPal.API.Controllers.Adoptions
     {
         [HttpPost]
         public async Task<ActionResult<int>> CreateRequest(CreateAdoptionRequestCommand crc, CancellationToken cancellationToken)
+        {
+            int id = await sender.Send(crc, cancellationToken);
+            return CreatedAtAction(nameof(GetById), new { id }, new { id });
+        }
+
+        [HttpPost("with-requirement")]
+        public async Task<ActionResult<int>> CreateRequestWithRequirement(
+            CreateAdoptionRequestWithRequirementCommand crc, CancellationToken cancellationToken)
         {
             int id = await sender.Send(crc, cancellationToken);
             return CreatedAtAction(nameof(GetById), new { id }, new { id });

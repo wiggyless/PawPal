@@ -23,6 +23,10 @@ namespace PawPal.Application.Modules.Users.Commands.Update
                 throw new PawPalConflictException("User is not allowed to do this action");
             }
             var city = await context.Cities.FirstOrDefaultAsync(x => x.Id == request.CityId,cancellationToken);
+            if (city is null)
+            {
+                throw new PawPalConflictException("City does not exist!");
+            }
             if (!request.AreStringPropertiesValid("ProfilePictureURL","AboutMe"))
             {
                 throw new PawPalConflictException($"Field cannot be an empty string");

@@ -20,6 +20,8 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Command.Create
             if (user is null) throw new PawPalNotFoundException("User does not exist");
             if (post is null) throw new PawPalNotFoundException("Post does not exist");
             if (req is null) throw new PawPalNotFoundException("Adoption requirement does not exist");
+            if (req.CreatedByUserId is not null && req.CreatedByUserId != user.Id)
+                throw new PawPalConflictException("You can only submit a requirement you created yourself");
             if (post.UserId == user.Id)
                 throw new PawPalConflictException("The same user cannot request to its own post");
 

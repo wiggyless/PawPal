@@ -4,6 +4,10 @@
   min-height: 100vh;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(187, 116, 34, 0.2) 100%), #e5d7c4;
   padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 ::ng-deep .mat-step-header .mat-step-icon-selected,
@@ -32,6 +36,7 @@
   stroke: #354024 !important;
 }
 .adoption-stepper {
+  width: 100%;
   max-width: 1600px;
   margin: 0 auto;
   background: transparent;
