@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReportedPostsService } from '../../../api-services/moderation/reported-posts/reported-posts.service';
 import { REPORT_REASON_LABELS } from '../../../api-services/moderation/reported-posts/reported-posts.model';
+import { DialoguePopupService } from '../../../api-services/dialogue-popup/dialogue-popup.service';
 
 export interface ReportPostDialogData {
   postId: number;
@@ -26,6 +27,7 @@ export class ReportPostComponent implements OnInit {
     private service: ReportedPostsService,
     private dialogRef: MatDialogRef<ReportPostComponent>,
     private cd: ChangeDetectorRef,
+    private dialogPopUp: DialoguePopupService,
     @Inject(MAT_DIALOG_DATA) public data: ReportPostDialogData,
   ) {}
 
@@ -61,7 +63,10 @@ export class ReportPostComponent implements OnInit {
         },
         error: (err) => {
           this.isSubmitting = false;
-          this.errorMessage = 'Something went wrong. Please try again.';
+          const message = err?.error?.message ?? 'Something went wrong. Please try again.';
+          this.errorMessage = message;
+          this.dialogPopUp.error('Error', message, 'OK');
+          this.cd.detectChanges();
         },
       });
   }
