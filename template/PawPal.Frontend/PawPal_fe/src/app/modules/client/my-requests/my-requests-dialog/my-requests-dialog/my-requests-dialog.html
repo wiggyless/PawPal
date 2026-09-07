@@ -425,7 +425,7 @@
                 <div class="status-label">STATUS:</div>
                 <div class="status-value">
                   {{ status }}
-                  @if (status.toLowerCase() == 'sent') {
+                  @if (status.toLowerCase() == 'pending') {
                     <svg
                       class="loading-spinner"
                       xmlns="http://www.w3.org/2000/svg"
@@ -480,7 +480,7 @@
                         </filter>
                       </defs>
                     </svg>
-                  } @else if (status.toLowerCase() == 'rejected') {
+                  } @else if (status.toLowerCase() == 'denied') {
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="27"
@@ -493,7 +493,7 @@
                         fill="#AD1F1F"
                       />
                     </svg>
-                  } @else if (status.toLowerCase() == 'approved') {
+                  } @else if (status.toLowerCase() == 'accepted') {
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="35"
@@ -528,7 +528,7 @@
                   stroke-linejoin="round"
                 />
               </svg>
-              Date of sending request:<br />{{ sentDateString | date: 'short' }}
+              Date of sending request:<br />{{ sentDate | date: 'short' }}
             </div>
 
             <div class="info-row">
@@ -550,10 +550,12 @@
               {{ cityCantonName }}
             </div>
           </div>
-          <div class="profile-buttons-approval">
-            <button class="primarybtn" (click)="approveRequest()">APPROVE</button>
-            <button class="secondarybtn" (click)="rejectRequest()">REJECT</button>
-          </div>
+          @if (canModerate && status.toLowerCase() === 'pending') {
+            <div class="profile-buttons-approval">
+              <button class="primarybtn" (click)="approveRequest()">APPROVE</button>
+              <button class="secondarybtn" (click)="rejectRequest()">REJECT</button>
+            </div>
+          }
         </div>
       </div>
     } @else if (!isLoaded) {

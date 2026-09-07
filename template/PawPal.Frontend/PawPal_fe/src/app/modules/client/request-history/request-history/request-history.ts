@@ -17,6 +17,7 @@ import { PostImagesService } from '../../../../api-services/animal-post-images/a
 import { MyRequestsDialog } from '../../my-requests/my-requests-dialog/my-requests-dialog/my-requests-dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PageEvent } from '@angular/material/paginator';
+import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 
 @Component({
   selector: 'app-my-requests',
@@ -50,6 +51,7 @@ export class RequestHistory implements OnInit, OnDestroy {
     },
   };
   dialog = inject(MatDialog);
+  dialogPopUp = inject(DialoguePopupService);
   catalogImages: GetMainImagePostBlobClass[] = [];
   imagesLoaded = signal(false);
   tempList: number[] = [];
@@ -65,6 +67,14 @@ export class RequestHistory implements OnInit, OnDestroy {
         this.requestsList = response.request;
         this.cantonsList = response.cantons;
         this.imagesLoaded.set(true);
+      },
+      error: (err) => {
+        this.imagesLoaded.set(true);
+        this.dialogPopUp.error(
+          'Error',
+          err?.error?.message ?? 'Could not load your request history. Please try again.',
+          'OK',
+        );
       },
     });
   }
@@ -84,6 +94,8 @@ export class RequestHistory implements OnInit, OnDestroy {
         sentDate: request.dateSent,
         status: request.status.toLocaleUpperCase(),
         postID: request.postID,
+        requestID: request.requestId,
+        canModerate: false,
       },
     });
   }

@@ -49,6 +49,11 @@ namespace PawPal.Domain.Entities.Adoptions
         public string HouseDetials { get; set; }
 
         public string? FinalComment { get; set; }
-        
+
+        // Set at creation from the authenticated user. A requirement has no owner-only
+        // relation until an AdoptionRequest links to it via RequirementId, so this is the
+        // only way to authorize Update/Delete on a not-yet-attached requirement.
+        public int? CreatedByUserId { get; set; }
+
     }
 }

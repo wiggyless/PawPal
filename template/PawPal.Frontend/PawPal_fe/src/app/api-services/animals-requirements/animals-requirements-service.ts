@@ -29,8 +29,7 @@ export class AnimalRequirementService {
     });
   }
   addRequirements(request?: CreateAdoptionRequirement): Observable<any> {
-    const params = request ? buildHttpParams(request as any) : undefined;
-    return this.httpClient.post<any>(`${this.apiUrl}`, request, { params });
+    return this.httpClient.post<any>(`${this.apiUrl}`, request);
   }
   deleteRequirements(requestId: number): Observable<number> {
     return this.httpClient.delete<number>(`${this.apiUrl}/${requestId}`, {

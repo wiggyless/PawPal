@@ -18,6 +18,13 @@ namespace PawPal.Application.Modules.Moderation.ReportedPosts.Commands.Create
             var post = await context.Posts.FirstOrDefaultAsync(x => x.Id == request.PostID, cancellationToken);
             if (post is null)
                 throw new PawPalNotFoundException("Post does not exist.");
+            if (post.UserId == currentUser.UserId)
+                throw new PawPalConflictException("You cannot report your own post.");
+
+            var alreadyReported = await context.ReportedPosts.AnyAsync(
+                x => x.PostID == request.PostID && x.UserID == currentUser.UserId, cancellationToken);
+            if (alreadyReported)
+                throw new PawPalConflictException("You have already reported this post.");
 
             var reportedPost = new ReportedPostsEntity
             {

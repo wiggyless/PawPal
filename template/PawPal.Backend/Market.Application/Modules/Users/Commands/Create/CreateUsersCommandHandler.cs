@@ -23,9 +23,11 @@ namespace PawPal.Application.Modules.Users.Commands.Create
             var userEmail = request.Email?.Trim();
             var birthDate = request.BirthDate;
             var password = request.Password?.Trim();
+            var username = request.Username?.Trim();
 
             if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(userLastName) ||
-                string.IsNullOrWhiteSpace(userEmail) || string.IsNullOrWhiteSpace(password) || birthDate == null)
+                string.IsNullOrWhiteSpace(userEmail) || string.IsNullOrWhiteSpace(password) ||
+                string.IsNullOrWhiteSpace(username) || birthDate == null)
             {
                 throw new ValidationException("All fields must be filled!");
             }
@@ -42,6 +44,13 @@ namespace PawPal.Application.Modules.Users.Commands.Create
             if (emailUsed)
             {
                 throw new PawPalConflictException("Email is already being used!");
+            }
+
+            bool usernameUsed = await context.Users.
+                AnyAsync(x => x.Username == username, cancellationToken);
+            if (usernameUsed)
+            {
+                throw new PawPalConflictException("Username is already being used!");
             }
             var hasher = new PasswordHasher<UserEntity>();
 
@@ -63,7 +72,7 @@ namespace PawPal.Application.Modules.Users.Commands.Create
                 EmailConfirmationToken = confirmationToken,
                 EmailConfirmationTokenExpiresAt = DateTime.UtcNow.AddHours(24),
                 IsEmailConfirmed = false,
-                Username = request.Username, 
+                Username = username,
                 AboutMe = request.AboutMe
             };
             context.Users.Add(newUser);

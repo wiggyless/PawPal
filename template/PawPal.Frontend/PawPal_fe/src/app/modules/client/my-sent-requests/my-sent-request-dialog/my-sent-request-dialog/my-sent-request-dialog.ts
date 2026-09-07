@@ -6,9 +6,8 @@ import { forkJoin, Subscription } from 'rxjs';
 import { AnimalPostService } from '../../../../../api-services/animal-posts/animal-posts.service';
 import { UserService } from '../../../../../api-services/users/users-service';
 import { GetPublicUserProfileDto } from '../../../../../api-services/users/users-model';
-import { AnimalRequestService } from '../../../../../api-services/animals-adoption/animals-adoption-service';
-import { UpdateRequestByID } from '../../../../../api-services/animals-adoption/animals-adoption-model';
 import { environment } from '../../../../../../environments/environment';
+import { DialoguePopupService } from '../../../../../api-services/dialogue-popup/dialogue-popup.service';
 @Component({
   selector: 'app-my-requests-dialog',
   standalone: false,
@@ -21,7 +20,7 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
   postAPI = inject(AnimalPostService);
   userAPI = inject(UserService);
   reqAPI = inject(AnimalRequirementService);
-  requestService = inject(AnimalRequestService);
+  dialogPopUp = inject(DialoguePopupService);
 
   reqID: number = 0;
   postID: number = 0;
@@ -29,7 +28,6 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
   cityCantonName: string = '';
   sentDate: Date = new Date();
 
-  sentDateString = '';
   isAnotherUser = false;
   requestID: number = 0;
   reqData: GetAdoptionRequirementsById | undefined;
@@ -38,12 +36,7 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
   env = environment.apiUrl;
   cd = inject(ChangeDetectorRef);
 
-  updateRequest: UpdateRequestByID = {
-    requestID: 0,
-    status: '',
-  };
   private mySubscription?: Subscription;
-  private updateSubcription?: Subscription;
   isLoaded = false;
   ngOnInit(): void {
     this.reqID = this.dialogData.reqID;
@@ -51,14 +44,12 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
     this.status = this.dialogData.status;
     this.cityCantonName = this.dialogData.cityCantonName;
     this.sentDate = this.dialogData.sentDate;
-    this.sentDateString = new Date(this.sentDate).toISOString().replace('T', ' ').split('.')[0];
     this.requestID = this.dialogData.requestID;
     this.isAnotherUser = this.dialogData.isAnotherUser;
     this.loadReq();
   }
   ngOnDestroy(): void {
     this.mySubscription?.unsubscribe();
-    this.updateSubcription?.unsubscribe();
   }
   loadReq() {
     this.mySubscription = forkJoin({
@@ -68,28 +59,30 @@ export class MySentRequestDialog implements OnInit, OnDestroy {
       next: (reponse) => {
         this.reqData = reponse.request;
         this.fullAddress = `${this.reqData.address}, Floor ${this.reqData.floorNumber}`;
-        this.userAPI.getPublicProfile(reponse.post.userID).subscribe((reponse) => {
-          this.user = reponse;
-          this.isLoaded = true;
-          this.cd.detectChanges();
+        this.userAPI.getPublicProfile(reponse.post.userID).subscribe({
+          next: (userResponse) => {
+            this.user = userResponse;
+            this.isLoaded = true;
+            this.cd.detectChanges();
+          },
+          error: () => {
+            this.isLoaded = true;
+            this.cd.detectChanges();
+          },
         });
+      },
+      error: (err) => {
+        this.dialogPopUp.error(
+          'Error',
+          err?.error?.message ?? 'Could not load the request details. Please try again.',
+          'OK',
+        );
+        this.dialogReg.close();
       },
     });
   }
 
   closeDialog() {
     this.dialogReg.close();
-  }
-  rejectRequest() {
-    this.updateRequest.requestID = this.requestID;
-    this.updateRequest.status = 'Denied';
-    this.updateSubcription = this.requestService
-      .updateRequest(this.updateRequest)
-      .subscribe((response) => {
-        this.dialogReg.close();
-      });
-  }
-  approveRequest() {
-    throw new Error('Method not implemented.');
   }
 }

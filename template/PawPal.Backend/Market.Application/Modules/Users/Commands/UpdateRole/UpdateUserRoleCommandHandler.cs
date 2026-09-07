@@ -25,6 +25,18 @@ namespace PawPal.Application.Modules.Users.Commands.UpdateRole
                 throw new PawPalConflictException("Role does not exist");
             }
 
+            // Guard against ending up with zero admins: block demoting the last remaining
+            // admin, including an admin demoting themselves.
+            if (user.RoleId == Roles.Admin && command.RoleId != Roles.Admin)
+            {
+                var otherAdminsCount = await context.Users
+                    .CountAsync(x => x.RoleId == Roles.Admin && x.Id != user.Id, cancellationToken);
+                if (otherAdminsCount == 0)
+                {
+                    throw new PawPalConflictException("Cannot remove the last remaining administrator.");
+                }
+            }
+
             user.RoleId = command.RoleId;
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;

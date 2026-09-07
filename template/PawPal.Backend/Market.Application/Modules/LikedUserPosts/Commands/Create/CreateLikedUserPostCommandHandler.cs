@@ -25,6 +25,11 @@ namespace PawPal.Application.Modules.LikedUserPosts.Commands.Create
             {
                 throw new PawPalNotFoundException("User does not exist");
             }
+            var postExists = await context.Posts.AnyAsync(x => x.Id == command.PostID, cancellationToken);
+            if (!postExists)
+            {
+                throw new PawPalNotFoundException("Post does not exist");
+            }
             if (likedPosts.FirstOrDefault(x => x.PostId == command.PostID && x.UserId == userId) != null){
                 return 0;
             }

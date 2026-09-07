@@ -25,6 +25,16 @@ namespace PawPal.Application.Modules.Moderation.ReportedComments.Commands.Create
             {
                 throw new PawPalNotFoundException("Comment does not exist inside the databse");
             }
+            if (comment.UserId == currentUser.UserId)
+            {
+                throw new PawPalConflictException("You cannot report your own comment.");
+            }
+            var alreadyReported = context.ReportedComments.AsNoTracking()
+                .Any(x => x.CommentID == request.CommentID && x.CommentReportedBy == currentUser.UserId);
+            if (alreadyReported)
+            {
+                throw new PawPalConflictException("You have already reported this comment.");
+            }
             var reportedComments = new ReportedCommentsEntity
             {
                 CommentReportedBy = userSent.Id,
