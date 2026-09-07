@@ -94,45 +94,54 @@ export class PostComponent implements OnInit, OnDestroy {
   isImagesLoaded = signal(false);
   ngOnInit(): void {
     window.scrollTo(0, 0);
-    this.route.queryParams.subscribe((params) => {
-      this.postId = params['postID'];
-    });
+    this.postId = this.route.snapshot.queryParams['postID'];
 
     this.imagesList = this.postImageService.getImagePost(this.postId);
     this.postSub = this.postService.getPostById(this.postId).subscribe({
       next: (res) => {
         this.dateAdded = res.dateAdded;
         this.animalId = res.animalID;
-        this.animalSub = this.animalService.getAnimalById(res.animalID).subscribe((resA) => {
-          this.togetherSub = forkJoin({
-            health: this.animalHealthService.getAnimalHealthHistoryById(this.animalId),
-            cities: this.cityService.getCityById(res.cityID),
-            users: this.userService.getPublicProfile(res.userID),
-          }).subscribe({
-            next: (response) => {
-              let sourceKeys = Object.keys(resA);
-              sourceKeys.forEach((key) => {
-                if (key in this.animal) {
-                  (this.animal as any)[key] = (resA as any)[key];
-                }
-              });
-              this.animalHealth = response.health;
-              this.city = response.cities;
-              this.user = response.users;
-              this.isImagesLoaded.set(true);
-            },
-          });
+        this.animalSub = this.animalService.getAnimalById(res.animalID).subscribe({
+          next: (resA) => {
+            this.togetherSub = forkJoin({
+              health: this.animalHealthService.getAnimalHealthHistoryById(this.animalId),
+              cities: this.cityService.getCityById(res.cityID),
+              users: this.userService.getPublicProfile(res.userID),
+            }).subscribe({
+              next: (response) => {
+                let sourceKeys = Object.keys(resA);
+                sourceKeys.forEach((key) => {
+                  if (key in this.animal) {
+                    (this.animal as any)[key] = (resA as any)[key];
+                  }
+                });
+                this.animalHealth = response.health;
+                this.city = response.cities;
+                this.user = response.users;
+                this.isImagesLoaded.set(true);
+              },
+              error: (err) => this.handleLoadError(err),
+            });
+          },
+          error: (err) => this.handleLoadError(err),
         });
       },
-      error: (res) => {
-        this.dialogPopUP.error('Error', res?.error?.message ?? 'Something went wrong.', 'OK');
-      },
+      error: (err) => this.handleLoadError(err),
     });
   }
   ngOnDestroy(): void {
     this.animalSub?.unsubscribe();
     this.postSub?.unsubscribe();
     this.togetherSub?.unsubscribe();
+  }
+
+  private handleLoadError(err: any): void {
+    this.dialogPopUP.error(
+      'Error',
+      err?.error?.message ?? 'Could not load this post. Please try again.',
+      'OK',
+    );
+    this.routeNext.navigate(['/catalog']);
   }
   keepOrder = (a: any, b: any) => 0;
 

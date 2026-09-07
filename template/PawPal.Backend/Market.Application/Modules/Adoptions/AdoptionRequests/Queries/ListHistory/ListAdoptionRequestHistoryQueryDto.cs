@@ -19,5 +19,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.ListHist
     public string Name { get; set; }
     public string City { get; set; }
     public string Canton { get; set; }
+    public string MainImage { get; set; }
+    public int AnimalID { get; set; }
 }
 }

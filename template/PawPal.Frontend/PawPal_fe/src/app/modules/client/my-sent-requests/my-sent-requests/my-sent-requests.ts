@@ -74,6 +74,15 @@ export class MySentRequests implements OnInit, OnDestroy {
         this.cantonsList = response.cantons;
         this.imagesLoaded.set(true);
       },
+      error: (err) => {
+        this.imagesLoaded.set(true);
+        this.listEmpty.set(true);
+        this.dialogConfirm.error(
+          'Error',
+          err?.error?.message ?? 'Could not load your sent requests. Please try again.',
+          'OK',
+        );
+      },
     });
   }
   ngOnDestroy(): void {

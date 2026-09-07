@@ -18,9 +18,14 @@ namespace PawPal.Application.Modules.Posts.Commands.Delete
             {
                 throw new PawPalConflictException("User is not allowed to do this action");
             }
+            var comments = await context.Comments.Where(x => x.PostId == request.Id).ToListAsync(cancellationToken);
+            var likes = await context.LikedUserPosts.Where(x => x.PostId == request.Id).ToListAsync(cancellationToken);
+
             post.IsDeleted = true;
             post.Animal.IsDeleted = true;
             if (postImage != null) postImage.IsDeleted = true;
+            foreach (var comment in comments) comment.IsDeleted = true;
+            foreach (var like in likes) like.IsDeleted = true;
             await context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

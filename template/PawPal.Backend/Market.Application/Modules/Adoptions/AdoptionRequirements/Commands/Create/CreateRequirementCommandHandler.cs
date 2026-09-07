@@ -25,6 +25,7 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Cre
 
             var newRequirement = new AdoptionRequirementEntity
             {
+                CreatedByUserId = currentUser.UserId,
                 HouseType = command.HouseType,
                 Address = command.Address,
                 ChildrenAround = command.ChildrenAround ?? false,

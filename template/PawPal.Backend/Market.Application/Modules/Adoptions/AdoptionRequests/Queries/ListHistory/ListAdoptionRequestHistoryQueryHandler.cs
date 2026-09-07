@@ -47,6 +47,11 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequests.Queries.ListHist
                 RequirementId = y.RequirementId,
                 UserID = y.UserId,
                 PostID = y.Post.Id,
+                MainImage = context.PostImages
+                        .Where(img => img.PostId == y.PostId)
+                        .Select(img => img.MainImage)
+                        .FirstOrDefault() ?? " ",
+                AnimalID = y.Post.AnimalID,
             }).AsQueryable();
 
             return await PageResult<ListAdoptionRequestHistoryQueryDto>.FromQueryableAsync(finalList,

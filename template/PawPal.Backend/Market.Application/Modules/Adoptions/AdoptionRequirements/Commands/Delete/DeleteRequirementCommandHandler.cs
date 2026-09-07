@@ -14,7 +14,10 @@ namespace PawPal.Application.Modules.Adoptions.AdoptionRequirements.Commands.Del
             var req = await context.AdoptionRequirements.FirstOrDefaultAsync(x=>x.Id == command.Id,cancellationToken);
             if (req is null) throw new PawPalNotFoundException("Requirement does not exist in the database");
             var owningRequest = await context.AdoptionRequests.FirstOrDefaultAsync(x => x.RequirementId == command.Id, cancellationToken);
-            if (owningRequest is not null && owningRequest.UserId != user.UserId && user.RoleId != Roles.Admin)
+            // Once attached to a request, ownership follows the request; before that,
+            // it falls back to whoever created the requirement.
+            var ownerId = owningRequest?.UserId ?? req.CreatedByUserId;
+            if (ownerId != user.UserId && user.RoleId != Roles.Admin)
                 throw new PawPalConflictException("User is not authorized to do this action");
             req.IsDeleted = true;
             await context.SaveChangesAsync(cancellationToken);

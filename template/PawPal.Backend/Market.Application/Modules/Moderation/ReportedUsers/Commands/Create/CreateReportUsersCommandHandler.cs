@@ -23,6 +23,15 @@ namespace PawPal.Application.Modules.Moderation.ReportedUsers.Commands.Create
                 throw new PawPalNotFoundException("User does not exist.");
             if (userSent is null)
                 throw new PawPalNotFoundException("User does not exist.");
+            if (request.ReportedUserID == currentUser.UserId)
+                throw new PawPalConflictException("You cannot report yourself.");
+
+            var alreadyReported = await context.ReportedUsers.AnyAsync(
+                x => x.ReportedUserID == request.ReportedUserID && x.ReportSentByUserID == currentUser.UserId,
+                cancellationToken);
+            if (alreadyReported)
+                throw new PawPalConflictException("You have already reported this user.");
+
             var reportedUser = new ReportedUserEntity
             {
                 ReportSentByUserID = userSent.Id,

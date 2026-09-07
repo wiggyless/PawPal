@@ -4,9 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AdoptionDialog } from './adoption-dialog/adoption-dialog/adoption-dialog';
 import { Location } from '@angular/common';
 import { AnimalRequestService } from '../../../../api-services/animals-adoption/animals-adoption-service';
-import { AnimalRequirementService } from '../../../../api-services/animals-requirements/animals-requirements-service';
 import { CreateAdoptionRequirement } from '../../../../api-services/animals-requirements/animals-requirements-model';
-import { CreateAdoptionRequest } from '../../../../api-services/animals-adoption/animals-adoption-model';
 import { CurrentUserService } from '../../../../core/services/auth/current-user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
@@ -21,14 +19,16 @@ export class Adoption implements OnInit {
   dialog = inject(DialoguePopupService);
   location = inject(Location);
   requestService = inject(AnimalRequestService);
-  requirementService = inject(AnimalRequirementService);
   currentUserService = inject(CurrentUserService);
   route = inject(ActivatedRoute);
   step1FormGroup = new FormGroup({
     houseType: new FormControl('', [Validators.required]),
     adress: new FormControl('', [Validators.required]),
-    numOfFloor: new FormControl(0, { nonNullable: true }),
-    numOfFamily: new FormControl(0, { nonNullable: true }),
+    numOfFloor: new FormControl(0, { nonNullable: true, validators: [Validators.min(0)] }),
+    numOfFamily: new FormControl(0, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.min(1)],
+    }),
     children: new FormControl(false),
     olderPeople: new FormControl(false),
     otherPets: new FormControl(false),
@@ -54,14 +54,9 @@ export class Adoption implements OnInit {
   });
   router = inject(Router);
   postID: number = 0;
-  requirementIDFromRes: number = 0;
+  isSubmitting = false;
   ngOnInit(): void {
-    const params = this.route.snapshot.queryParams;
-    if (Object.keys(params).length != 0) {
-      this.route.queryParams.subscribe((params) => {
-        this.postID = params['postID'];
-      });
-    }
+    this.postID = this.route.snapshot.queryParams['postID'];
   }
 
   sendRequest() {
@@ -71,7 +66,19 @@ export class Adoption implements OnInit {
       this.step3FormGroup.markAllAsTouched();
       return;
     }
-    let isCheckReady = this.step3FormGroup.value.iAmReady;
+    if (!this.postID) {
+      this.dialog.error(
+        'Error',
+        'This adoption form is not linked to a post. Please open it from the animal you want to adopt.',
+        'OK',
+      );
+      return;
+    }
+    if (this.isSubmitting) {
+      return;
+    }
+    this.isSubmitting = true;
+
     const payload: CreateAdoptionRequirement = {
       houseType: this.step1FormGroup.controls['houseType'].value as string,
       address: this.step1FormGroup.controls['adress'].value as string,
@@ -81,10 +88,14 @@ export class Adoption implements OnInit {
       elderlyAround: this.step1FormGroup.controls['olderPeople'].value as boolean,
       otherPetsAround: this.step1FormGroup.controls['otherPets'].value as boolean,
       yardAvailable: this.step1FormGroup.controls['yardAvail'].value as boolean,
-      yardDetails: this.step1FormGroup.controls['yardInfo'].value as string,
+      yardDetails: this.step1FormGroup.controls['yardAvail'].value
+        ? (this.step1FormGroup.controls['yardInfo'].value as string)
+        : '',
 
       petExp: this.step2FormGroup.controls['pastExp'].value as boolean,
-      expDetails: this.step2FormGroup.controls['yourExp'].value as string,
+      expDetails: this.step2FormGroup.controls['pastExp'].value
+        ? (this.step2FormGroup.controls['yourExp'].value as string)
+        : '',
       peopleAva: this.step2FormGroup.controls['familyAvail'].value as string,
       isGift: this.step2FormGroup.controls['gift'].value as boolean,
       planedStay: this.step2FormGroup.controls['placeToLive'].value as string,
@@ -97,34 +108,19 @@ export class Adoption implements OnInit {
       finalComment: this.step3FormGroup.controls['comment'].value as string,
       postID: this.postID,
     };
-    this.requirementService.addRequirements(payload).subscribe({
-      next: (res) => {
-        this.requirementIDFromRes = res;
 
-        const payload: CreateAdoptionRequest = {
-          status: 'SENT',
-          dateSend: new Date(),
-          postID: this.postID,
-          requirementID: res.id,
-        };
-        this.requestService.addRequest(payload).subscribe({
-          next: (res) => {
-            this.dialog.success(
-              'Request Sent',
-              'Your adoption request has been sent successfully. Please wait for further updates.',
-              'OK',
-            );
-            this.router.navigate(['']);
-          },
-          error: (err) => {
-            this.dialog.error('Error', err?.error.message, 'OK');
-            this.router.navigate(['']);
-          },
-        });
+    this.requestService.addRequestWithRequirement(payload).subscribe({
+      next: () => {
+        this.dialog.success(
+          'Request Sent',
+          'Your adoption request has been sent successfully. Please wait for further updates.',
+          'OK',
+        );
+        this.router.navigate(['']);
       },
       error: (err) => {
-        this.dialog.error('Error', err?.error.message, 'OK');
-        this.router.navigate(['']);
+        this.isSubmitting = false;
+        this.dialog.error('Error', err?.error?.message ?? 'Could not send your request.', 'OK');
       },
     });
   }

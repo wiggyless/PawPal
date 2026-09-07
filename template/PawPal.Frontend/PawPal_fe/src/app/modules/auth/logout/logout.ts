@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AuthFacadeService } from '../../../../app/core/services/auth/auth-facade.service';
+import { AuthTimeoutService } from '../../../../app/core/services/auth/auth-timeout.service';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-logout',
@@ -9,10 +10,12 @@ import { Router } from '@angular/router';
 })
 export class LogoutComponent implements OnInit{
   private authService = inject(AuthFacadeService);
+  private authTimeout = inject(AuthTimeoutService);
   private router = inject(Router);
  countdownSeconds = 3;
 
   ngOnInit(): void {
+    this.authTimeout.stopExpirationTracker();
     this.authService.logout().subscribe({
       next: () => this.startCountdown(),
       error: () => this.startCountdown()

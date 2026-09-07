@@ -67,8 +67,18 @@ export class AuthTimeoutService implements OnDestroy {
   }
 
   private showSessionWarning(): void {
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    // The user may have logged out (storage cleared) after this timer was
+    // scheduled. In that case there is no session to warn about.
+    if (!accessToken || !refreshToken) {
+      this.stopExpirationTracker();
+      return;
+    }
+
     const refresh: RefreshTokenCommand = {
-      refreshToken: localStorage.getItem('refreshToken')!,
+      refreshToken,
     };
 
     this.dialoguePopup.warning(
