@@ -17,6 +17,7 @@ import { GetMainImagePostBlobClass } from '../../../../api-services/animal-post-
 import { PostImagesService } from '../../../../api-services/animal-post-images/animal-post-images-service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PageEvent } from '@angular/material/paginator';
+import { DialoguePopupService } from '../../../../api-services/dialogue-popup/dialogue-popup.service';
 
 @Component({
   selector: 'app-my-requests',
@@ -47,6 +48,7 @@ export class MyRequests implements OnInit, OnDestroy {
     },
   };
   dialog = inject(MatDialog);
+  dialogPopUp = inject(DialoguePopupService);
   catalogImages: GetMainImagePostBlobClass[] = [];
   imagesLoaded = signal(false);
   tempList: number[] = [];
@@ -65,6 +67,15 @@ export class MyRequests implements OnInit, OnDestroy {
         this.cantonsList = response.cantons;
         this.imagesLoaded.set(true);
         this.cd.detectChanges();
+      },
+      error: (err) => {
+        this.imagesLoaded.set(true);
+        this.cd.detectChanges();
+        this.dialogPopUp.error(
+          'Error',
+          err?.error?.message ?? 'Could not load the adoption requests. Please try again.',
+          'OK',
+        );
       },
     });
   }
@@ -86,7 +97,7 @@ export class MyRequests implements OnInit, OnDestroy {
           status: request.status.toLocaleUpperCase(),
           postID: request.postID,
           requestID: request.requestId,
-          animalID: request.animalID,
+          canModerate: true,
         },
       })
       .afterClosed()

@@ -181,7 +181,7 @@
                 <div class="form-field">
                   <label class="field-label">Floor number</label>
                   <mat-form-field appearance="outline" class="custom-field number-field">
-                    <input matInput type="number" formControlName="numOfFloor" />
+                    <input matInput type="number" min="0" formControlName="numOfFloor" />
                     <div matSuffix class="arrow-container">
                       <mat-icon (click)="$event.stopPropagation(); addToInput(1, 'numOfFloor')"
                         >arrow_drop_up</mat-icon
@@ -191,6 +191,12 @@
                       >
                     </div>
                   </mat-form-field>
+                  @if (
+                    this.step1FormGroup.controls['numOfFloor']?.hasError('min') &&
+                    this.step1FormGroup.controls['numOfFloor'].touched
+                  ) {
+                    <mat-error>The floor number cannot be negative!</mat-error>
+                  }
                 </div>
               </div>
             </div>
@@ -228,7 +234,7 @@
                     Number of residents <span class="required">*</span>
                   </label>
                   <mat-form-field appearance="outline" class="custom-field number-field">
-                    <input matInput type="number" formControlName="numOfFamily" value="0" />
+                    <input matInput type="number" min="1" formControlName="numOfFamily" value="0" />
                     <div matSuffix class="arrow-container">
                       <mat-icon (click)="$event.stopPropagation(); addToInput(1, 'numOfFamily')"
                         >arrow_drop_up</mat-icon
@@ -238,6 +244,13 @@
                       >
                     </div>
                   </mat-form-field>
+                  @if (
+                    (this.step1FormGroup.controls['numOfFamily']?.hasError('required') ||
+                      this.step1FormGroup.controls['numOfFamily']?.hasError('min')) &&
+                    this.step1FormGroup.controls['numOfFamily'].touched
+                  ) {
+                    <mat-error>Please enter the number of residents (at least 1)!</mat-error>
+                  }
                 </div>
 
                 <!-- Children present -->
@@ -775,7 +788,7 @@
               class="primarybtn btn-submit"
               type="button"
               (click)="sendRequest()"
-              [disabled]="this.step3FormGroup.invalid"
+              [disabled]="this.step3FormGroup.invalid || isSubmitting"
             >
               SEND REQUEST
             </button>

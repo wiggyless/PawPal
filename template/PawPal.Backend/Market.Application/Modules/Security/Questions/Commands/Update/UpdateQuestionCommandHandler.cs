@@ -21,9 +21,9 @@ namespace PawPal.Application.Modules.Security.Questions.Commands.Update
             {
                 throw new PawPalNotFoundException("Question does not exist");
             }
-            if (string.IsNullOrWhiteSpace(question.Question))
+            if (string.IsNullOrWhiteSpace(command.Question))
             {
-                throw new PawPalNotFoundException("Question cannot be empty");
+                throw new PawPalConflictException("Question cannot be empty");
             }
             question.Question = command.Question;
             await context.SaveChangesAsync(cancellationToken);
