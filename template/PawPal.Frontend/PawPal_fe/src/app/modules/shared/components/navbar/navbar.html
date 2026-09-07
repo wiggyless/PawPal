@@ -1,205 +1,192 @@
-<!doctype html>
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
-    rel="stylesheet"
-  />
-</head>
-<body>
-  <div class="navbar">
-    @if (roleId != 2 && roleId != 3) {
-      <div class="logo" routerLink="/"></div>
-      <div class="navcontent">
-        <a routerLink="/catalog" routerLinkActive="active"> ANIMAL CATALOG </a>
-        <a routerLink="/news" routerLinkActive="active"> NEWS </a>
-        <button class="primarybtn" routerLink="/auth/login">LOG IN</button>
-        <button class="secondarybtn" routerLink="/auth/register">REGISTER</button>
+<div class="navbar">
+  @if (roleId != 2 && roleId != 3) {
+    <div class="logo" routerLink="/"></div>
+    <div class="navcontent">
+      <a routerLink="/catalog" routerLinkActive="active"> ANIMAL CATALOG </a>
+      <a routerLink="/news" routerLinkActive="active"> NEWS </a>
+      <button class="primarybtn" routerLink="/auth/login">LOG IN</button>
+      <button class="secondarybtn" routerLink="/auth/register">REGISTER</button>
+    </div>
+  } @else if (roleId == 3) {
+    <div class="logo" routerLink="/"></div>
+    <div class="navcontent">
+      <a routerLink="/catalog" routerLinkActive="active"> ANIMAL CATALOG </a>
+      <a routerLink="/news" routerLinkActive="active"> NEWS </a>
+      <div class="avatar-container" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+        <div class="icon-circle">
+          <svg
+            fill="#C7B18C"
+            width="28px"
+            height="28px"
+            viewBox="0 0 1920 1920"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+              <path
+                d="M1556.611 1920c-54.084 0-108.168-20.692-149.333-61.857L740.095 1190.96c-198.162 41.712-406.725-19.269-550.475-163.019C14.449 852.771-35.256 582.788 65.796 356.27l32.406-72.696 390.194 390.193c24.414 24.305 64.266 24.305 88.68 0l110.687-110.686c11.824-11.934 18.283-27.59 18.283-44.34 0-16.751-6.46-32.516-18.283-44.34L297.569 84.207 370.265 51.8C596.893-49.252 866.875.453 1041.937 175.515c155.026 155.136 212.833 385.157 151.851 594.815l650.651 650.651c39.961 39.852 61.967 92.95 61.967 149.443 0 56.383-22.006 109.482-61.967 149.334l-138.275 138.385c-41.275 41.165-95.36 61.857-149.553 61.857Z"
+                fill-rule="evenodd"
+              ></path>
+            </g>
+          </svg>
+        </div>
+        @if (menuOpened) {
+          <div
+            class="avatar-menu-admin"
+            (mouseenter)="menuOpened = true"
+            (mouseleave)="menuOpened = false"
+          >
+            <div class="menu-item" routerLink="/admin/my-profile">DETAILS</div>
+            <div class="menu-item" routerLink="/admin/user-profiles">USER DATABASE</div>
+            <div class="menu-item" routerLink="/admin/reported-users">REPORTED USERS</div>
+            <div class="menu-item" routerLink="/admin/reported-posts">REPORTED POSTS</div>
+            <div class="menu-item" routerLink="/admin/reported-comments">REPORTED COMMENTS</div>
+          </div>
+        }
       </div>
-    } @else if (roleId == 3) {
-      <div class="logo" routerLink="/"></div>
-      <div class="navcontent">
-        <a routerLink="/catalog" routerLinkActive="active"> ANIMAL CATALOG </a>
-        <a routerLink="/news" routerLinkActive="active"> NEWS </a>
-        <div class="avatar-container" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+    </div>
+  } @else if (roleId == 2) {
+    <div class="logo" routerLink="/"></div>
+    <div class="navcontent">
+      <a routerLink="/catalog" routerLinkActive="active"> ANIMAL CATALOG </a>
+      <a routerLink="/news" routerLinkActive="active"> NEWS </a>
+      <a routerLink="/client/create-post" routerLinkActive="active">CREATE POST</a>
+      <div class="icons-group">
+        <div
+          class="avatar-container"
+          (mouseenter)="menuOpened = true"
+          (mouseleave)="menuOpened = false"
+        >
           <div class="icon-circle">
             <svg
-              fill="#C7B18C"
               width="28px"
               height="28px"
-              viewBox="0 0 1920 1920"
+              viewBox="0 0 16.00 16.00"
+              fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              stroke="#C7B18C"
+              stroke-width="0.00016"
             >
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
               <g id="SVGRepo_iconCarrier">
                 <path
-                  d="M1556.611 1920c-54.084 0-108.168-20.692-149.333-61.857L740.095 1190.96c-198.162 41.712-406.725-19.269-550.475-163.019C14.449 852.771-35.256 582.788 65.796 356.27l32.406-72.696 390.194 390.193c24.414 24.305 64.266 24.305 88.68 0l110.687-110.686c11.824-11.934 18.283-27.59 18.283-44.34 0-16.751-6.46-32.516-18.283-44.34L297.569 84.207 370.265 51.8C596.893-49.252 866.875.453 1041.937 175.515c155.026 155.136 212.833 385.157 151.851 594.815l650.651 650.651c39.961 39.852 61.967 92.95 61.967 149.443 0 56.383-22.006 109.482-61.967 149.334l-138.275 138.385c-41.275 41.165-95.36 61.857-149.553 61.857Z"
-                  fill-rule="evenodd"
+                  d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z"
+                  fill="#C7B18C"
+                ></path>
+                <path
+                  d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z"
+                  fill="#C7B18C"
                 ></path>
               </g>
             </svg>
           </div>
           @if (menuOpened) {
+            <div class="menu-bridge"></div>
             <div
-              class="avatar-menu-admin"
+              class="avatar-menu"
               (mouseenter)="menuOpened = true"
               (mouseleave)="menuOpened = false"
             >
-              <div class="menu-item" routerLink="/admin/my-profile">DETAILS</div>
-              <div class="menu-item" routerLink="/admin/user-profiles">USER DATABASE</div>
-              <div class="menu-item" routerLink="/admin/reported-users">REPORTED USERS</div>
-              <div class="menu-item" routerLink="/admin/reported-posts">REPORTED POSTS</div>
-              <div class="menu-item" routerLink="/admin/reported-comments">REPORTED COMMENTS</div>
+              <div class="menu-item" routerLink="/client/my-profile">DETAILS</div>
+              <div class="menu-item" routerLink="/client/my-favorties">FAVORITES</div>
+              <div class="menu-item" routerLink="/client/myPosts">MY POSTS</div>
+              <div class="menu-item" routerLink="/client/my-requests">MY REQUESTS</div>
             </div>
           }
         </div>
-      </div>
-    } @else if (roleId == 2) {
-      <div class="logo" routerLink="/"></div>
-      <div class="navcontent">
-        <a routerLink="/catalog" routerLinkActive="active"> ANIMAL CATALOG </a>
-        <a routerLink="/news" routerLinkActive="active"> NEWS </a>
-        <a routerLink="/client/create-post" routerLinkActive="active">CREATE POST</a>
-        <div class="icons-group">
-          <div
-            class="avatar-container"
-            (mouseenter)="menuOpened = true"
-            (mouseleave)="menuOpened = false"
+
+        <div class="icon-circle notification-bell" (click)="toggleNotifications()">
+          @if (notificationService.unreadCount() > 0) {
+            <span class="notif-badge">{{ notificationService.unreadCount() }}</span>
+          }
+          <svg
+            width="28px"
+            height="28px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <div class="icon-circle">
-              <svg
-                width="28px"
-                height="28px"
-                viewBox="0 0 16.00 16.00"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                stroke="#C7B18C"
-                stroke-width="0.00016"
-              >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                  <path
-                    d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z"
-                    fill="#C7B18C"
-                  ></path>
-                  <path
-                    d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z"
-                    fill="#C7B18C"
-                  ></path>
-                </g>
-              </svg>
-            </div>
-            @if (menuOpened) {
-              <div class="menu-bridge"></div>
-              <div
-                class="avatar-menu"
-                (mouseenter)="menuOpened = true"
-                (mouseleave)="menuOpened = false"
-              >
-                <div class="menu-item" routerLink="/client/my-profile">DETAILS</div>
-                <div class="menu-item" routerLink="/client/my-favorties">FAVORITES</div>
-                <div class="menu-item" routerLink="/client/myPosts">MY POSTS</div>
-                <div class="menu-item" routerLink="/client/my-requests">MY REQUESTS</div>
-              </div>
-            }
-          </div>
+            <path
+              d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.36 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.63 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z"
+              fill="#C7B18C"
+            />
+          </svg>
 
-          <div class="icon-circle notification-bell" (click)="toggleNotifications()">
-            @if (notificationService.unreadCount() > 0) {
-              <span class="notif-badge">{{ notificationService.unreadCount() }}</span>
-            }
-            <svg
-              width="28px"
-              height="28px"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.36 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.63 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z"
-                fill="#C7B18C"
-              />
-            </svg>
-
-            @if (notificationsOpen) {
-              <div class="notifications-dropdown" (click)="$event.stopPropagation()">
-                <div class="notifications-header">
-                  <span>Notifications</span>
-                  @if (notificationService.notifications().length > 0) {
-                    <span class="clear-all" (click)="notificationService.clearAll()"
-                      >Clear all</span
-                    >
-                  }
-                </div>
-
-                @if (notificationService.notifications().length === 0) {
-                  <div class="notifications-empty">No notifications yet</div>
-                }
-
-                @for (notification of notificationService.notifications(); track notification.id) {
-                  <div
-                    class="notification-item"
-                    [class.unread]="!notification.read"
-                    (click)="onNotificationClick(notification)"
+          @if (notificationsOpen) {
+            <div class="notifications-dropdown" (click)="$event.stopPropagation()">
+              <div class="notifications-header">
+                <span>Notifications</span>
+                @if (notificationService.notifications().length > 0) {
+                  <span class="clear-all" (click)="notificationService.clearAll()"
+                    >Clear all</span
                   >
-                    <div class="notification-title">{{ notification.title }}</div>
-                    <div class="notification-body">{{ notification.body }}</div>
-                    <div class="notification-time">
-                      {{ notification.timestamp | date: 'shortTime' }}
-                    </div>
-                  </div>
                 }
               </div>
-            }
-          </div>
 
-          <div class="icon-circle messages-icon" routerLink="/client/messages">
-            <svg
-              width="28px"
-              height="28px"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                <path
-                  d="M18.47 16.83L18.86 19.99C18.96 20.82 18.07 21.4 17.36 20.97L13.17 18.48C12.71 18.48 12.26 18.45 11.82 18.39C12.56 17.52 13 16.42 13 15.23C13 12.39 10.54 10.09 7.49997 10.09C6.33997 10.09 5.26997 10.42 4.37997 11C4.34997 10.75 4.33997 10.5 4.33997 10.24C4.33997 5.68999 8.28997 2 13.17 2C18.05 2 22 5.68999 22 10.24C22 12.94 20.61 15.33 18.47 16.83Z"
-                  stroke="#C7B18C"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-                <path
-                  d="M13 15.23C13 16.42 12.56 17.5201 11.82 18.3901C10.83 19.5901 9.26 20.36 7.5 20.36L4.89 21.91C4.45 22.18 3.89 21.81 3.95 21.3L4.2 19.3301C2.86 18.4001 2 16.91 2 15.23C2 13.47 2.94 11.9201 4.38 11.0001C5.27 10.4201 6.34 10.0901 7.5 10.0901C10.54 10.0901 13 12.39 13 15.23Z"
-                  stroke="#C7B18C"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-              </g>
-            </svg>
-          </div>
+              @if (notificationService.notifications().length === 0) {
+                <div class="notifications-empty">No notifications yet</div>
+              }
+
+              @for (notification of notificationService.notifications(); track notification.id) {
+                <div
+                  class="notification-item"
+                  [class.unread]="!notification.read"
+                  (click)="onNotificationClick(notification)"
+                >
+                  <div class="notification-title">{{ notification.title }}</div>
+                  <div class="notification-body">{{ notification.body }}</div>
+                  <div class="notification-time">
+                    {{ notification.timestamp | date: 'shortTime' }}
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="icon-circle messages-icon" routerLink="/client/messages">
+          <svg
+            width="28px"
+            height="28px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+              <path
+                d="M18.47 16.83L18.86 19.99C18.96 20.82 18.07 21.4 17.36 20.97L13.17 18.48C12.71 18.48 12.26 18.45 11.82 18.39C12.56 17.52 13 16.42 13 15.23C13 12.39 10.54 10.09 7.49997 10.09C6.33997 10.09 5.26997 10.42 4.37997 11C4.34997 10.75 4.33997 10.5 4.33997 10.24C4.33997 5.68999 8.28997 2 13.17 2C18.05 2 22 5.68999 22 10.24C22 12.94 20.61 15.33 18.47 16.83Z"
+                stroke="#C7B18C"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M13 15.23C13 16.42 12.56 17.5201 11.82 18.3901C10.83 19.5901 9.26 20.36 7.5 20.36L4.89 21.91C4.45 22.18 3.89 21.81 3.95 21.3L4.2 19.3301C2.86 18.4001 2 16.91 2 15.23C2 13.47 2.94 11.9201 4.38 11.0001C5.27 10.4201 6.34 10.0901 7.5 10.0901C10.54 10.0901 13 12.39 13 15.23Z"
+                stroke="#C7B18C"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </g>
+          </svg>
         </div>
       </div>
-    }
-  </div>
-
-  @if (
-    (roleId == 2 || roleId == 3) &&
-    notificationService.permissionState() === 'default' &&
-    !bannerDismissed
-  ) {
-    <div class="notif-banner">
-      <span>🐾 Enable notifications to stay updated on your adoption requests and messages</span>
-      <button class="primarybtn" (click)="enableNotifications()">Enable</button>
-      <button class="notif-banner-dismiss" (click)="dismissBanner()">✕</button>
     </div>
   }
-</body>
+</div>
+
+@if (
+  (roleId == 2 || roleId == 3) &&
+  notificationService.permissionState() === 'default' &&
+  !bannerDismissed
+) {
+  <div class="notif-banner">
+    <span>🐾 Enable notifications to stay updated on your adoption requests and messages</span>
+    <button class="primarybtn" (click)="enableNotifications()">Enable</button>
+    <button class="notif-banner-dismiss" (click)="dismissBanner()">✕</button>
+  </div>
+}

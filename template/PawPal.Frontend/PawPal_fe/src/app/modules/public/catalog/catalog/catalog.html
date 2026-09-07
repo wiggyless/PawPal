@@ -1,175 +1,159 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
-      rel="stylesheet"
-    />
-    <title>PawPal</title>
-  </head>
-  <body>
-    <div class="catalog-container">
-      <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
-      <div class="header-sort">
-        <div>
-          <form [formGroup]="filterForm" class="select-container">
-            <div class="select-child">
-              <label for="category-select">Categories</label>
-              <mat-form-field class="custom">
-                <mat-select
-                  formControlName="selectedCat"
-                  placeholder="Choose an animal category"
-                  (selectionChange)="getBreedSelect()"
-                >
-                  @for (cat of animalCategories?.items; track cat) {
-                    <mat-option [value]="cat.categoryName">
-                      {{ cat.categoryName }}
-                    </mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="select-child">
-              <label for="breed-select">Breed</label>
-              <mat-form-field class="custom">
-                <mat-select placeholder="Choose an animal breed" formControlName="selectedBreed">
-                  @for (breed of breedArr; track breed) {
-                    <mat-option [value]="breed.name">
-                      {{ breed.name }}
-                    </mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="select-child">
-              <label for="gender-select">Gender</label>
-              <mat-form-field class="custom">
-                <mat-select formControlName="selectedGender" placeholder="Choose gender">
-                  @for (gen of genderList?.items; track gen.id) {
-                    <mat-option [value]="gen.name">
-                      {{ gen.name }}
-                    </mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="select-child">
-              <label for="canton-select">Cantons</label>
-              <mat-form-field class="custom">
-                <mat-select
-                  formControlName="selectedCanton"
-                  placeholder="Choose canton"
-                  (selectionChange)="changeCity()"
-                >
-                  @for (can of cantonsList?.items; track can) {
-                    <mat-option [value]="can">
-                      {{ can.fullName }}
-                    </mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="select-child">
-              <label for="city-select">City</label>
-              <mat-form-field class="custom">
-                <mat-select formControlName="selectedCity" placeholder="Choose city">
-                  @for (cit of getValue('selectedCanton')?.cities; track cit) {
-                    <mat-option [value]="cit.name">
-                      {{ cit.name }}
-                    </mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="select-child">
-              <label for="date-form">Date</label>
-              <mat-form-field class="date-form">
-                <mat-date-range-input [rangePicker]="picker" [formGroup]="datePicker" disabled>
-                  <input
-                    matInput
-                    matStartDate
-                    placeholder="Start date"
-                    #fromInputMin
-                    formControlName="start"
-                  />
-                  <input
-                    matInput
-                    matEndDate
-                    placeholder="End date"
-                    #fromInputMax
-                    formControlName="end"
-                  />
-                </mat-date-range-input>
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker disabled="false"></mat-date-range-picker>
-              </mat-form-field>
-            </div>
-          </form>
-        </div>
-        <div class="header-buttons">
-          <button (click)="searchCatalog()" class="primarybtn">SEARCH</button>
-          <button (click)="clearSearch()" class="secondarybtn">CLEAR</button>
-        </div>
-      </div>
-      <div class="header-posts-container">
-        <div class="header-posts-title">
-          <p>Your search result:</p>
-        </div>
-        @if (animalPosts | async; as posts) {
-          @if (imagesLoaded()) {
-            <div class="header-posts">
-              @for (post of posts.items; track post) {
-                <div class="post" (click)="routeToPost(post)">
-                  <button class="favorite-post" (click)="likeUnlikePost(post.postID, $event)">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="29"
-                      height="26"
-                      viewBox="0 0 29 26"
-                      fill="none"
-                    >
-                      <path
-                        d="M24.987 3.93285C24.3747 3.32008 23.6475 2.83399 22.8473 2.50234C22.047 2.1707 21.1892 2 20.323 2C19.4567 2 18.5989 2.1707 17.7987 2.50234C16.9984 2.83399 16.2713 3.32008 15.6589 3.93285L14.388 5.20397L13.117 3.93285C11.88 2.69568 10.2023 2.00064 8.45294 2.00064C6.70357 2.00064 5.02585 2.69568 3.78886 3.93285C2.55187 5.17003 1.85693 6.848 1.85693 8.59762C1.85693 10.3473 2.55187 12.0252 3.78886 13.2624L14.388 23.8631L24.987 13.2624C25.5997 12.6499 26.0857 11.9227 26.4173 11.1223C26.7489 10.3219 26.9196 9.46401 26.9196 8.59762C26.9196 7.73124 26.7489 6.87334 26.4173 6.07295C26.0857 5.27255 25.5997 4.54534 24.987 3.93285Z"
-                        [class]="isFavorite(post.postID) ? 'filled' : 'non-filled'"
-                        stroke="white"
-                        stroke-width="4"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </button>
-                  <img [src]="getImageUrl(post.mainImage)" class="post-image" />
-                  <div class="post-detail">
-                    <h3>{{ post.name }}</h3>
-                    <p>{{ post.breed }}</p>
-                    <p>{{ post.dateAdded | date: 'short' }}</p>
-                    <p>{{ genderEnum[post.genderID] }}</p>
-                  </div>
-                </div>
+<div class="catalog-container">
+  <app-navbar [roleId]="currentUser.roleid()"></app-navbar>
+  <div class="header-sort">
+    <div>
+      <form [formGroup]="filterForm" class="select-container">
+        <div class="select-child">
+          <label for="category-select">Categories</label>
+          <mat-form-field class="custom">
+            <mat-select
+              formControlName="selectedCat"
+              placeholder="Choose an animal category"
+              (selectionChange)="getBreedSelect()"
+            >
+              @for (cat of animalCategories?.items; track cat) {
+                <mat-option [value]="cat.categoryName">
+                  {{ cat.categoryName }}
+                </mat-option>
               }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="select-child">
+          <label for="breed-select">Breed</label>
+          <mat-form-field class="custom">
+            <mat-select placeholder="Choose an animal breed" formControlName="selectedBreed">
+              @for (breed of breedArr; track breed) {
+                <mat-option [value]="breed.name">
+                  {{ breed.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="select-child">
+          <label for="gender-select">Gender</label>
+          <mat-form-field class="custom">
+            <mat-select formControlName="selectedGender" placeholder="Choose gender">
+              @for (gen of genderList?.items; track gen.id) {
+                <mat-option [value]="gen.name">
+                  {{ gen.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="select-child">
+          <label for="canton-select">Cantons</label>
+          <mat-form-field class="custom">
+            <mat-select
+              formControlName="selectedCanton"
+              placeholder="Choose canton"
+              (selectionChange)="changeCity()"
+            >
+              @for (can of cantonsList?.items; track can) {
+                <mat-option [value]="can">
+                  {{ can.fullName }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="select-child">
+          <label for="city-select">City</label>
+          <mat-form-field class="custom">
+            <mat-select formControlName="selectedCity" placeholder="Choose city">
+              @for (cit of getValue('selectedCanton')?.cities; track cit) {
+                <mat-option [value]="cit.name">
+                  {{ cit.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="select-child">
+          <label for="date-form">Date</label>
+          <mat-form-field class="date-form">
+            <mat-date-range-input [rangePicker]="picker" [formGroup]="datePicker" disabled>
+              <input
+                matInput
+                matStartDate
+                placeholder="Start date"
+                #fromInputMin
+                formControlName="start"
+              />
+              <input
+                matInput
+                matEndDate
+                placeholder="End date"
+                #fromInputMax
+                formControlName="end"
+              />
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker disabled="false"></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+    <div class="header-buttons">
+      <button (click)="searchCatalog()" class="primarybtn">SEARCH</button>
+      <button (click)="clearSearch()" class="secondarybtn">CLEAR</button>
+    </div>
+  </div>
+  <div class="header-posts-container">
+    <div class="header-posts-title">
+      <p>Your search result:</p>
+    </div>
+    @if (animalPosts | async; as posts) {
+      @if (imagesLoaded()) {
+        <div class="header-posts">
+          @for (post of posts.items; track post) {
+            <div class="post" (click)="routeToPost(post)">
+              <button class="favorite-post" (click)="likeUnlikePost(post.postID, $event)">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="29"
+                  height="26"
+                  viewBox="0 0 29 26"
+                  fill="none"
+                >
+                  <path
+                    d="M24.987 3.93285C24.3747 3.32008 23.6475 2.83399 22.8473 2.50234C22.047 2.1707 21.1892 2 20.323 2C19.4567 2 18.5989 2.1707 17.7987 2.50234C16.9984 2.83399 16.2713 3.32008 15.6589 3.93285L14.388 5.20397L13.117 3.93285C11.88 2.69568 10.2023 2.00064 8.45294 2.00064C6.70357 2.00064 5.02585 2.69568 3.78886 3.93285C2.55187 5.17003 1.85693 6.848 1.85693 8.59762C1.85693 10.3473 2.55187 12.0252 3.78886 13.2624L14.388 23.8631L24.987 13.2624C25.5997 12.6499 26.0857 11.9227 26.4173 11.1223C26.7489 10.3219 26.9196 9.46401 26.9196 8.59762C26.9196 7.73124 26.7489 6.87334 26.4173 6.07295C26.0857 5.27255 25.5997 4.54534 24.987 3.93285Z"
+                    [class]="isFavorite(post.postID) ? 'filled' : 'non-filled'"
+                    stroke="white"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <img [src]="getImageUrl(post.mainImage)" class="post-image" />
+              <div class="post-detail">
+                <h3>{{ post.name }}</h3>
+                <p>{{ post.breed }}</p>
+                <p>{{ post.dateAdded | date: 'short' }}</p>
+                <p>{{ genderEnum[post.genderID] }}</p>
+              </div>
             </div>
           }
-        } @else {
-          <div class="header-posts-flex">
-            <p>Loading</p>
-            <mat-spinner class="catalog-spinner"></mat-spinner>
-          </div>
-        }
-
-        <mat-paginator
-          [length]="page.totalItems"
-          [pageSize]="page.pageSize"
-          [pageSizeOptions]="page.pageSizeOption"
-          aria-label="Select page"
-          (page)="handlePageEvent($event)"
-        >
-        </mat-paginator>
+        </div>
+      }
+    } @else {
+      <div class="header-posts-flex">
+        <p>Loading</p>
+        <mat-spinner class="catalog-spinner"></mat-spinner>
       </div>
-    </div>
-    <app-footer></app-footer>
-  </body>
-</html>
+    }
+
+    <mat-paginator
+      [length]="page.totalItems"
+      [pageSize]="page.pageSize"
+      [pageSizeOptions]="page.pageSizeOption"
+      aria-label="Select page"
+      (page)="handlePageEvent($event)"
+    >
+    </mat-paginator>
+  </div>
+</div>
+<app-footer></app-footer>
